@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "workspaces": [
+    "app",
+    "client",
+    "electron",
+    "manage",
+    "server"
+  ]
+}
