@@ -1,0 +1,22 @@
+.globalNav {
+  display: flex;
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  box-shadow: 0 -2px 6px rgba(0,0,0,.1);
+}
+
+.globalNav li {
+  flex: 1;
+  line-height: 50px;
+  list-style: none;
+  text-align: center;
+}
+
+.globalNav .selected {
+  color: red;
+}
