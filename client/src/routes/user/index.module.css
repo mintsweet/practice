@@ -1,0 +1,15 @@
+.more {
+  margin-top: 20px;
+}
+
+.more a {
+  color: #108ee9;
+}
+
+.more .left {
+  float: left;
+}
+
+.more .right {
+  float: right;
+}

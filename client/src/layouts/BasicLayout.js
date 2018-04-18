@@ -18,7 +18,7 @@ export default class BasicLayout extends PureComponent {
     return (
       <div className="container">
         <Switch>
-        {routerData.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+          {routerData.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
         </Switch>
         <GlobalNav />
       </div>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-
 import Home from '../routes/home';
 import Genre from '../routes/genre';
 import Add from '../routes/add';
 import Mood from '../routes/mood';
+import Account from '../routes/account';
 
 const routerData = [
   {
@@ -36,6 +36,12 @@ const routerData = [
     path: '/mood',
     name: '心情',
     component: Mood
+  },
+  {
+    exact: true,
+    path: '/account',
+    name: '个人中心',
+    component: Account
   }
 ];
 

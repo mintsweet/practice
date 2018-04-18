@@ -1,4 +1,4 @@
-import admin from './admin';
+import user from './user';
 
 export default app => {
   // Entry
@@ -9,8 +9,8 @@ export default app => {
     });
   });
 
-  // Admin
-  app.use('/api/admin', admin);
+  // User
+  app.use('/api/user', user);
 
   // 404
   app.use((req, res) => {
