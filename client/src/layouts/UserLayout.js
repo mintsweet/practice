@@ -13,11 +13,10 @@ export default class UserLayout extends PureComponent {
           <span>Logo</span>
         </div>
         <Switch>
-          <Redirect from="/user" to="/user/signin" />
-          {/* <Route path="/user" render={() => } /> */}
-          <Route path="/user/signin" component={Signin} />
-          <Route path="/user/signup" component={Signup} />
-          <Route path="/user/forget" component={Forget} />
+          <Route exact path="/user" render={() => <Redirect to="/user/signin" /> } />
+          <Route exact path="/user/signin" component={Signin} />
+          <Route exact path="/user/signup" component={Signup} />
+          <Route exact path="/user/forget" component={Forget} />
         </Switch>
       </div>
     );

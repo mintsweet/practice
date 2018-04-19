@@ -2,25 +2,31 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { WingBlank, List, InputItem, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import { signinApi } from '../../service/api';
 import styles from './index.module.css';
 
 class Signin extends Component {
-  signin() {
+  async signin = () => {
     this.props.form.validateFields((error, value) => {
-      console.log(error, value);
+      if (!error) {
+        const res = await signinApi(value);
+        console.log(value); 
+      }
     });
   }
 
   render() {
-    const { getFieldProps } = this.props.form;
-    
+    const { getFieldProps, getFieldError } = this.props.form;
     return (
       <div>
         <List>
           <InputItem
-            {...getFieldProps('mobile')}
+            {...getFieldProps('mobile', {
+              rules: [{ required: true }]
+            })}
             type="phone"
             placeholder="请输入注册的手机号"
+            error={true}
           >手机号：</InputItem>
           <InputItem
             {...getFieldProps('password')}
