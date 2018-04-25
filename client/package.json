@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "mints serve -p 3001"
+    "start": "mints start --port 3001"
   },
   "license": "MIT",
   "dependencies": {
@@ -15,6 +15,6 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "mints": "^1.0.0-rc.2"
+    "mints": "^1.0.0-rc.5"
   }
 }

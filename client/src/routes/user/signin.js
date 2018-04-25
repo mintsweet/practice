@@ -2,40 +2,62 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { WingBlank, List, InputItem, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import { signinApi } from '../../service/api';
 import styles from './index.module.css';
 
 class Signin extends Component {
-  async signin = () => {
-    this.props.form.validateFields((error, value) => {
-      if (!error) {
-        const res = await signinApi(value);
-        console.log(value); 
+  state = {
+    error: ''
+  };
+
+  signin = () => {
+    this.props.form.validateFields(async (error, values) => {
+      if (error) {
+        this.setState({
+          error
+        });
+      } else {
+        console.log(1);
       }
     });
   }
 
+  perrtyError = (error) => {
+    if (!error) {
+      return;
+    }
+    const firstKey = (Object.keys(error))[0];
+    const firstError = error[firstKey].errors[0].message;
+    return <div>{firstError}</div>
+  }
+
   render() {
-    const { getFieldProps, getFieldError } = this.props.form;
+    const { error } = this.state;
+    const { getFieldProps } = this.props.form;
     return (
       <div>
+        {this.perrtyError(error)}
         <List>
           <InputItem
             {...getFieldProps('mobile', {
-              rules: [{ required: true }]
+              rules: [{
+                required: true, message: '手机号不能为空'
+              }]
             })}
             type="phone"
             placeholder="请输入注册的手机号"
-            error={true}
           >手机号：</InputItem>
           <InputItem
-            {...getFieldProps('password')}
+            {...getFieldProps('password', {
+              rules: [{
+                required: true, message: '密码不能为空'
+              }]
+            })}
             type="password"
             placeholder="请输入密码"
           >密码：</InputItem>
         </List>
         <WingBlank style={{ marginTop: 10 }}>
-          <Button type="primary" onClick={() => this.signin()}>登录</Button>
+          <Button type="primary" onClick={this.signin}>登录</Button>
           <div className={styles.more}>
             <div className={styles.left}>
               <Link to="/user/forget" replace>忘记密码</Link>
