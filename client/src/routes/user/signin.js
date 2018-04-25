@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { WingBlank, List, InputItem, Button } from 'antd-mobile';
+import { WingBlank, List, InputItem, Button, WhiteSpace } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 
 class Signin extends Component {
   state = {
@@ -27,7 +27,7 @@ class Signin extends Component {
     }
     const firstKey = (Object.keys(error))[0];
     const firstError = error[firstKey].errors[0].message;
-    return <div>{firstError}</div>
+    return firstError;
   }
 
   render() {
@@ -35,12 +35,14 @@ class Signin extends Component {
     const { getFieldProps } = this.props.form;
     return (
       <div>
-        {this.perrtyError(error)}
+        <div className={styles.error}>
+          {this.perrtyError(error)}
+        </div>
         <List>
           <InputItem
             {...getFieldProps('mobile', {
               rules: [{
-                required: true, message: '手机号不能为空'
+                required: true, message: '手机号不能为空!'
               }]
             })}
             type="phone"
@@ -49,14 +51,15 @@ class Signin extends Component {
           <InputItem
             {...getFieldProps('password', {
               rules: [{
-                required: true, message: '密码不能为空'
+                required: true, message: '密码不能为空!'
               }]
             })}
             type="password"
             placeholder="请输入密码"
           >密码：</InputItem>
         </List>
-        <WingBlank style={{ marginTop: 10 }}>
+        <WhiteSpace size="xl" />
+        <WingBlank size="lg">
           <Button type="primary" onClick={this.signin}>登录</Button>
           <div className={styles.more}>
             <div className={styles.left}>

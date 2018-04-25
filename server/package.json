@@ -12,11 +12,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "formidable": "^1.2.1",
     "gd-bmp": "^1.2.4",
+    "moment": "^2.22.1",
     "mongoose": "^5.0.12"
   },
   "devDependencies": {

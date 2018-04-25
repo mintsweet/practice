@@ -1,3 +1,4 @@
+import fetch from './fetch';
 /*
 * 接口
 */
