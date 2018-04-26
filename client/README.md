@@ -8,3 +8,5 @@
   - 启动数据段
   - 执行 npm start 或者 yarn start
   - 打开`http://localhost:3001`
+
+## 目录结构

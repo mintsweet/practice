@@ -1,4 +1,8 @@
-import { signinApi, signupApi } from '@/service/api';
+import {
+  signinApi,
+  signupApi,
+  getUserInfoApi
+} from '@/service/api';
 
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
@@ -18,6 +22,18 @@ export function user(state = INIT, action) {
     default:
       return state;
   }
+}
+
+export function getUserInfo() {
+  return dispatch => {
+    getUserInfoApi().then(res => {
+      if (res.status === 1) {
+        dispatch(success(res.data));
+      } else {
+        dispatch(error(res.message));
+      }
+    });
+  };
 }
 
 export function signupFunc(obj) {

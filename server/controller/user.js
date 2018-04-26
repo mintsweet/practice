@@ -11,6 +11,22 @@ class User extends BaseComponent {
     this.signup = this.signup.bind(this);
   }
 
+  getInfo(req, res) {
+    const { userInfo } = req.session;
+    if (!userInfo) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_ADMIN_INFO',
+        message: '尚未登录'
+      });
+    } else {
+      return res.send({
+        status: 1,
+        data: userInfo
+      });
+    }
+  }
+
   signup(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
