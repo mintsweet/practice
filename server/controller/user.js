@@ -27,6 +27,58 @@ class User extends BaseComponent {
     }
   }
 
+  signin(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
+
+      const { mobile, password } = fields;
+
+      try {
+        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+          throw new Error('请输入正确的手机号!');
+        }
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_SIGNIN_PARMAS',
+          message: err.message
+        });
+      }
+
+      const existUser = await UserModel.findOne({ mobile }, '-_id, -__v');
+      if (!existUser) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_USER_IS_NOT_EXITS',
+          message: '手机账户账户不存在'
+        });
+      }
+
+      const isMatch = await bcrypt.compare(password, existUser.password);
+      if (isMatch) {
+        req.session.userInfo = existUser;
+        return res.send({
+          status: 1,
+          data: existUser
+        });
+      } else {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PASS_IS_NOT_MATCH',
+          message: '用户密码错误'
+        });
+      }
+
+    });
+  }
+
   signup(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
@@ -94,10 +146,6 @@ class User extends BaseComponent {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const hash = await bcrypt.hash(password, salt);
     return hash;
-  }
-
-  signin() {
-
   }
 }
 

@@ -55,8 +55,7 @@ class Signup extends Component {
           <InputItem
             {...getFieldProps('mobile', {
               rules: [{
-                required: true, message: '手机号不能为空!',
-                pattern: /^1[3,5,7,8,9]\d{9}$/, message: '密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间!'
+                pattern: /^1[3,5,7,8,9]\d{9}$/, message: '请输入正确的手机号'
               }]
             })}
             placeholder="请输入手机号"

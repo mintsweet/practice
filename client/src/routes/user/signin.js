@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { WingBlank, List, InputItem, Button, WhiteSpace } from 'antd-mobile';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { Toast, WingBlank, List, InputItem, Button, WhiteSpace } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import { signinFunc } from '@/store/user.reducer';
 import styles from './index.module.scss';
 
 class Signin extends Component {
@@ -16,7 +18,7 @@ class Signin extends Component {
           error
         });
       } else {
-        console.log(1);
+        this.props.signinFunc(values);
       }
     });
   }
@@ -30,11 +32,24 @@ class Signin extends Component {
     return firstError;
   }
 
+  redirect(user) {
+    if (user.info) {
+      return <Redirect to="/" />;
+    } else {
+      this.setState({
+        error: user.error
+      });
+    }
+  }
+
+
   render() {
     const { error } = this.state;
-    const { getFieldProps } = this.props.form;
+    const { form, user } = this.props;
+    const { getFieldProps } = form;
     return (
       <div>
+        {user.info && this.redirect(user)}
         <div className={styles.error}>
           {this.perrtyError(error)}
         </div>
@@ -42,10 +57,9 @@ class Signin extends Component {
           <InputItem
             {...getFieldProps('mobile', {
               rules: [{
-                required: true, message: '手机号不能为空!'
+                pattern: /^1[3,5,7,8,9]\d{9}$/, message: '请输入正确的手机号'
               }]
             })}
-            type="phone"
             placeholder="请输入注册的手机号"
           >手机号：</InputItem>
           <InputItem
@@ -75,4 +89,9 @@ class Signin extends Component {
   }
 }
 
-export default createForm()(Signin)
+export default connect(
+  state => ({
+    user: state.user
+  }),
+  { signinFunc }
+)(createForm()(Signin));

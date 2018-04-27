@@ -48,6 +48,18 @@ export function signupFunc(obj) {
   };
 }
 
+export function signinFunc(obj) {
+  return dispatch => {
+    signinApi(obj).then(res => {
+      if (res.status === 1) {
+        dispatch(success(res.data));
+      } else {
+        dispatch(error(res.message));
+      }
+    });
+  }
+}
+
 function success(data) {
   return { type: SUCCESS, payload: data };
 }
