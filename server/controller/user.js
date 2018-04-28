@@ -1,4 +1,4 @@
-import BaseComponent from '../proptype/BaseComponent';
+import BaseComponent from '../prototype/BaseComponent';
 import formidable from 'formidable';
 import bcrypt from 'bcryptjs';
 import UserModel from '../models/user';
@@ -63,7 +63,7 @@ class User extends BaseComponent {
 
       const isMatch = await bcrypt.compare(password, existUser.password);
       if (isMatch) {
-        req.session.userInfo = existUser;
+        // req.session.userInfo = existUser;
         return res.send({
           status: 1,
           data: existUser
@@ -109,7 +109,6 @@ class User extends BaseComponent {
           throw new Error('请输入4-8位的名称!');
         }
       } catch(err) {
-        console.log(err);
         return res.send({
           status: 0,
           type: 'ERROR_SIGNUP_PARMAS',
@@ -146,6 +145,45 @@ class User extends BaseComponent {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const hash = await bcrypt.hash(password, salt);
     return hash;
+  }
+
+  forget(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
+      const { msg_code } = req.session;
+      const { mobile, password , msgcaptcha } = fields;
+
+      try {
+        if (mobile && mobile !== msg_code.mobile) {
+          throw new Error('提交手机号与获取验证码手机号不对应');
+        } else if (msg_code.code !== msgcaptcha) {
+          throw new Error('验证码错误');
+        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+          throw new Error('验证码已失效，请重新获取');
+        } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
+          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间!');
+        }
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_FORGET_PARMAS',
+          message: err.message
+        });
+      }
+
+      const bcryptPassword = await this.encryption(password);
+      await UserModel.findOneAndUpdate({ mobile }, {$set: {password: bcryptPassword}});
+      return res.send({
+        status: 1
+      });
+    });
   }
 }
 

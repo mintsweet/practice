@@ -15,51 +15,15 @@ const RouteWithSubRoutes = route => (
   />
 );
 
-class BasicLayout extends PureComponent {
-  state = {
-    login: true
-  };
-
-  componentDidMount() {
-    if (!this.props.user.info) {
-      this.getUserInfo();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.user.info) {
-      this.setState({
-        login: false
-      });
-    }
-  }
-
-  async getUserInfo() {
-    const res = await this.props.getUserInfo();
-  }
-
+export default class BasicLayout extends PureComponent {
   render() {
-    const { login } = this.state;
-    const home = (
-      <Fragment>
+    return (
+      <div className="container">
         <Switch>
             {routerData.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
         </Switch>
         <GlobalNav />
-      </Fragment>
-    );
-
-    return (
-      <div className="container">
-        {login ? home : <Redirect to="/user" />}
       </div>
     );
   }
 }
-
-export default connect(
-  state => ({
-    user: state.user
-  }),
-  { getUserInfo }
-)(BasicLayout);

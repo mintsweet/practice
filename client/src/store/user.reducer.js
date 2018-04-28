@@ -1,7 +1,8 @@
 import {
+  getUserInfoApi,
   signinApi,
   signupApi,
-  getUserInfoApi
+  forgetApi
 } from '@/service/api';
 
 const SUCCESS = 'SUCCESS';
@@ -36,6 +37,18 @@ export function getUserInfo() {
   };
 }
 
+export function signinFunc(obj) {
+  return dispatch => {
+    signinApi(obj).then(res => {
+      if (res.status === 1) {
+        dispatch(success(res.data));
+      } else {
+        dispatch(error(res.message));
+      }
+    });
+  }
+}
+
 export function signupFunc(obj) {
   return dispatch => {
     signupApi(obj).then(res => {
@@ -48,16 +61,17 @@ export function signupFunc(obj) {
   };
 }
 
-export function signinFunc(obj) {
+export function forgetFunc(obj) {
   return dispatch => {
-    signinApi(obj).then(res => {
+    forgetApi(obj).then(res => {
+      console.log(res);
       if (res.status === 1) {
         dispatch(success(res.data));
       } else {
         dispatch(error(res.message));
       }
     });
-  }
+  };
 }
 
 function success(data) {

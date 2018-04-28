@@ -63,7 +63,6 @@ class Signup extends Component {
           <InputItem
             {...getFieldProps('password', {
               rules: [{
-                required: true, message: '密码不能为空!',
                 pattern: /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/
               }]
             })}

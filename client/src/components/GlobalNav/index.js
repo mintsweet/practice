@@ -20,7 +20,7 @@ const nav = [
     name: '心情'
   },
   {
-    path: '/user',
+    path: '/account',
     name: '个人中心'
   }
 ];
@@ -31,7 +31,7 @@ export default class GlobalNav extends Component {
       <ul className={styles.globalNav}>
         {nav.map((item, i) => (
           <li key={i}>
-            <NavLink to={item.path} activeClassName={styles.selected}>{item.name}</NavLink>
+            <NavLink to={item.path} activeClassName={styles.selected} replace>{item.name}</NavLink>
           </li>
         ))}
       </ul>

@@ -1,4 +1,5 @@
 import user from './user';
+import common from './common';
 
 export default app => {
   // Entry
@@ -8,6 +9,9 @@ export default app => {
       message: 'Welcome to use parctice servcie!'
     });
   });
+
+  // Common
+  app.use('/api/common', common);
 
   // User
   app.use('/api/user', user);
