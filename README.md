@@ -15,9 +15,9 @@ React + React-Router + Redux + React-Native + Electron + Express + MongoDB => �
 所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(client)，你不止需要启动client，也需启动server，其他皆是如此，每端详情到各个目录下查看`README.md`。
 
   - [依赖数据源数据端(server)](/server/README.md)
-  - [移动端网页客户端(client)](/clinet/README.md)
+  - [移动端网页客户端(client)](/client/README.md)
   - [电脑端网页管理端(manage)](/manage/README.md)
-  - [移动端 RN APP端(native)](/manage/README.md)
+  - [移动端 RN APP端(native)](/native/README.md)
   - [桌面端 Electron(electron)](/electron/README.md)
   - [移动端微信小程序(weapp)](/weapp/README.md)
 
