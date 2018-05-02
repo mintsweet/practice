@@ -14,6 +14,14 @@ class Forget extends Component {
     disabled: false
   };
 
+  componentWillUnmount() {
+    this.setState({
+      error: '',
+      text: '获取验证码',
+      disabled: false
+    });
+  }
+
   perrtyError = (error) => {
     if (!error) {
       return;
@@ -53,6 +61,10 @@ class Forget extends Component {
           error: res.message
         });
       }
+    } else {
+      this.setState({
+        error: '请输入正确的手机号'
+      });
     }
   }
 
