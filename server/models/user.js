@@ -55,6 +55,12 @@ const UserSchema = new Schema({
   fans: {
     type: Array,
     default: []
+  },
+  create_at: {
+    type: String
+  },
+  update_at: {
+    type: String
   }
 });
 

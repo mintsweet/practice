@@ -1,5 +1,6 @@
-import user from './user';
 import common from './common';
+import user from './user';
+import post from './post'
 
 export default app => {
   // Entry
@@ -15,6 +16,9 @@ export default app => {
 
   // User
   app.use('/api/user', user);
+
+  // Post
+  app.use('/api/post', post);
 
   // 404
   app.use((req, res) => {

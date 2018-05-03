@@ -33,7 +33,8 @@ React + React-Router + Redux + React-Native + Electron + Express + MongoDB => �
 ### 个人博客地址
 
 [React终极实战(一)-原型设计和数据模型](https://github.com/mintsweet/target/issues/1)<br>
-[React终极实战(二)-API设计说明与数据端初始化](https://github.com/mintsweet/target/issues/2)
+[React终极实战(二)-API设计说明与数据端初始化](https://github.com/mintsweet/target/issues/2)<br>
+[React终极实战(三)-完成客户端用户模块](https://github.com/mintsweet/target/issues/3)<br>
 
 ### segmentfault地址
 

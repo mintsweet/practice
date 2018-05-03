@@ -9,4 +9,3 @@ router.post('/signup', User.signup);
 router.post('/forget', User.forget);
 
 export default router;
-

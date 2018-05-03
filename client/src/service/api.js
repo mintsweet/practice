@@ -27,3 +27,8 @@ export const forgetApi = info => fetch('/user/forget', info, 'POST');
 * 获取验证码
 */
 export const getMsgCaptchaApi = mobile => fetch('/common/msgcaptcha', mobile);
+
+/*
+* 获取文章列表
+*/
+export const getPostListApi = () => fetch('/post/list');

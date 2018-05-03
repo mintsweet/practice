@@ -5,8 +5,8 @@ import {
   forgetApi
 } from '@/service/api';
 
-const SUCCESS = 'SUCCESS';
-const ERROR = 'ERROR';
+const SUCCESS = 'USER_SUCCESS';
+const ERROR = 'USER_ERROR';
 const INIT = {
   error: '',
   info: null

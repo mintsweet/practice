@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import styles from './UserLayout.module.css';
 import Signin from '../routes/user/signin';
 import Signup from '../routes/user/signup';
 import Forget from '../routes/user/forget';
+import styles from './UserLayout.module.css';
 
 export default class UserLayout extends PureComponent {
   render() {
