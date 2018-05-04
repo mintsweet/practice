@@ -34,6 +34,13 @@ const PostSchema = new Schema({
     type: Number,
     isRequire: true
   },
+  cover: {
+    type: String
+  },
+  is_top: {
+    type: Boolean,
+    default: false
+  },
   create_at: {
     type: String,
     default: moment(Date.now()).format('YYYY-MM-DD')

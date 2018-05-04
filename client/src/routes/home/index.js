@@ -1,46 +1,54 @@
 import React, { Component } from 'react';
-import { Carousel } from 'antd-mobile';
 import { connect } from 'react-redux';
-import { getPostList } from '@/store/post.reducer';
+import { Link } from 'react-router-dom';
+import { List, Carousel } from 'antd-mobile';
+import { getPostList, getPostTop } from '@/store/post.reducer';
 
 class Home extends Component {
-  state = {
-    data: ['1', '2', '3'],
-    imgHeight: 176,
-  };
-
   componentDidMount() {
+    this.props.getPostTop();
     this.props.getPostList();
   }
 
   render() {
+    const { post } = this.props;
+    const { posts, tops } = post;
+
     return (
       <div>
         <Carousel
           autoplay={false}
           infinite
-          beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-          afterChange={index => console.log('slide to', index)}
         >
-          {this.state.data.map(val => (
-            <a
+          {tops.map(val => (
+            <Link
               key={val}
-              href="http://www.alipay.com"
-              style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
+              to={`/post/${val.id}`}
+              style={{ display: 'inline-block', width: '100%', height: 176 }}
             >
               <img
-                src="http://iph.href.lu/414x176"
-                alt=""
-                style={{ width: '100%', verticalAlign: 'top' }}
+                src={val.cover}
+                style={{ width: '100%', verticalAlign: 'top', height: 176 }}
                 onLoad={() => {
                   // fire window resize event to change height
                   window.dispatchEvent(new Event('resize'));
                   this.setState({ imgHeight: 'auto' });
                 }}
               />
-            </a>
+            </Link>
           ))}
         </Carousel>
+        <List renderHeader={() => '文章列表'}>
+          {posts.map(item => (
+            <List.Item
+              wrap
+              key={item.id}
+              arrow="horizontal"
+            >
+              {item.title}
+            </List.Item>
+          ))}
+        </List>
       </div>
     );
   }
@@ -50,5 +58,5 @@ export default connect(
   state => ({
     post: state.post
   }),
-  { getPostList }
+  { getPostList, getPostTop }
 )(Home);

@@ -29,6 +29,11 @@ export const forgetApi = info => fetch('/user/forget', info, 'POST');
 export const getMsgCaptchaApi = mobile => fetch('/common/msgcaptcha', mobile);
 
 /*
+* 获取头条文章列表
+*/
+export const getPostTopApi = () => fetch('/post/top');
+
+/*
 * 获取文章列表
 */
 export const getPostListApi = () => fetch('/post/list');

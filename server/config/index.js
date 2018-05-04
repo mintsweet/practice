@@ -1,5 +1,5 @@
 export default {
-  port: 3005,
+  port: 3000,
   mongodb: 'mongodb://localhost/practice',
   session: {
     key: 'practice',
