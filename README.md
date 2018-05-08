@@ -32,13 +32,7 @@ React + React-Native + Electron + Express + MongoDB => 构建技术社区
 
 ## 项目博客
 
-在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习，首发皆在我本人`Github`，本仓库有关于`react`的代码也是为了[target](https://github.com/mintsweet/target)仓库而创，如果你想跟我学`react`，来`target`仓库一探。
-
-### 博客地址
-
-[React终极实战(一)-原型设计和数据模型](https://github.com/mintsweet/target/issues/1)<br>
-[React终极实战(二)-API设计说明与数据端初始化](https://github.com/mintsweet/target/issues/2)<br>
-[React终极实战(三)-完成客户端用户模块](https://github.com/mintsweet/target/issues/3)<br>
+在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习。
 
 ## 其他
 

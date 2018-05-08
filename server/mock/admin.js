@@ -56,7 +56,7 @@ export default [
   {
     "id": 7,
     "nickname": "管理员七号",
-    "username": "admin027",
+    "username": "admin07",
     "password": "123456",
     "mobile": "18700000007",
     "role": 1,

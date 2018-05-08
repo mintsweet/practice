@@ -2,9 +2,9 @@ import BaseComponent from '../prototype/BaseComponent';
 import PostModel from '../models/post';
 
 class Post extends BaseComponent {
-  async getPostTop(req, res) {
+  async getTop(req, res) {
     try {
-      const posts = await PostModel.find();
+      const posts = await PostModel.find({}, '-_id -__v');
       const tops = posts.filter(item => item.is_top);
       return res.send({
         status: 1,
@@ -19,7 +19,7 @@ class Post extends BaseComponent {
     }
   }
 
-  async getPostList(req, res) {
+  async getList(req, res) {
     try {
       const posts = await PostModel.find();
       return res.send({
@@ -32,6 +32,19 @@ class Post extends BaseComponent {
         type: 'ERROR_GET_POST_LIST',
         message: err.message
       });
+    }
+  }
+
+  async getInfoById(req, res) {
+    const { id } = req.params;
+    if (!id) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_NO_ID',
+        
+      });
+    } else {
+
     }
   }
 }

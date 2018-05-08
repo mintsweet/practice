@@ -1,21 +1,43 @@
-import Express from 'express';
-import connectMongo from 'connect-mongo';
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import config from './config';
-import router from './routes';
+const chalk = require('chalk');
+const Express = require('express');
+const mongoose = require('mongoose');
+const connectMongo = require('connect-mongo');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const config = require('./config');
+const router = require('./routes');
 
+/*
+* init express
+*/
 const app = new Express();
+
+/*
+* connect mongodb
+*/
+mongoose.connect(config.mongodb);
+const db = mongoose.connection;
+db.on('connected', () => {
+  console.log(chalk.greenBright(`MongoDB Connection Success!`));
+});
+
+db.on('error', (err) => {
+  console.error(chalk.redBright(`MongoDB Connection Error: ${err}`));
+});
+
+db.on('disconnected', () => {
+  console.error(chalk.yellowBright(`MongoDB Connection Failed!`));
+});
 
 /*
 * cross
 */
-// const ALLOW_ORIGIN = [
-//   'http://localhost:3001',
-//   'http://localhost:3002',
-//   'http://localhost:3003',
-//   'http://localhost:3004'
-// ];
+const ALLOW_ORIGIN = [
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://localhost:3003',
+  'http://localhost:3004'
+];
 
 // app.all('*', (req, res, next) => {
 //   const reqOrigin = req.headers.origin;
@@ -55,6 +77,5 @@ app.use(session({
 router(app);
 
 app.listen(config.port, () => {
-  console.log();
-  console.log(`Practice server start ---> Listening on ${config.port}!`);
+  console.log(chalk.greenBright(`Server start on ${config.port}!`));
 });

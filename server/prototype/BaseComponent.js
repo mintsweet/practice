@@ -1,8 +1,8 @@
-import chalk from 'chalk';
-import { BMP24 } from 'gd-bmp';
-import Ids from '../models/ids';
+const chalk = require('chalk');
+const { BMP24 } = require('gd-bmp');
+const Ids = require('../models/ids');
 
-export default class BaseComponent {
+module.exports = class BaseComponent {
   constructor() {
     this.idList = ['admin_id', 'user_id', 'genre_id', 'post_id', 'mood_id'];
   }

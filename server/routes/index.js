@@ -1,11 +1,11 @@
-import common from './common';
-import user from './user';
-import post from './post';
-import gener from './gener';
-import mood from './mood';
-import admin from './admin';
+const common = require('./common');
+// import user from './user';
+// import post from './post';
+// import gener from './gener';
+// import mood from './mood';
+// import admin from './admin';
 
-export default app => {
+module.exports = app => {
   // Entry
   app.get('/api', (req, res) => {
     res.send({
@@ -17,20 +17,20 @@ export default app => {
   // Common
   app.use('/api/common', common);
 
-  // User
-  app.use('/api/user', user);
+  // // User
+  // app.use('/api/user', user);
 
-  // Post
-  app.use('/api/post', post);
+  // // Post
+  // app.use('/api/post', post);
 
-  // Gener
-  app.use('/api/gener', gener);
+  // // Gener
+  // app.use('/api/gener', gener);
 
-  // Mood
-  app.use('/api/mood', mood);
+  // // Mood
+  // app.use('/api/mood', mood);
 
-  // Admin
-  app.use('/api/admin', admin);
+  // // Admin
+  // app.use('/api/admin', admin);
 
   // 404
   app.use((req, res) => {

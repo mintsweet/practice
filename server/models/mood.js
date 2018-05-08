@@ -14,6 +14,9 @@ const MoodSchema = new Schema({
     type: String,
     isRequire: true
   },
+  picture: {
+    type: String
+  },
   author_id: {
     type: Number,
     isRequire: true

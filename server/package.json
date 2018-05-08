@@ -1,18 +1,14 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "data servcie base on node",
   "scripts": {
-    "start": "node ./index.js"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "start": "node ./app.js"
   },
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chalk": "^2.4.1",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
@@ -21,10 +17,5 @@
     "gd-bmp": "^1.2.4",
     "moment": "^2.22.1",
     "mongoose": "^5.0.12"
-  },
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
   }
 }
