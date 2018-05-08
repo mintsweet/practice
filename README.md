@@ -26,6 +26,10 @@ React + React-Router + Redux + React-Native + Electron + Express + MongoDB => �
   - `Node`：     `>= 8.0.0`
   - `MongoDB`：  `>= 3.4.0`
 
+## 数据API文档
+
+[使劲戳这里戳这里](server/API.md)。
+
 ## 项目博客
 
 在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习，首发皆在我本人`Github`，本仓库有关于`react`的代码也是为了[target](https://github.com/mintsweet/target)仓库而创，如果你想跟我学`react`，来`target`仓库一探。

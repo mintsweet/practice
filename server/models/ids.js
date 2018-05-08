@@ -14,11 +14,11 @@ const Ids = mongoose.model('Ids', IdsSchema);
 
 Ids.findOne((err, data) => {
   const newIds = new Ids({
-    admin_id: 1,
-    user_id: 1,
-    genre_id: 1,
-    post_id: 1,
-    mood_id: 1
+    admin_id: 11,
+    user_id: 11,
+    genre_id: 11,
+    post_id: 11,
+    mood_id: 11
   });
   newIds.save();
 });

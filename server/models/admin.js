@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import moment from 'moment';
-import adminData from '../mock/adminData';
+import AdminData from '../mock/admin';
 
 const Schema = mongoose.Schema;
 
@@ -60,7 +60,7 @@ const Admin = mongoose.model('Admin', AdminSchema);
 
 Admin.findOne((err, data) => {
   if (!data) {
-    adminData.map(async item => {
+    AdminData.map(async item => {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(item.password, salt);
       const _admin = new Admin({

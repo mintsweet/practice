@@ -1,20 +1,11 @@
 export default [
   {
-    "id": 0,
+    "id": 1,
     "nickname": "青湛",
     "username": "qingzhan",
     "password": "123456",
     "mobile": "18788888888",
     "role": 101,
-    "status": "success"
-  },
-  {
-    "id": 1,
-    "nickname": "管理员一号",
-    "username": "admin01",
-    "password": "123456",
-    "mobile": "18700000001",
-    "role": 1,
     "status": "success"
   },
   {

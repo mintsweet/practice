@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import moment from 'moment';
-import postData from '../mock/post';
+import PostData from '../mock/post';
 
 const Schema = mongoose.Schema;
 
@@ -43,10 +43,11 @@ const PostSchema = new Schema({
   },
   create_at: {
     type: String,
-    default: moment(Date.now()).format('YYYY-MM-DD')
+    default: moment(Date.now()).format('YYYY-MM-DD HH:mm')
   },
   update_at: {
-    type: String
+    type: String,
+    default: moment(Date.now()).format('YYYY-MM-DD HH:mm')
   }
 });
 
@@ -56,7 +57,7 @@ const Post = mongoose.model('Post', PostSchema);
 
 Post.findOne((err, data) => {
   if (!data) {
-    postData.map(async item => {
+    PostData.map(async item => {
       const _post = new Post(item);
       await _post.save();
     });

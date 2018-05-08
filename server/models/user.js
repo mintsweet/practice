@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import moment from 'moment';
-import userData from '../mock/userData';
+import UserData from '../mock/user';
 
 const Schema = mongoose.Schema;
 
@@ -57,10 +57,8 @@ const UserSchema = new Schema({
     default: []
   },
   create_at: {
-    type: String
-  },
-  update_at: {
-    type: String
+    type: String,
+    default: moment(Date.now()).format('YYYY-MM-DD HH:mm')
   }
 });
 
@@ -70,7 +68,7 @@ const User = mongoose.model('User', UserSchema);
 
 User.findOne((err, data) => {
   if (!data) {
-    userData.map(async item => {
+    UserData.map(async item => {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(item.password, salt);
       const _user = new User({
@@ -78,14 +76,7 @@ User.findOne((err, data) => {
         mobile: item.mobile,
         nickname: item.nickname,
         password: hash,
-        motto: item.motto,
-        post_list: item.post_list,
-        mood_list: item.mood_list,
-        collect_list: item.collect_list,
-        praise_list: item.praise_list,
-        dynamic: item.dynamic,
-        follow: item.follow,
-        fans: item.fans
+        motto: item.motto
       });
       await _user.save();
     });

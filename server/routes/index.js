@@ -1,6 +1,9 @@
 import common from './common';
 import user from './user';
-import post from './post'
+import post from './post';
+import gener from './gener';
+import mood from './mood';
+import admin from './admin';
 
 export default app => {
   // Entry
@@ -19,6 +22,15 @@ export default app => {
 
   // Post
   app.use('/api/post', post);
+
+  // Gener
+  app.use('/api/gener', gener);
+
+  // Mood
+  app.use('/api/mood', mood);
+
+  // Admin
+  app.use('/api/admin', admin);
 
   // 404
   app.use((req, res) => {
