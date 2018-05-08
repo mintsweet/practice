@@ -1,12 +1,10 @@
 # practice
 
-React + React-Native + Electron + Express + MongoDB => 构建技术社区
+React + Vue + React-Native + Electron + Express + MongoDB => 构建技术社区
 
 > 可能花费的时间会很多，我尽量在今年之内完成。(start一下 ---- 谢谢..)
 
 ## 简介
-
-现如今前端的技术层出不穷，每个人都有选择不同技术的权利，我更加钟爱`react`一些，所以采用了如题的技术栈，做一个功能比较完善的技术社区。
 
 本篇对整个项目做一个统筹性的说明，我会在每个子包(也就是单独的项目中)进行项目的详细说明，想查看详细说明可到各个子包下面的`README.md`进行查看，如果是你想了解我学习的历程、本项目的开发过程和心得、与我一起成长，可以拉到文末查看我开发过程的博客，我可能会边做边写，也可能会做一大段在写，希望大家能耐心等待。
 
@@ -14,12 +12,7 @@ React + React-Native + Electron + Express + MongoDB => 构建技术社区
 
 所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(client)，你不止需要启动client，也需启动server，其他皆是如此，每端详情到各个目录下查看`README.md`。
 
-  - [后台数据端 (server)](/server/README.md)
-  - [网页客户端 (client)](/client/README.md)
-  - [网页管理端 (manage)](/manage/README.md)
-  - [原生APP(RN) (native)](/native/README.md)
-  - [桌面版 (electron)](/electron/README.md)
-  - [微信小程序 (weapp)](/weapp/README.md)
+  - [基于 Node 的后台数据端(server)](/server/README.md)
 
 ## 开发环境
 
@@ -28,11 +21,18 @@ React + React-Native + Electron + Express + MongoDB => 构建技术社区
 
 ## 数据API文档
 
-[使劲戳这里戳这里](server/API.md)。
+  - [公共模块](server/doc/common.md)
+  - [用户模块](server/doc/user.md)
+  - [文章模块](server/doc/post.md)
+  - [分类模块](server/doc/gener.md)
+  - [心情模块](server/doc/mood.md)
+  - [管理员模块](server/doc/admin.md)
 
 ## 项目博客
 
 在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习。
+
+  - 终极实战(一) - 基于 Express 和 MongoDB 的数据服务实现
 
 ## 其他
 

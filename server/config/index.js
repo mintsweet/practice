@@ -3,7 +3,7 @@ module.exports = {
   mongodb: 'mongodb://localhost/practice',
   session: {
     key: 'practice',
-    secret: 'react-demo',
+    secret: 'practice',
     cookie: {
       httpOnly: true,
       secure: false,

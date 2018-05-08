@@ -1,0 +1,9 @@
+{
+  "name": "client-pc",
+  "version": "1.0.0",
+  "description": "pc client base on react",
+  "scripts": {
+    "start": "mints start -p 3001"
+  },
+  "license": "MIT"
+}
