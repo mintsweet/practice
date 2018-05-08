@@ -20,6 +20,8 @@
 
 用户模块：
 
+  - 获取当前用户信息：/user/info
+  - 获取用户信息：/user/info
   - 用户登录：/user/signin
   - 用户注册：/user/signup
   - 用户找回密码：/user/forget 

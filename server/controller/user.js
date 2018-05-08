@@ -9,6 +9,7 @@ class User extends BaseComponent {
   constructor() {
     super();
     this.signup = this.signup.bind(this);
+    this.forget = this.forget.bind(this);
   }
 
   getInfo(req, res) {
@@ -184,6 +185,39 @@ class User extends BaseComponent {
         status: 1
       });
     });
+  }
+
+  async getInfoById(req, res) {
+    const { id } = req.params;
+    if (!id) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARMAS',
+        message: '不能获取ID'
+      });
+    } else {
+      try {
+        const user = await UserModel.findOne({ id }, '-_id -__v');
+        if (!user) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_NO_EXIST_USER',
+            message: '用户不存在'
+          });
+        } else {
+          return res.send({
+            status: 1,
+            data: user
+          });
+        }
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_SERVICE_FAILED',
+          message: '服务器无响应，请稍后重试'
+        });
+      }
+    }
   }
 }
 

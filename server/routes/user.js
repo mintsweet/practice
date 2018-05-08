@@ -7,5 +7,6 @@ router.get('/info', User.getInfo);
 router.post('/signin', User.signin);
 router.post('/signup', User.signup);
 router.post('/forget', User.forget);
+router.get('/:id', User.getInfoById);
 
 export default router;

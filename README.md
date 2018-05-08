@@ -1,8 +1,8 @@
 # practice
 
-React + React-Router + Redux + React-Native + Electron + Express + MongoDB => 构建技术社区(涵盖 IOS Andriod App, 网页版客户端, 网页版管理端, 桌面版应用 , 数据端)
+React + React-Native + Electron + Express + MongoDB => 构建技术社区
 
-> 简介已经说得很清楚了嘛，一个项目包含整整六个子项目，每一个都能自成为一个项目，但是我觉得麻烦，就放在一起了，整体以 React 为基础，一整套 React 技术栈的实践，可能花费的时间会很多，我尽量在今年之内完成。(start一下 ---- 谢谢..)
+> 可能花费的时间会很多，我尽量在今年之内完成。(start一下 ---- 谢谢..)
 
 ## 简介
 
@@ -14,12 +14,12 @@ React + React-Router + Redux + React-Native + Electron + Express + MongoDB => �
 
 所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(client)，你不止需要启动client，也需启动server，其他皆是如此，每端详情到各个目录下查看`README.md`。
 
-  - [依赖数据源数据端(server)](/server/README.md)
-  - [移动端网页客户端(client)](/client/README.md)
-  - [电脑端网页管理端(manage)](/manage/README.md)
-  - [移动端 RN APP端(native)](/native/README.md)
-  - [桌面端 Electron(electron)](/electron/README.md)
-  - [移动端微信小程序(weapp)](/weapp/README.md)
+  - [后台数据端 (server)](/server/README.md)
+  - [网页客户端 (client)](/client/README.md)
+  - [网页管理端 (manage)](/manage/README.md)
+  - [原生APP(RN) (native)](/native/README.md)
+  - [桌面版 (electron)](/electron/README.md)
+  - [微信小程序 (weapp)](/weapp/README.md)
 
 ## 开发环境
 
@@ -34,22 +34,17 @@ React + React-Router + Redux + React-Native + Electron + Express + MongoDB => �
 
 在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习，首发皆在我本人`Github`，本仓库有关于`react`的代码也是为了[target](https://github.com/mintsweet/target)仓库而创，如果你想跟我学`react`，来`target`仓库一探。
 
-### 个人博客地址
+### 博客地址
 
 [React终极实战(一)-原型设计和数据模型](https://github.com/mintsweet/target/issues/1)<br>
 [React终极实战(二)-API设计说明与数据端初始化](https://github.com/mintsweet/target/issues/2)<br>
 [React终极实战(三)-完成客户端用户模块](https://github.com/mintsweet/target/issues/3)<br>
-
-### segmentfault地址
-
-[React终极实战(一)-原型设计和数据模型](https://segmentfault.com/a/1190000013249174)
 
 ## 其他
 
 本项目的问题你可以提[issue](https://github.com/mintsweet/practice/issues/new)或者给我发邮件。<br>
 其他无关问题你可以在[segmentfault](https://segmentfault.com/u/qingzhan)给我提问。<br>
 
-
 ## 协议
 
-practice &copy; [qingzhan](https://github.com/mintsweet), Released under the [MIT](./LICENSE) License.
+practice &copy; [青湛](https://github.com/mintsweet), Released under the [MIT](./LICENSE) License.
