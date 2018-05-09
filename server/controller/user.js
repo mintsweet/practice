@@ -1,7 +1,7 @@
-import BaseComponent from '../prototype/BaseComponent';
-import formidable from 'formidable';
-import bcrypt from 'bcryptjs';
-import UserModel from '../models/user';
+const formidable = require('formidable');
+const bcrypt = require('bcryptjs');
+const BaseComponent = require('../prototype/BaseComponent');
+const UserModel = require('../models/user');
 
 const SALT_WORK_FACTOR = 10;
 
@@ -53,7 +53,7 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile }, '-_id, -__v');
+      const existUser = await UserModel.findOne({ mobile }, '-_id -__v');
       if (!existUser) {
         return res.send({
           status: 0,
@@ -64,7 +64,7 @@ class User extends BaseComponent {
 
       const isMatch = await bcrypt.compare(password, existUser.password);
       if (isMatch) {
-        // req.session.userInfo = existUser;
+        req.session.userInfo = existUser;
         return res.send({
           status: 1,
           data: existUser
@@ -92,12 +92,21 @@ class User extends BaseComponent {
       }
 
       const { nickname, mobile, password } = fields;
-      const existUser = await UserModel.findOne({ mobile });
+      let existUser;
+      existUser = await UserModel.findOne({ mobile });
       if (existUser) {
         return res.send({
           status: 0,
           type: 'USER_HASN_EXIST',
           message: '手机号已经存在了'
+        });
+      }
+      existUser = await UserModel.findOne({ nickname });
+      if (existUser) {
+        return res.send({
+          status: 0,
+          type: 'USER_HASH_EXIST',
+          message: '昵称已经存在了'
         });
       }
 
@@ -129,8 +138,7 @@ class User extends BaseComponent {
       try {
         await UserModel.create(userInfo);
         return res.send({
-          status: 1,
-          data: userInfo
+          status: 1
         });
       } catch(err) {
         return res.send({
@@ -197,7 +205,7 @@ class User extends BaseComponent {
       });
     } else {
       try {
-        const user = await UserModel.findOne({ id }, '-_id -__v');
+        const user = await UserModel.findOne({ id }, '-_id -__v -password -create_at -mobile');
         if (!user) {
           return res.send({
             status: 0,
@@ -221,4 +229,4 @@ class User extends BaseComponent {
   }
 }
 
-export default new User();
+module.exports = new User();

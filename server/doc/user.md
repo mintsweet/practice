@@ -2,6 +2,16 @@
 
 模块公共路径为`/user`，以下请求路径省略`http://localhost:3000/api/user`。
 
+## 目录
+
+[获取当前用户信息](#获取当前用户信息)<br>
+[用户注册](#用户注册)<br>
+[用户登录](#用户登录)<br>
+[用户忘记密码](#用户忘记密码)<br>
+[获取用户信息](#获取用户信息)<br>
+
+## 接口列表
+
 ### 获取当前用户信息
 
 #### 请求Url
@@ -24,9 +34,21 @@ GET
 
 ```json
 {
-    "status": 0,
-    "type": "ERROR_GET_ADMIN_INFO",
-    "message": "尚未登录"
+    "status": 1,
+    "data": {
+        "post_list": [],
+        "mood_list": [],
+        "collect_list": [],
+        "praise_list": [],
+        "dynamic": [],
+        "follow": [],
+        "fans": [],
+        "create_at": "2018-05-09 09:44",
+        "id": 5,
+        "nickname": "笑嘻嘻嘻嘻",
+        "password": "$2a$10$MrpfrR9ckS7Kw6jN4sHj/Ox1fK/jsvJcdOEQL7VLxUHp5LDvo6Cza",
+        "mobile": "18800001011"
+    }
 }
 ```
 
@@ -56,13 +78,7 @@ POST
 
 ```json
 {
-    "status": 1,
-    "data": {
-        "id": 3,
-        "nickname": "青湛啦啦啦",
-        "password": "$2a$10$LwQYlJs99U85SKVLJP.gg.nrDa8apWwkrn7yioxa.roWuMrAJ8KXK",
-        "mobile": "18711111111"
-    }
+    "status": 1
 }
 ```
 
@@ -100,11 +116,11 @@ POST
         "dynamic": [],
         "follow": [],
         "fans": [],
-        "create_at": "2018-05-08 10:07",
-        "id": 3,
-        "nickname": "青湛啦啦啦",
-        "password": "$2a$10$LwQYlJs99U85SKVLJP.gg.nrDa8apWwkrn7yioxa.roWuMrAJ8KXK",
-        "mobile": "18711111111"
+        "create_at": "2018-05-09 09:44",
+        "id": 5,
+        "nickname": "笑嘻嘻嘻嘻",
+        "password": "$2a$10$MrpfrR9ckS7Kw6jN4sHj/Ox1fK/jsvJcdOEQL7VLxUHp5LDvo6Cza",
+        "mobile": "18800001011"
     }
 }
 ```
@@ -172,12 +188,8 @@ GET
         "dynamic": [],
         "follow": [],
         "fans": [],
-        "create_at": "2018-05-08 11:00",
-        "id": 1,
-        "mobile": "18788888888",
-        "nickname": "青湛",
-        "password": "$2a$10$d5ERtrHPWCs4tTyTjnup0etrPRpbjsvDmwByQLAycMxhVtd70UTfa",
-        "motto": "清明深湛，清澈透亮"
+        "id": 2,
+        "nickname": "青湛啦啦啦"
     }
 }
 ```

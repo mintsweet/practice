@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import moment from 'moment';
-import PostData from '../mock/post';
+const mongoose = require('mongoose');
+const moment = require('moment');
+const PostData = require('../mock/post');
 
 const Schema = mongoose.Schema;
 
@@ -64,4 +64,4 @@ Post.findOne((err, data) => {
   }
 });
 
-export default Post;
+module.exports = Post;

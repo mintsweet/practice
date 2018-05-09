@@ -1,5 +1,5 @@
-import BaseComponent from '../prototype/BaseComponent';
-import PostModel from '../models/post';
+const BaseComponent = require('../prototype/BaseComponent');
+const PostModel = require('../models/post');
 
 class Post extends BaseComponent {
   async getTop(req, res) {
@@ -21,7 +21,7 @@ class Post extends BaseComponent {
 
   async getList(req, res) {
     try {
-      const posts = await PostModel.find();
+      const posts = await PostModel.find({}, '-_id -__v');
       return res.send({
         status: 1,
         data: posts
@@ -44,9 +44,37 @@ class Post extends BaseComponent {
         
       });
     } else {
-
+      try {
+        const post = await PostModel.findOne({ id }, '-_id -__v');
+        if (!post) {
+          return res.send({
+            status: 0,
+            typpe: 'ERROR_NO_EXIST_POST',
+            message: '文章不存在'
+          });
+        } else {
+          return res.send({
+            status: 1,
+            data: post
+          });
+        }
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_SERVICE_FAILED',
+          message: '服务器无响应，请稍后重试'
+        });
+      }
     }
+  }
+
+  async likePost(req, res) {
+    
+  }
+
+  async commentPost(req, res) {
+    
   }
 }
 
-export default new Post();
+module.exports = new Post();

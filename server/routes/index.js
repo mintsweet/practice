@@ -1,6 +1,6 @@
 const common = require('./common');
-// import user from './user';
-// import post from './post';
+const user = require('./user');
+const post = require('./post');
 // import gener from './gener';
 // import mood from './mood';
 // import admin from './admin';
@@ -17,11 +17,11 @@ module.exports = app => {
   // Common
   app.use('/api/common', common);
 
-  // // User
-  // app.use('/api/user', user);
+  // User
+  app.use('/api/user', user);
 
-  // // Post
-  // app.use('/api/post', post);
+  // Post
+  app.use('/api/post', post);
 
   // // Gener
   // app.use('/api/gener', gener);

@@ -1,14 +1,15 @@
 {
   "private": true,
   "workspaces": [
-    "app",
-    "client",
+    "client-mobile",
+    "client-pc",
     "electron",
     "manage",
+    "native",
+    "weapp",
     "server"
   ],
   "scripts": {
-    "start:server": "cd server && yarn start",
-    "start:client": "cd client && yarn start"
+    "start:server": "cd server && yarn start"
   }
 }

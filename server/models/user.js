@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import moment from 'moment';
-import UserData from '../mock/user';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const moment = require('moment');
+const UserData = require('../mock/user');
 
 const Schema = mongoose.Schema;
 
@@ -83,4 +83,4 @@ User.findOne((err, data) => {
   }
 });
 
-export default User;
+module.exports = User;

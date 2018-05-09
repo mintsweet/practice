@@ -1,5 +1,5 @@
-import express from 'express';
-import Post from '../controller/post';
+const express = require('express');
+const Post = require('../controller/post');
 
 const router = express.Router();
 
@@ -9,4 +9,4 @@ router.get('/:id', Post.getInfoById)
 router.post('/:id/like', Post.likePost);
 router.post('/:id/comment', Post.commentPost);
 
-export default router;
+module.exports = router;
