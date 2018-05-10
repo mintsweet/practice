@@ -69,6 +69,39 @@ class Post extends BaseComponent {
   }
 
   async likePost(req, res) {
+    const { id } = req.params;
+    const { userInfo } = req.session;
+    if (!id) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARMAS',
+        message: '获取ID失败'
+      });
+    }
+
+    if (!userInfo) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '尚未登录'
+      });
+    }
+
+    if (userInfo.praise_list.includes(id)) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_REPEATED_OPERATION',
+        message: '你已经点过赞了'
+      });
+    }
+
+    const post = await PostModel.findOne({ id }, '-_id -__v');
+    const praise_num = post.praise_num++;
+    await PostModel.findOneAndUpdate({ id }, { praise_num });
+    
+  }
+
+  async collectPost(req, res) {
     
   }
 

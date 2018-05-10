@@ -15,18 +15,11 @@ const app = new Express();
 /*
 * connect mongodb
 */
-mongoose.connect(config.mongodb);
-const db = mongoose.connection;
-db.on('connected', () => {
-  console.log(chalk.greenBright(`MongoDB Connection Success!`));
-});
-
-db.on('error', (err) => {
+mongoose.connect(config.mongodb, {
+    server: {poolSize: 20}
+}, (err) => {
   console.error(chalk.redBright(`MongoDB Connection Error: ${err}`));
-});
-
-db.on('disconnected', () => {
-  console.error(chalk.yellowBright(`MongoDB Connection Failed!`));
+  process.exit(1);
 });
 
 /*

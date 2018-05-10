@@ -5,5 +5,8 @@
   "scripts": {
     "start": "mints start -p 3001"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "log4js": "^2.5.3"
+  }
 }

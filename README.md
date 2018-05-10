@@ -21,6 +21,8 @@ React + Vue + React-Native + Electron + Express + MongoDB => 构建技术社区
 
 ## 数据API文档
 
+### 各模块详情
+
   - [公共模块](server/doc/common.md)
   - [用户模块](server/doc/user.md)
   - [文章模块](server/doc/post.md)
@@ -28,11 +30,19 @@ React + Vue + React-Native + Electron + Express + MongoDB => 构建技术社区
   - [心情模块](server/doc/mood.md)
   - [管理员模块](server/doc/admin.md)
 
+### API更新日志
+
+**API更新说明详情[使劲戳这里](server/CHANGELOG.md)**
+
 ## 项目博客
 
 在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习。
 
   - 终极实战(一) - 基于 Express 和 MongoDB 的数据服务实现
+
+## 更新日志
+
+[CHANGELOG](CHANGELOG.md)
 
 ## 其他
 
