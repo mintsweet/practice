@@ -4,7 +4,7 @@ const Ids = require('../models/ids');
 
 module.exports = class BaseComponent {
   constructor() {
-    this.idList = ['admin_id', 'user_id', 'genre_id', 'post_id', 'mood_id'];
+    this.idList = ['message_id', 'reply_id', 'statistics_id', 'topic_id', 'user_id'];
   }
 
   async getId(type) {
