@@ -1,17 +1,15 @@
-var path = require('path');
-var config = require('../config');
+const path = require('path');
+const log4js = require('log4js');
+const config = require('../config');
 
-var env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || "development";
 
-var log4js = require('log4js');
 log4js.configure({
-  appenders: [
-    { type: 'console' },
-    { type: 'file', filename: path.join(config.log_dir, 'cheese.log'), category: 'cheese' }
-  ]
+  appenders: { cheese: { type: 'file', filename: path.join(config.log_dir, 'cheese.log') } },
+  categories: { default: { appenders: ['cheese'], level: config.debug && env !== 'test' ? 'debug' : 'error' } }
 });
 
-var logger = log4js.getLogger('cheese');
-logger.setLevel(config.debug && env !== 'test' ? 'DEBUG' : 'ERROR')
+const logger = log4js.getLogger('cheese');
 
 module.exports = logger;
+

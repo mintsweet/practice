@@ -29,3 +29,6 @@ yarn.lock
 *.ntvs*
 *.njsproj
 *.sln
+
+# log
+cheese.log

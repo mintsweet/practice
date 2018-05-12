@@ -1,12 +1,14 @@
 {
   "name": "client-pc",
   "version": "1.0.0",
-  "description": "pc client base on react",
+  "description": "pc client base on traditional",
   "scripts": {
-    "start": "mints start -p 3001"
+    "start": "node app.js"
   },
   "license": "MIT",
   "dependencies": {
-    "log4js": "^2.5.3"
+    "log4js": "^2.5.3",
+    "pug": "^2.0.3",
+    "request": "^2.85.0"
   }
 }

@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="description", content=config.description)
+    meta(name="keywords", content=config.keywords)
+    meta(name="author", content=config.author)
+    title #{config.name}
+    if config.site_icon
+      link(rel="shortcut icon", href=config.site_icon, type="image/x-icon")
+  body
+    block content
