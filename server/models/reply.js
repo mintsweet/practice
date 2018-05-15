@@ -12,8 +12,9 @@ const Schema = mongoose.Schema;
 
 const ReplySchema = new Schema({
   id: { unqie: true, type: Number, isRequire: true },
+  type: { type: String, isRequire: true },
   content: { type: String, isRequire: true },
-  topic_id: { type: Number,isRequire: true },
+  topic_id: { type: Number, isRequire: true },
   author_id: { type: Number, isRequire: true },
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },

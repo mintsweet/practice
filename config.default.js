@@ -2,10 +2,20 @@
 * 配置
 */
 const config = {
-  
-  port: 3000,
+  debug: true,
 
-  mongodb: 'mongodb://localhost/practice',
+  // Site base
+  name: 'Mints - 薄荷糖社区',
+  description: '',
+  keywords: 'mints, community',
+  author: '青湛(github/mintsweet)',
+
+  site_icon: '/static/favicon.ico',
+
+  // Server
+  server_port: 3000,
+  
+  db: 'mongodb://localhost/practice',
 
   session: {
     key: 'practice',
@@ -17,7 +27,11 @@ const config = {
     }
   },
 
+  // Client Pc
+  client_pc_port: 3001,
+
   tabs: [
+    { name: '问答', path: 'ask' },
     {
       name: '技术',
       path: 'tech',
@@ -44,6 +58,5 @@ const config = {
     }
   ]
 };
-
 
 module.exports = config;
