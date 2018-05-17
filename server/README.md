@@ -15,12 +15,7 @@
 
 ## API说明
 
-[公共模块](doc/common.md)<br/>
-[用户模块](doc/user.md)<br/>
-[文章模块](doc/post.md)<br/>
-[分类模块](doc/gener.md)<br/>
-[心情模块](doc/mood.md)<br/>
-[管理员模块](doc/admin.md)<br/>
+[使劲戳API详情](API.md)
 
 ## 非法的域名
 

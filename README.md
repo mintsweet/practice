@@ -27,14 +27,9 @@ React + Vue + React-Native + Electron + Express + MongoDB => 构建社区
 
 ## 数据API文档
 
-### 各模块详情
+### API详情
 
-  - [公共模块](server/doc/common.md)
-  - [用户模块](server/doc/user.md)
-  - [文章模块](server/doc/post.md)
-  - [分类模块](server/doc/gener.md)
-  - [心情模块](server/doc/mood.md)
-  - [管理员模块](server/doc/admin.md)
+[使劲戳这里](server/API.md)
 
 ### API更新日志
 

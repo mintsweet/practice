@@ -12,74 +12,7 @@ class User extends BaseComponent {
     this.forget = this.forget.bind(this);
   }
 
-  getInfo(req, res) {
-    const { userInfo } = req.session;
-    if (!userInfo) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_GET_ADMIN_INFO',
-        message: '尚未登录'
-      });
-    } else {
-      return res.send({
-        status: 1,
-        data: userInfo
-      });
-    }
-  }
-
-  signin(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
-      }
-
-      const { mobile, password } = fields;
-
-      try {
-        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
-          throw new Error('请输入正确的手机号!');
-        }
-      } catch(err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_SIGNIN_PARMAS',
-          message: err.message
-        });
-      }
-
-      const existUser = await UserModel.findOne({ mobile }, '-_id -__v');
-      if (!existUser) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_USER_IS_NOT_EXITS',
-          message: '手机账户账户不存在'
-        });
-      }
-
-      const isMatch = await bcrypt.compare(password, existUser.password);
-      if (isMatch) {
-        req.session.userInfo = existUser;
-        return res.send({
-          status: 1,
-          data: existUser
-        });
-      } else {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PASS_IS_NOT_MATCH',
-          message: '用户密码错误'
-        });
-      }
-
-    });
-  }
-
+  // 注册
   signup(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
@@ -156,7 +89,66 @@ class User extends BaseComponent {
     return hash;
   }
 
-  forget(req, res) {
+  // 登录
+  signin(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
+
+      const { mobile, password } = fields;
+
+      try {
+        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+          throw new Error('请输入正确的手机号!');
+        }
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_SIGNIN_PARMAS',
+          message: err.message
+        });
+      }
+
+      const existUser = await UserModel.findOne({ mobile }, '-_id -__v');
+      if (!existUser) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_USER_IS_NOT_EXITS',
+          message: '手机账户账户不存在'
+        });
+      }
+
+      const isMatch = await bcrypt.compare(password, existUser.password);
+      if (isMatch) {
+        req.session.userInfo = existUser;
+        return res.send({
+          status: 1,
+          data: existUser
+        });
+      } else {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PASS_IS_NOT_MATCH',
+          message: '用户密码错误'
+        });
+      }
+
+    });
+  }
+
+  // 登出
+  signout(req, res) {
+    
+  }
+
+  // 忘记密码
+  forgetPass(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
       if (err) {
@@ -195,37 +187,49 @@ class User extends BaseComponent {
     });
   }
 
-  async getInfoById(req, res) {
-    const { id } = req.params;
-    if (!id) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_PARMAS',
-        message: '不能获取ID'
-      });
-    } else {
-      try {
-        const user = await UserModel.findOne({ id }, '-_id -__v -password -create_at -mobile');
-        if (!user) {
-          return res.send({
-            status: 0,
-            type: 'ERROR_NO_EXIST_USER',
-            message: '用户不存在'
-          });
-        } else {
-          return res.send({
-            status: 1,
-            data: user
-          });
-        }
-      } catch(err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_SERVICE_FAILED',
-          message: '服务器无响应，请稍后重试'
-        });
-      }
-    }
+  // 修改密码
+  updatePass(req, res) {
+
+  }
+
+  // 通过昵称获取用户信息
+  getInfoNickname(req, res) {
+
+  }
+
+  // 更新个人信息
+  updateUserInfo(req, res) {
+
+  }
+
+  // 获取星标用户列表
+  getStartList(req, res) {
+
+  }
+
+  // 获取积分榜前一百用户
+  getTop100(req, res) {
+
+  }
+
+  // 获取用户收藏列表
+  getUserCollections(req, res) {
+
+  }
+
+  // 用户回复的列表
+  getUserReplies(req, res) {
+    
+  }
+  
+  // 获取用户粉丝列表
+  getUserFollower(req, res) {
+
+  }
+
+  // 获取用户关注的人列表
+  getUserFollowig(req, res) {
+
   }
 }
 

@@ -29,27 +29,27 @@ const ALLOW_ORIGIN = [
   'http://localhost:3004'
 ];
 
-app.all('*', (req, res, next) => {
-  const reqOrigin = req.headers.origin;
-  if (ALLOW_ORIGIN.includes(reqOrigin)) {
-    res.header("Access-Control-Allow-Origin", reqOrigin);
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("X-Powered-By", '3.2.1');
-    if (req.method == 'OPTIONS') {
-      res.sendStatus(200);
-    } else {
-      next();
-    }
-  } else {
-    res.send({
-      status: 0,
-      type: 'ILLEGAL DOMAIN NAME',
-      message: '非法的域名'
-    });
-  }
-});
+// app.all('*', (req, res, next) => {
+//   const reqOrigin = req.headers.origin;
+//   if (ALLOW_ORIGIN.includes(reqOrigin)) {
+//     res.header("Access-Control-Allow-Origin", reqOrigin);
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+//     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+//     res.header("Access-Control-Allow-Credentials", true);
+//     res.header("X-Powered-By", '3.2.1');
+//     if (req.method == 'OPTIONS') {
+//       res.sendStatus(200);
+//     } else {
+//       next();
+//     }
+//   } else {
+//     res.send({
+//       status: 0,
+//       type: 'ILLEGAL DOMAIN NAME',
+//       message: '非法的域名'
+//     });
+//   }
+// });
 
 // cookie and session
 const MongoStore = connectMongo(session);

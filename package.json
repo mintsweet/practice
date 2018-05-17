@@ -10,6 +10,7 @@
     "server"
   ],
   "scripts": {
-    "start:server": "cd server && yarn start"
+    "start:server": "cd server && yarn start",
+    "start:client-pc": "cd client-pc && yarn start"
   }
 }
