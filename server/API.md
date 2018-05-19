@@ -6,6 +6,8 @@
 [获取手机验证码](#获取手机验证码)<br>
 [注册](#注册)<br>
 [登录](#登录)<br>
+[登出](#登出)<br>
+[忘记密码](#忘记密码)<br>
 
 ## 接口列表
 
@@ -138,5 +140,59 @@ POST
     "password": "$2a$10$8SceZZN4feIc8c52FlMTxuhvQtmp795RgA4mXupctfOhSSgHhgEx6",
     "mobile": "18800000000"
   }
+}
+```
+
+## 登出
+
+#### 请求Url
+
+```bash
+/user/signout
+```
+
+#### 请求方式
+
+```bash
+GET
+```
+
+#### 参数类型：无
+
+#### 返回示例
+
+```json
+{
+  "status": 1
+}
+```
+
+## 忘记密码
+
+#### 请求Url
+
+```bash
+/user/forgetPass
+```
+
+#### 请求方式
+
+```bash
+POST
+```
+
+#### 参数类型：params
+
+|参数|是否必选|类型|说明|
+|:-----|:-------:|:-----|:-----|
+|mobile      |Yes       |number  |标准手机号格式 |
+|newPassword |Yes       |number  |数字、字母和特殊字符其中两种组成并且在6-18位之间 |
+|msgcaptcha  |Yes       |number  |6为标准验证码 |
+
+#### 返回示例
+
+```json
+{
+  "status": 1
 }
 ```

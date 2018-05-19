@@ -169,7 +169,18 @@ class User extends BaseComponent {
 
   // 登出
   signout(req, res) {
-    
+    try {
+      delete res.session.userInfo;
+      res.send({
+        status: 1
+      });
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'ERROR_SIGNOUT_FAILED',
+        message: err.message
+      });
+    }
   }
 
   // 忘记密码
@@ -184,7 +195,7 @@ class User extends BaseComponent {
         });
       }
       const { msg_code } = req.session;
-      const { mobile, password , msgcaptcha } = fields;
+      const { mobile, newPassword , msgcaptcha } = fields;
 
       try {
         if (mobile && mobile !== msg_code.mobile) {
@@ -193,7 +204,7 @@ class User extends BaseComponent {
           throw new Error('验证码错误');
         } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
           throw new Error('验证码已失效，请重新获取');
-        } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
+        } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间!');
         }
       } catch(err) {
@@ -204,7 +215,7 @@ class User extends BaseComponent {
         });
       }
 
-      const bcryptPassword = await this.encryption(password);
+      const bcryptPassword = await this.encryption(newPassword);
       await UserModel.findOneAndUpdate({ mobile }, {$set: {password: bcryptPassword}});
       return res.send({
         status: 1
@@ -214,7 +225,7 @@ class User extends BaseComponent {
 
   // 修改密码
   updatePass(req, res) {
-
+    
   }
 
   // 通过昵称获取用户信息
