@@ -8,7 +8,6 @@ const UserSchema = new Schema({
   id: { unqie: true, type: Number, isRequire: true },
 
   mobile: { unqie: true, type: String },
-  email: { unqie: true, type: String },
   password: { type: String, isRequire: true },
   
   nickname: { unqie: true, type: String, isRequire: true },
