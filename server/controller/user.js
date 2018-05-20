@@ -282,13 +282,49 @@ class User extends BaseComponent {
   }
 
   // 通过昵称获取用户信息
-  getInfoNickname(req, res) {
+  async getInfoNickname(req, res) {
+    const { nickname } = req.params;
 
+    if (!nickname) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARAMS',
+        message: '无效的昵称'
+      });
+    }
+
+    const user = await UserModel.findOne({ nickname }, '-_id -__v -password -mobile -isAdmin -roles -create_at -update_at -id');
+
+    if (!user) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_USER_NOT_EXSIT',
+        message: '用户不存在'
+      });
+    }
+
+    return res.send({
+      status: 1,
+      data: user
+    });
   }
 
   // 更新个人信息
   updateUserInfo(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
 
+      const { userInfo } = req.session;
+      const { nickname, avatar, location, signature } = fields;
+
+    });
   }
 
   // 获取星标用户列表

@@ -16,13 +16,14 @@ const UserSchema = new Schema({
   signature: { type: String },
 
   score: { type: Number, default: 0 },
-  topic_count: { type: Number, default: 0 },
-  reply_count: { type: Number, default: 0 },
-  follower_count: { type: Number, default: 0 },
-  following_count: { type: Number, default: 0 },
+  is_start: { type: Boolean, default: false },
+  collect_list: { type: Array, default: [] },
+  reply_list: { type: Array, default: [] },
+  follower_list: { type: Array, default: [] },
+  following_list: { type: Array, default: [] },
 
-  isAdmin: { type: Boolean, default: false },
-  roles: { type: Number, default: 1 },
+  is_admin: { type: Boolean, default: false },
+  role: { type: Number, default: 0 },
 
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },

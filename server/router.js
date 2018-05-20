@@ -2,7 +2,6 @@ const express = require('express');
 const Auth = require('./middleware/auth');
 const Common = require('./controller/common');
 const User = require('./controller/user');
-const Auth = require('./middleware/auth');
 
 const router = express.Router();
 
@@ -17,7 +16,7 @@ router.get('/user/signout', User.signout); // 登出
 router.post('/user/forget_pass', User.forgetPass); // 忘记密码
 router.post('/user/update_pass', Auth.userRequired, User.updatePass); // 修改密码
 router.get('/user/:nickname', User.getInfoNickname); // 获取指定昵称用户信息
-router.post('/user/setting', User.updateUserInfo); // 更新个人信息
+router.post('/user/setting', Auth.userRequired, User.updateUserInfo); // 更新个人信息
 router.get('/user/start', User.getStartList); // 获取星标用户列表
 router.get('/user/top100', User.getTop100); // 获取积分榜前一百用户列表
 router.get('/user/:nickname/collections', User.getUserCollections);  // 获取用户收藏列表
