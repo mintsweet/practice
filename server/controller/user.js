@@ -9,7 +9,8 @@ class User extends BaseComponent {
   constructor() {
     super();
     this.signup = this.signup.bind(this);
-    this.forget = this.forgetPass.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
+    this.updatePass = this.updatePass.bind(this);
   }
 
   // 注册
@@ -205,7 +206,7 @@ class User extends BaseComponent {
         } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
           throw new Error('验证码已失效，请重新获取');
         } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
-          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间!');
+          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
         }
       } catch(err) {
         return res.send({
@@ -225,7 +226,59 @@ class User extends BaseComponent {
 
   // 修改密码
   updatePass(req, res) {
-    
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
+
+      const { mobile } = req.session.userInfo;
+      const { oldPassword , newPassword } = fields;
+      
+      try {
+        if (!mobile) {
+          throw new Error('手机号不能为空');
+        } else if (!oldPassword) {
+          throw new Error('旧密码不能为空');
+        } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
+          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+        }
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_FORGET_PARMAS',
+          message: err.message
+        });
+      }
+  
+      const existUser = await UserModel.findOne({ mobile }, '-_id -__v');
+      if (!existUser) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_USER_IS_NOT_EXITS',
+          message: '手机账户账户不存在'
+        });
+      }
+  
+      const isMatch = await bcrypt.compare(oldPassword, existUser.password);
+      if (isMatch) {
+        const bcryptPassword = await this.encryption(newPassword);
+        await UserModel.findOneAndUpdate({ mobile }, {$set: {password: bcryptPassword}});
+        return res.send({
+          status: 1
+        });
+      } else {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PASSWORD_IS_NOT_MAtCH',
+          message: '密码错误'
+        });
+      }
+    });
   }
 
   // 通过昵称获取用户信息

@@ -1,6 +1,8 @@
 /*
 * 配置
 */
+const path = require('path');
+
 const config = {
   debug: true,
 
@@ -26,6 +28,8 @@ const config = {
       maxAge: 2592000000,
     }
   },
+
+  log_dir: path.join(__dirname, './server/logs'),
 
   // Client Pc
   client_pc_port: 3001,

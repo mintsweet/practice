@@ -4,7 +4,6 @@
 const express = require('express');
 const path = require('path');
 const config = require('./config');
-const logger = require('./utils/logger');
 const routes = require('./router');
 
 const app = express();
@@ -24,8 +23,8 @@ app.use('/', routes);
 
 if (!module.parent) {
   app.listen(config.port, () => {
-    logger.info('Mints listening on port', config.port);
-    logger.info('You can debug your app with http://' + config.hostname + ':' + config.port);
-    logger.info('');
+    console.log('Mints listening on port', config.port);
+    console.log('You can debug your app with http://' + config.hostname + ':' + config.port);
+    console.log('');
   });
 }

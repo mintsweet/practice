@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const connectMongo = require('connect-mongo');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const logger = require('./utils/logger');
 const config = require('../config.default');
 const router = require('./router');
 
@@ -13,10 +14,10 @@ const app = new Express();
 // connect mongodb
 mongoose.connect(config.db, (error) => {
   if (error) {
-    console.error(chalk.redBright(`MongoDB Connection Error: ${err}`));
+    logger.error('MongoDB Connection Error: ', error)
     process.exit(1);
   } else {
-    console.log(chalk.greenBright(`MongoDB Connection Success!`));
+    logger.info('MongoDB Connection Success!')
   }
 });
 
@@ -88,5 +89,6 @@ app.use((err, req, res) => {
 });
 
 app.listen(config.server_port, () => {
-  console.log(chalk.greenBright(`Server start on ${config.server_port}!`));
+  logger.info('The Server listening on port', config.server_port);
+  logger.info('');
 });

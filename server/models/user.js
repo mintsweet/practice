@@ -21,6 +21,9 @@ const UserSchema = new Schema({
   follower_count: { type: Number, default: 0 },
   following_count: { type: Number, default: 0 },
 
+  isAdmin: { type: Boolean, default: false },
+  roles: { type: Number, default: 1 },
+
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },
 });

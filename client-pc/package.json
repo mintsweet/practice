@@ -7,7 +7,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "log4js": "^2.5.3",
     "pug": "^2.0.3",
     "request": "^2.85.0"
   }

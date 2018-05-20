@@ -8,6 +8,7 @@
 [登录](#登录)<br>
 [登出](#登出)<br>
 [忘记密码](#忘记密码)<br>
+[修改密码](#修改密码)<br>
 
 ## 接口列表
 
@@ -172,7 +173,7 @@ GET
 #### 请求Url
 
 ```bash
-/user/forgetPass
+/user/forget_pass
 ```
 
 #### 请求方式
@@ -188,6 +189,40 @@ POST
 |mobile      |Yes       |number  |标准手机号格式 |
 |newPassword |Yes       |number  |数字、字母和特殊字符其中两种组成并且在6-18位之间 |
 |msgcaptcha  |Yes       |number  |6为标准验证码 |
+
+#### 返回示例
+
+```json
+{
+  "status": 1
+}
+```
+
+## 修改密码
+
+
+#### 请求Url
+
+```bash
+/user/update_pass
+```
+
+#### 前置条件
+
+**需要登录状态**
+
+#### 请求方式
+
+```bash
+POST
+```
+
+#### 参数类型：params
+
+|参数|是否必选|类型|说明|
+|:-----|:-------:|:-----|:-----|
+|oldPassword |Yes       |number  |数字、字母和特殊字符其中两种组成并且在6-18位之间 |
+|newPassword |Yes       |number  |数字、字母和特殊字符其中两种组成并且在6-18位之间 |
 
 #### 返回示例
 

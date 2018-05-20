@@ -11,4 +11,17 @@ const IdsSchema = new Schema({
 
 const Ids = mongoose.model('Ids', IdsSchema);
 
+Ids.findOne((err, data) => {
+  if (!data) {
+    const newIds = new Ids({
+      message_id: 1,
+      reply_id: 1,
+      topic_id: 1,
+      user_id: 1,
+      statistics_id: 1
+    });
+    newIds.save();
+  }
+});
+
 module.exports = Ids;
