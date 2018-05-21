@@ -293,7 +293,7 @@ class User extends BaseComponent {
       });
     }
 
-    const user = await UserModel.findOne({ nickname }, '-_id -__v -password -mobile -isAdmin -roles -create_at -update_at -id');
+    const user = await UserModel.findOne({ nickname }, '-_id -__v -password -mobile -is_admin -roles -create_at -update_at -id');
 
     if (!user) {
       return res.send({
@@ -328,13 +328,39 @@ class User extends BaseComponent {
   }
 
   // 获取星标用户列表
-  getStartList(req, res) {
-
+  async getStartList(req, res) {
+    try {
+      const userList = await UserModel.find({ is_start: true }, '-_id -__v -password -mobile -is_admin -roles -create_at -update_at -id');
+      return res.send({
+        status: 1,
+        data: userList
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_START_LIST',
+        message: '获取星标用户失败'
+      });
+    }
   }
 
   // 获取积分榜前一百用户
   getTop100(req, res) {
-
+    try {
+      const userList = await UserModel.find({}, {
+        sort: { score: 1 }
+      });
+      return res.send({
+        status: 1,
+        data: userList
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_START_LIST',
+        message: '获取星标用户失败'
+      });
+    }
   }
 
   // 获取用户收藏列表
