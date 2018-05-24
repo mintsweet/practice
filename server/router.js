@@ -22,7 +22,7 @@ router.get('/user/top100', User.getTop100); // 获取积分榜前一百用户列
 router.get('/user/:nickname/collections', User.getUserCollections);  // 获取用户收藏列表
 router.get('/user/:nickname/replies', User.getUserReplies); // 用户回复的列表
 router.get('/user/:nickname/follower', User.getUserFollower); // 获取用户粉丝列表
-router.get('/user/:nickname/followig', User.getUserFollowig); // 获取用户关注的人列表
+router.get('/user/:nickname/following', User.getUserFollowing); // 获取用户关注的人列表
 
 // 主题
 

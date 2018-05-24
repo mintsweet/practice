@@ -2,6 +2,8 @@ const formidable = require('formidable');
 const bcrypt = require('bcryptjs');
 const BaseComponent = require('../prototype/BaseComponent');
 const UserModel = require('../models/user');
+const TopicModel = require('../models/topic');
+const ReplyModel = require('../models/reply');
 
 const SALT_WORK_FACTOR = 10;
 
@@ -345,14 +347,14 @@ class User extends BaseComponent {
   }
 
   // 获取积分榜前一百用户
-  getTop100(req, res) {
+  async getTop100(req, res) {
     try {
       const userList = await UserModel.find({}, {
         sort: { score: 1 }
       });
       return res.send({
         status: 1,
-        data: userList
+        data: userList.slice(0, 100)
       });
     } catch(err) {
       return res.send({
@@ -364,23 +366,95 @@ class User extends BaseComponent {
   }
 
   // 获取用户收藏列表
-  getUserCollections(req, res) {
-
+  async getUserCollections(req, res) {
+    const { nickname } = req.params;
+    try {
+      const user = await UserModel.findOne({ nickname });
+      const collections = user.collect_list;
+      const data = collections.map(async item => {
+        return await TopicModel.findById({ item });
+      });
+  
+      return res.send({
+        status: 1,
+        data
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '获取用户失败'
+      });
+    }
   }
 
   // 用户回复的列表
-  getUserReplies(req, res) {
-    
+  async getUserReplies(req, res) {
+    const { nickname } = req.params;
+    try {
+      const user = await UserModel.findOne({ nickname });
+      const replies = user.reply_list;
+      const data = replies.map(async item => {
+        return await ReplyModel.findById({ item });
+      });
+  
+      return res.send({
+        status: 1,
+        data
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '获取用户失败'
+      });
+    }
   }
   
   // 获取用户粉丝列表
   getUserFollower(req, res) {
-
+    const { nickname } = req.params;
+    try {
+      const user = await UserModel.findOne({ nickname });
+      const follower = user.follower_list;
+      const data = follower.map(async item => {
+        return await UserModel.findById({ item });
+      });
+  
+      return res.send({
+        status: 1,
+        data
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '获取用户失败'
+      });
+    }
   }
 
   // 获取用户关注的人列表
-  getUserFollowig(req, res) {
-
+  getUserFollowing(req, res) {
+    const { nickname } = req.params;
+    try {
+      const user = await UserModel.findOne({ nickname });
+      const following = user.following_list;
+      const data = following.map(async item => {
+        return await UserModel.findById({ item });
+      });
+  
+      return res.send({
+        status: 1,
+        data
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '获取用户失败'
+      });
+    }
   }
 }
 

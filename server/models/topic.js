@@ -51,6 +51,6 @@ TopicSchema.virtual('tabName').get(() => {
   }
 });
 
-const Topic = mongoose.model('Topic', PostSchema);
+const Topic = mongoose.model('Topic', TopicSchema);
 
 module.exports = Topic;
