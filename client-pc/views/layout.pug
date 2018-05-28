@@ -2,11 +2,25 @@ doctype html
 html
   head
     meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(name="description", content=config.description)
     meta(name="keywords", content=config.keywords)
     meta(name="author", content=config.author)
     title #{config.name}
     if config.site_icon
       link(rel="shortcut icon", href=config.site_icon, type="image/x-icon")
+    //- styles
+    link(rel="stylesheet", href="/static/libs/bootstrap/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/static/css/style.css")
   body
-    block content
+    include includes/navbar
+    .container
+      .content
+        block content
+      .sidebar
+        include includes/sidebar
+    //- scripts
+    script(src="/static/libs/jquery.min.js")
+    script(src="/static/libs/popper.min.js")
+    script(src="/static/libs/bootstrap/js/bootstrap.min.js")
+    script(src="/static/js/main.js")

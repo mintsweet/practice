@@ -3,7 +3,7 @@
 */
 const express = require('express');
 const path = require('path');
-const config = require('./config');
+const config = require('../config.default');
 const routes = require('./router');
 
 const app = express();
@@ -22,9 +22,7 @@ app.locals.config = config;
 app.use('/', routes);
 
 if (!module.parent) {
-  app.listen(config.port, () => {
-    console.log('Mints listening on port', config.port);
-    console.log('You can debug your app with http://' + config.hostname + ':' + config.port);
-    console.log('');
+  app.listen(config.client_pc_port, () => {
+    console.log('Mints PC Client listening on port', config.client_pc_port);
   });
 }

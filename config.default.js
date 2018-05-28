@@ -60,7 +60,14 @@ const config = {
         { name: '西安', path: 'xian' }
       ]
     }
-  ]
+  ],
+
+  menus: [
+    { name: '首页', url: '/' },
+    { name: '新手入门', url: '/get_start' },
+    { name: 'API说明', url: '/api_introduction' },
+    { name: '关于', url: '/about' }
+  ],
 };
 
 module.exports = config;
