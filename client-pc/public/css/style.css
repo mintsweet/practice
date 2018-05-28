@@ -1,9 +1,68 @@
+/* body */
+body {
+  background-color: #e5e5e5;
+}
+
 /* navbar */
 .navbar-nav {
   margin-right: 20px;
 }
 
-/* container */
+/* layout */
 .container {
-  margin-top: 56px;
+  position: relative;
+  margin-top: 70px;
+}
+
+.content {
+  margin-right: 305px;
+  background-color: #fff;
+}
+
+.content-tabs {
+  padding: 0 20px;
+  height: 40px;
+  line-height: 40px;
+  background: #f4f4f4;
+}
+
+.content-tabs a {
+  margin-right: 10px;
+}
+
+.content-inner {
+  padding: 10px 20px;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+}
+
+@media (max-width: 979px) {
+  .content {
+    margin-right: 0;
+  }
+  .sidebar {
+    display: none;
+  }
+}
+
+/* panel */
+.panel {
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.panel-title {
+  padding: 0 10px;
+  height: 40px;
+  line-height: 40px;
+  background: #f4f4f4;
+}
+
+.panel-inner {
+  padding: 10px;
 }

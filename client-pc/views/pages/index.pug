@@ -1,4 +1,8 @@
 extends ../layout.pug
 
 block content
-  p 我是首页
+  .content-tabs
+    each tab in [{ name: '全部', path: 'all' }].concat(config.tabs)
+      a(href='/?tab=' + tab.path) #{tab.name}
+  .content-inner
+    | 首页
