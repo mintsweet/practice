@@ -26,6 +26,7 @@ router.get('/user/:nickname/follower', User.getUserFollower); // 获取用户粉
 router.get('/user/:nickname/following', User.getUserFollowing); // 获取用户关注的人列表
 
 // 主题
+router.get('/topic/list', Topic.getTopicList); // 主题列表
 router.post('/topic/add', Topic.addTopic); // 新增主题
 
 module.exports = router;

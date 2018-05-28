@@ -1,9 +1,27 @@
+const rq = require('request-promise');
+
 class Home {
-  
   // 首页
-  index(req, res) {
+  async index(req, res) {
+    const { tab, page } = req.query;
+    let topics = [];
+    let userTop = [];
+
+    const topicRespone = await rq(`http://localhost:3000/api/topic/list?tab=${tab}&page=${page}`);
+    const userRespone = await rq('http://localhost:3000/api/user/top100');
+
+    if (topicRespone.status === 1) {
+      topics = topicRespone.data;
+    }
+
+    if (userRespone.status === 1) {
+      userTop = userRespone.data;
+    }
+
     res.render('index', {
       title: '首页',
+      topics,
+      userTop
     });
   }
 

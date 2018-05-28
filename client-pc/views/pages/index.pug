@@ -5,4 +5,5 @@ block content
     each tab in [{ name: '全部', path: 'all' }].concat(config.tabs)
       a(href='/?tab=' + tab.path) #{tab.name}
   .content-inner
-    | 首页
+    if (typeof(topics) !== 'undefined' && topics.length > 0)
+      

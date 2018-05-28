@@ -8,6 +8,16 @@ class Topic extends BaseComponent {
     this.addTopic = this.addTopic.bind(this);
   }
 
+  // 获取列表
+  getTopicList(req, res) {
+    const { tab, page } = req.query;
+
+    return res.send({
+      status: 1,
+      data: []
+    });
+  }
+
   // 新增
   addTopic(req, res) {
     const form = new formidable.IncomingForm();

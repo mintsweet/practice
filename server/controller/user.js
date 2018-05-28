@@ -412,7 +412,7 @@ class User extends BaseComponent {
   }
   
   // 获取用户粉丝列表
-  getUserFollower(req, res) {
+  async getUserFollower(req, res) {
     const { nickname } = req.params;
     try {
       const user = await UserModel.findOne({ nickname });
@@ -435,7 +435,7 @@ class User extends BaseComponent {
   }
 
   // 获取用户关注的人列表
-  getUserFollowing(req, res) {
+  async getUserFollowing(req, res) {
     const { nickname } = req.params;
     try {
       const user = await UserModel.findOne({ nickname });
