@@ -1,4 +1,7 @@
 const rq = require('request-promise');
+const md = require('markdown-it')();
+const fs = require('fs');
+const path = require('path');
 
 class Home {
   // 首页
@@ -27,22 +30,34 @@ class Home {
 
   // 新手入门
   getStart(req, res) {
-    res.render('getStart', {
-      titile: '新手入门',
+    fs.readFile(path.join(__dirname, '../data/getStart.md'), 'utf-8', (err, data) => {
+      const text = md.render(data);
+      return res.render('getStart', {
+        title: '新手入门',
+        text
+      });
     });
   }
 
   // API说明
   apiIntroduction(req, res) {
-    res.render('apiIntroduction', {
-      titile: 'API说明',
+    fs.readFile(path.join(__dirname, '../data/API.md'), 'utf-8', (err, data) => {
+      const text = md.render(data);
+      return res.render('apiIntroduction', {
+        titile: 'API说明',
+        text
+      });
     });
   }
 
   // 关于
   about(req, res) {
-    res.render('about', {
-      titile: '关于',
+    fs.readFile(path.join(__dirname, '../data/about.md'), 'utf-8', (err, data) => {
+      const text = md.render(data);
+      return res.render('about', {
+        title: '关于',
+        text
+      });
     });
   }
 }

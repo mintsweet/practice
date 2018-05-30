@@ -1,4 +1,10 @@
 extends ../layout
 
 block content
-  p 我是API说明
+  .content-title
+    ol.breadcrumb
+      li.breadcrumb-item
+        a(href="/") 首页
+      li.breadcrumb-item.active API说明
+  .content-inner
+    | !{text}

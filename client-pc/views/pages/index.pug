@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .content-tabs
+  .content-title
     each tab in [{ name: '全部', path: 'all' }].concat(config.tabs)
       a(href='/?tab=' + tab.path) #{tab.name}
   .content-inner

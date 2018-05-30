@@ -19,14 +19,14 @@ body {
   background-color: #fff;
 }
 
-.content-tabs {
+.content-title {
   padding: 0 20px;
   height: 40px;
   line-height: 40px;
   background: #f4f4f4;
 }
 
-.content-tabs a {
+.content-title > a {
   margin-right: 10px;
 }
 
@@ -65,4 +65,10 @@ body {
 
 .panel-inner {
   padding: 10px;
+}
+
+.breadcrumb {
+  padding: 0;
+  margin: 0;
+  background: none;
 }

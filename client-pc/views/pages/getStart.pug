@@ -1,4 +1,10 @@
 extends ../layout
 
 block content
-  p 我是新手入门
+  .content-title
+    ol.breadcrumb
+      li.breadcrumb-item
+        a(href="/") 首页
+      li.breadcrumb-item.active 新手入门
+  .content-inner 
+    | !{text}
