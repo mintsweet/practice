@@ -1,5 +1,6 @@
 const express = require('express');
 const Home = require('./controllers/home');
+const User = require('./controllers/user');
 
 const router = express.Router();
 
@@ -11,5 +12,8 @@ router.get('/get_start', Home.getStart);
 router.get('/api_introduction', Home.apiIntroduction);
 // 关于
 router.get('/about', Home.about);
+
+// 用户
+router.get('/signin', User.renderSignin);
 
 module.exports = router;

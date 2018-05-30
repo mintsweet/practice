@@ -68,6 +68,9 @@ const config = {
     { name: 'API说明', url: '/api_introduction' },
     { name: '关于', url: '/about' }
   ],
+
+  // Client Mobile
+  
 };
 
 module.exports = config;
