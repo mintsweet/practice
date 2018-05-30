@@ -349,18 +349,20 @@ class User extends BaseComponent {
   // 获取积分榜前一百用户
   async getTop100(req, res) {
     try {
-      const userList = await UserModel.find({}, {
-        sort: { score: 1 }
+      const userList = await UserModel.find({}, '-_id nickname score', {
+        limit: 10,
+        sort: '-score'
       });
+
       return res.send({
         status: 1,
-        data: userList.slice(0, 100)
+        data: userList
       });
     } catch(err) {
       return res.send({
         status: 0,
         type: 'ERROR_GET_START_LIST',
-        message: '获取星标用户失败'
+        message: '获取积分榜前一百用户失败'
       });
     }
   }

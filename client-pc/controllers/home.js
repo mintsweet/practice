@@ -1,29 +1,26 @@
-const rq = require('request-promise');
 const md = require('markdown-it')();
 const fs = require('fs');
 const path = require('path');
+const { apiGetUserTop100 } = require('../service/api');
 
 class Home {
   // 首页
   async index(req, res) {
     const { tab, page } = req.query;
-    let topics = [];
+    // let topics = [];
     let userTop = [];
-
-    const topicRespone = await rq(`http://localhost:3000/api/topic/list?tab=${tab}&page=${page}`);
-    const userRespone = await rq('http://localhost:3000/api/user/top100');
-
-    if (topicRespone.status === 1) {
-      topics = topicRespone.data;
-    }
+    
+    const userRespone = await apiGetUserTop100();
 
     if (userRespone.status === 1) {
       userTop = userRespone.data;
     }
 
+    // const topicRespone = await rq(`http://localhost:3000/api/topic/list?tab=${tab}&page=${page}`);
+    // const  = await rq('http://localhost:3000/api/user/top100');
+
     res.render('index', {
       title: '首页',
-      topics,
       userTop
     });
   }
@@ -32,7 +29,7 @@ class Home {
   getStart(req, res) {
     fs.readFile(path.join(__dirname, '../data/getStart.md'), 'utf-8', (err, data) => {
       const text = md.render(data);
-      return res.render('getStart', {
+      return res.render('get_start', {
         title: '新手入门',
         text
       });
@@ -43,8 +40,8 @@ class Home {
   apiIntroduction(req, res) {
     fs.readFile(path.join(__dirname, '../data/API.md'), 'utf-8', (err, data) => {
       const text = md.render(data);
-      return res.render('apiIntroduction', {
-        titile: 'API说明',
+      return res.render('api_introduction', {
+        title: 'API说明',
         text
       });
     });

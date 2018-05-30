@@ -18,6 +18,7 @@ const UserSchema = new Schema({
 
   score: { type: Number, default: 0 },
   is_start: { type: Boolean, default: false },
+  is_block: { type: Boolean, default: false },
   collect_list: { type: Array, default: [] },
   reply_list: { type: Array, default: [] },
   follower_list: { type: Array, default: [] },

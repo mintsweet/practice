@@ -1,9 +1,13 @@
 extends ../layout
 
 block content
-  .content-title
-    each tab in [{ name: '全部', path: 'all' }].concat(config.tabs)
-      a(href='/?tab=' + tab.path) #{tab.name}
-  .content-inner
-    if (typeof(topics) !== 'undefined' && topics.length > 0)
+  .container
+    .content
+      .content-title
+        each tab in [{ name: '全部', path: 'all' }].concat(config.tabs)
+          a(href='/?tab=' + tab.path) #{tab.name}
+      .content-inner
+        if (typeof(topics) !== 'undefined' && topics.length > 0)
+    .sidebar
+      include ../includes/index_sidebar
       

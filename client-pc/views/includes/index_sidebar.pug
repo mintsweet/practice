@@ -12,6 +12,11 @@ if user
 .panel
   .panel-title 积分榜 Top100
   .panel-inner
+    ul.user-socre-list
+      each user in userTop
+        li.user-score-item
+          span.user-score-number #{user.score}
+          span.user-socre-name #{user.nickname}
 .panel
   .panel-title 友情社区
   .panel-inner
