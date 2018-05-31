@@ -7,7 +7,15 @@ exports.apiGetUserTop100 = () => rq({
 });
 
 exports.apiSignin = obj => rq({
+  method: 'POST',
   uri: `${baseUrl}/signin`,
   body: obj,
-  json: true
+  json: true,
+  jar: true
+});
+
+exports.apiGetUserInfo = () => rq({
+  uri: `${baseUrl}/info`,
+  json: true,
+  jar: true
 });

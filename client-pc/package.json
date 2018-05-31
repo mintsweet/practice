@@ -7,6 +7,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "formidable": "^1.2.1",
     "markdown-it": "^8.4.1",
     "pug": "^2.0.3",
     "request": "^2.85.0",

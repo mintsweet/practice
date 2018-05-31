@@ -5,6 +5,7 @@ const express = require('express');
 const path = require('path');
 const config = require('../config.default');
 const routes = require('./router');
+const { apiGetUserInfo } = require('./service/api');
 
 const app = express();
 
@@ -17,6 +18,28 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // local
 app.locals.config = config;
+
+// middleware is login
+app.use(async (req, res, next) => {
+  if (config.debug) {
+    app.locals.current_user = {
+      id: 1,
+      nickname: '青湛'
+    };
+  }
+
+  if (app.locals.current_user) {
+    return next();
+  } else {
+    const restRes = await apiGetUserInfo();
+    if (restRes.status === 1) {
+      app.locals.current_user = restRes.data;
+      return next();
+    } else {
+      return next();
+    }
+  }
+});
 
 // routes
 app.use('/', routes);

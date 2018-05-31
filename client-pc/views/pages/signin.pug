@@ -9,13 +9,15 @@ block content
             a(href="/") 首页
           li.breadcrumb-item.active 登录
       .content-inner
+        if error
+          .alert.alert-danger #{error}
         form.form-horizontal#signin_form(action="/signin", method="POST")
           .form-group
-            label(for="username") 用户名：
-            input.form-control(type="text", id="username")
+            label(for="mobile") 手机号：
+            input.form-control(type="text", id="mobile", name="mobile")
           .form-group
             label(for="password") 密码：
-            input.form-control(type="password", id="password")
+            input.form-control(type="password", id="password", name="password")
           button.btn.btn-primary(type="submit") 登录
     .sidebar
       include ../includes/user_sidebar

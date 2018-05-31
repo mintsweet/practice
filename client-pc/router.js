@@ -14,6 +14,7 @@ router.get('/api_introduction', Home.apiIntroduction);
 router.get('/about', Home.about);
 
 // 用户
-router.get('/signin', User.renderSignin);
+router.get('/signin', User.renderSignin); // 渲染登录页
+router.post('/signin', User.signin); // 登录
 
 module.exports = router;
