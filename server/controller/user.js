@@ -15,6 +15,23 @@ class User extends BaseComponent {
     this.updatePass = this.updatePass.bind(this);
   }
 
+  // 获取当前用户信息
+  getUserInfo(req, res) {
+    const { userInfo } = req.session;
+    if (userInfo) {
+      return res.send({
+        status: 1,
+        data: userInfo
+      });
+    } else {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '尚未登录'
+      });
+    }
+  }
+
   // 注册
   signup(req, res) {
     const form = new formidable.IncomingForm();

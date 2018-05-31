@@ -54,13 +54,17 @@ const ALLOW_ORIGIN = [
 
 // cookie and session
 const MongoStore = connectMongo(session);
-app.use(cookieParser());
+app.use(cookieParser(config.session_secret));
 app.use(session({
-  name: config.session.key,
-  secret: config.session.secret,
+  name: 'practice',
+  secret: config.session_secret,
   resave: true,
   saveUninitialized: false,
-  cookie: config.session.cookie,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    maxAge: 2592000000,
+  },
   store: new MongoStore({
     url: config.db
   })

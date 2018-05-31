@@ -19,17 +19,10 @@ const config = {
   
   db: 'mongodb://localhost/practice',
 
-  session: {
-    key: 'practice',
-    secret: 'practice',
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      maxAge: 2592000000,
-    }
-  },
-
   log_dir: path.join(__dirname, './server/logs'),
+
+  session_secret: 'practice_secret', // 务必修改
+  auth_cookie_name: 'practice',
 
   // Client Pc
   client_pc_port: 3001,
