@@ -1,11 +1,13 @@
 const rq = require('request-promise');
 const { baseUrl } = require('./env');
 
-const apiGetUserTop100 = () => rq({
+exports.apiGetUserTop100 = () => rq({
   uri: `${baseUrl}/users/top100`,
   json: true
 });
 
-module.exports = {
-  apiGetUserTop100
-};
+exports.apiSignin = obj => rq({
+  uri: `${baseUrl}/signin`,
+  body: obj,
+  json: true
+});

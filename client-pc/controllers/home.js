@@ -1,23 +1,13 @@
 const md = require('markdown-it')();
 const fs = require('fs');
 const path = require('path');
-const { apiGetUserTop100 } = require('../service/api');
+const { getUserTop100 } = require('./user');
 
 class Home {
   // 首页
   async index(req, res) {
     const { tab, page } = req.query;
-    // let topics = [];
-    let userTop = [];
-    
-    const userRespone = await apiGetUserTop100();
-
-    if (userRespone.status === 1) {
-      userTop = userRespone.data;
-    }
-
-    // const topicRespone = await rq(`http://localhost:3000/api/topic/list?tab=${tab}&page=${page}`);
-    // const  = await rq('http://localhost:3000/api/user/top100');
+    const userTop = await getUserTop100();
 
     res.render('index', {
       title: '首页',
