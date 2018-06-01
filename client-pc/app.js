@@ -10,7 +10,7 @@ const { apiGetUserInfo } = require('./service/api');
 const app = express();
 
 // views
-app.set('views', path.join(__dirname, './views/pages'));
+app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
 // static
@@ -21,13 +21,6 @@ app.locals.config = config;
 
 // middleware is login
 app.use(async (req, res, next) => {
-  if (config.debug) {
-    app.locals.current_user = {
-      id: 1,
-      nickname: '青湛'
-    };
-  }
-
   if (app.locals.current_user) {
     return next();
   } else {

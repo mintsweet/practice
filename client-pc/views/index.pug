@@ -1,4 +1,4 @@
-extends ../layout
+extends ./layout
 
 block content
   .container
@@ -9,5 +9,5 @@ block content
       .content-inner
         if (typeof(topics) !== 'undefined' && topics.length > 0)
     .sidebar
-      include ../includes/index_sidebar
+      include ./includes/index_sidebar
       

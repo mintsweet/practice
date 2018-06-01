@@ -1,5 +1,4 @@
 const formidable = require('formidable');
-const rq = require('request-promise');
 const {
   apiGetUserTop100, apiSignin, apiGetUserInfo
 } = require('../service/api');

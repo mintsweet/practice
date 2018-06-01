@@ -1,21 +1,23 @@
 const rq = require('request-promise');
 const { baseUrl } = require('./env');
 
-exports.apiGetUserTop100 = () => rq({
-  uri: `${baseUrl}/users/top100`,
-  json: true
-});
+const request = (url, data, method = 'GET') => {
+  const uri = baseUrl + url;
 
-exports.apiSignin = obj => rq({
-  method: 'POST',
-  uri: `${baseUrl}/signin`,
-  body: obj,
-  json: true,
-  jar: true
-});
+  return rq({
+    method,
+    uri,
+    json: true,
+    jar: true,
+    body: data
+  });
+};
 
-exports.apiGetUserInfo = () => rq({
-  uri: `${baseUrl}/info`,
-  json: true,
-  jar: true
-});
+// 获取用户Top100
+exports.apiGetUserTop100 = () => request('/users/top100');
+
+// 登录
+exports.apiSignin = obj => request('/signin');
+
+// 获取当前用户信息
+exports.apiGetUserInfo = () => request('/info');
