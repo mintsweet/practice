@@ -8,16 +8,6 @@ class Topic extends BaseComponent {
     this.addTopic = this.addTopic.bind(this);
   }
 
-  // 获取列表
-  getTopicList(req, res) {
-    const { tab, page } = req.query;
-
-    return res.send({
-      status: 1,
-      data: []
-    });
-  }
-
   // 新增
   addTopic(req, res) {
     const form = new formidable.IncomingForm();
@@ -30,9 +20,73 @@ class Topic extends BaseComponent {
         });
       }
 
-      const { userInfo } = req.sessions;
+      const { userInfo } = req.session;
       const { title, content } = fields;
 
+      try {
+        if (!userInfo || !userInfo.id) {
+          throw new Error('尚未登录')
+        } else if (!title) {
+          throw new Error('标题不能为空')
+        } else if (!content) {
+          throw new Error('内容不能为空')
+        }
+      } catch (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARAMS',
+          message: err.message
+        });
+      }
+
+      const topicId = await this.getId('topic_id');
+      const topicInfo = {
+        id: topicId,
+        title,
+        content,
+        author_id: userInfo.id,
+      };
+
+      try {
+        await TopicModel.create(topicInfo);
+        return res.send({
+          status: 1
+        });
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_SERVICE_FAILED',
+          message: '服务器无响应，请稍后重试'
+        });
+      }
+    });
+  }
+  
+  // 获取列表
+  getTopicList(req, res) {
+    const { tab, page, size } = req.query;
+
+    try {
+      const topicList = await TopicModel.find({}, 'title content', {
+        skip: (page - 1) * size,
+        limit: size
+      });
+
+      return res.send({
+        status: 1,
+        data: topicList
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_Topic_LIST',
+        message: '获取主题失败'
+      });
+    }
+
+    return res.send({
+      status: 1,
+      data: []
     });
   }
   

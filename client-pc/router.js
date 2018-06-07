@@ -2,7 +2,6 @@ const express = require('express');
 const Home = require('./controllers/home');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
-const Reply = require('./controllers/reply');
 
 const router = express.Router();
 
