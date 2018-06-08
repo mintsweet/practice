@@ -1,8 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "client-mobile",
-    "client-pc",
+    "site",
+    "spa",
     "electron",
     "manage",
     "native",
@@ -11,6 +11,6 @@
   ],
   "scripts": {
     "start:server": "cd server && yarn start",
-    "start:client-pc": "cd client-pc && yarn start"
+    "start:site": "cd site && yarn start"
   }
 }

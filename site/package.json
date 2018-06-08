@@ -1,14 +1,13 @@
 {
-  "name": "client-pc",
+  "name": "site",
   "version": "1.0.0",
-  "description": "pc client base on traditional",
+  "description": "site base on traditional",
   "scripts": {
     "start": "node app.js"
   },
   "license": "MIT",
   "dependencies": {
     "formidable": "^1.2.1",
-    "markdown-it": "^8.4.1",
     "pug": "^2.0.3",
     "request": "^2.85.0",
     "request-promise": "^4.2.2"

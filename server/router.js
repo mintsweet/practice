@@ -2,7 +2,9 @@ const express = require('express');
 const Auth = require('./middleware/auth');
 const Common = require('./controller/common');
 const User = require('./controller/user');
+const Message = require('./controller/message');
 const Topic = require('./controller/topic');
+const Reply = require('./controller/reply');
 
 const router = express.Router();
 
@@ -26,6 +28,8 @@ router.get('/user/:nickname/replies', User.getUserReplies); // 用户回复的�
 router.get('/user/:nickname/follower', User.getUserFollower); // 获取用户粉丝列表
 router.get('/user/:nickname/following', User.getUserFollowing); // 获取用户关注的人列表
 
+// 信息
+
 // 主题
 router.post('/topic/add', Auth.userRequired, Topic.addTopic); // 新增主题
 router.get('/topics', Topic.getTopicList); // 主题列表
@@ -33,5 +37,7 @@ router.get('/topic/:id', Topic.getTopicDetail); // 获取主题详情
 router.post('/topic/:id/edit', Auth.userRequired, Topic.editTopic); // 编辑主题
 router.post('/topic/:id/collect', Auth.userRequired, Topic.collectTopic); // 收藏主题
 router.post('/topic/:id/un_collect', Auth.userRequired, Topic.unCollectTopic); // 取消收藏主题
+
+// 回复
 
 module.exports = router;

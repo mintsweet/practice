@@ -1,19 +1,11 @@
 class Auth {
-  // auth root
-  rootRequired(req, res, next) {
-    if (!req.session.user) {
+  // auth user
+  userRequired(req, res, next) {
+    if (!req.session || !req.session.user || !req.session.user.id) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_SIGNIN',
         message: '尚未登录'
-      });
-    }
-
-    if (req.session.is_admin && req.session.role > 100) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_NO_AUTHORITY',
-        message: '需要超级管理员权限'
       });
     }
 
@@ -34,20 +26,28 @@ class Auth {
       return res.send({
         status: 0,
         type: 'ERROR_NO_AUTHORITY',
-        message: '需要超级管理员权限'
+        message: '需要管理员权限'
       });
     }
   
     next();
   };
-  
-  // auth user
-  userRequired(req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user.id) {
+
+  // auth root
+  rootRequired(req, res, next) {
+    if (!req.session.user) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_SIGNIN',
         message: '尚未登录'
+      });
+    }
+
+    if (req.session.is_admin && req.session.role > 100) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_NO_AUTHORITY',
+        message: '需要超级管理员权限'
       });
     }
 
