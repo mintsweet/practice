@@ -87,5 +87,14 @@ module.exports =  [
     avatar: 'http://image.yujunren.com/demo/avatar.jpg',
     location: '西安',
     signature: '来自西安的阿西'  
+  },
+  {
+    id: 10,
+    mobile: '18800000009',
+    password: 'a123456',
+    nickname: '用户六号',
+    avatar: 'http://image.yujunren.com/demo/avatar.jpg',
+    location: '厦门',
+    signature: '来自厦门的阿厦'
   }
 ];

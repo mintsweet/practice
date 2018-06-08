@@ -13,11 +13,11 @@ React + Vue + React-Native + Electron + Express + MongoDB => 构建社区
 所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(client)，你不止需要启动client，也需启动server，其他皆是如此，每端详情到各个目录下查看`README.md`。
 
   - [数据服务](/server/README.md)
-  - [传统网站](/client-pc/README.md)
-  - [移动版单页网站(Vue)](/client-mobile/README.md)
-  - [电脑版单页网站(React)](/manage/README.md)
-  - [原生APP](/native/READNE.md)
-  - [桌面应用](/desktop/README.md)
+  - [传统网站](/site/README.md)
+  - [移动版SPA(Vue)](/spa/README.md)
+  - [后台管理网站(React)](/manage/README.md)
+  - [原生APP(React-Native)](/native/READNE.md)
+  - [桌面应用(Electron)](/desktop/README.md)
   - [微信小程序](/weapp/README.md)
 
 ## 开发环境

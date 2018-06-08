@@ -27,7 +27,11 @@ router.get('/user/:nickname/follower', User.getUserFollower); // 获取用户粉
 router.get('/user/:nickname/following', User.getUserFollowing); // 获取用户关注的人列表
 
 // 主题
-router.get('/topic/list', Topic.getTopicList); // 主题列表
-router.post('/topic/add', Topic.addTopic); // 新增主题
+router.post('/topic/add', Auth.userRequired, Topic.addTopic); // 新增主题
+router.get('/topics', Topic.getTopicList); // 主题列表
+router.get('/topic/:id', Topic.getTopicDetail); // 获取主题详情
+router.post('/topic/:id/edit', Auth.userRequired, Topic.editTopic); // 编辑主题
+router.post('/topic/:id/collect', Auth.userRequired, Topic.collectTopic); // 收藏主题
+router.post('/topic/:id/un_collect', Auth.userRequired, Topic.unCollectTopic); // 取消收藏主题
 
 module.exports = router;

@@ -63,11 +63,13 @@ class Topic extends BaseComponent {
   }
   
   // 获取列表
-  getTopicList(req, res) {
-    const { tab, page, size } = req.query;
+  async getTopicList(req, res) {
+    const { tab } = req.query;
+    const page = req.query.page | 1;
+    const size = req.query.size | 10;
 
     try {
-      const topicList = await TopicModel.find({}, 'title content', {
+      const topicList = await TopicModel.find({}, '-_id', {
         skip: (page - 1) * size,
         limit: size
       });
@@ -83,13 +85,27 @@ class Topic extends BaseComponent {
         message: '获取主题失败'
       });
     }
-
-    return res.send({
-      status: 1,
-      data: []
-    });
   }
   
+  // 获取主题详情
+  getTopicDetail(req, res) {
+
+  }
+
+  // 编辑主题
+  editTopic(req, res) {
+
+  }
+
+  // 收藏主题
+  collectTopic(req, res) {
+
+  }
+
+  // 取消收藏主题
+  unCollectTopic(req, res) {
+    
+  }
 }
 
 module.exports = new Topic();
