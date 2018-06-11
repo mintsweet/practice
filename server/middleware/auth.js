@@ -1,7 +1,7 @@
 class Auth {
   // auth user
   userRequired(req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user.id) {
+    if (!req.session || !req.session.userInfo || !req.session.userInfo.id) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_SIGNIN',

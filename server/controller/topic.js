@@ -1,11 +1,13 @@
 const formidable = require('formidable');
 const BaseComponent = require('../prototype/BaseComponent');
 const TopicModel = require('../models/topic');
+const UserModel = require('../models/user');
 
 class Topic extends BaseComponent {
   constructor() {
     super();
     this.addTopic = this.addTopic.bind(this);
+    this.getTopicList = this.getTopicList.bind(this);
   }
 
   // 新增
@@ -21,7 +23,7 @@ class Topic extends BaseComponent {
       }
 
       const { userInfo } = req.session;
-      const { title, content } = fields;
+      const { tab, title, content } = fields;
 
       try {
         if (!userInfo || !userInfo.id) {
@@ -42,6 +44,7 @@ class Topic extends BaseComponent {
       const topicId = await this.getId('topic_id');
       const topicInfo = {
         id: topicId,
+        tab: tab,
         title,
         content,
         author_id: userInfo.id,
@@ -61,24 +64,55 @@ class Topic extends BaseComponent {
       }
     });
   }
+
+  // 获取用户信息
+  async getUserInfo(id) {
+    const userInfo = await UserModel.findOne({ id: id }, '-_id id nickname avatar');
+    return userInfo;
+  }
   
   // 获取列表
   async getTopicList(req, res) {
-    const { tab } = req.query;
-    const page = req.query.page | 1;
-    const size = req.query.size | 10;
+    const tab = req.query.tab || 'all';
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 10;
 
     try {
-      const topicList = await TopicModel.find({}, '-_id', {
-        skip: (page - 1) * size,
-        limit: size
+      let topicList;
+
+      if (tab === 'all') {
+        topicList = await TopicModel.find({}, '-_id tab title content author_id create_at', {
+          skip: (page - 1) * size,
+          limit: size
+        });
+      } else {
+        topicList = await TopicModel.find({ tab }, '-_id tab title content author_id create_at', {
+          skip: (page - 1) * size,
+          limit: size
+        });
+      }
+
+      const promises = await Promise.all(topicList.map(item => {
+        return new Promise((resolve, reject) => {
+          resolve(this.getUserInfo(item.author_id));
+        });
+      }));
+
+      const result = topicList.map((item, i) => {
+        let temp = {};
+        temp.author = promises[i];
+        temp.title = item.title;
+        temp.content = item.content;
+        item.createTime = item.create_time;
+        return temp;
       });
 
       return res.send({
         status: 1,
-        data: topicList
+        data: result
       });
     } catch(err) {
+      console.log(err)
       return res.send({
         status: 0,
         type: 'ERROR_GET_Topic_LIST',

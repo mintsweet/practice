@@ -26,6 +26,7 @@
 ### 主题模块
 
   1. [新增主题](#新增主题)
+  2. [获取主题列表](#获取主题列表)
 
 ## 接口列表
 
@@ -542,3 +543,53 @@ POST
   "status": 1
 }
 ```
+
+### 获取主题列表
+
+#### 请求Url
+
+```bash
+/topic/list
+```
+
+#### 请求方式
+
+```bash
+GET
+```
+
+#### 参数类型：query
+
+|参数|是否必选|类型|说明|默认值|
+|:-----|:-------:|:-----|:-----|:-----|
+|tab   |No       |string  |主题类型 |        |
+|page  |No       |string  |当前页数 | 默认 1  |
+|size  |No       |string  |每页个数 | 默认 10 |
+
+#### 返回示例
+
+```json
+{
+  "status": 1,
+  "data": [
+    {
+      "author": {
+        "id": 1,
+        "nickname": "青湛",
+        "avatar": "http://image.yujunren.com/demo/avatar.jpg"
+      },
+      "title": "测试标题啊啊啊",
+      "content": "随便写写"
+    },
+    {
+      "author": {
+        "id": 1,
+        "nickname": "青湛",
+        "avatar": "http://image.yujunren.com/demo/avatar.jpg"
+      },
+      "title": "这是一个测试问题",
+      "content": "随便问点什么"
+    }
+  ]
+}
+``` 
