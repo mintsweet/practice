@@ -10,13 +10,13 @@ html
     if config.site_icon
       link(rel="shortcut icon", href=config.site_icon, type="image/x-icon")
     //- styles
-    link(rel="stylesheet", href="/static/libs/bootstrap/css/bootstrap.min.css")
     link(rel="stylesheet", href="/static/css/style.css")
   body
-    include includes/navbar
-    block content
+    include includes/header
+    .main
+      .layout
+        block content
+    include includes/footer    
     //- scripts
-    script(src="/static/libs/jquery.min.js")
-    script(src="/static/libs/popper.min.js")
-    script(src="/static/libs/bootstrap/js/bootstrap.min.js")
+    script(src="/static/libs/jquery-3.3.1.min.js")
     script(src="/static/js/main.js")

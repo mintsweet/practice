@@ -2,6 +2,7 @@
 * Mints - app.js
 */
 const express = require('express');
+const chalk = require('chalk');
 const path = require('path');
 const config = require('../config.default');
 const routes = require('./router');
@@ -22,9 +23,7 @@ app.locals.config = config;
 app.use('/', routes);
 
 if (!module.parent) {
-  app.listen(config.client_pc_port, () => {
-    console.log();
-    console.log(`Mints PC Client listening on http://localhost:${config.client_pc_port}`);
-    console.log();
+  app.listen(config.site_port, () => {
+    console.log(`Mints PC Client listening on ${chalk.greenBright(`http://localhost:${config.site_port}`)}`);
   });
 }
