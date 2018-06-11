@@ -24,8 +24,8 @@ const config = {
   session_secret: 'practice_secret', // 务必修改
   auth_cookie_name: 'practice',
 
-  // Client Pc
-  client_pc_port: 3001,
+  // Site
+  site_port: 3001,
 
   tabs: [
     { name: '问答', path: 'ask' },
