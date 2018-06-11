@@ -32,7 +32,7 @@ router.get('/user/:nickname/following', User.getUserFollowing); // 获取用户�
 
 // 主题
 router.post('/topic/add', Auth.userRequired, Topic.addTopic); // 新增主题
-router.get('/topic/list', Topic.getTopicList); // 主题列表
+router.get('/topic/list', Topic.getTopicList); // 获取主题列表
 router.get('/topics/:id', Topic.getTopicDetail); // 获取主题详情
 router.post('/topics/:id/edit', Auth.userRequired, Topic.editTopic); // 编辑主题
 router.post('/topics/:id/collect', Auth.userRequired, Topic.collectTopic); // 收藏主题
