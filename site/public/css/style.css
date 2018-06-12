@@ -48,28 +48,24 @@ a:hover{color:#16982B;text-decoration:none;}
 .header {height: 55px;line-height: 55px;box-shadow: 0 1px 6px rgba(0,0,0,.2);}
 .header .logo {position: absolute;top: 0;left: 0;font-size: 20px;}
 .header .logo a:hover {color: #333;}
+.header .menu {float: right;margin-right: 300px;}
+.header .menu li {display: inline-block;margin-right: 20px;}
+.header .user-info {position: absolute;top: 0;right: 0;padding: 0 10px;line-height: 55px;}
+.header .user-info .avatar {display: inline-block;width: 40px;height: 40px;border-radius: 50%;background: red;vertical-align: middle;}
+.header .user-info .nickname {display: inline-block;margin-left: 20px;vertical-align: middle;}
 
 /* main */
 .main {padding: 20px 0;min-height: 400px;}
-/* .content {margin-right: 240px;} */
-.main .tab-list {
-  margin-bottom: 10px;
-  line-height: 30px;
-}
-
-.main .tab-list a {
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.main .card {
-  margin-bottom: 10px;
-  padding: 0 20px;
-  line-height: 50px;
-  background: #16952a14;
-}
+.main .tab-list {margin-bottom: 10px;line-height: 30px;}
+.main .tab-list a {padding: 5px 10px;margin-right: 10px;font-size: 16px;}
+.main .tab-list a.active {background: #16982B;color: #fff;}
+.main .card {margin-bottom: 10px;padding: 0 20px;line-height: 50px;background: #16952a14;}
 
 /* footer */
 .footer {height: 150px;text-align: center;}
 .footer-link a {font-size: 30px;line-height: 1;}
 .footer-copy p {margin: 10px 0 0;}
+
+/* markdown */
+.markdown {padding: 10px 20px;background: #16952a14;border-radius: 4px;}
+.markdown h1 {font-size: 18px;font-weight: 400;}

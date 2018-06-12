@@ -2,3 +2,10 @@
   .layout
     h1.logo
       a(href="/") Mints - 薄荷糖社区
+    ul.menu
+      each menu in config.menus
+        li
+          a(href=menu.url) #{menu.name}
+    .user-info
+      .avatar
+      .nickname 青湛

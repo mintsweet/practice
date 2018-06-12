@@ -5,6 +5,7 @@ const User = require('./controller/user');
 const Message = require('./controller/message');
 const Topic = require('./controller/topic');
 const Reply = require('./controller/reply');
+const Static = require('./controller/static');
 
 const router = express.Router();
 
@@ -39,5 +40,10 @@ router.post('/topics/:id/collect', Auth.userRequired, Topic.collectTopic); // �
 router.post('/topics/:id/un_collect', Auth.userRequired, Topic.unCollectTopic); // 取消收藏主题
 
 // 回复
+
+// 静态
+router.get('/static/get_start', Static.getStart); // 获取快速开始文档
+router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API说明文档
+router.get('/static/about', Static.getAbout); // 获取关于文档
 
 module.exports = router;

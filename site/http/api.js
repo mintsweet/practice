@@ -12,5 +12,11 @@ const request = (url, data, method = 'GET') => {
   });
 };
 
-// 获取主题列表
-exports.getTopicLIst = obj => request('/topics', obj)
+// 快速开始
+exports.getStartData = () => request('/static/get_start');
+
+// API说明
+exports.getApiData = () => request('/static/api_introduction');
+
+// 关于
+exports.getAboutData = () => request('/static/about');

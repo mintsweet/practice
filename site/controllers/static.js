@@ -1,0 +1,37 @@
+const path = require('path');
+const {
+  getStartData,
+  getApiData,
+  getAboutData
+} = require('../http/api');
+
+class Static {
+  // 快速开始
+  async getStart(req, res) {
+    const response = await getStartData();
+    res.render('static/get_start', {
+      title: '快速开始',
+      text: response.data
+    });
+  }
+
+  // API说明
+  async apiIntroduction(req, res) {
+    const response = await getApiData();
+    res.render('static/api_introduction', {
+      title: 'API说明',
+      text: response.data
+    });
+  }
+
+  // 关于
+  async about(req, res) {
+    const response = await getAboutData();
+    res.render('static/about', {
+      title: '关于',
+      text: response.data
+    });
+  }
+}
+
+module.exports = new Static();
