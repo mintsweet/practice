@@ -9,7 +9,8 @@ router.get('/', Site.index);
 
 // 静态
 router.get('/get_start', Static.getStart);
-router.get('/api_introduction', Static.apiIntroduction);
-router.get('/about', Static.about);
+router.get('/api_introduction', Static.getApiIntroduction);
+router.get('/about', Static.getAbout);
+router.get('/markdown_style', Static.getMarkdown);
 
 module.exports = router;

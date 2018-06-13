@@ -2,7 +2,8 @@ const path = require('path');
 const {
   getStartData,
   getApiData,
-  getAboutData
+  getAboutData,
+  getMarkdownData
 } = require('../http/api');
 
 class Static {
@@ -16,7 +17,7 @@ class Static {
   }
 
   // API说明
-  async apiIntroduction(req, res) {
+  async getApiIntroduction(req, res) {
     const response = await getApiData();
     res.render('static/api_introduction', {
       title: 'API说明',
@@ -25,10 +26,19 @@ class Static {
   }
 
   // 关于
-  async about(req, res) {
+  async getAbout(req, res) {
     const response = await getAboutData();
     res.render('static/about', {
       title: '关于',
+      text: response.data
+    });
+  }
+
+  // Markdown演示
+  async getMarkdown(req, res) {
+    const response = await getMarkdownData();
+    res.render('static/markdown_style', {
+      title: 'Markdown演示',
       text: response.data
     });
   }

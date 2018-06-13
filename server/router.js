@@ -45,5 +45,6 @@ router.post('/topics/:id/un_collect', Auth.userRequired, Topic.unCollectTopic); 
 router.get('/static/get_start', Static.getStart); // 获取快速开始文档
 router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API说明文档
 router.get('/static/about', Static.getAbout); // 获取关于文档
+router.get('/static/markdown_style', Static.getMarkdown); // 获取Markdown样式文档
 
 module.exports = router;

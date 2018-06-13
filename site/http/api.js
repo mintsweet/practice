@@ -20,3 +20,6 @@ exports.getApiData = () => request('/static/api_introduction');
 
 // 关于
 exports.getAboutData = () => request('/static/about');
+
+// Markdown演示
+exports.getMarkdownData = () => request('/static/markdown_style');

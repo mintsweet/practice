@@ -24,7 +24,7 @@ body,textarea,input,button,select,keygen,legend{font:14px/1.8 "Microsoft YaHei U
 body{background:#fff;color:#333;border-top: 4px solid #16982B;}
 a{color:#444;outline:none;transition: color .3s;}
 a:hover{color:#16982B;text-decoration:none;}
-.layout {position: relative;;margin: 0 auto;width: 1080px;}
+.layout {margin: 0 auto;width: 960px;}
 
 /* iconf */
 
@@ -46,9 +46,12 @@ a:hover{color:#16982B;text-decoration:none;}
 
 /* header */
 .header {height: 55px;line-height: 55px;box-shadow: 0 1px 6px rgba(0,0,0,.2);}
-.header .logo {position: absolute;top: 0;left: 0;font-size: 20px;}
+.header>.layout {position: relative;}
+.header .logo {position: absolute;top: 0;left: 0;font-size: 20px;width: 55px;height: 55px;}
+.header .logo a,
+.header .logo img {display: block;width: 100%;height: 100%;}
 .header .logo a:hover {color: #333;}
-.header .menu {float: right;margin-right: 300px;}
+.header .menu {float: left;margin-left: 100px;}
 .header .menu li {display: inline-block;margin-right: 20px;}
 .header .user-info {position: absolute;top: 0;right: 0;padding: 0 10px;line-height: 55px;}
 .header .user-info .avatar {display: inline-block;width: 40px;height: 40px;border-radius: 50%;background: red;vertical-align: middle;}
@@ -59,7 +62,7 @@ a:hover{color:#16982B;text-decoration:none;}
 .main .tab-list {margin-bottom: 10px;line-height: 30px;}
 .main .tab-list a {padding: 5px 10px;margin-right: 10px;font-size: 16px;}
 .main .tab-list a.active {background: #16982B;color: #fff;}
-.main .card {margin-bottom: 10px;padding: 0 20px;line-height: 50px;background: #16952a14;}
+.main .card {margin-bottom: 10px;padding: 0 20px;line-height: 50px;background: #a4d1aa14;}
 
 /* footer */
 .footer {height: 150px;text-align: center;}
@@ -67,5 +70,52 @@ a:hover{color:#16982B;text-decoration:none;}
 .footer-copy p {margin: 10px 0 0;}
 
 /* markdown */
-.markdown {padding: 10px 20px;background: #16952a14;border-radius: 4px;}
-.markdown h1 {font-size: 18px;font-weight: 400;}
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {margin-top: 24px;margin-bottom: 16px;font-weight: 600;line-height: 1.25;}
+.markdown h1 {padding-bottom: .3em;font-size: 1.8em;border-bottom: 1px solid #eaecef;}
+.markdown h2 {padding-bottom: .3em;font-size: 1.4em;border-bottom: 1px solid #eaecef;}
+.markdown h3 {font-size: 1.2em;}
+.markdown h4 {font-size: 1em;}
+.markdown h5 {font-size: 0.875em;}
+.markdown h6 {font-size: 0.85em;color: #6a737d;}
+.markdown ul, .markdown ol {padding-left: 2em;}
+.markdown ol li {list-style-type: decimal;}
+.markdown ul li {list-style-type: square;}
+.markdown a {color: #159329;}
+.markdown table {display: block;width: 100%;overflow: auto;}
+.markdown table tr {background-color: #fff;border-top: 1px solid #c6cbd1;}
+.markdown table th, .markdown table td {padding: 6px 13px;border: 1px solid #dfe2e5;}
+.markdown table tr:nth-child(2n) {background-color: #f6f8fa;}
+
+.markdown .toc {position: absolute;left: 20px;top: 100px;bottom: 0;padding: 10px 20px;overflow: scroll;border-right: 1px solid #ddd;}
+.markdown .toc.toc-fixed {position: fixed;top: 0;}
+.markdown .toc::-webkit-scrollbar { display: none; }
+@media (max-width: 1400px) {
+  .markdown .toc {
+    display: none;
+  }
+}
+
+.hljs {display:block;overflow-x:auto;padding:0.5em;background:#232323;color:#e6e1dc}
+.hljs-comment,.hljs-quote{color:#bc9458;font-style:italic}
+.hljs-keyword,.hljs-selector-tag{color:#c26230}
+.hljs-string,.hljs-number,.hljs-regexp,.hljs-variable,.hljs-template-variable{color:#a5c261}
+.hljs-subst{color:#519f50}
+.hljs-tag,.hljs-name{color:#e8bf6a}
+.hljs-type{color:#da4939}
+.hljs-symbol,.hljs-bullet,.hljs-built_in,.hljs-builtin-name,.hljs-attr,.hljs-link{color:#6d9cbe}
+.hljs-params{color:#d0d0ff}
+.hljs-attribute{color:#cda869}
+.hljs-meta{color:#9b859d}
+.hljs-title,.hljs-section{color:#ffc66d}
+.hljs-addition{background-color:#144212;color:#e6e1dc;display:inline-block;width:100%}
+.hljs-deletion{background-color:#600;color:#e6e1dc;display:inline-block;width:100%}
+.hljs-selector-class{color:#9b703f}
+.hljs-selector-id{color:#8b98ab}
+.hljs-emphasis{font-style:italic}
+.hljs-strong{font-weight:bold}
+.hljs-link{text-decoration:underline}

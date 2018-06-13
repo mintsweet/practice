@@ -14,8 +14,10 @@
     "express-session": "^1.15.6",
     "formidable": "^1.2.1",
     "gd-bmp": "^1.2.4",
+    "highlight.js": "^9.12.0",
     "log4js": "^2.5.3",
     "markdown-it": "^8.4.1",
+    "markdown-it-toc-and-anchor": "^4.1.2",
     "moment": "^2.22.1",
     "mongoose": "^5.0.12"
   }
