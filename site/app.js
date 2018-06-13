@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const path = require('path');
 const config = require('../config.default');
 const routes = require('./router');
+const { getCurrentUser } = require('./http/api');
 
 const app = express();
 
@@ -18,6 +19,16 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // local
 app.locals.config = config;
+app.use(async (req, res, next) => {
+  const response = await getCurrentUser();
+  if (response.status === 1) {
+    app.locals.user = response.data;
+  } else {
+    app.locals.user = null;
+  }
+
+  next();
+});
 
 // routes
 app.use('/', routes);

@@ -23,3 +23,9 @@ exports.getAboutData = () => request('/static/about');
 
 // Markdown演示
 exports.getMarkdownData = () => request('/static/markdown_style');
+
+// 获取当前用户信息
+exports.getCurrentUser = () => request('/info');
+
+// 登录
+exports.apiSignin = obj => request('/signin', obj, 'POST');

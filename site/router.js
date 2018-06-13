@@ -1,6 +1,7 @@
 const express = require('express');
 const Site = require('./controllers/site');
 const Static = require('./controllers/static');
+const User = require('./controllers/user');
 
 const router = express.Router();
 
@@ -12,5 +13,9 @@ router.get('/get_start', Static.getStart);
 router.get('/api_introduction', Static.getApiIntroduction);
 router.get('/about', Static.getAbout);
 router.get('/markdown_style', Static.getMarkdown);
+
+// 用户
+router.get('/signin', User.renderSignin);
+router.post('/signin', User.signin);
 
 module.exports = router;

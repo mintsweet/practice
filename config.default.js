@@ -28,16 +28,10 @@ const config = {
   site_port: 3001,
 
   tabs: [
-    { name: '问答', url: 'ask' }
+    { name: '问答', url: 'ask' },
+    { name: '招聘', url: 'offer' }
   ],
   
-  menus: [
-    { name: '新手入门', url: '/get_start' },
-    { name: 'API说明', url: '/api_introduction' },
-    { name: '关于', url: '/about' },
-    { name: 'Markdown演示', url: '/markdown_style'}
-  ],
-
   // Spa
   spa_port: 3002
 };
