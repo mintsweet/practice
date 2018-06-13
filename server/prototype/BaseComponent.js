@@ -28,9 +28,9 @@ module.exports = class BaseComponent {
   }
 
   drawCode () {
-    const img = new BMP24(117, 40);
+    const img = new BMP24(100, 38);
     let token = '';
-    img.fillRect(0, 0, 117, 40, '0xffffff');
+    img.fillRect(0, 0, 100, 38, '0xffffff');
     
     const p = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
 

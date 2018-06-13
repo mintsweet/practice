@@ -190,11 +190,14 @@ class User extends BaseComponent {
   // 登出
   signout(req, res) {
     try {
-      delete res.session.userInfo;
+      req.session.userInfo = null;
       res.send({
         status: 1
       });
     } catch(err) {
+
+      console.log(err)
+
       res.send({
         status: 0,
         type: 'ERROR_SIGNOUT_FAILED',

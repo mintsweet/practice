@@ -1,7 +1,19 @@
 const formidable = require('formidable');
-const { apiSignin } = require('../http/api');
+const { getPicCaptcha, apiSignin, apiSignout } = require('../http/api');
 
 class User {
+  // 注册页
+  async renderSignup(req, res) {
+    const response = await getPicCaptcha();
+
+    if (response.status === 1) {
+      return res.render('user/signup', {
+        title: '注册',
+        url: response.data.url
+      });
+    }
+  }
+
   // 登录页
   renderSignin(req, res) {
     res.render('user/signin', {
@@ -23,7 +35,11 @@ class User {
       const response = await apiSignin(Object.assign({ type: 'acc' }, fields));
 
       if (response.status === 1) {
-        return res.redirect('/')
+        return res.render('site/transfer', {
+          title: '登录成功',
+          text: '登录成功',
+          type: 'success'
+        });
       } else {
         return res.render('user/signin', {
           title: '登录',
@@ -31,6 +47,18 @@ class User {
         });
       }
     });
+  }
+
+  // 登出
+  async signout(req, res) {
+    const response = await apiSignout();
+    if (response.status === 1) {
+      return res.render('site/transfer', {
+        title: '退出成功',
+        text: '退出成功',
+        type: 'success'
+      });
+    }
   }
 }
 

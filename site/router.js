@@ -15,7 +15,9 @@ router.get('/about', Static.getAbout);
 router.get('/markdown_style', Static.getMarkdown);
 
 // 用户
+router.get('/signup', User.renderSignup);
 router.get('/signin', User.renderSignin);
 router.post('/signin', User.signin);
+router.get('/signout', User.signout);
 
 module.exports = router;

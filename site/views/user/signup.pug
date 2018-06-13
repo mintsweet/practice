@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  .user-wrapper
+    .title 用户注册
+    .user-inner.clearfix
+      form#signinForm.form.form-horizontal(method="post")
+        if error
+          .alert.alert-error #{error}
+        .control-group
+          label.control-label(for="mobile") 手机号：
+          .controls
+            input(type="text", id="mobile", name="mobile")
+        .control-group
+          label.control-label(for="password") 密码：
+          .controls
+            input(type="password", id="password", name="password")
+        .control-group
+          label.control-label(for="piccatcp") 验证码：
+          .controls
+            input(type="text", maxlength="6")
+            img.captcha(src=url, alt=验证码)
+        .control-group
+          label.control-label(for="piccatcp") 手机验证码：
+          .controls
+            input(type="text", maxlength="6")
+            .getcode.btn 获取验证码
+        .control-group
+          label.control-label
+          .controls
+            button.btn.submit(type="submit") 立即注册
+      .text
+        p 已经拥有账号？
+        p 请直接
+          a(href="/signin") 登录
+    

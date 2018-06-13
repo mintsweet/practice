@@ -17,6 +17,12 @@
         .avatar
           img(src=user.avatar, alt=user.nickname)
         .nickname #{user.nickname}
+        .drop-menus
+          .item
+            a(href="/user/" + user.nickname) 个人主页
+          span.divider
+          .item
+            a(href="/signout") 退出登录
       else
         a(href="/signin") 登录
         span.divider |
