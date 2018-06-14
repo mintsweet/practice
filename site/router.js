@@ -2,6 +2,7 @@ const express = require('express');
 const Site = require('./controllers/site');
 const Static = require('./controllers/static');
 const User = require('./controllers/user');
+const Topic = require('./controllers/topic');
 
 const router = express.Router();
 
@@ -19,5 +20,8 @@ router.get('/signup', User.renderSignup);
 router.get('/signin', User.renderSignin);
 router.post('/signin', User.signin);
 router.get('/signout', User.signout);
+
+// 主题
+router.get('/topic/create', Topic.renderCreate);
 
 module.exports = router;

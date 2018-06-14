@@ -14,7 +14,7 @@ router.get('/common/piccaptcha', Common.getPicCaptcha);
 router.get('/common/msgcaptcha', Common.getMsgCaptcha);
 
 // 用户
-router.get('/info', User.getUserInfo); // 获取当前用户信息
+router.get('/info', Auth.userRequired, User.getUserInfo); // 获取当前用户信息
 router.post('/signup', User.signup); // 注册
 router.post('/signin', User.signin); // 登录
 router.get('/signout', User.signout); // 登出

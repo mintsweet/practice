@@ -32,11 +32,11 @@ a:hover{color:#16982B;text-decoration:none;}
 
 /* icon */
 @font-face {font-family: "practice";
-  src: url('iconfont.eot?t=1528873930605'); /* IE9*/
-  src: url('iconfont.eot?t=1528873930605#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
-  url('iconfont.ttf?t=1528873930605') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1528873930605#practice') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1528955983394'); /* IE9*/
+  src: url('iconfont.eot?t=1528955983394#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+  url('iconfont.ttf?t=1528955983394') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1528955983394#practice') format('svg'); /* iOS 4.1- */
 }
 .practice {
   font-family:"practice" !important;
@@ -48,7 +48,9 @@ a:hover{color:#16982B;text-decoration:none;}
 .pra-github:before { content: "\e600"; }
 .pra-success:before { content: "\e613"; }
 .pra-up:before { content: "\e62b"; }
-.pra-error-filling:before { content: "\e612"; }
+.pra-error:before { content: "\e612"; }
+.pra-plus:before { content: "\e7be"; }
+.pra-message:before { content: "\e61a"; }
 
 /* button */
 .btn {display: inline-block;border: none;text-align: center;background: #16982B;color: #fff;min-height: 30px;line-height: 30px;padding: 0 15px;transition: background 0.3s,border 0.3s;}
@@ -91,15 +93,19 @@ textarea:focus, input:focus {border-color: #16982B;}
 .header .menu {float: left;margin-left: 100px;}
 .header .menu li {display: inline-block;margin-right: 20px;}
 .header .user-info {position: absolute;top: 0;right: 0;padding: 0 10px;line-height: 55px;}
+.header .user-info .avatar-wrapper {position: relative;display: inline-block;}
 .header .user-info .avatar {display: inline-block;width: 40px;height: 40px;border-radius: 50%;background: red;vertical-align: middle;}
 .header .user-info .avatar img {display: block;width: 100%;height: 100%;border-radius: 50%;}
 .header .user-info .nickname {display: inline-block;margin-left: 20px;vertical-align: middle;}
 .header .user-info .divider {margin: 0 10px;}
-.header .user-info:hover .drop-menus {opacity: 1;z-index: 1;}
+.header .user-info .avatar-wrapper:hover .drop-menus {opacity: 1;z-index: 1;}
 .header .user-info .drop-menus {opacity: 0;z-index: -1;position: absolute;top: 55px;left: 0;width: 100%;color: #fff;text-align: center;background: #a4d1aa;transition: opacity .3s;}
 .header .user-info .drop-menus .item {line-height: 34px;cursor: pointer;}
 .header .user-info .drop-menus .item a {display: block;color: #fff;}
 .header .user-info .drop-menus .divider {display: block;margin: 0;width: 100%;height: 1px;background: #ddd;}
+.header .action {display: inline-block;margin-right: 30px;vertical-align: middle;}
+.header .action a {font-size: 26px;}
+.header .action a+a {margin-left: 10px;}
 
 /* main */
 .main {padding: 20px 0;min-height: 400px;}

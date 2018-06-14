@@ -1,6 +1,6 @@
 # practice
 
-React + Vue + React-Native + Electron + Express + MongoDB => 构建社区
+> 技术栈 Express + MongoDB + Pug + React + Vue + React-Native + Electron + Weapp
 
 > 可能花费的时间会很多，我尽量在今年之内完成。(start一下 ---- 谢谢..)
 
@@ -10,45 +10,35 @@ React + Vue + React-Native + Electron + Express + MongoDB => 构建社区
 
 ## 快速开始
 
-所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(client)，你不止需要启动client，也需启动server，其他皆是如此，每端详情到各个目录下查看`README.md`。
+所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(site)，你不止需要启动site，也需启动server，其他皆是如此，详情到各个目录下查看`README.md`。
 
-  - [数据服务](/server/README.md)
-  - [传统网站](/site/README.md)
+  - [数据服务(服务器)](/server/README.md)
+  - [传统网站(Pug)](/site/README.md)
   - [移动版SPA(Vue)](/spa/README.md)
   - [后台管理网站(React)](/manage/README.md)
   - [原生APP(React-Native)](/native/READNE.md)
   - [桌面应用(Electron)](/desktop/README.md)
-  - [微信小程序](/weapp/README.md)
+  - [微信小程序(Weapp)](/weapp/README.md)
 
 ## 开发环境
 
   - `Node`：     `>= 8.0.0`
   - `MongoDB`：  `>= 3.4.0`
 
-## 数据API文档
+## API文档
 
-### API详情
+[API详情](server/API.md)
 
-[使劲戳这里](server/API.md)
-
-### API更新日志
-
-[使劲戳这里](server/CHANGELOG.md)
+[API更新日志](server/CHANGELOG.md)
 
 ## 项目博客
 
-在做这个实战项目的过程中，我还是把每一步都记录了下来给大家参照，也方便大家学习。
-
-  - 终极实战(一) - 基于 Express 和 MongoDB 的数据服务
+  - [终极实战(一) - 搞个 Node 的数据服务](https://github.com/mintsweet/blog/issues/2)
+  - 终极实战(二) - 用 Pug 模板输出传统网站
 
 ## 更新日志
 
 [CHANGELOG](CHANGELOG.md)
-
-## 其他
-
-本项目的问题你可以提[issue](https://github.com/mintsweet/practice/issues/new)或者给我发邮件。<br>
-其他无关问题你可以在[segmentfault](https://segmentfault.com/u/qingzhan)给我提问。<br>
 
 ## 协议
 

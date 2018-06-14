@@ -1,5 +1,3 @@
-const path = require('path');
-
 class Site {
   // 首页
   async index(req, res) {
