@@ -10,9 +10,21 @@ $(document).ready(function () {
       $('.back-top').fadeOut();
     }
   });
+
   // back top 回到顶部
-  $(".back-top").click(function(){
+  $(".back-top").click(function() {
     $('html, body').animate({ scrollTop: 0 },500);
     return false;
+  });
+
+  // select 展现
+  $('.select').click(function() {
+    $('.select .select-options').slideToggle();
+  });
+
+  // select option 选择
+  $('.option').click(function(e) {
+    $('.select-input').text($(this).attr('data-value'));
+    $('.select-hidden').val($(this).attr('data-value'));
   });
 });

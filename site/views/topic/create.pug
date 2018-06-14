@@ -1,11 +1,54 @@
-extends ../layout
-
-block content
-  .topic-wrapper
-    .title 发布主题
-    .inner
-      form.form
-        .control-group
-          label.control-label(for="title") 标题：
-          .controls
-            input(type="text", id="title", name="title")
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="description", content=config.description)
+    meta(name="keywords", content=config.keywords)
+    meta(name="author", content=config.author)
+    title #{title} - 薄荷糖社区
+    if config.site_icon
+    link(rel="shortcut icon", href=config.site_icon, type="image/x-icon")
+    //- styles
+    link(rel="stylesheet", href="/static/css/style.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css")
+  body
+    include ../includes/header
+    .main
+      .layout
+        .topic-wrapper
+          .title 发布主题
+          .inner
+            form.form(method="post")
+              .control-group
+                label.control-label(for="tab")
+                .controls
+                  input.select-hidden(type="hidden", name="tab")
+                  .select
+                    a.select-input(href="javascript:;") 请选择类别
+                    .select-options
+                      each item in config.tabs
+                        .option(data-value=item.name) #{item.name}
+              .control-group
+                label.control-label(for="title") 标题：
+                .controls
+                  input#title(type="text", id="title", name="title")
+              .control-group
+                label.control-label(for="content") 内容：
+                .controls
+                  textarea#editor
+              .control-group
+                .controls
+                  button.btn.submit(type="submit") 发布主题
+      .back-top
+        i.practice.pra-up
+    include ../includes/footer    
+    //- scripts
+    script(src="/static/libs/jquery-3.3.1.min.js")
+    script(src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js")
+    script(src="/static/js/main.js")
+    script.
+      var simplemde = new SimpleMDE({ element: $("#editor")[0] }),
+          title = $('#title');
+      $('.form').submit(function() {
+      });

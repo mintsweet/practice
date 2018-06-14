@@ -12,7 +12,7 @@
 
 所有对用户的端均需依赖于数据端，所有数据皆从数据端获取。也就意味着，如果你只看网页客户端(site)，你不止需要启动site，也需启动server，其他皆是如此，详情到各个目录下查看`README.md`。
 
-  - [数据服务(服务器)](/server/README.md)
+  - [数据服务(Node)](/server/README.md)
   - [传统网站(Pug)](/site/README.md)
   - [移动版SPA(Vue)](/spa/README.md)
   - [后台管理网站(React)](/manage/README.md)

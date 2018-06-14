@@ -58,11 +58,19 @@ a:hover{color:#16982B;text-decoration:none;}
 .btn.disabled{background:#f1f1f1;border-color:#aaa;color:#aaa;cursor:no-drop;}
 
 /* form */
+.form .select {position: relative;padding: 0 10px;width: 232px;height: 40px;line-height: 38px;border: 1px solid #d7d7d7;background: #fff;box-sizing: border-box;}
+.form .select::after {content: '';position: absolute;right: 10px;top: 15px;width: 0;height: 0;border-left: 4px solid transparent;border-right: 4px solid transparent;border-top: 6px solid #333;}
+.form .select .select-input {display: block;width: 100%;height: 100%;}
+.form .select .select-input:hover {color: #333;}
+.form .select .select-options {display: none;position: absolute;top: 38px;left: -1px;right: -1px;background: #fff;border: 1px solid #d7d7d7;z-index: 2;}
+.form .select .option {padding: 0 10px;height: 40px;box-sizing: border-box;cursor: pointer;transition: all .3s;}
+.form .select .option:hover {background: #16982B;color: #fff;}
+.form .select .option + .option {border-top: 1px solid #d7d7d7;}
 .form-horizontal {padding-top: 15px;}
 .form-horizontal .control-group {position: relative;margin-bottom: 9px;}
 .form-horizontal .control-label {display: inline-block;margin-right: 10px;width: 100px;text-align: right;vertical-align: middle;}
 .form-horizontal .controls {position: relative;;display: inline-block;padding: 5px 0;vertical-align: middle;}
-textarea, input[type="text"], input[type="password"], input[type="search"] {padding: 8px 15px;min-width: 200px;height: 22px;line-height: 1;background-color: #fff;border: 1px solid #ddd;transition: border linear 0.2s;vertical-align: middle;}
+textarea, input[type="text"], input[type="password"], input[type="search"] {padding: 8px 15px;min-width: 200px;height: 22px;line-height: 1;background-color: #fff;border: 1px solid #ddd;transition: border linear 0.2s;vertical-align: middle;border-radius: 2px;}
 textarea:focus, input:focus {border-color: #16982B;}
 .form-horizontal .getcode {position: absolute;right: 4px;top: 10px;width: 80px;cursor: pointer;}
 .form-horizontal .captcha {position: absolute;right: 1px;top: 6px;}
@@ -121,6 +129,12 @@ textarea:focus, input:focus {border-color: #16982B;}
 .user-wrapper .form {padding: 10px 20px;box-sizing: border-box;}
 .user-wrapper .text {padding: 35px;border-left: 1px solid #ddd;box-sizing: border-box;}
 .user-wrapper .text a {margin: 0 6px;color: #16982B;}
+
+/* topic */
+.topic-wrapper {padding: 0 10px;}
+.topic-wrapper .title {font-size: 18px;}
+.topic-wrapper .control-group {margin-top: 10px;}
+.topic-wrapper .control-label {display: block;margin-bottom: 6px;}
 
 /* footer */
 .footer {height: 150px;text-align: center;}

@@ -23,5 +23,6 @@ router.get('/signout', User.signout);
 
 // 主题
 router.get('/topic/create', Topic.renderCreate);
+router.post('/topic/create', Topic.createTopic);
 
 module.exports = router;
