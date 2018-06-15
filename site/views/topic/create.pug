@@ -20,6 +20,10 @@ html
           .title 发布主题
           .inner
             form.form(method="post")
+              if error
+                .alert.alert-error #{error}
+              else
+                .alert.alert-error.hidden #{error}
               .control-group
                 label.control-label(for="tab")
                 .controls
@@ -32,10 +36,11 @@ html
               .control-group
                 label.control-label(for="title") 标题：
                 .controls
-                  input#title(type="text", id="title", name="title")
+                  input#title(type="text", name="title")
               .control-group
                 label.control-label(for="content") 内容：
                 .controls
+                  input.content-hidden(type="hidden", name="content")
                   textarea#editor
               .control-group
                 .controls
@@ -49,6 +54,21 @@ html
     script(src="/static/js/main.js")
     script.
       var simplemde = new SimpleMDE({ element: $("#editor")[0] }),
-          title = $('#title');
+          tab = $('.select-hidden');
+          title = $('#title'),
+          alert = $('.alert');
+
       $('.form').submit(function() {
+        validate();
+        $('.content-hidden').val(simplemde.value());
       });
+
+      function validate() {
+        if (!tab.val()) {
+          alert.text('请选择分类').slideDown();
+        } else if (!title.val()) {
+          alert.text('标题不能为空').slideDown();
+        } else if (!simplemde.value()) {
+          alert.text('内容不能为空').slideDown();
+        }
+      }

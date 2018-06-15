@@ -8,10 +8,10 @@
 
 ## 快速开始
 
-  - 启动 Mongodb 服务
-  - 执行 npm install 或者是 yarn 安装依赖
-  - 执行 npm start 或者是 yarn start
-  - 检查服务是否开始，浏览器访问 http://localhost:3000/api 是否有返回JSON。
+  1. 启动 Mongodb 服务
+  2. 执行 npm install 或者是 yarn 安装依赖
+  3. 执行 npm start 或者是 yarn start
+  4. 检查服务是否开始，浏览器访问 http://localhost:3000/api 是否有返回JSON。
 
 ## API说明
 

@@ -29,7 +29,7 @@ const TopicSchema = new Schema({
   deleted: { type: Boolean, default: false },
 });
 
-TopicSchema.index({ create_at: -1 });
+TopicSchema.index({ id: -1 });
 TopicSchema.index({ top: -1, last_reply_at: -1 });
 TopicSchema.index({ author_id: 1, create_at: -1 });
 

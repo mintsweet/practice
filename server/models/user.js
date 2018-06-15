@@ -31,8 +31,8 @@ const UserSchema = new Schema({
   update_at: { type: Date, default: Date.now },
 });
 
+UserSchema.index({ id: -1 });
 UserSchema.index({ score: 1 });
-UserSchema.index({ id: 1 });
 
 const User = mongoose.model('User', UserSchema);
 

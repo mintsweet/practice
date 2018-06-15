@@ -8,7 +8,34 @@ block content
       else
         a(href="?tab=" + item.url) #{item.name}
   .card-list
-    each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-      .card
-        | #{val}
-      
+    if list.length > 0
+      each item in list
+        .card
+          .avatar
+            img(src=item.author.avatar)
+          .statistics
+            span #{item.reply_count}
+            span  / 
+            span #{item.visit_count}
+          .topic-content
+            .title
+              if item.top
+                span.tag.active 置顶
+              else if item.good
+                span.tag.active 精华
+              else
+                span.tag #{item.tabName}
+              a(href=`/topic/${item.id}`) #{item.title}
+          .last-time
+            - var now = (new Date()).getTime();var lastTime = (new Date(item.last_reply_at)).getTime();
+            - var limit = now - lastTime;
+            if limt < (1000 * 60 * 60)
+              span #{Math.floor(limit / (1000 * 60))}分钟前
+            else if limit > (1000 * 60 * 60) && limit < (1000 * 60 * 60 * 24)
+              span #{Math.floor(limit / (1000 * 60 * 60))}小时前
+            else if limit > (1000 * 60 * 60 * 24) && limit < (1000 * 60 * 60 * 24 * 10)
+              span #{Math.floor(limit / (1000 * 60 * 60 * 24))}天前
+            else
+              span 很久以前 
+    else
+      span 暂无内容

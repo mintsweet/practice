@@ -6,13 +6,13 @@ const UserModel = require('../models/user');
 class Topic extends BaseComponent {
   constructor() {
     super();
-    this.addTopic = this.addTopic.bind(this);
+    this.createTopic = this.createTopic.bind(this);
     this.getTopicList = this.getTopicList.bind(this);
     this.getTopicDetail = this.getTopicDetail.bind(this);
   }
 
   // 新增
-  addTopic(req, res) {
+  createTopic(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
       if (err) {
@@ -75,23 +75,29 @@ class Topic extends BaseComponent {
   // 获取列表
   async getTopicList(req, res) {
     const tab = req.query.tab || 'all';
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.query.page) > 0 || 1;
     const size = parseInt(req.query.size) || 10;
 
-    try {
-      let topicList;
+    let query = {};
 
-      if (tab === 'all') {
-        topicList = await TopicModel.find({}, '-_id tab title content author_id create_at', {
-          skip: (page - 1) * size,
-          limit: size
-        });
+    if (!tab || tab === 'all') {
+      query = {};
+    } else {
+      if (tab === 'good') {
+        query.good = true;
       } else {
-        topicList = await TopicModel.find({ tab }, '-_id tab title content author_id create_at', {
-          skip: (page - 1) * size,
-          limit: size
-        });
+        query.tab = tab;
       }
+    }
+
+    const options = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: '-top -last_reply_at'
+    };
+
+    try {
+      const topicList = await TopicModel.find(query, '-_id', options);
 
       const promises = await Promise.all(topicList.map(item => {
         return new Promise((resolve, reject) => {
@@ -100,12 +106,7 @@ class Topic extends BaseComponent {
       }));
 
       const result = topicList.map((item, i) => {
-        let temp = {};
-        temp.author = promises[i];
-        temp.title = item.title;
-        temp.content = item.content;
-        item.createTime = item.create_time;
-        return temp;
+        return Object.assign({ author: promises[i], tabName: item.tabName }, item.toObject());
       });
 
       return res.send({
@@ -114,6 +115,7 @@ class Topic extends BaseComponent {
       });
     } catch(err) {
       console.log(err)
+
       return res.send({
         status: 0,
         type: 'ERROR_GET_Topic_LIST',

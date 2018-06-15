@@ -21,6 +21,7 @@ const ReplySchema = new Schema({
   deleted: { type: Boolean,default: false }
 });
 
+ReplySchema.index({ id: -1 });
 ReplySchema.index({ topic_id: 1 });
 ReplySchema.index({ author_id: 1, create_at: -1 });
 
