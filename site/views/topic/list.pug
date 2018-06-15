@@ -1,0 +1,13 @@
+dl.topic-list
+  each topic in topics
+    dd
+      a.avatar(href=`/user/${topic.author.id}`)
+        img(src=topic.author.avatar, alt=topic.author.nickname)
+      a.title(href=`/topic/${topic.id}`)
+        span #{topic.title}
+      .info
+        a.tag(href=`/?${item.tab}`) #{item.tabName}
+        | •
+        a.author(href=`/user/${topic.author.id}`) #{item.author.nickname}
+        | •
+        time.create-time #{topic.createTime}

@@ -138,10 +138,31 @@ textarea:focus, input:focus {border-color: #16982B;}
 .user-wrapper .text a {margin: 0 6px;color: #16982B;}
 
 /* topic */
+.topic-list  {
+
+}
+
+.topic-list dd {
+  margin-left: 0;
+  padding: 10px 0;
+  border-bottom: 1px dashed #CCC;
+}
+
+.topic-list dd:last-child {
+  border-bottom: none;
+}
+
+.topic-list dd .avatar {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .topic-wrapper {padding: 0 10px;}
 .topic-wrapper .title {font-size: 18px;margin-bottom: 10px;}
 .topic-wrapper .control-group {margin-top: 10px;}
 .topic-wrapper .control-label {display: block;margin-bottom: 6px;}
+
 
 /* footer */
 .footer {height: 150px;text-align: center;}
