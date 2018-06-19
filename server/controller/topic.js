@@ -75,7 +75,7 @@ class Topic extends BaseComponent {
   // 获取列表
   async getTopicList(req, res) {
     const tab = req.query.tab || 'all';
-    const page = parseInt(req.query.page) > 0 || 1;
+    const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 10;
 
     let query = {};
@@ -97,6 +97,7 @@ class Topic extends BaseComponent {
     };
 
     try {
+      const topicCount = await TopicModel.count(query);
       const topicList = await TopicModel.find(query, '-_id', options);
 
       const promises = await Promise.all(topicList.map(item => {
@@ -111,11 +112,16 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: result
+        data: {
+          topics: result,
+          currentPage: page,
+          topicCount: size,
+          pages: Math.ceil(topicCount / size),
+          tab
+        },
       });
     } catch(err) {
-      console.log(err)
-
+      console.log(err);
       return res.send({
         status: 0,
         type: 'ERROR_GET_Topic_LIST',
