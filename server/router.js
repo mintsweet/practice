@@ -9,6 +9,12 @@ const Static = require('./controller/static');
 
 const router = express.Router();
 
+// 静态
+router.get('/static/get_start', Static.getStart); // 获取快速开始文档
+router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API说明文档
+router.get('/static/about', Static.getAbout); // 获取关于文档
+router.get('/static/markdown_style', Static.getMarkdown); // 获取Markdown样式文档
+
 // 公共
 router.get('/common/piccaptcha', Common.getPicCaptcha);
 router.get('/common/msgcaptcha', Common.getMsgCaptcha);
@@ -29,8 +35,6 @@ router.get('/user/:nickname/replies', User.getUserReplies); // 用户回复的�
 router.get('/user/:nickname/follower', User.getUserFollower); // 获取用户粉丝列表
 router.get('/user/:nickname/following', User.getUserFollowing); // 获取用户关注的人列表
 
-// 信息
-
 // 主题
 router.post('/topic/create', Auth.userRequired, Topic.createTopic); // 新增主题
 router.get('/topic/list', Topic.getTopicList); // 获取主题列表
@@ -41,10 +45,6 @@ router.post('/topics/:id/un_collect', Auth.userRequired, Topic.unCollectTopic); 
 
 // 回复
 
-// 静态
-router.get('/static/get_start', Static.getStart); // 获取快速开始文档
-router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API说明文档
-router.get('/static/about', Static.getAbout); // 获取关于文档
-router.get('/static/markdown_style', Static.getMarkdown); // 获取Markdown样式文档
+// 消息
 
 module.exports = router;

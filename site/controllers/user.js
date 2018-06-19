@@ -1,11 +1,10 @@
 const formidable = require('formidable');
-const { getPicCaptcha, apiSignin, apiSignout } = require('../http/api');
+const { getPicCaptcha, apiSignin, apiSignout, getCurrentUser } = require('../http/api');
 
 class User {
   // 注册页
   async renderSignup(req, res) {
     const response = await getPicCaptcha();
-
     if (response.status === 1) {
       return res.render('user/signup', {
         title: '注册',
@@ -31,9 +30,7 @@ class User {
           error: err
         });
       }
-
       const response = await apiSignin(Object.assign({ type: 'acc' }, fields));
-
       if (response.status === 1) {
         return res.render('site/transfer', {
           title: '登录成功',
@@ -59,6 +56,13 @@ class User {
         type: 'success'
       });
     }
+  }
+
+  // 个人信息页
+  renderInfo(req, res) {
+    return res.render('user/info', {
+      title: '个人信息'
+    });
   }
 }
 

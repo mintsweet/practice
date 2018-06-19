@@ -37,15 +37,20 @@ exports.getAboutData = () => request('/static/about');
 exports.getMarkdownData = () => request('/static/markdown_style');
 
 /*
+* 公共
+*/
+
+// 请求图形验证码
+exports.getPicCaptcha = () => request('/common/piccaptcha');
+// 请求手机验证码
+exports.getMsgCaptcha = mobile => request('/common/msgcaptcha');
+
+/*
 * 用户 user
 */
 
 // 获取当前用户信息
 exports.getCurrentUser = () => request('/info');
-// 请求图形验证码
-exports.getPicCaptcha = () => request('/common/piccaptcha');
-// 请求手机验证码
-exports.getMsgCaptcha = mobile => request('/common/msgcaptcha');
 // 登录
 exports.apiSignin = obj => request('/signin', obj, 'POST');
 // 登出

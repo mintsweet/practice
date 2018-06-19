@@ -22,6 +22,7 @@ router.get('/signup', User.renderSignup);
 router.get('/signin', User.renderSignin);
 router.post('/signin', User.signin);
 router.get('/signout', User.signout);
+router.get('/user/:nickname', User.renderInfo);
 
 // 主题
 router.get('/topic/create', Auth.userRequired, Topic.renderCreate);
