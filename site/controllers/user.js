@@ -1,23 +1,97 @@
 const formidable = require('formidable');
-const { getPicCaptcha, apiSignin, apiSignout, getCurrentUser } = require('../http/api');
+const { getPicCaptcha, apiSignup, apiSignin, apiForgetPass, apiSignout } = require('../http/api');
 
 class User {
+  constructor() {
+    this.signup = this.signup.bind(this);
+  }
+
+  // 获取图形验证码
+  async getPicToken() {
+    const response = await getPicCaptcha();
+    if (response.status === 1) {
+      return response.data;
+    } else {
+      return {};
+    }
+  }
+
   // 注册页
   async renderSignup(req, res) {
     const response = await getPicCaptcha();
     if (response.status === 1) {
+      req.app.locals.pic_token = response.data.token;
       return res.render('user/signup', {
         title: '注册',
-        url: response.data.url
+        picUrl: response.data.url
       });
     }
   }
 
-  // 登录页
-  renderSignin(req, res) {
-    res.render('user/signin', {
-      title: '登录'
+  // 注册
+  signup(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.render('user/signup', {
+          title: '注册',
+          error: err
+        });
+      }
+
+      const { nickname, mobile, password, msgcaptcha } = fields;
+      const { msg_code } = req.app.locals;
+      const picToken = await this.getPicToken();
+      req.app.locals.pic_token = picToken.token;
+      
+      try {
+        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+          throw new Error('请输入正确的手机号');
+        } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
+          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+        } else if (!nickname || nickname.length > 8 || nickname.length < 4) {
+          throw new Error('请输入4-8位的名称');
+        } else if (msg_code.mobile !== mobile) {
+          throw new Error('收取验证码的手机与登录手机不匹配');
+        } else if (msg_code.code !== msgcaptcha) {
+          throw new Error('短信验证码不正确')
+        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+          throw new Error('短信验证码已经失效了，请重新获取');
+        }
+      } catch(err) {
+        return res.render('user/signup', {
+          title: '注册',
+          picUrl: picToken.url,
+          error: err.message
+        });
+      }
+
+      const response = await apiSignup(fields);
+      if (response.status === 1) {
+        return res.render('site/transfer', {
+          title: '注册成功',
+          text: '注册成功',
+          type: 'success'
+        });
+      } else {
+        return res.render('user/signup', {
+          title: '注册',
+          error: response.message
+        });
+      }
     });
+  }
+
+  // 登录页
+  async renderSignin(req, res) {
+    const response = await getPicCaptcha();
+    if (response.status === 1) {
+      req.app.locals.pic_token = response.data.token;
+      res.render('user/signin', {
+        title: '登录',
+        picUrl: response.data.url
+      });
+    }
   }
   
   // 登录
@@ -30,6 +104,25 @@ class User {
           error: err
         });
       }
+
+      const { mobile, piccaptcha } = fields;
+      const { pic_token } = req.app.locals;
+
+      try {
+        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+          throw new Error('请输入正确的手机号');
+        } else if (piccaptcha !== pic_token) {
+          throw new Error('图形验证码错误');
+        } else if ((Date.now() - pic_token.time) / (1000 * 60) > 5) {
+          throw new Error('图形验证码已经失效了，请重新获取');
+        }
+      } catch(err) {
+        return res.render('user/signin', {
+          title: '登录',
+          error: err.message
+        });
+      }
+
       const response = await apiSignin(Object.assign({ type: 'acc' }, fields));
       if (response.status === 1) {
         return res.render('site/transfer', {
@@ -40,6 +133,67 @@ class User {
       } else {
         return res.render('user/signin', {
           title: '登录',
+          error: response.message
+        });
+      }
+    });
+  }
+
+  // 忘记密码页
+  async renderForgetPass(req, res) {
+    const response = await getPicCaptcha();
+    if (response.status === 1) {
+      req.app.locals.pic_token = response.data.token;
+      return res.render('user/forget_pass', {
+        title: '忘记密码',
+        picUrl: response.data.url
+      });
+    }
+  }
+
+  // 忘记密码
+  async forgetPass(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.render('user/forget_pass', {
+          title: '忘记密码',
+          error: err
+        });
+      }
+
+      const { msg_code } = req.app.locals;
+      const { mobile, password, msgcaptcha } = fields;
+
+      try {
+        if (!mobile && mobile !== msg_code.mobile) {
+          throw new Error('提交手机号与获取验证码手机号不对应');
+        } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
+          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+        } else if (msg_code.code !== msgcaptcha) {
+          throw new Error('验证码错误');
+        } else if (msg_code.mobile !== mobile) {
+          throw new Error('收取验证码的手机与登录手机不匹配');
+        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+          throw new Error('验证码已失效，请重新获取');
+        }
+      } catch(err) {
+        return res.render('user/forget_pass', {
+          title: '忘记密码',
+          error: err.message
+        });
+      }
+
+      const response = await apiForgetPass(fields);
+      if (response.status === 1) {
+        return res.render('site/transfer', {
+          title: '密码找回成功',
+          text: '密码找回成功',
+          type: 'success'
+        });
+      } else {
+        return res.render('user/forget_pass', {
+          title: '忘记密码',
           error: response.message
         });
       }

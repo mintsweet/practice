@@ -1,0 +1,67 @@
+extends ../layout
+
+block content
+  .main
+    .layout.user
+      .title
+        span.practice &#xe601;
+        | 忘记密码
+      .user-flex
+        form#forgetForm.form.form-horizontal(method="post")
+          if error
+            .alert.alert-error #{error}
+          else
+            .alert.alert-error.hidden
+          .control-group
+            label.control-label(for="mobile") 手机号：
+            .controls
+              input(type="text", id="mobile", name="mobile", minlength="11", maxlength="11", required="required", placeholder="请输入你的手机号", autocomplete="off")
+          .control-group
+            label.control-label(for="newPassword") 新密码：
+            .controls
+              input(type="password", id="newPassword", name="newPassword", minlength="6", maxlength="18", required="required", placeholder="请输入新密码", autocomplete="off")
+          .control-group
+            label.control-label(for="piccaptcha") 验证码：
+            .controls
+              input(type="text", id="piccaptcha", minlength="5", maxlength="5", required="required", placeholder="请输入验证码", autocomplete="off")
+              img.captcha(src=picUrl, alt="图形验证码")
+          .control-group
+            label.control-label(for="msgcaptcha") 手机验证码：
+            .controls
+              input(type="text", id="msgcaptcha", minlength="6", maxlength="6", required="required", placeholder="请输入手机验证码", autocomplete="off")
+              .getcode.btn 获取验证码
+          .control-group
+            label.control-label
+            .controls
+              button.btn.submit(type="submit") 确认修改
+        .text
+          p 尚未拥有账号？
+          p 请点击
+            a(href="/signup") 注册
+          p 已经拥有账号？
+          p 请点击
+            a(href="/signin") 登录
+  include ../includes/footer
+  script.
+    var mobile = $('#mobile'),
+        newPassword = $('#newPassword'),
+        piccaptcha = $('#piccaptcha'),
+        msgcaptcha = $('#msgcaptcha'),
+        alert = $('.alert');
+
+    $('#forgetForm').submit(function() {
+      if (!mobile.val() || !!/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+        alert.text('请填写正确格式的手机号').slideDown();
+        return false;
+      } else if (!newPassword.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
+        alert.text('请填写正确格式的密码').slideDown();
+        return false;
+      } else if (!piccaptcha.val() || piccaptcha.length !== 5) {
+        alert.text('请填写正确格式的图形验证码').slideDown();
+        return false;
+      } else if (!msgcaptcha.val() || msgcaptcha.length !== 6) {
+        alert.text('请填写正确格式的手机验证码').slideDown();
+        return false;
+      }
+    });
+    

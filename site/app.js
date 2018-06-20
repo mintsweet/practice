@@ -19,6 +19,8 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // local
 app.locals.config = config;
+app.locals.msg_code = {};
+app.locals.pic_token = {};
 app.use(async (req, res, next) => {
   const response = await getCurrentUser();
   if (response.status === 1) {

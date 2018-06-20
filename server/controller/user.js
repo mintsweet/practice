@@ -44,7 +44,7 @@ class User extends BaseComponent {
         });
       }
 
-      const { nickname, mobile, password } = fields;
+      const { nickname, mobile, password, msgcaptcha } = fields;
       let existUser;
       existUser = await UserModel.findOne({ mobile });
       if (existUser) {
@@ -68,8 +68,14 @@ class User extends BaseComponent {
           throw new Error('请输入正确的手机号');
         } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
-        } else if (!nickname || nickname.length > 8 || nickname.length < 4) {
+        } else if (!nickname || nickname.length > 16 || nickname.length < 4) {
           throw new Error('请输入4-8位的名称');
+        } else if (msg_code.mobile !== mobile) {
+          throw new Error('收取验证码的手机与登录手机不匹配');
+        } else if (msg_code.code !== msgcaptcha) {
+          throw new Error('短信验证码不正确')
+        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+          throw new Error('短信验证码已经失效了，请重新获取');
         }
       } catch(err) {
         return res.send({
@@ -148,7 +154,7 @@ class User extends BaseComponent {
 
       if (type === 'acc') {
         const isMatch = await bcrypt.compare(password, existUser.password);
-        if (isMatch) {
+        if (!isMatch) {
           req.session.userInfo = existUser;
           return res.send({
             status: 1,
@@ -218,17 +224,19 @@ class User extends BaseComponent {
         });
       }
       const { msg_code } = req.session;
-      const { mobile, newPassword , msgcaptcha } = fields;
+      const { mobile, newPassword, msgcaptcha } = fields;
 
       try {
         if (mobile && mobile !== msg_code.mobile) {
           throw new Error('提交手机号与获取验证码手机号不对应');
-        } else if (msg_code.code !== msgcaptcha) {
-          throw new Error('验证码错误');
-        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
-          throw new Error('验证码已失效，请重新获取');
         } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+        } else if (msg_code.code !== msgcaptcha) {
+          throw new Error('验证码错误');
+        } else if (msg_code.mobile !== mobile) {
+          throw new Error('收取验证码的手机与登录手机不匹配');
+        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+          throw new Error('验证码已失效，请重新获取');
         }
       } catch(err) {
         return res.send({

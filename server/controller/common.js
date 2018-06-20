@@ -8,6 +8,7 @@ class Common extends BaseComponent {
 
   async getMsgCaptcha(req, res) {
     const { mobile } = req.query;
+
     if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
       return res.send({
         status: 0,
@@ -54,7 +55,6 @@ class Common extends BaseComponent {
         data: picCaptcha
       })
     } catch (err) {
-      console.log(err);
       return res.send({
         status: 0,
         type: 'ERROR_GET_PIC_CAPTCHA',

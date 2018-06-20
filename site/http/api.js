@@ -43,7 +43,7 @@ exports.getMarkdownData = () => request('/static/markdown_style');
 // 请求图形验证码
 exports.getPicCaptcha = () => request('/common/piccaptcha');
 // 请求手机验证码
-exports.getMsgCaptcha = mobile => request('/common/msgcaptcha');
+exports.getMsgCaptcha = mobile => request('/common/msgcaptcha', mobile);
 
 /*
 * 用户 user
@@ -51,10 +51,14 @@ exports.getMsgCaptcha = mobile => request('/common/msgcaptcha');
 
 // 获取当前用户信息
 exports.getCurrentUser = () => request('/info');
+// 注册
+exports.apiSignup = obj => request('/signup', obj, 'POST');
 // 登录
 exports.apiSignin = obj => request('/signin', obj, 'POST');
 // 登出
 exports.apiSignout = () => request('/signout');
+// 忘记密码
+exports.apiForgetPass = obj => request('/forget_pass', obj, 'POST');
 
 /*
 * 主题
