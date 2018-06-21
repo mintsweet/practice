@@ -20,7 +20,7 @@ body
                   a.select-input(href="javascript:;") 请选择类别
                   .select-options
                     each item in config.tabs
-                      .option(data-value=item.name) #{item.name}
+                      .option(data-value=item.url) #{item.name}
             .control-group
               label.control-label(for="title") 标题：
               .controls

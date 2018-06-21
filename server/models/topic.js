@@ -33,17 +33,9 @@ TopicSchema.index({ id: -1 });
 TopicSchema.index({ top: -1, last_reply_at: -1 });
 TopicSchema.index({ author_id: 1, create_at: -1 });
 
-TopicSchema.virtual('tabName').get(() => {
-  let tabs = [];
-  config.tabs.forEach(item => {
-    if (item.children) {
-      tabs = tabs.concat(item.children);
-    } else {
-      tabs.push(item);
-    }
-  });
+TopicSchema.virtual('tabName').get(function() {
+  const pair = config.tabs.find(item => item.url === this.tab);
 
-  const pair = tabs.find(item => item.path === this.tab);
   if (pair) {
     return pair.name;
   } else {

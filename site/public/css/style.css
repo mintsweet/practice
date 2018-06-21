@@ -87,6 +87,20 @@ textarea:focus, input:focus {border-color: #16982B;}
 .alert {padding: 8px 35px 8px 14px;margin-bottom: 20px;text-shadow: 0 1px 0 rgba(255,255,255,0.5);border: 1px solid #fbeed5;background-color: #fcf8e3;border-radius: 4px;color: #c09853;}
 .alert-error {color: #b94a48;background-color: #f2dede;border-color: #eed3d7;}
 
+/* card */
+.card {
+  margin-bottom: 20px;
+  padding: 20px 30px;
+  background: #fff;
+}
+
+.card .avatar {
+  width: 180px;
+  height: 180px;
+  background: red;
+  border-radius: 50%;
+}
+
 /* transfer */
 .transfer {height:100vh;background-color:#efeff4;overflow: hidden;}
 .transfer .msg {display:block;text-align:center;padding:15px 0;}
@@ -145,10 +159,10 @@ textarea:focus, input:focus {border-color: #16982B;}
 .topic-list .topic .avatar {position: absolute;left: 10px;top: 10px;width: 30px;height: 30px;}
 .topic-list .topic .avatar img {width: 100%;height: 100%;}
 .topic-list .topic .statistics {position: absolute;left: 50px;}
-.topic-list .topic .topic-content {margin: 0 90px 0 100px;height: 100%;}
+.topic-list .topic .topic-content {margin: 0 120px 0 100px;height: 100%;}
 .topic-list .topic .topic-content .tag {padding: 2px 4px;margin-right: 8px;font-size: 12px;border-radius: 2px;color: #fff;background: #a1a1a1;}
 .topic-list .topic .topic-content .tag.active {background: #16982B;}
-.topic-list .topic .last-time {position: absolute;right: 10px;top: 0;width: 80px;text-align: center;font-size: 12px;}
+.topic-list .topic .last-time {position: absolute;right: 10px;top: 0;width: 110px;text-align: center;font-size: 12px;}
 .topic-wrapper {padding: 0 10px;}
 .topic-wrapper .title {font-size: 18px;margin-bottom: 10px;}
 .topic-wrapper .control-group {margin-top: 10px;}
@@ -181,7 +195,6 @@ textarea:focus, input:focus {border-color: #16982B;}
 .exception p span {display: block;}
 
 /* markdown */
-/* .markdown {background: #fff;} */
 .markdown h1,
 .markdown h2,
 .markdown h3,

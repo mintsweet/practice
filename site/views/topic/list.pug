@@ -19,7 +19,10 @@ dl.topic-list
       .last-time
         - var now = (new Date()).getTime();var lastTime = (new Date(topic.last_reply_at)).getTime();
         - var limit = now - lastTime;
-        if limt < (1000 * 60 * 60)
+        if limit < (1000 * 60)
+          span 发布于
+          span 小于1分钟
+        else if limit < (1000 * 60 * 60)
           span 发布于
           span #{Math.floor(limit / (1000 * 60))}分钟前
         else if limit > (1000 * 60 * 60) && limit < (1000 * 60 * 60 * 24)
@@ -32,7 +35,7 @@ dl.topic-list
           span 发布于
           span #{Math.floor(limit / (1000 * 60 * 60 * 24 * 30))}月前
         else
-          span 发布于很久以前
+          span 很久以前
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 ul.pagination
   if currentPage === 1

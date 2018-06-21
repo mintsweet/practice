@@ -24,7 +24,7 @@ $(document).ready(function () {
 
   // select option 选择
   $('.option').click(function(e) {
-    $('.select-input').text($(this).attr('data-value'));
+    $('.select-input').text($(this).text());
     $('.select-hidden').val($(this).attr('data-value'));
   });
 

@@ -107,7 +107,7 @@ class Topic extends BaseComponent {
       }));
 
       const result = topicList.map((item, i) => {
-        return Object.assign({ author: promises[i], tabName: item.tabName }, item.toObject());
+        return Object.assign({ author: promises[i] }, item.toObject({ virtuals: true }));
       });
 
       return res.send({
