@@ -3,7 +3,9 @@ class Auth {
     if (req.app.locals.user) {
       next();
     } else {
-      res.redirect('/exception/403');
+      res.render('exception/403', {
+        title: '403'
+      });
     }
   }
 }

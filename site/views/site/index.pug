@@ -1,13 +1,15 @@
 extends ../layout
 
 block content
-  .tab-list
-    each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
-      if currentTab === item.url
-        a.active(href="?tab=" + item.url) #{item.name}
+  .main
+    .layout
+      .tab-list
+        each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
+          if currentTab === item.url
+            a.active(href="?tab=" + item.url) #{item.name}
+          else
+            a(href="?tab=" + item.url) #{item.name}
+      if topics.length > 0
+        include ../topic/list
       else
-        a(href="?tab=" + item.url) #{item.name}
-  if topics.length > 0
-    include ../topic/list
-  else
-    span 暂无内容
+        span 暂无内容

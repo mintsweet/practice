@@ -84,7 +84,6 @@ app.use((req, res) => {
 
 // 500
 app.use((err, req, res) => {
-  console.error(err.stack);
   res.status(500).send({
     status: 0,
     type: 'ERROR_SERVICE_NOT_RESP',

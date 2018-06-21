@@ -5,7 +5,6 @@ const Static = require('./controllers/static');
 const Common = require('./controllers/common');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
-const Exception = require('./controllers/exception');
 
 const router = express.Router();
 
@@ -35,9 +34,5 @@ router.get('/user/:nickname', User.renderInfo);
 // 主题
 router.get('/topic/create', Auth.userRequired, Topic.renderCreate);
 router.post('/topic/create', Auth.userRequired, Topic.createTopic);
-
-// 其他
-router.get('/exception/403', Exception.render403);
-router.get('/exception/500', Exception.render500);
 
 module.exports = router;

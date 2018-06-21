@@ -1,8 +1,8 @@
 /*
 * Mints - app.js
 */
-const express = require('express');
 const chalk = require('chalk');
+const express = require('express');
 const path = require('path');
 const config = require('../config.default');
 const routes = require('./router');
@@ -31,8 +31,19 @@ app.use(async (req, res, next) => {
   next();
 });
 
+// middleware
+
 // routes
 app.use('/', routes);
+
+app.use(function (req, res, next) {
+  res.status(404).render('exception/404', { title: '404' });
+});
+
+// 500
+app.use((err, req, res) => {
+  res.status(500).render('exception/500', { title: '500' });
+});
 
 if (!module.parent) {
   app.listen(config.site_port, () => {
