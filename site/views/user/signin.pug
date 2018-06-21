@@ -23,7 +23,7 @@ block content
           .control-group
             label.control-label(for="piccaptcha") 验证码：
             .controls
-              input(type="text", id="piccaptcha", minlength="5", maxlength="5", required="required", placeholder="请输入六位验证", autocomplete="off")
+              input(type="text", id="piccaptcha", name="piccaptcha", minlength="5", maxlength="5", required="required", placeholder="请输入六位验证", autocomplete="off")
               img.captcha(src=picUrl, alt="图形验证码")
           .control-group
             label.control-label
@@ -39,18 +39,14 @@ block content
   include ../includes/footer
   script.
     var mobile = $('#mobile'),
-        password = $('#password'),
         piccaptcha = $('#piccaptcha')
         alert = $('.alert');
     
     $('#signinForm').submit(function() {
-      if (!mobile.val() || !!/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
-        alert.text('请填写正确格式的用户名').slideDown();
+      if (!mobile.val() || !(/^1[3,5,7,8,9]\d{9}$/.test(mobile.val()))) {
+        alert.text('请填写正确格式的手机号').slideDown();
         return false;
-      } else if (!password.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
-        alert.text('请填写正确格式的密码').slideDown();
-        return false;
-      } else if (!piccaptcha.val() || piccaptcha.length !== 5) {
+      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
         alert.text('请填写正确格式的图形验证码').slideDown();
         return false;
       }

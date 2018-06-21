@@ -4,6 +4,7 @@ const { getPicCaptcha, apiSignup, apiSignin, apiForgetPass, apiSignout } = requi
 class User {
   constructor() {
     this.signup = this.signup.bind(this);
+    this.signin = this.signin.bind(this);
   }
 
   // 获取图形验证码
@@ -86,7 +87,7 @@ class User {
   async renderSignin(req, res) {
     const response = await getPicCaptcha();
     if (response.status === 1) {
-      req.app.locals.pic_token = response.data.token;
+      req.app.locals.pic_token = { token: response.data.token, time: Date.now() };
       res.render('user/signin', {
         title: '登录',
         picUrl: response.data.url
@@ -109,16 +110,19 @@ class User {
       const { pic_token } = req.app.locals;
 
       try {
-        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+        if (!mobile || !(/^1[3,5,7,8,9]\d{9}$/.test(mobile))) {
           throw new Error('请输入正确的手机号');
-        } else if (piccaptcha !== pic_token) {
+        } else if (!pic_token.token || piccaptcha.toLowerCase() !== pic_token.token.toLowerCase()) {
           throw new Error('图形验证码错误');
         } else if ((Date.now() - pic_token.time) / (1000 * 60) > 5) {
           throw new Error('图形验证码已经失效了，请重新获取');
         }
       } catch(err) {
+        const picToken = await this.getPicToken();
+        req.app.locals.pic_token = picToken.token;
         return res.render('user/signin', {
           title: '登录',
+          picUrl: picToken.url,
           error: err.message
         });
       }
@@ -131,8 +135,11 @@ class User {
           type: 'success'
         });
       } else {
+        const picToken = await this.getPicToken();
+        req.app.locals.pic_token = picToken.token;
         return res.render('user/signin', {
           title: '登录',
+          picUrl: picToken.url,
           error: response.message
         });
       }

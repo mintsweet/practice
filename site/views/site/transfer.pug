@@ -1,24 +1,24 @@
 include ../includes/head
-  body.transfer
-    .msg
-      i(class="practice " + type + " pra-" + type)
-      strong #{text}
-      .skip
-        span#time 3
-        | 秒后将跳转…
-    //- scripts
-    script(src="/static/libs/jquery-3.3.1.min.js")
-    script(src="/static/js/main.js")
-    script.
-        var time = $('#time'),
-            countTime = 3,
-            timer;
-        timer = window.setInterval(function() {
-        countTime--;
-          if (countTime === 0){
-            location.href = '/';
-            window.clearInterval(timer);
-            return false;
-          }
-          time.text(countTime);
-        }, 1000);
+body.transfer
+  .msg
+    i(class="practice " + type + " pra-" + type)
+    strong #{text}
+    .skip
+      span#time 3
+      | 秒后将跳转…
+  //- scripts
+  script(src="/static/libs/jquery-3.3.1.min.js")
+  script(src="/static/js/main.js")
+  script.
+      var time = $('#time'),
+          countTime = 3,
+          timer;
+      timer = window.setInterval(function() {
+      countTime--;
+        if (countTime === 0){
+          location.href = '/';
+          window.clearInterval(timer);
+          return false;
+        }
+        time.text(countTime);
+      }, 1000);

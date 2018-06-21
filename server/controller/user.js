@@ -154,7 +154,7 @@ class User extends BaseComponent {
 
       if (type === 'acc') {
         const isMatch = await bcrypt.compare(password, existUser.password);
-        if (!isMatch) {
+        if (isMatch) {
           req.session.userInfo = existUser;
           return res.send({
             status: 1,

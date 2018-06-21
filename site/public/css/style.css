@@ -141,7 +141,7 @@ textarea:focus, input:focus {border-color: #16982B;}
 
 /* topic */
 .topic-list {margin-top: 20px;}
-.topic-list .topic {position: relative;margin-bottom: 10px;height: 50px;;line-height: 50px;background: #a4d1aa14;}
+.topic-list .topic {position: relative;margin-bottom: 10px;height: 50px;;line-height: 50px;background: #e9f1e7;}
 .topic-list .topic .avatar {position: absolute;left: 10px;top: 10px;width: 30px;height: 30px;}
 .topic-list .topic .avatar img {width: 100%;height: 100%;}
 .topic-list .topic .statistics {position: absolute;left: 50px;}
@@ -181,7 +181,7 @@ textarea:focus, input:focus {border-color: #16982B;}
 .exception p span {display: block;}
 
 /* markdown */
-.markdown {background: #fff;}
+/* .markdown {background: #fff;} */
 .markdown h1,
 .markdown h2,
 .markdown h3,

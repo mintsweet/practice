@@ -28,6 +28,7 @@ const config = {
   site_port: 3001,
 
   tabs: [
+    { name: '分享', url: 'share' },
     { name: '问答', url: 'ask' },
     { name: '招聘', url: 'offer' }
   ],
