@@ -3,10 +3,6 @@ dl.topic-list
     dd.topic
       a.avatar(href=`/user/${topic.author.nickname}`)
         img(src=topic.author.avatar)
-      .statistics
-        span #{topic.reply_count} 回复
-        span  / 
-        span #{topic.visit_count} 阅读
       .topic-content
         .title
           if topic.top
@@ -36,6 +32,10 @@ dl.topic-list
           span #{Math.floor(limit / (1000 * 60 * 60 * 24 * 30))}月前
         else
           span 很久以前
+      .statistics
+        span #{topic.reply_count} 回复
+        span  / 
+        span #{topic.visit_count} 阅读
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 ul.pagination
   if currentPage === 1

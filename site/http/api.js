@@ -59,6 +59,8 @@ exports.apiSignin = obj => request('/signin', obj, 'POST');
 exports.apiSignout = () => request('/signout');
 // 忘记密码
 exports.apiForgetPass = obj => request('/forget_pass', obj, 'POST');
+// 获取积分榜前一百
+exports.apiGetUserTop100 = () => request('/users/top100');
 
 /*
 * 主题

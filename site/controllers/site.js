@@ -1,24 +1,27 @@
-const { getTopicList } = require('../http/api');
+const { getTopicList, apiGetUserTop100 } = require('../http/api');
 
 class Site {
   // 首页
   async index(req, res) {
     const { tab, page } = req.query;
 
-    const response = await getTopicList({
+    const resTopic = await getTopicList({
       tab: tab || 'all',
       page: page || 1,
       size: 10
     });
 
-    if (response.status === 1) {
+    const resUserTop100 = await apiGetUserTop100();
+
+    if (resTopic.status === 1 && resUserTop100.status === 1) {
       res.render('site/index', {
         title: '首页',
         currentTab: tab || 'all',
-        topics: response.data.topics,
-        pages: response.data.pages,
-        tab: response.data.tab,
-        currentPage: response.data.currentPage
+        topics: resTopic.data.topics,
+        pages: resTopic.data.pages,
+        tab: resTopic.data.tab,
+        currentPage: resTopic.data.currentPage,
+        top100: resUserTop100.data
       });
     } else {
       res.redirect('/exception/500');

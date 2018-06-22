@@ -25,6 +25,7 @@ body {background:#f5f5f5;color:#333;border-top: 4px solid #16982B;}
 a {color:#444;transition: color .3s;}
 a:hover {color: #16982B;}
 .layout {margin: 0 auto;width: 960px;}
+.no-content {line-height: 250px;font-size: 50px;text-align: center;}
 
 /* icon */
 @font-face {font-family: "practice";
@@ -126,11 +127,34 @@ textarea:focus, input:focus {border-color: #16982B;}
 
 /* site */
 .site {display: flex;}
-.site .content {flex: auto;margin-right: 20px;background: #fff;}
-.site .side {flex: 0 0 220px;}
-.site .tab-list {margin-bottom: 10px;line-height: 30px;}
+.site .content {flex: auto;padding: 25px 20px;margin-right: 20px;background: #fff;border-radius: 4px;}
+.site .tab-list {line-height: 30px;}
 .site .tab-list a {padding: 5px 10px;margin-right: 10px;font-size: 16px;}
 .site .tab-list a.active {background: #16982B;color: #fff;}
+.site .side {flex: 0 0 220px;}
+.site .side .download {padding: 10px 20px;margin-bottom: 10px;background: #fff;}
+.site .side .top100 {background: #fff;}
+.site .side .top100 .title {padding: 10px 20px;border-bottom: 1px solid #eee;}
+.site .side .top100 .title a {float: right;margin-top: 2px;color: #16982B;font-size: 12px;}
+.site .side .top100 .list {padding: 10px 20px;}
+.site .side .top100 .list li {line-height: 26px;}
+.site .side .top100 .list .nickname {font-size: 13px;}
+.site .side .top100 .list .score {float: right;font-size: 12px;color: #16982B;}
+
+/* topic */
+.topic-list {margin-top: 20px;}
+.topic-list .topic {position: relative;margin-bottom: 10px;height: 50px;;line-height: 50px;background: #e9f1e7;}
+.topic-list .topic .avatar {position: absolute;left: 10px;top: 10px;width: 30px;height: 30px;}
+.topic-list .topic .avatar img {width: 100%;height: 100%;}
+.topic-list .topic .statistics {position: absolute;top: 0;right: 130px;font-size: 12px;width: 100px;text-align: right;}
+.topic-list .topic .topic-content {margin: 0 230px 0 50px;height: 100%;}
+.topic-list .topic .topic-content .tag {padding: 2px 4px;margin-right: 8px;font-size: 12px;border-radius: 2px;color: #fff;background: #a1a1a1;}
+.topic-list .topic .topic-content .tag.active {background: #16982B;}
+.topic-list .topic .last-time {position: absolute;right: 10px;top: 0;width: 110px;text-align: center;font-size: 12px;}
+.topic-wrapper {padding: 0 10px;}
+.topic-wrapper .title {font-size: 18px;margin-bottom: 10px;}
+.topic-wrapper .control-group {margin-top: 10px;}
+.topic-wrapper .control-label {display: block;margin-bottom: 6px;}
 
 /* user */
 .user-acc {padding: 20px 30px;background: #fff;border-radius: 4px;}
@@ -142,21 +166,6 @@ textarea:focus, input:focus {border-color: #16982B;}
 .user-acc .user-form .form {padding: 10px 20px;box-sizing: border-box;}
 .user-acc .user-form .text {padding: 35px;border-left: 1px solid #ddd;box-sizing: border-box;}
 .user-acc .user-form .text a {margin: 0 6px;color: #16982B;}
-
-/* topic */
-.topic-list {margin-top: 20px;}
-.topic-list .topic {position: relative;margin-bottom: 10px;height: 50px;;line-height: 50px;background: #e9f1e7;}
-.topic-list .topic .avatar {position: absolute;left: 10px;top: 10px;width: 30px;height: 30px;}
-.topic-list .topic .avatar img {width: 100%;height: 100%;}
-.topic-list .topic .statistics {position: absolute;left: 50px;font-size: 12px;}
-.topic-list .topic .topic-content {margin: 0 120px 0 100px;height: 100%;}
-.topic-list .topic .topic-content .tag {padding: 2px 4px;margin-right: 8px;font-size: 12px;border-radius: 2px;color: #fff;background: #a1a1a1;}
-.topic-list .topic .topic-content .tag.active {background: #16982B;}
-.topic-list .topic .last-time {position: absolute;right: 10px;top: 0;width: 110px;text-align: center;font-size: 12px;}
-.topic-wrapper {padding: 0 10px;}
-.topic-wrapper .title {font-size: 18px;margin-bottom: 10px;}
-.topic-wrapper .control-group {margin-top: 10px;}
-.topic-wrapper .control-label {display: block;margin-bottom: 6px;}
 
 /* back top */
 .back-top {display: none;position: fixed;bottom: 60px;right: 40px;width: 40px;height: 40px;line-height: 40px;color: #fff;text-align: center;background: #16982B;cursor: pointer;}

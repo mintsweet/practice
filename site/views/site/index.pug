@@ -12,6 +12,17 @@ block content
       if topics.length > 0
         include ../topic/list
       else
-        span 暂无内容
+        div.no-content 暂无内容
     .side
-      .card
+      .download
+        span 查看源码
+      .top100
+        .title
+          | 积分榜
+          a(href="/users/top100") 更多
+        ul.list
+          each user in top100
+            li
+              a.nickname(href=`/user/${user.nickname}`) #{user.nickname}
+              span.score #{user.score}
+      
