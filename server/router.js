@@ -45,7 +45,7 @@ router.post('/topics/:id/collect', Auth.userRequired, Topic.collectTopic); // �
 router.post('/topics/:id/un_collect', Auth.userRequired, Topic.unCollectTopic); // 取消收藏主题
 
 // 回复
-router.post('/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
+router.post('/topisc/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
 router.post('/reply/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
 router.delete('/reply/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
 router.get('/reply/:rid/up', Auth.userRequired, Reply.upReply); // 点赞回复

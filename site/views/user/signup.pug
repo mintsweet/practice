@@ -1,51 +1,49 @@
 extends ../layout
 
 block content
-  .main
-    .layout.user
-      .title
-        span.practice &#xe642;
-        | 用户注册
-      .user-flex
-        form#signupForm.form.form-horizontal(method="post")
-          if error
-            .alert.alert-error #{error}
-          else
-            .alert.alert-error.hidden
-          .control-group
+  .user-acc
+    .title
+      span.practice &#xe642;
+      | 用户注册
+    .user-form
+      form#signupForm.form.form-horizontal(method="post")
+        if error
+          .alert.alert-error #{error}
+        else
+          .alert.alert-error.hidden
+        .control-group
           label.control-label(for="nickname") 昵称：
           .controls
             input(type="text", id="nickname", name="nickname", minlength="4", maxlength="16", required="required",placeholder="请输入你的昵称", autocomplete="off")
-          .control-group
-            label.control-label(for="mobile") 手机号：
-            .controls
-              input(type="text", id="mobile", name="mobile", minlength="11", maxlength="11", required="required",placeholder="请输入你的手机号", autocomplete="off")
-          .control-group
-            label.control-label(for="password") 密码：
-            .controls
-              input(type="password", id="password", name="password", minlength="6", maxlength="18", required="required",placeholder="请输入你的密码", autocomplete="off")
-          .control-group
-            label.control-label(for="piccaptcha") 验证码：
-            .controls
-              input(type="text", id="piccaptcha", minlength="5", maxlength="5", required="required",placeholder="请输入六位验证", autocomplete="off")
-              img.captcha(src=picUrl, alt="图形验证码")
-          .control-group
-            label.control-label(for="msgcaptcha") 手机验证码：
-            .controls
-              input(type="text", id="msgcaptcha", minlength="6", maxlength="6", required="required",placeholder="请输入手机验证码", autocomplete="off")
-              .getcode.btn 获取验证码
-          .control-group
-            label.control-label
-            .controls
-              button.btn.submit(type="submit") 立即注册
-        .text
-          p 已经拥有账号？
-          p 请直接
-            a(href="/signin") 登录
-          p 忘记密码了？
-          p 请点击
-            a(href="/forget_pass") 忘记密码
-  include ../includes/footer
+        .control-group
+          label.control-label(for="mobile") 手机号：
+          .controls
+            input(type="text", id="mobile", name="mobile", minlength="11", maxlength="11", required="required",placeholder="请输入你的手机号", autocomplete="off")
+        .control-group
+          label.control-label(for="password") 密码：
+          .controls
+            input(type="password", id="password", name="password", minlength="6", maxlength="18", required="required",placeholder="请输入你的密码", autocomplete="off")
+        .control-group
+          label.control-label(for="piccaptcha") 验证码：
+          .controls
+            input(type="text", id="piccaptcha", minlength="5", maxlength="5", required="required",placeholder="请输入六位验证", autocomplete="off")
+            img.captcha(src=picUrl, alt="图形验证码")
+        .control-group
+          label.control-label(for="msgcaptcha") 手机验证码：
+          .controls
+            input(type="text", id="msgcaptcha", minlength="6", maxlength="6", required="required",placeholder="请输入手机验证码", autocomplete="off")
+            .getcode.btn 获取验证码
+        .control-group
+          label.control-label
+          .controls
+            button.btn.submit(type="submit") 立即注册
+      .text
+        p 已经拥有账号？
+        p 请直接
+          a(href="/signin") 登录
+        p 忘记密码了？
+        p 请点击
+          a(href="/forget_pass") 忘记密码
   script.
     var nickname = $('#nickname'),
         mobile = $('#mobile'),

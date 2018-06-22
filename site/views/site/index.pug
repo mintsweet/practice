@@ -1,8 +1,8 @@
 extends ../layout
 
 block content
-  .main
-    .layout
+  .site
+    .content
       .tab-list
         each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
           if currentTab === item.url
@@ -13,4 +13,5 @@ block content
         include ../topic/list
       else
         span 暂无内容
-  include ../includes/footer
+    .side
+      .card

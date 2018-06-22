@@ -8,7 +8,7 @@ const config = {
 
   // Site base
   name: 'Mints - 薄荷糖社区',
-  description: '',
+  description: '简洁、快乐的交流社区',
   keywords: 'mints, community',
   author: '青湛(github/mintsweet)',
 
@@ -21,7 +21,7 @@ const config = {
 
   log_dir: path.join(__dirname, './server/logs'),
 
-  session_secret: 'practice_secret', // 务必修改
+  session_secret: 'practice_secret',
   auth_cookie_name: 'practice',
 
   // Site
@@ -31,10 +31,7 @@ const config = {
     { name: '分享', url: 'share' },
     { name: '问答', url: 'ask' },
     { name: '招聘', url: 'offer' }
-  ],
-  
-  // Spa
-  spa_port: 3002
+  ]
 };
 
 module.exports = config;

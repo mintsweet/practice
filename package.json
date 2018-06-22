@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "start:server": "cd server && yarn start",
-    "start:site": "cd site && yarn start"
+    "start:site": "cd site && yarn start",
+    "start:manage": "cd manage && yarn start"
   }
 }
