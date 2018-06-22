@@ -39,7 +39,7 @@ class Static {
   }
 
   getApiIntroduction(req, res) {
-    fs.readFile('./API.md', 'utf-8', (err, data) => {
+    fs.readFile('./data/static/api.md', 'utf-8', (err, data) => {
       if (err) {
         return res.send({
           status: 0,

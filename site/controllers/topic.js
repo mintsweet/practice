@@ -1,9 +1,9 @@
 const formidable = require('formidable');
-const { createTopic } = require('../http/api');
+const { createTopic, getTopicDetail } = require('../http/api');
 
 class Site {
   // 新增主题页
-  async renderCreate(req, res) {
+  renderCreate(req, res) {
     res.render('topic/create', {
       title: '发布主题'
     });
@@ -34,6 +34,36 @@ class Site {
           error: response.message
         });
       }
+    });
+  }
+
+  // 主题详情页
+  async renderDetail(req, res) {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.render('exception/404', {
+        title: '404'
+      });
+    }
+
+    const response = await getTopicDetail(id);
+
+    if (response.status === 1) {
+      return res.render('topic/detail', {
+        title: '主题详情'
+      });
+    } else {
+      return res.render('exception/500', {
+        title: '500'
+      });
+    }
+  }
+
+  // 编辑主题页
+  renderEdit(req, res) {
+    res.render('topic/edit', {
+      title: '主题编辑'
     });
   }
 }

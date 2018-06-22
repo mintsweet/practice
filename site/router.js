@@ -34,5 +34,7 @@ router.get('/user/:nickname', User.renderInfo);
 // 主题
 router.get('/topic/create', Auth.userRequired, Topic.renderCreate);
 router.post('/topic/create', Auth.userRequired, Topic.createTopic);
+router.get('/topics/:id', Topic.renderDetail);
+router.get('/topics/:id/edit', Auth.userRequired, Topic.renderEdit);
 
 module.exports = router;

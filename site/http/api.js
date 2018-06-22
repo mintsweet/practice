@@ -68,3 +68,5 @@ exports.apiForgetPass = obj => request('/forget_pass', obj, 'POST');
 exports.createTopic = obj => request('/topic/create', obj, 'POST');
 // 获取主题列表
 exports.getTopicList = page => request('/topic/list', page);
+// 获取主题详情
+exports.getTopicDetail = id => request(`/topics/${id}`);

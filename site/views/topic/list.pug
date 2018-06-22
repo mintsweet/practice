@@ -15,7 +15,7 @@ dl.topic-list
             span.tag.active 精华
           else
             span.tag #{topic.tabName}
-          a(href=`/topic/${topic.id}`) #{topic.title}
+          a(href=`/topics/${topic.id}`) #{topic.title}
       .last-time
         - var now = (new Date()).getTime();var lastTime = (new Date(topic.last_reply_at)).getTime();
         - var limit = now - lastTime;

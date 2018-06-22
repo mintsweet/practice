@@ -38,6 +38,10 @@ class Common {
       });
     }
   }
+
+  uploadImage(req, res) {
+    
+  }
 }
 
 module.exports = new Common();

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const moment = require('moment');
 const userData = require('../data/user');
 
 const Schema = mongoose.Schema;

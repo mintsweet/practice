@@ -145,10 +145,11 @@ class Topic extends BaseComponent {
     try {
       const topic = await TopicModel.findOne({ id }, '-_id -__v');
       const author = await this.getUserInfo(topic.author_id);
+      const result = Object.assign({ author }, topic.toObject({ virtuals: true }));
 
       return res.send({
         status: 1,
-        data: topic
+        data: result
       });
     } catch(err) {
       return res.send({
@@ -157,6 +158,11 @@ class Topic extends BaseComponent {
         message: err.message
       });
     }
+  }
+
+  // 搜索主题
+  searchTopicList(req, res) {
+
   }
 
   // 编辑主题
