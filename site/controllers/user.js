@@ -225,6 +225,13 @@ class User {
       title: '个人信息'
     });
   }
+
+  // 积分榜前一百
+  renderTop100(req, res) {
+    return res.render('user/top100', {
+      title: '积分榜前一百'
+    });
+  }
 }
 
 module.exports = new User();

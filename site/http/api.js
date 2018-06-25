@@ -33,8 +33,6 @@ exports.getStartData = () => request('/static/get_start');
 exports.getApiData = () => request('/static/api_introduction');
 // 关于
 exports.getAboutData = () => request('/static/about');
-// Markdown演示
-exports.getMarkdownData = () => request('/static/markdown_style');
 
 /*
 * 公共
@@ -59,8 +57,24 @@ exports.apiSignin = obj => request('/signin', obj, 'POST');
 exports.apiSignout = () => request('/signout');
 // 忘记密码
 exports.apiForgetPass = obj => request('/forget_pass', obj, 'POST');
+// 修改密码
+exports.apiUpdatePass = obj => request('/update_pass', obj, 'POST');
+// 更新个人设置
+exports.apiSetting = obj => request('/setting', obj, 'POST');
+// 获取星标用户列表
+exports.getUserStart = () => request('/users/start');
 // 获取积分榜前一百
 exports.apiGetUserTop100 = () => request('/users/top100');
+// 获取指定昵称的用户信息
+exports.getUserInfoByName = nickname => request(`/user/${nickname}`);
+// 获取用户收藏列表
+exports.getUserCollection = nickname => request(`/user/${nickname}/collections`);
+// 获取用户回复列表
+exports.getUserReply = nickname => request(`/user/${nickname}/replies`);
+// 获取用户粉丝列表
+exports.getUserFollower = nickname => request(`/user/${nickname}/follower`);
+// 获取用户关注列表
+exports.getUserFollowing = nickname => request(`/user/${nickname}/following`);
 
 /*
 * 主题

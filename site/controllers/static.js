@@ -32,15 +32,6 @@ class Static {
       text: response.data
     });
   }
-
-  // Markdown演示
-  async getMarkdown(req, res) {
-    const response = await getMarkdownData();
-    res.render('static/markdown_style', {
-      title: 'Markdown演示',
-      text: response.data
-    });
-  }
 }
 
 module.exports = new Static();

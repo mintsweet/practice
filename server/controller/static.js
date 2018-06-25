@@ -75,25 +75,6 @@ class Static {
       });
     });
   }
-
-  getMarkdown(req, res) {
-    fs.readFile('./data/static/markdown_style.md', 'utf-8', (err, data) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_GET_FILE',
-          message: err
-        });
-      }
-
-      const result = md.render(data);
-      
-      return res.send({
-        status: 1,
-        data: result
-      });
-    });
-  }
 }
 
 module.exports = new Static();

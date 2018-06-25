@@ -1,8 +1,37 @@
 extends ../layout
 
 block content
-  .main
-    .layout
-      .card
+  .user-info
+    .info
+      .person
         .avatar
-      .card
+          img(src=user.avatar, alt=user.nickname)
+        .desc
+          h1 #{user.nickname}
+          a.edit(href=`/user/${user.nickname}/edit`) 编辑个人资料
+      .gener
+    .side
+      .stat
+        .title 个人成就
+        .body
+          .item
+            span.practice &#xe72f;
+            .content
+              | 获得喜欢
+              span.count #{user.collect_list}
+              | 次
+          .item
+            span.practice &#xe6a4;
+            .content
+              | 获得积分
+              span.count #{user.score}
+              | 分
+      .follow
+        .item
+          .title 关注了
+          .count 5
+        .item
+          .title 关注者
+          .count 0
+      .collect
+        a(href="/user/:nickname/collect") 收藏集
