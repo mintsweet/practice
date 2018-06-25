@@ -1,48 +1,14 @@
-const BaseComponent = require('../prototype/BaseComponent')
-const MessageModel = require('../models/message');
+const BaseComponent = require('../prototype/BaseComponent');
+const NoticeModel = require('../models/notice');
 
-class Message extends BaseComponent {
-  async getAllMessage(req, res) {
-    try {
-      const message = await MessageModel.find();
-      return res.send({
-        status: 1,
-        data: message
-      });
-    } catch(err) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE_FAILED',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+class Notice extends BaseComponent {
+  async getAllNotice(req, res) {
+
   }
 
-  async getMessageByType(req, res) {
-    const { type } = req.params;
-
-    if (!type) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_PARAMS',
-        message: '无效的类型'
-      });
-    }
-
-    try {
-      const message = await MessageModel.find({ type });
-      return res.send({
-        status: 1,
-        data: message
-      });
-    } catch(err) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE_FAILED',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+  async getMNoticeByType(req, res) {
+    
   }
 }
 
-module.exports = new Message();
+module.exports = new Notice();

@@ -395,6 +395,11 @@ class User extends BaseComponent {
     }
   }
 
+  // 获取用户喜欢列表
+  async getUserLikes(req, res) {
+    const { nickname } = req.params;
+  }
+
   // 获取用户收藏列表
   async getUserCollections(req, res) {
     const { nickname } = req.params;

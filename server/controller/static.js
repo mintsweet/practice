@@ -1,22 +1,5 @@
-const hljs = require('highlight.js');
-const markdownItTocAndAnchor = require('markdown-it-toc-and-anchor').default;
-const md = require('markdown-it')({
-  html: true,
-  linkify: true,
-  typography: true,
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      return `<pre><code class="hljs ${lang}">${hljs.highlight(lang, str, true).value}</code></pre>`;
-    }
-    return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
-  }
-}).use(markdownItTocAndAnchor, {
-  tocClassName: 'toc',
-  tocLastLevel: 3,
-  anchorLinkSymbol: '',
-  anchorClassName: 'anchor'
-});
 const fs = require('fs');
+const md2html = require('../utils/md2html');
 
 class Static {
   getStart(req, res) {
@@ -29,7 +12,7 @@ class Static {
         });
       }
 
-      const result = md.render(data);
+      const result = md2html(data);
       
       return res.send({
         status: 1,
@@ -48,7 +31,7 @@ class Static {
         });
       }
 
-      const result = md.render(data);
+      const result = md2html(data);
       
       return res.send({
         status: 1,
@@ -67,7 +50,7 @@ class Static {
         });
       }
 
-      const result = md.render(data);
+      const result = md2html(data);
       
       return res.send({
         status: 1,

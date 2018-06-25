@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const Express = require('express');
 const mongoose = require('mongoose');
 const connectMongo = require('connect-mongo');

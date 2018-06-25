@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const ReplySchema = new Schema({
-  content: { type: String },
+  content: { type: String, required: true },
 
-  topic_id: { type: ObjectId },
-  author_id: { type: ObjectId },
+  topic_id: { type: ObjectId, required: true },
+  author_id: { type: ObjectId, required: true },
   reply_id: { type: ObjectId },
 
   create_at: { type: Date, default: Date.now },

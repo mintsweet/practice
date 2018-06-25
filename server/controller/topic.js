@@ -217,6 +217,14 @@ class Topic extends BaseComponent {
     });
   }
 
+  // 喜欢话题
+  likeTopic(req, res) {
+  }
+
+  // 取消喜欢话题
+  unLikeTopic(req, res) {
+  }
+
   // 收藏主题
   collectTopic(req, res) {
     const form = new formidable.IncomingForm();

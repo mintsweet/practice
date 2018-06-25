@@ -36,6 +36,7 @@ app.use(async (req, res, next) => {
 // routes
 app.use('/', routes);
 
+// 404
 app.use(function (req, res, next) {
   res.status(404).render('exception/404', { title: '404' });
 });

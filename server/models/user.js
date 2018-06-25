@@ -6,10 +6,10 @@ const bcrypt = require('bcryptjs');
 const userData = require('./data/user');
 
 const UserSchema = new Schema({
-  mobile: { unqie: true, type: String, isRequire: true },
-  password: { type: String, isRequire: true },
+  mobile: { unqie: true, type: String, required: true },
+  password: { type: String, required: true },
   
-  nickname: { unqie: true, type: String, isRequire: true },
+  nickname: { unqie: true, type: String, required: true },
   avatar: { type: String },
   location: { type: String },
   signature: { type: String },
