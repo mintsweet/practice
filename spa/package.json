@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "mobile client base on vue",
   "scripts": {
-    "start": "mints start -p 3002"
+    "start": "mints start -p 3003"
   },
   "license": "MIT"
 }

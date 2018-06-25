@@ -39,6 +39,7 @@ router.get('/topics/:id', Topic.renderDetail);
 router.get('/topics/:id/edit', Auth.userRequired, Topic.renderEdit);
 
 // 消息
-router.get('/message/all', Auth.userRequired, Message.renderMessageAll);
+router.get('/message', Auth.userRequired, Message.renderMessage);
+router.get('/message/system', Auth.userRequired, Message.renderSystemMessage);
 
 module.exports = router;

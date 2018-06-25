@@ -1,43 +1,40 @@
-include ../includes/head
-link(rel="stylesheet", href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css")
-body
-  include ../includes/header
-  .main
-    .layout
-      .topic-wrapper
-        .title 发布主题
-        .inner
-          form.form(method="post")
-            if error
-              .alert.alert-error #{error}
-            else
-              .alert.alert-error.hidden #{error}
-            .control-group
-              label.control-label(for="tab")
-              .controls
-                input.select-hidden(type="hidden", name="tab")
-                .select
-                  a.select-input(href="javascript:;") 请选择类别
-                  .select-options
-                    each item in config.tabs
-                      .option(data-value=item.url) #{item.name}
-            .control-group
-              label.control-label(for="title") 标题：
-              .controls
-                input#title(type="text", name="title")
-            .control-group
-              label.control-label(for="content") 内容：
-              .controls
-                input.content-hidden(type="hidden", name="content")
-                textarea#editor
-            .control-group
-              .controls
-                button.btn.submit(type="submit") 发布主题
-    .back-top
-      i.practice.pra-up
-  include ../includes/footer    
-  //- scripts
+extends ../layout.pug
+
+append head
+  link(rel="stylesheet", href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css")
+
+block content
+  .topic-wrapper
+    .title 发布主题
+    .inner
+      form.form(method="post")
+        .alert.alert-error(class=error ? '' : 'hidden')
+        .control-group
+          label.control-label(for="tab")
+          .controls
+            input.select-hidden(type="hidden", name="tab")
+            .select
+              a.select-input(href="javascript:;") 请选择类别
+              .select-options
+                each item in config.tabs
+                  .option(data-value=item.url) #{item.name}
+        .control-group
+          label.control-label(for="title") 标题：
+          .controls
+            input#title(type="text", name="title")
+        .control-group
+          label.control-label(for="content") 内容：
+          .controls
+            input.content-hidden(type="hidden", name="content")
+            textarea#editor
+        .control-group
+          .controls
+            button.btn.submit(type="submit") 发布主题
+  .back-top
+    i.practice.pra-up
+append footer
   script(src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js")
+
   script.
     var simplemde = new SimpleMDE({ element: $("#editor")[0] }),
         tab = $('.select-hidden');
@@ -45,16 +42,16 @@ body
         alert = $('.alert');
 
     $('.form').submit(function() {
-      validate();
-      $('.content-hidden').val(simplemde.value());
-    });
-
-    function validate() {
       if (!tab.val()) {
         alert.text('请选择分类').slideDown();
+        return false;
       } else if (!title.val()) {
         alert.text('标题不能为空').slideDown();
+        return false;
       } else if (!simplemde.value()) {
         alert.text('内容不能为空').slideDown();
+        return false;
       }
-    }
+
+      $('.content-hidden').val(simplemde.value());
+    });

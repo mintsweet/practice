@@ -1,8 +1,7 @@
 const {
   getStartData,
   getApiData,
-  getAboutData,
-  getMarkdownData
+  getAboutData
 } = require('../http/api');
 
 class Static {
