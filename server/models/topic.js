@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 const config = require('../../config.default');
 const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
 const TopicSchema = new Schema({
-  id: { unqie: true, type: Number, isRequire: true },
-  
   title: { type: String, isRequire: true },
   content: { type: String, isRequire: true },
   author_id: { type: Number, isRequire: true },
@@ -21,26 +20,19 @@ const TopicSchema = new Schema({
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now },
 
-  last_reply: { type: Number },
+  last_reply: { type: ObjectId },
   last_reply_at: { type: Date, default: Date.now },
   
-  tab: { type: String },
-  
-  deleted: { type: Boolean, default: false },
+  tab: { type: String }
 });
 
-TopicSchema.index({ id: -1 });
+TopicSchema.index({ create_at: -1 });
 TopicSchema.index({ top: -1, last_reply_at: -1 });
 TopicSchema.index({ author_id: 1, create_at: -1 });
 
 TopicSchema.virtual('tabName').get(function() {
   const pair = config.tabs.find(item => item.url === this.tab);
-
-  if (pair) {
-    return pair.name;
-  } else {
-    return '';
-  }
+  return pair ? pair : ''; 
 });
 
 const Topic = mongoose.model('Topic', TopicSchema);

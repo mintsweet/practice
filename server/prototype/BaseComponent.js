@@ -1,28 +1,6 @@
-const chalk = require('chalk');
 const { BMP24 } = require('gd-bmp');
-const Ids = require('../models/ids');
 
 module.exports = class BaseComponent {
-  constructor() {
-    this.idList = ['message_id', 'reply_id', 'statistics_id', 'topic_id', 'user_id'];
-  }
-
-  async getId(type) {
-    if(!this.idList.includes(type)) {
-      console.error(`${type} ${chalk.redBright('Id 类型错误!')}`);
-      return;
-    }
-    try {
-      const idData = await Ids.findOne();
-      idData[type]++;
-      await idData.save();
-      return idData[type];
-    } catch(err) {
-      console.error(`${chalk.redBright('获取id数据失败')}`);
-      return false;
-    }
-  }
-
   rand (min, max) {
     return Math.random() * (max - min + 1) + min | 0;
   }
@@ -39,6 +17,7 @@ module.exports = class BaseComponent {
     }
 
     let x = 10, y = 2;
+    
     for (let i = 0; i < token.length; i ++) {
       y = 2 + this.rand(-4, 4);
       img.drawChar(token[i], x, y, BMP24.font12x24, '0xa1a1a1');

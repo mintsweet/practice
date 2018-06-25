@@ -91,7 +91,11 @@ app.use((err, req, res) => {
   });
 });
 
-app.listen(config.server_port, () => {
-  logger.info('The Server listening on port', config.server_port);
-  logger.info('');
-});
+if (!module.parent) {
+  app.listen(config.server_port, () => {
+    logger.info('The Server listening on port', config.server_port);
+    logger.info('');
+  });
+}
+
+module.exports = app;
