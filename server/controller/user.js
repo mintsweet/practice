@@ -116,7 +116,7 @@ class User extends BaseComponent {
       const { type, mobile, password, msgcaptcha } = fields;
 
       try {
-        if (!type || type !== 'acc' || type !== 'mct') {
+        if (!type || (type !== 'acc' && type !== 'mct')) {
           throw new Error('请输入正确的登录方式');
         } else if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
@@ -129,12 +129,12 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile }, '-_id -__v');
+      const existUser = await UserModel.findOne({ mobile }, '-__v');
       if (!existUser) {
         return res.send({
           status: 0,
           type: 'ERROR_USER_IS_NOT_EXITS',
-          message: '手机账户账户不存在'
+          message: '手机账户尚未注册'
         });
       }
 
@@ -160,13 +160,13 @@ class User extends BaseComponent {
             throw new Error('收取验证码的手机与登录手机不匹配');
           } else if (msg_code.code !== msgcaptcha) {
             throw new Error('短信验证码不正确')
-          } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+          } else if ((Date.now() - msg_code.time) > 1000) {
             throw new Error('短信验证码已经失效了，请重新获取');
           }
         } catch(err) {
           return res.send({
             status: 0,
-            type: 'ERROR_MSG_CAPTCHA_NOT_MATCH',
+            type: 'ERROR_MSG_CAPTCHA',
             message: err.message
           });
         }
