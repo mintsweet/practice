@@ -116,7 +116,7 @@ class User extends BaseComponent {
       const { type, mobile, password, msgcaptcha } = fields;
 
       try {
-        if (!type && (type !== 'acc' || type !== 'mct')) {
+        if (!type || type !== 'acc' || type !== 'mct') {
           throw new Error('请输入正确的登录方式');
         } else if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');

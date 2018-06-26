@@ -40,7 +40,7 @@ describe('test/api/user', function() {
     });
 
     // 昵称已经注册
-    it('should fail when nickname is registered', function(done) {
+    it('should fail when the nickname is registered', function(done) {
       request
         .post('/api/signup')
         .send({
@@ -59,7 +59,7 @@ describe('test/api/user', function() {
     });
 
     // 手机号验证失败
-    it('should fail when mobile is not valid', function(done) {
+    it('should fail when the mobile is not valid', function(done) {
       request
         .post('/api/signup')
         .send({
@@ -78,7 +78,7 @@ describe('test/api/user', function() {
     });
 
     // 密码验证失败
-    it('should fail when password is not valid', function(done) {
+    it('should fail when the password is not valid', function(done) {
       request
         .post('/api/signup')
         .send({
@@ -97,7 +97,7 @@ describe('test/api/user', function() {
     });
 
     // 昵称验证失败
-    it('should fail when nickname is not valid', function(done) {
+    it('should fail when the nickname is not valid', function(done) {
       request
         .post('/api/signup')
         .send({
@@ -116,7 +116,7 @@ describe('test/api/user', function() {
     });
 
     // 接收短信验证码的手机与填写的手机不匹配
-    it('should fail when msgcaptcha and mobile do not match', function(done) {
+    it('should fail when the msgcaptcha and mobile do not match', function(done) {
       request
         .get('/api/captcha/msg')
         .query({
@@ -144,7 +144,7 @@ describe('test/api/user', function() {
     });
 
     // 短信验证码不正确
-    it('should fail when msgcaptcha is not valid', function(done) {
+    it('should fail when the msgcaptcha is not valid', function(done) {
       request
         .get('/api/captcha/msg')
         .query({
@@ -172,7 +172,7 @@ describe('test/api/user', function() {
     });
 
     // 验证码过期
-    it('should fail when msgcaptcha expired', function(done) {
+    it('should fail when the msgcaptcha expired', function(done) {
       request
         .get('/api/captcha/msg')
         .query({
@@ -227,7 +227,27 @@ describe('test/api/user', function() {
         });
     });
   });
-  
+
+  // 登录 
+  describe('post /api/signin', function() {
+    // 登录方式不正确
+    it('should fail when the acc is not valid', function(done) {
+      request
+        .post('/api/signin')
+        .send({
+          type: 'lala',
+          mobile: 18800000000,
+          password: 'a123456'
+        })
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.body.status.should.equal(0);
+          res.body.type.should.equal('ERROR_SIGNIN_PARMAS');
+          res.body.message.should.equal('请输入正确的登录方式');
+          done();
+        });
+    });
+  });
 
   after(function(done) {
     support
