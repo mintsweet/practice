@@ -6,7 +6,7 @@ class Notice extends BaseComponent {
 
   }
 
-  async getMNoticeByType(req, res) {
+  async getNoticeByType(req, res) {
     
   }
 }

@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// test data
-const bcrypt = require('bcryptjs');
-const userData = require('./data/user');
-
 const UserSchema = new Schema({
   mobile: { unqie: true, type: String, required: true },
   password: { type: String, required: true },
@@ -46,16 +42,5 @@ UserSchema.pre('save', function(next) {
 });
 
 const User = mongoose.model('User', UserSchema);
-
-User.findOne((err, data) => {
-  if (!data) {
-    userData.map(async item => {
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(item.password, salt);
-      const _user = new User({ ...item, password: hash });
-      await _user.save();
-    });
-  }
-});
 
 module.exports = User;

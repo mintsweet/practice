@@ -3,7 +3,7 @@ const md2html = require('../utils/md2html');
 
 class Static {
   getStart(req, res) {
-    fs.readFile('./data/static/get_start.md', 'utf-8', (err, data) => {
+    fs.readFile('./controller/static/get_start.md', 'utf-8', (err, data) => {
       if (err) {
         return res.send({
           status: 0,
@@ -22,7 +22,7 @@ class Static {
   }
 
   getApiIntroduction(req, res) {
-    fs.readFile('./data/static/api.md', 'utf-8', (err, data) => {
+    fs.readFile('./controller/static/api.md', 'utf-8', (err, data) => {
       if (err) {
         return res.send({
           status: 0,
@@ -41,7 +41,7 @@ class Static {
   }
 
   getAbout(req, res) {
-    fs.readFile('./data/static/about.md', 'utf-8', (err, data) => {
+    fs.readFile('./controller/static/about.md', 'utf-8', (err, data) => {
       if (err) {
         return res.send({
           status: 0,

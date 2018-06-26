@@ -4,7 +4,7 @@
   "description": "data servcie base on node",
   "scripts": {
     "start": "node ./app.js",
-    "test": "mocha ./test/controller/static.test"
+    "test": "mocha --recursive --timeout 5000"
   },
   "license": "MIT",
   "dependencies": {

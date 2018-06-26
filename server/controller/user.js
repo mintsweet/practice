@@ -15,23 +15,6 @@ class User extends BaseComponent {
     this.updatePass = this.updatePass.bind(this);
   }
 
-  // 获取当前用户信息
-  getUserInfo(req, res) {
-    const { userInfo } = req.session;
-    if (userInfo) {
-      return res.send({
-        status: 1,
-        data: userInfo
-      });
-    } else {
-      return res.send({
-        status: 0,
-        type: 'ERROR_GET_USER_INFO',
-        message: '尚未登录'
-      });
-    }
-  }
-
   // 注册
   signup(req, res) {
     const form = new formidable.IncomingForm();
@@ -44,58 +27,61 @@ class User extends BaseComponent {
         });
       }
 
+      const { msg_code } = req.session;
       const { nickname, mobile, password, msgcaptcha } = fields;
+
       let existUser;
+
       existUser = await UserModel.findOne({ mobile });
       if (existUser) {
         return res.send({
           status: 0,
-          type: 'USER_HASN_EXIST',
-          message: '手机号已经存在了'
+          type: 'MOBILE_HAS_BEEN_REGISTERED',
+          message: '手机号已经注册过了'
         });
       }
+
       existUser = await UserModel.findOne({ nickname });
       if (existUser) {
         return res.send({
           status: 0,
-          type: 'USER_HASH_EXIST',
-          message: '昵称已经存在了'
+          type: 'NICKNAME_HAS_BEEN_REGISTERED',
+          message: '昵称已经注册过了'
         });
       }
+      
 
       try {
         if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
-        } else if (!nickname || nickname.length > 16 || nickname.length < 4) {
-          throw new Error('请输入4-8位的名称');
+        } else if (!nickname || nickname.length > 8 || nickname.length < 2) {
+          throw new Error('请输入2-8位的名称');
         } else if (msg_code.mobile !== mobile) {
           throw new Error('收取验证码的手机与登录手机不匹配');
         } else if (msg_code.code !== msgcaptcha) {
           throw new Error('短信验证码不正确')
-        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+        } else if ((Date.now() - msg_code.time) > 1000) {
           throw new Error('短信验证码已经失效了，请重新获取');
         }
       } catch(err) {
         return res.send({
           status: 0,
-          type: 'ERROR_SIGNUP_PARMAS',
+          type: 'ERROR_PARMAS_SIGNUP',
           message: err.message
         });
       }
 
       const bcryptPassword = await this.encryption(password);
-      const userId = await this.getId('user_id');
-      const userInfo = {
-        id: userId,
+      const _user = {
         nickname,
-        password: bcryptPassword,
-        mobile
+        mobile,
+        password: bcryptPassword
       };
 
       try {
-        await UserModel.create(userInfo);
+        await UserModel.create(_user);
         return res.send({
           status: 1
         });
@@ -252,6 +238,23 @@ class User extends BaseComponent {
         status: 1
       });
     });
+  }
+
+  // 获取当前用户信息
+  getUserInfo(req, res) {
+    const { userInfo } = req.session;
+    if (userInfo) {
+      return res.send({
+        status: 1,
+        data: userInfo
+      });
+    } else {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_USER_INFO',
+        message: '尚未登录'
+      });
+    }
   }
 
   // 修改密码

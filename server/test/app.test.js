@@ -1,14 +1,15 @@
-const request = require('supertest');
 const app = require('../app');
-const config = require('../../config.default');
+const request = require('supertest')(app);
+const should = require('should');
 
 describe('test/app.test.js', function() {
-  it('should / status 200', function(done) {
-    request(app)
-      .get('/')
+  it('should corrent link api service', function(done) {
+    request
+      .get('/api')
       .end(function(err, res) {
-        res.status.should.equal(200);
-        res.text.should.containEql(config.description);
+        should.not.exist(err);
+        res.body.status.should.equal(1);
+        res.body.data.should.containEql('欢迎使用Mints(薄荷糖社区)API接口')
         done();
       });
   });
