@@ -1,16 +1,18 @@
 const formidable = require('formidable');
 const BaseComponent = require('../prototype/BaseComponent');
 const TopicModel = require('../models/topic');
-const BehaviorModel = require('../models/behavior');
+// const BehaviorModel = require('../models/behavior');
 const UserModel = require('../models/user');
-const NoticeModel = require('../models/notice');
+// const NoticeModel = require('../models/notice');
 const md2html = require('../utils/md2html');
+const logger = require('../utils/logger');
 
 class Topic extends BaseComponent {
   constructor() {
     super();
     this.createTopic = this.createTopic.bind(this);
     this.likeOrUnlikeTopic = this.likeOrUnlikeTopic.bind(this);
+    this.collectOrUncollectTopic = this.collectOrUncollectTopic.bind(this);
   }
 
   // 创建话题
@@ -29,7 +31,7 @@ class Topic extends BaseComponent {
       const { tab, title, content } = fields;
 
       try {
-        if (!userInfo || !userInfo._id) {
+        if (!_id) {
           throw new Error('尚未登录')
         } else if (!title) {
           throw new Error('标题不能为空')
@@ -39,7 +41,7 @@ class Topic extends BaseComponent {
       } catch (err) {
         return res.send({
           status: 0,
-          type: 'ERROR_PARAMS',
+          type: 'ERROR_PARAMS_CREATE_TOPIC',
           message: err.message
         });
       }
@@ -48,16 +50,17 @@ class Topic extends BaseComponent {
         tab,
         title,
         content: md2html(content),
-        author_id: userInfo._id,
+        author_id: _id,
       };
 
       try {
-        await TopicModel.create(_topic);
+        const topic = await TopicModel.create(_topic);
         await this.createBehavior('create', _id, topic.id);
         return res.send({
           status: 1
         });
       } catch(err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
           type: 'ERROR_SERVICE_FAILED',
@@ -376,6 +379,7 @@ class Topic extends BaseComponent {
         type: behavior.delete ? 'un_collect' : 'collect'
       });
     } catch(err) {
+      logger.error(err.message);
       return res.send({
         status: 0,
         type: 'ERROR_COLLECT_OR_UN_COLLECT_TOPIC',

@@ -32,10 +32,10 @@ router.post('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
 router.get('/users/start', User.getStartList); // 获取星标用户列表
 router.get('/users/top100', User.getTop100); // 获取积分榜前100用户列表
 router.get('/user/:uid', User.getInfoById); // 根据ID获取用户信息
-
-// 未测 ~~~~~~
 router.get('/user/:uid/likes', User.getUserLikes); // 获取用户喜欢列表
 router.get('/user/:uid/collections', User.getUserCollections);  // 获取用户收藏列表
+
+// 未测 ~~~~~~
 router.get('/user/:uid/replies', User.getUserReplies); // 用户回复的列表
 router.get('/user/:uid/follower', User.getUserFollower); // 获取用户粉丝列表
 router.get('/user/:uid/following', User.getUserFollowing); // 获取用户关注的人列表
@@ -52,13 +52,13 @@ router.post('/topics/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopi
 router.post('/topics/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
 
 // 回复
-router.post('/topisc/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
-router.post('/reply/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
-router.delete('/reply/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
-router.get('/reply/:rid/up', Auth.userRequired, Reply.upReply); // 点赞回复
+router.post('/topics/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
+router.put('/replies/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
+router.delete('/replies/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
+router.post('/replies/:rid/up', Auth.userRequired, Reply.upReply); // 回复点赞
 
 // 消息
-router.get('/notice', Auth.userRequired, Notice.getAllNotice); // 获取所有消息
-router.get('/notice/:type', Auth.userRequired, Notice.getNoticeByType); // 根据类型获取消息
+router.get('/notice/user', Auth.userRequired, Notice.getUserNotice); // 获取用户消息
+router.get('/notice/system', Auth.userRequired, Notice.getSystemNotice); // 获取系统消息
 
 module.exports = router;

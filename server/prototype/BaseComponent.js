@@ -3,7 +3,7 @@ const NoticeModel = require('../models/notice');
 
 module.exports = class BaseComponent {
   async createBehavior(type, author_id, target_id) {
-    await BehaviorModel.create({ type, author_id, target_id });
+    return await BehaviorModel.create({ type, author_id, target_id });
   }
 
   async findOneBehavior(type, author_id, target_id) {

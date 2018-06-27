@@ -3,13 +3,14 @@ const bcrypt = require('bcryptjs');
 const BaseComponent = require('../prototype/BaseComponent');
 const UserModel = require('../models/user');
 const BehaviorModel = require('../models/behavior');
-const ObjectId = require('mongoose').Types.ObjectId;
+const TopicModel = require('../models/topic');
 
 const SALT_WORK_FACTOR = 10;
 
 class User extends BaseComponent {
   constructor() {
     super();
+    this.signup = this.signup.bind(this);
     this.getUserLikes = this.getUserLikes.bind(this);
   }
 
@@ -411,12 +412,34 @@ class User extends BaseComponent {
   async getUserLikes(req, res) {
     const { uid } = req.params;
     const likeBehavior = await BehaviorModel.find({ type: 'like', author_id: uid, delete: false });
-    const likeTopics = likeBehavior.map(item => item.target_id.toString());
+    const likeTopicIds = likeBehavior.map(item => item.target_id.toString());
+    const result = await Promise.all(likeTopicIds.map(item => {
+      return new Promise((resolve, reject) => {
+        resolve(TopicModel.findById(item));
+      });
+    }));
+
+    return res.send({
+      status: 1,
+      data: result
+    });
   }
 
   // 获取用户收藏列表
   async getUserCollections(req, res) {
-    
+    const { uid } = req.params;
+    const collectBehavior = await BehaviorModel.find({ type: 'collect', author_id: uid, delete: false });
+    const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
+    const result = await Promise.all(collectTopicIds.map(item => {
+      return new Promise((resolve, reject) => {
+        resolve(TopicModel.findById(item));
+      });
+    }));
+
+    return res.send({
+      status: 1,
+      data: result
+    });
   }
 
   // 用户回复的列表

@@ -1,8 +1,8 @@
 {
 	"variables": [],
 	"info": {
-		"name": "practice test",
-		"_postman_id": "ea731f9e-3f04-22f1-e8c9-425fb8106a07",
+		"name": "practice",
+		"_postman_id": "d1966db3-6c72-fcc4-85c9-753a2a94ac1c",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -13,7 +13,10 @@
 				"url": "http://localhost:3000/api",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -24,7 +27,10 @@
 				"url": "http://localhost:3000/api/static/get_start",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -35,7 +41,10 @@
 				"url": "http://localhost:3000/api/static/api_introduction",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -46,7 +55,10 @@
 				"url": "http://localhost:3000/api/static/about",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -57,7 +69,10 @@
 				"url": "http://localhost:3000/api/captcha/pic",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -89,7 +104,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -168,7 +186,10 @@
 				"url": "http://localhost:3000/api/signout",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -212,7 +233,10 @@
 				"url": "http://localhost:3000/api/info",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -271,7 +295,10 @@
 				"url": "http://localhost:3000/api/users/start",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -282,7 +309,10 @@
 				"url": "http://localhost:3000/api/users/top100",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -291,6 +321,31 @@
 			"name": "用户 - 根据ID获取用户信息",
 			"request": {
 				"url": "http://localhost:3000/api/user/5b32f6b5f5b58e313cb8e7a6",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "用户 - 获取用户喜欢列表",
+			"request": {
+				"url": "http://localhost:3000/api/user/5b3390d9ed418b0362099ab2/likes",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "用户 - 获取用户收藏列表",
+			"request": {
+				"url": "http://localhost:3000/api/user/5b3390d9ed418b0362099ab2/collections",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -337,7 +392,10 @@
 				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9/delete",
 				"method": "DELETE",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -402,7 +460,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -447,7 +508,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -458,7 +522,10 @@
 				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -466,7 +533,7 @@
 		{
 			"name": "话题 - 喜欢或者取消喜欢话题",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b3356b8a62334198868b892/like_or_un",
+				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/like_or_un",
 				"method": "POST",
 				"header": [],
 				"body": {},
@@ -477,8 +544,94 @@
 		{
 			"name": "话题 - 收藏或者取消收藏话题",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b334ad0a1abee1224b55ce1/collect_or_un",
+				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/collect_or_un",
 				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "回复 - 创建回复",
+			"request": {
+				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/reply",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "content",
+							"value": "# 嘻嘻，测试一下回复",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "回复 - 编辑回复",
+			"request": {
+				"url": "http://localhost:3000/api/replies/5b3396b458346806c5b0a7b1/edit",
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "content",
+							"value": "# 嘻嘻",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "回复 - 删除回复",
+			"request": {
+				"url": "http://localhost:3000/api/replies/5b3396b458346806c5b0a7b1/delete",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "回复 - 回复点赞",
+			"request": {
+				"url": "http://localhost:3000/api/replies/5b339a2821900b07857d383d/up",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "消息 - 获取用户消息",
+			"request": {
+				"url": "http://localhost:3000/api/notice/user",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "消息 - 获取系统消息",
+			"request": {
+				"url": "http://localhost:3000/api/notice/system",
+				"method": "GET",
 				"header": [],
 				"body": {},
 				"description": ""
