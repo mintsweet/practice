@@ -48,11 +48,8 @@ router.post('/topics/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑�
 router.get('/topic/list', Topic.getTopicList); // 获取话题列表
 router.get('/topic/search', Topic.searchTopic); // 搜索话题列表
 router.get('/topics/:tid', Topic.getTopicById); // 根据ID获取话题详情
-
-router.post('/topics/:tid/like_or_unlike', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢话题
-// router.post('/topucs/:tid/un_like', Auth.userRequired, Topic.likeOrUnlikeTopic); // 取消喜欢话题
-router.post('/topics/:tid/collect', Auth.userRequired, Topic.collectTopic); // 收藏话题
-router.post('/topics/:tid/un_collect', Auth.userRequired, Topic.unCollectTopic); // 取消收藏话题
+router.post('/topics/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
+router.post('/topics/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
 
 // 回复
 router.post('/topisc/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复

@@ -1,10 +1,18 @@
 const formidable = require('formidable');
+const BaseComponent = require('../prototype/BaseComponent');
 const TopicModel = require('../models/topic');
 const BehaviorModel = require('../models/behavior');
 const UserModel = require('../models/user');
+const NoticeModel = require('../models/notice');
 const md2html = require('../utils/md2html');
 
-class Topic {
+class Topic extends BaseComponent {
+  constructor() {
+    super();
+    this.createTopic = this.createTopic.bind(this);
+    this.likeOrUnlikeTopic = this.likeOrUnlikeTopic.bind(this);
+  }
+
   // 创建话题
   createTopic(req, res) {
     const form = new formidable.IncomingForm();
@@ -17,7 +25,7 @@ class Topic {
         });
       }
 
-      const { userInfo } = req.session;
+      const { _id } = req.session.userInfo;
       const { tab, title, content } = fields;
 
       try {
@@ -43,14 +51,9 @@ class Topic {
         author_id: userInfo._id,
       };
 
-      const _behavior = {
-        type: 'create',
-        author_id: userInfo._id,
-      };
-
       try {
-        const topic = await TopicModel.create(_topic);
-        await BehaviorModel.create({ ..._behavior, target_id: topic._id });
+        await TopicModel.create(_topic);
+        await this.createBehavior('create', _id, topic.id);
         return res.send({
           status: 1
         });
@@ -275,24 +278,21 @@ class Topic {
     }
   }
 
-  // 喜欢话题
+  // 喜欢或者取消喜欢话题
   async likeOrUnlikeTopic(req, res) {
     const { tid } = req.params;
     const { _id } = req.session.userInfo;
 
     try {
-      const behavior = await BehaviorModel.findOne({ type: 'like', author_id: _id, target_id: tid});
+      let behavior;
+      
+      behavior = await this.findOneBehavior('like', _id, tid);
       
       if (behavior) {
         behavior.delete = !behavior.delete;
-        behavior.save();
+        behavior = await behavior.save();
       } else {
-        const _behavior = {
-          type: 'like',
-          author_id: _id,
-          target_id: tid
-        };
-        await BehaviorModel.create(_behavior);
+        behavior = await this.createBehavior('like', _id, tid);
       }
 
       const topic = await TopicModel.findById(tid);
@@ -314,105 +314,74 @@ class Topic {
         user.like_count += 1;
         user.save();
         req.session.userInfo.like_count += 1;
+        // 发送提醒 notice
+        await this.sendLikeNotice(_id, topic.author_id, topic._id);
       }
 
       return res.send({
         status: 1,
-        type: behavior ? 'un_like' : 'like'
+        type: behavior.delete ? 'un_like' : 'like'
       });
     } catch(err) {
       return res.send({
         status: 0,
-        type: 'ERROR_LIKE_TOPIC',
-        message: '喜欢话题失败'
+        type: 'ERROR_LIKE_OR_UN_LIKE_TOPIC',
+        message: '喜欢或者取消喜欢话题失败'
       });
     }
   }
 
-  // 收藏话题
-  collectTopic(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+  // 收藏或者取消收藏话题
+  async collectOrUncollectTopic(req, res) {
+    const { tid } = req.params;
+    const { _id } = req.session.userInfo;
+    
+    try {
+      let behavior;
+
+      behavior = await this.findOneBehavior('collect', _id, tid);
+      
+      if (behavior) {
+        behavior.delete = !behavior.delete;
+        behavior.save();
+      } else {
+        behavior = await this.createBehavior('collect', _id, tid);
       }
 
-      const { userInfo } = req.session;
-      const { id } = fields;
+      const topic = await TopicModel.findById(tid);
+      const user = await UserModel.findById(_id);
 
-      try {
-        if (!id) {
-          throw new Error('id不能为空')
-        }
-      } catch (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARAMS',
-          message: err.message
-        });
+      if (!topic || !user) {
+        throw new Error('未找到话题或者用户');
       }
 
-      try {
-        // await TopicModel.findOneAndUpdate({ id });
-        // await UserModel.findOneAndUpdate({ id: userInfo.id }, { collect_list: }) 
-        return res.send({
-          status: 1
-        });
-      } catch(err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_SERVICE_FAILED',
-          message: '服务器无响应，请稍后重试'
-        });
-      }
-    });
-  }
-
-  // 取消收藏话题
-  unCollectTopic(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+      if (behavior.delete) {
+        topic.collect_count -= 1;
+        topic.save();
+        user.collect_count -= 1;
+        user.save();
+        req.session.userInfo.collect_count -= 1;
+      } else {
+        topic.collect_count += 1;
+        topic.save();
+        user.collect_count += 1;
+        user.save();
+        req.session.userInfo.collect_count += 1;
+        // 发送提醒 notice
+        await this.sendCollectNotice(_id, topic.author_id, topic._id);
       }
 
-      const { userInfo } = req.session;
-      const { id } = fields;
-
-      try {
-        if (!id) {
-          throw new Error('id不能为空')
-        }
-      } catch (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARAMS',
-          message: err.message
-        });
-      }
-
-      try {
-        // await TopicModel.findOneAndUpdate({ id });
-        // await UserModel.findOneAndUpdate({ id: userInfo.id }, { collect_list: }) 
-        return res.send({
-          status: 1
-        });
-      } catch(err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_SERVICE_FAILED',
-          message: '服务器无响应，请稍后重试'
-        });
-      }
-    });
+      return res.send({
+        status: 1,
+        type: behavior.delete ? 'un_collect' : 'collect'
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_COLLECT_OR_UN_COLLECT_TOPIC',
+        message: '收藏或者取消收藏话题失败'
+      });
+    }
   }
 }
 

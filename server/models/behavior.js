@@ -21,7 +21,7 @@ const BehaviorSchema = new Schema({
   delete: { type: Boolean, default: false }
 });
 
-BehaviorSchema.index({ author_id: 1, target_id: 1 }, { unique: true });
+BehaviorSchema.index({ author_id: 1, target_id: 1, type: 1 }, { unique: true });
 
 const Behavior = mongoose.model('Behavior', BehaviorSchema);
 
