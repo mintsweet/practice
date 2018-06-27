@@ -1,7 +1,7 @@
 class Auth {
   // auth user
   userRequired(req, res, next) {
-    if (!req.session || !req.session.userInfo || !req.session.userInfo.id) {
+    if (!req.session || !req.session.userInfo || !req.session.userInfo._id) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_SIGNIN',
@@ -14,7 +14,7 @@ class Auth {
 
   // auth admin
   adminRequired(req, res, next) {
-    if (!req.session.user) {
+    if (!req.session.userInfo) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_SIGNIN',
@@ -22,7 +22,7 @@ class Auth {
       });
     }
   
-    if (!req.session.user.is_admin && res.session.user.role > 0) {
+    if (!req.session.userInfo.is_admin && res.session.userInfo.role > 0) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_AUTHORITY',
@@ -35,7 +35,7 @@ class Auth {
 
   // auth root
   rootRequired(req, res, next) {
-    if (!req.session.user) {
+    if (!req.session.userInfo) {
       return res.send({
         status: 0,
         type: 'ERROR_NO_SIGNIN',

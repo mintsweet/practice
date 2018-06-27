@@ -1,17 +1,11 @@
 const formidable = require('formidable');
-const BaseComponent = require('../prototype/BaseComponent');
 const TopicModel = require('../models/topic');
+const BehaviorModel = require('../models/behavior');
 const UserModel = require('../models/user');
+const md2html = require('../utils/md2html');
 
-class Topic extends BaseComponent {
-  constructor() {
-    super();
-    this.createTopic = this.createTopic.bind(this);
-    this.getTopicList = this.getTopicList.bind(this);
-    this.getTopicDetail = this.getTopicDetail.bind(this);
-  }
-
-  // 新增
+class Topic {
+  // 创建话题
   createTopic(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
@@ -27,7 +21,7 @@ class Topic extends BaseComponent {
       const { tab, title, content } = fields;
 
       try {
-        if (!userInfo || !userInfo.id) {
+        if (!userInfo || !userInfo._id) {
           throw new Error('尚未登录')
         } else if (!title) {
           throw new Error('标题不能为空')
@@ -42,17 +36,21 @@ class Topic extends BaseComponent {
         });
       }
 
-      const topicId = await this.getId('topic_id');
-      const topicInfo = {
-        id: topicId,
-        tab: tab,
+      const _topic = {
+        tab,
         title,
-        content,
-        author_id: userInfo.id,
+        content: md2html(content),
+        author_id: userInfo._id,
+      };
+
+      const _behavior = {
+        type: 'create',
+        author_id: userInfo._id,
       };
 
       try {
-        await TopicModel.create(topicInfo);
+        const topic = await TopicModel.create(_topic);
+        await BehaviorModel.create({ ..._behavior, target_id: topic._id });
         return res.send({
           status: 1
         });
@@ -66,19 +64,88 @@ class Topic extends BaseComponent {
     });
   }
 
-  // 获取用户信息
-  async getUserInfo(id) {
-    const userInfo = await UserModel.findOne({ id: id }, '-_id id nickname avatar');
-    return userInfo;
+  // 删除话题
+  async deleteTopic(req, res) {
+    const { tid } = req.params;
+    
+    if (!tid) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARAMS',
+        message: '无效的ID'
+      });
+    }
+
+    const { _id } = req.session.userInfo;
+    const currentTopic = await TopicModel.findById(tid);
+
+    if (_id !== currentTopic.author_id.toString()) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_IS_NOT_AUTHOR',
+        message: '不能删除别人的话题'
+      });
+    } else {
+      await TopicModel.findByIdAndUpdate(tid, { delete: true });
+    }
   }
   
+  // 编辑话题
+  editTopic(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
+
+      const { tid } = req.params;
+      const { _id } = req.session.userInfo;
+      const currentTopic = await TopicModel.findById(tid);
+
+      if (_id !== currentTopic.author_id.toString()) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_IS_NOT_AUTHOR',
+          message: '不能编辑别人的话题'
+        });
+      }
+
+      const { tab, title, content } = fields;
+
+      const topicInfo = {
+        tab: tab || currentTopic.tab,
+        title: title || currentTopic.title,
+        content: content || currentTopic.content
+      };
+
+      try {
+        await TopicModel.findByIdAndUpdate(tid, topicInfo); 
+        return res.send({
+          status: 1
+        });
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_SERVICE_FAILED',
+          message: '服务器无响应，请稍后重试'
+        });
+      }
+    });
+  }
+
   // 获取列表
   async getTopicList(req, res) {
     const tab = req.query.tab || 'all';
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 10;
 
-    let query = {};
+    let query = {
+      lock: false
+    };
 
     if (!tab || tab === 'all') {
       query = {};
@@ -98,16 +165,16 @@ class Topic extends BaseComponent {
 
     try {
       const topicCount = await TopicModel.count(query);
-      const topicList = await TopicModel.find(query, '-_id', options);
+      const topicList = await TopicModel.find(query, '-__v -lock', options);
 
       const promises = await Promise.all(topicList.map(item => {
         return new Promise((resolve, reject) => {
-          resolve(this.getUserInfo(item.author_id));
+          resolve(UserModel.findById(item.author_id, 'nickname avatar'));
         });
       }));
 
       const result = topicList.map((item, i) => {
-        return Object.assign({ author: promises[i] }, item.toObject({ virtuals: true }));
+        return { ...item.toObject({ virtuals: true }), author: promises[i] }
       });
 
       return res.send({
@@ -115,26 +182,75 @@ class Topic extends BaseComponent {
         data: {
           topics: result,
           currentPage: page,
-          topicCount: size,
-          pages: Math.ceil(topicCount / size),
-          tab
+          total: size,
+          totalPage: Math.ceil(topicCount / size),
+          tab,
+          size
         },
       });
     } catch(err) {
-      console.log(err);
       return res.send({
         status: 0,
-        type: 'ERROR_GET_Topic_LIST',
-        message: '获取主题失败'
+        type: 'ERROR_GET_TOPIC_LIST',
+        message: '获取话题失败'
+      });
+    }
+  }
+
+  // 搜索话题
+  async searchTopic(req, res) {
+    const { title } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 10;
+
+    let query = {
+      title: { $regex: title },
+      lock: false
+    };
+
+    const options = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: '-top -last_reply_at'
+    };
+    
+    try {
+      const topicCount = await TopicModel.count(query);
+      const topicList = await TopicModel.find(query, '-__v -lock', options);
+
+      const promises = await Promise.all(topicList.map(item => {
+        return new Promise((resolve, reject) => {
+          resolve(UserModel.findById(item.author_id, 'nickname avatar'));
+        });
+      }));
+
+      const result = topicList.map((item, i) => {
+        return { ...item.toObject({ virtuals: true }), author: promises[i] }
+      });
+
+      return res.send({
+        status: 1,
+        data: {
+          topics: result,
+          currentPage: page,
+          total: topicCount,
+          totalPage: Math.ceil(topicCount / size),
+        },
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_TOPIC_LIST',
+        message: '获取话题失败'
       });
     }
   }
   
-  // 获取主题详情
-  async getTopicDetail(req, res) {
-    const { id } = req.params;
+  // 获取话题详情
+  async getTopicById(req, res) {
+    const { tid } = req.params;
 
-    if (!id) {
+    if (!tid) {
       return res.send({
         status: 0,
         type: 'ERROR_PARAMS',
@@ -143,89 +259,77 @@ class Topic extends BaseComponent {
     }
 
     try {
-      const topic = await TopicModel.findOne({ id }, '-_id -__v');
-      const author = await this.getUserInfo(topic.author_id);
-      const result = Object.assign({ author }, topic.toObject({ virtuals: true }));
+      const topic = await TopicModel.findById(tid, '-__v');
+      const author = await UserModel.findById(topic.author_id, '_id nickname avatar score');
 
       return res.send({
         status: 1,
-        data: result
+        data: { ...topic.toObject({ virtuals: true }), author}
       });
     } catch(err) {
       return res.send({
         status: 0,
         type: 'ERROR_GET_TOPIC_DETAIL',
-        message: err.message
+        message: '获取话题详情失败'
       });
     }
   }
 
-  // 搜索主题
-  searchTopicList(req, res) {
-
-  }
-
-  // 编辑主题
-  editTopic(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
-      }
-
-      const { userInfo } = req.session;
-      const { id, tab, title, content } = fields;
-
-      try {
-        if (!userInfo || !userInfo.id) {
-          throw new Error('尚未登录')
-        } else if (!title) {
-          throw new Error('标题不能为空')
-        } else if (!content) {
-          throw new Error('内容不能为空')
-        }
-      } catch (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARAMS',
-          message: err.message
-        });
-      }
-
-      const topicInfo = {
-        tab: tab,
-        title,
-        content
-      };
-
-      try {
-        await TopicModel.findOneAndUpdate({ id }, topicInfo); 
-        return res.send({
-          status: 1
-        });
-      } catch(err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_SERVICE_FAILED',
-          message: '服务器无响应，请稍后重试'
-        });
-      }
-    });
-  }
-
   // 喜欢话题
-  likeTopic(req, res) {
+  async likeOrUnlikeTopic(req, res) {
+    const { tid } = req.params;
+    const { _id } = req.session.userInfo;
+
+    try {
+      const behavior = await BehaviorModel.findOne({ type: 'like', author_id: _id, target_id: tid});
+      
+      if (behavior) {
+        behavior.delete = !behavior.delete;
+        behavior.save();
+      } else {
+        const _behavior = {
+          type: 'like',
+          author_id: _id,
+          target_id: tid
+        };
+        await BehaviorModel.create(_behavior);
+      }
+
+      const topic = await TopicModel.findById(tid);
+      const user = await UserModel.findById(_id);
+
+      if (!topic || !user) {
+        throw new Error('未找到话题或者用户');
+      }
+
+      if (behavior.delete) {
+        topic.like_count -= 1;
+        topic.save();
+        user.like_count -= 1;
+        user.save();
+        req.session.userInfo.like_count -= 1;
+      } else {
+        topic.like_count += 1;
+        topic.save();
+        user.like_count += 1;
+        user.save();
+        req.session.userInfo.like_count += 1;
+      }
+
+      return res.send({
+        status: 1,
+        type: behavior ? 'un_like' : 'like'
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_LIKE_TOPIC',
+        message: '喜欢话题失败'
+      });
+    }
   }
 
-  // 取消喜欢话题
-  unLikeTopic(req, res) {
-  }
-
-  // 收藏主题
+  // 收藏话题
   collectTopic(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
@@ -268,7 +372,7 @@ class Topic extends BaseComponent {
     });
   }
 
-  // 取消收藏主题
+  // 取消收藏话题
   unCollectTopic(req, res) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {

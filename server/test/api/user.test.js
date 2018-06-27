@@ -2,19 +2,42 @@ const app = require('../../app');
 const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
+const sinon = require('sinon');
 
 describe('test/api/user', function() {
   let mockUser;
+  let clock;
 
   before(function(done) {
     support
       .createUser({
         nickname: '青湛',
-        mobile: 18800000000,
+        mobile: '18800000000',
         password: 'a123456'
       }).then((user) => {
         mockUser = user;
         done();
+      });
+  });
+
+  beforeEach(function() {
+    clock = sinon.useFakeTimers();
+  });
+
+  afterEach(function() {
+    clock.restore();
+  });
+
+  after(function(done) {
+    support
+      .deleteUser('18800000000')
+      .then(() => {
+        support
+          .deleteUser('18800000001')
+          .then(() => {
+            mockUser = null;
+            done();
+          });
       });
   });
 
@@ -27,8 +50,8 @@ describe('test/api/user', function() {
         .send({
           nickname: '小明',
           password: 'a123456',
-          mobile: 18800000000,
-          msgcaptcha: 123456
+          mobile: '18800000000',
+          msgcaptcha: '123456'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -46,8 +69,8 @@ describe('test/api/user', function() {
         .send({
           nickname: '青湛',
           password: 'a123456',
-          mobile: 18800000001,
-          msgcaptcha: 666666
+          mobile: '18800000001',
+          msgcaptcha: '666666'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -65,8 +88,8 @@ describe('test/api/user', function() {
         .send({
           nickname: '小明',
           password: 'a123456',
-          mobile: 12345678912,
-          msgcaptcha: 666666
+          mobile: '12345678912',
+          msgcaptcha: '666666'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -84,8 +107,8 @@ describe('test/api/user', function() {
         .send({
           nickname: '小明',
           password: '123456',
-          mobile: 18800000001,
-          msgcaptcha: 666666
+          mobile: '18800000001',
+          msgcaptcha: '666666'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -103,8 +126,8 @@ describe('test/api/user', function() {
         .send({
           nickname: '小',
           password: 'a123456',
-          mobile: 18800000001,
-          msgcaptcha: 666666
+          mobile: '18800000001',
+          msgcaptcha: '666666'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -120,7 +143,7 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000001'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -130,8 +153,8 @@ describe('test/api/user', function() {
             .send({
               nickname: '小明',
               password: 'a123456',
-              mobile: 18800000002,
-              msgcaptcha: 666666
+              mobile: '18800000002',
+              msgcaptcha: '666666'
             })
             .end(function(err, res) {
               should.not.exist(err);
@@ -148,7 +171,7 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000001'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -158,8 +181,8 @@ describe('test/api/user', function() {
             .send({
               nickname: '小明',
               password: 'a123456',
-              mobile: 18800000001,
-              msgcaptcha: 666666
+              mobile: '18800000001',
+              msgcaptcha: '666666'
             })
             .end(function(err, res) {
               should.not.exist(err);
@@ -176,28 +199,27 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000001'
         })
         .end(function(err, res) {
           should.not.exist(err);
           res.body.status.should.equal(1);
-          setTimeout(function() {
-            request
-              .post('/api/signup')
-              .send({
-                nickname: '小明',
-                password: 'a123456',
-                mobile: 18800000001,
-                msgcaptcha: res.body.code
-              })
-              .end(function(err, res) {
-                should.not.exist(err);
-                res.body.status.should.equal(0);
-                res.body.type.should.equal('ERROR_PARMAS_SIGNUP');
-                res.body.message.should.equal('短信验证码已经失效了，请重新获取');
-                done();
-              });
-          }, 1000);
+          clock.tick(1000 * 60 * 11);
+          request
+            .post('/api/signup')
+            .send({
+              nickname: '小明',
+              password: 'a123456',
+              mobile: '18800000001',
+              msgcaptcha: res.body.code
+            })
+            .end(function(err, res) {
+              should.not.exist(err);
+              res.body.status.should.equal(0);
+              res.body.type.should.equal('ERROR_PARMAS_SIGNUP');
+              res.body.message.should.equal('短信验证码已经失效了，请重新获取');
+              done();
+            });
         });
     });
 
@@ -206,7 +228,7 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000001'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -216,7 +238,7 @@ describe('test/api/user', function() {
             .send({
               nickname: '小明',
               password: 'a123456',
-              mobile: 18800000001,
+              mobile: '18800000001',
               msgcaptcha: res.body.code
             })
             .end(function(err, res) {
@@ -236,7 +258,7 @@ describe('test/api/user', function() {
         .post('/api/signin')
         .send({
           type: 'lala',
-          mobile: 18800000000,
+          mobile: '18800000000',
           password: 'a123456'
         })
         .end(function(err, res) {
@@ -254,7 +276,7 @@ describe('test/api/user', function() {
         .post('/api/signin')
         .send({
           type: 'acc',
-          mobile: 12345678901,
+          mobile: '12345678901',
           password: 'a123456'
         })
         .end(function(err, res) {
@@ -272,7 +294,7 @@ describe('test/api/user', function() {
         .post('/api/signin')
         .send({
           type: 'acc',
-          mobile: 18800000002,
+          mobile: '18800000002',
           password: 'a123456'
         })
         .end(function(err, res) {
@@ -290,7 +312,7 @@ describe('test/api/user', function() {
         .post('/api/signin')
         .send({
           type: 'acc',
-          mobile: 18800000000,
+          mobile: '18800000000',
           password: 'a123456789'
         })
         .end(function(err, res) {
@@ -308,7 +330,7 @@ describe('test/api/user', function() {
         .post('/api/signin')
         .send({
           type: 'acc',
-          mobile: 18800000001,
+          mobile: '18800000000',
           password: 'a123456'
         })
         .end(function(err, res) {
@@ -324,7 +346,7 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000000
+          mobile: '18800000000'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -333,8 +355,8 @@ describe('test/api/user', function() {
             .post('/api/signin')
             .send({
               type: 'mct',
-              mobile: 18800000001,
-              msgcaptcha: 123456
+              mobile: '18800000001',
+              msgcaptcha: '123456'
             })
             .end(function(err, res) {
               should.not.exist(err);
@@ -351,7 +373,7 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000000'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -360,8 +382,8 @@ describe('test/api/user', function() {
             .post('/api/signin')
             .send({
               type: 'mct',
-              mobile: 18800000001,
-              msgcaptcha: 123456
+              mobile: '18800000000',
+              msgcaptcha: '123456'
             })
             .end(function(err, res) {
               should.not.exist(err);
@@ -378,27 +400,26 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000001'
         })
         .end(function(err, res) {
           should.not.exist(err);
           res.body.status.should.equal(1);
-          setTimeout(function() {
-            request
-              .post('/api/signin')
-              .send({
-                type: 'mct',
-                mobile: 18800000001,
-                msgcaptcha: res.body.code
-              })
-              .end(function(err, res) {
-                should.not.exist(err);
-                res.body.status.should.equal(0);
-                res.body.type.should.equal('ERROR_MSG_CAPTCHA');
-                res.body.message.should.equal('短信验证码已经失效了，请重新获取');
-                done();
-              });
-          }, 1000);
+          clock.tick(1000 * 60 * 11);
+          request
+            .post('/api/signin')
+            .send({
+              type: 'mct',
+              mobile: '18800000001',
+              msgcaptcha: res.body.code
+            })
+            .end(function(err, res) {
+              should.not.exist(err);
+              res.body.status.should.equal(0);
+              res.body.type.should.equal('ERROR_MSG_CAPTCHA');
+              res.body.message.should.equal('短信验证码已经失效了，请重新获取');
+              done();
+            });
         });
     });
 
@@ -407,7 +428,7 @@ describe('test/api/user', function() {
       request
         .get('/api/captcha/msg')
         .query({
-          mobile: 18800000001
+          mobile: '18800000000'
         })
         .end(function(err, res) {
           should.not.exist(err);
@@ -416,7 +437,7 @@ describe('test/api/user', function() {
             .post('/api/signin')
             .send({
               type: 'mct',
-              mobile: 18800000001,
+              mobile: '18800000000',
               msgcaptcha: res.body.code
             })
             .end(function(err, res) {
@@ -427,18 +448,5 @@ describe('test/api/user', function() {
             });
         });
     });
-  });
-
-  after(function(done) {
-    support
-      .deleteUser(18800000000)
-      .then(() => {
-        support
-          .deleteUser(18800000001)
-          .then(() => {
-            mockUser = null;
-            done();
-          });
-      });
   });
 });

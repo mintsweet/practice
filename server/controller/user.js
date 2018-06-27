@@ -2,6 +2,7 @@ const formidable = require('formidable');
 const bcrypt = require('bcryptjs');
 const BaseComponent = require('../prototype/BaseComponent');
 const UserModel = require('../models/user');
+const BehaviorModel = require('../models/behavior');
 const TopicModel = require('../models/topic');
 const ReplyModel = require('../models/reply');
 
@@ -52,7 +53,7 @@ class User extends BaseComponent {
       
 
       try {
-        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+        if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
@@ -62,7 +63,7 @@ class User extends BaseComponent {
           throw new Error('收取验证码的手机与登录手机不匹配');
         } else if (msg_code.code !== msgcaptcha) {
           throw new Error('短信验证码不正确')
-        } else if ((Date.now() - msg_code.time) > 1000) {
+        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
           throw new Error('短信验证码已经失效了，请重新获取');
         }
       } catch(err) {
@@ -129,7 +130,7 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile }, '-__v');
+      const existUser = await UserModel.findOne({ mobile }, '-__v -is_block -create_at -update_at');
       if (!existUser) {
         return res.send({
           status: 0,
@@ -257,6 +258,37 @@ class User extends BaseComponent {
     }
   }
 
+  // 更新个人信息
+  updateUserInfo(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
+
+      const { _id } = req.session.userInfo;
+      const { nickname, avatar, location, signature } = fields;
+
+      try {
+        const doc = await UserModel.findByIdAndUpdate(_id, { nickname, avatar, location, signature });
+        req.session.userInfo = doc.toObject();
+        return res.send({
+          status: 1
+        });
+      } catch(err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_UPDATE_USER_INFO',
+          message: err.message
+        });
+      }
+    });
+  }
+
   // 修改密码
   updatePass(req, res) {
     const form = new formidable.IncomingForm();
@@ -269,13 +301,11 @@ class User extends BaseComponent {
         });
       }
 
-      const { mobile } = req.session.userInfo;
+      const { _id } = req.session.userInfo;
       const { oldPassword , newPassword } = fields;
       
       try {
-        if (!mobile) {
-          throw new Error('手机号不能为空');
-        } else if (!oldPassword) {
+        if (!oldPassword) {
           throw new Error('旧密码不能为空');
         } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
@@ -288,7 +318,7 @@ class User extends BaseComponent {
         });
       }
   
-      const existUser = await UserModel.findOne({ mobile }, '-_id -__v');
+      const existUser = await UserModel.findById(_id, '-_id -__v');
       if (!existUser) {
         return res.send({
           status: 0,
@@ -300,7 +330,7 @@ class User extends BaseComponent {
       const isMatch = await bcrypt.compare(oldPassword, existUser.password);
       if (isMatch) {
         const bcryptPassword = await this.encryption(newPassword);
-        await UserModel.findOneAndUpdate({ mobile }, {$set: {password: bcryptPassword}});
+        await UserModel.findByIdAndUpdate(_id, { password: bcryptPassword });
         return res.send({
           status: 1
         });
@@ -314,56 +344,10 @@ class User extends BaseComponent {
     });
   }
 
-  // 通过昵称获取用户信息
-  async getInfoNickname(req, res) {
-    const { nickname } = req.params;
-
-    if (!nickname) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_PARAMS',
-        message: '无效的昵称'
-      });
-    }
-
-    const user = await UserModel.findOne({ nickname }, '-_id -__v -password -mobile -is_admin -roles -create_at -update_at -id');
-
-    if (!user) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_USER_NOT_EXSIT',
-        message: '用户不存在'
-      });
-    }
-
-    return res.send({
-      status: 1,
-      data: user
-    });
-  }
-
-  // 更新个人信息
-  updateUserInfo(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
-      }
-
-      const { userInfo } = req.session;
-      const { nickname, avatar, location, signature } = fields;
-
-    });
-  }
-
   // 获取星标用户列表
   async getStartList(req, res) {
     try {
-      const userList = await UserModel.find({ is_start: true }, '-_id -__v -password -mobile -is_admin -roles -create_at -update_at -id');
+      const userList = await UserModel.find({ is_start: true }, '_id nickname score');
       return res.send({
         status: 1,
         data: userList
@@ -380,8 +364,8 @@ class User extends BaseComponent {
   // 获取积分榜前一百用户
   async getTop100(req, res) {
     try {
-      const userList = await UserModel.find({}, '-_id nickname score', {
-        limit: 10,
+      const userList = await UserModel.find({}, '_id nickname score', {
+        limit: 100,
         sort: '-score'
       });
 
@@ -398,9 +382,39 @@ class User extends BaseComponent {
     }
   }
 
+  // 根据ID获取用户信息
+  async getInfoById(req, res) {
+    const { uid } = req.params;
+
+    if (!uid) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARAMS',
+        message: '无效的Id'
+      });
+    }
+
+    const user = await UserModel.findById(uid, '-__v -password -mobile -is_admin -role -create_at -update_at -is_block -is_star');
+
+    if (!user) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_USER_NOT_EXSIT',
+        message: '用户不存在'
+      });
+    }
+
+    return res.send({
+      status: 1,
+      data: user
+    });
+  }
+
   // 获取用户喜欢列表
   async getUserLikes(req, res) {
-    const { nickname } = req.params;
+    const { uid } = req.params;
+    const topics = await BehaviorModel.find({ user_id: uid }, 'aims_id');
+
   }
 
   // 获取用户收藏列表

@@ -76,8 +76,8 @@ class Common extends BaseComponent {
       };
 
       req.session.msg_code = {
-        mobile: Number(mobile),
-        code,
+        mobile: mobile,
+        code: code.toString(),
         time: Date.now()
       }
 

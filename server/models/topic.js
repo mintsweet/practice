@@ -23,7 +23,9 @@ const TopicSchema = new Schema({
   last_reply: { type: ObjectId },
   last_reply_at: { type: Date, default: Date.now },
   
-  tab: { type: String }
+  tab: { type: String },
+
+  delete: { type: Boolean, default: false }
 });
 
 TopicSchema.index({ create_at: -1 });
@@ -32,7 +34,7 @@ TopicSchema.index({ author_id: 1, create_at: -1 });
 
 TopicSchema.virtual('tabName').get(function() {
   const pair = config.tabs.find(item => item.url === this.tab);
-  return pair ? pair : ''; 
+  return pair ? pair.name : ''; 
 });
 
 const Topic = mongoose.model('Topic', TopicSchema);

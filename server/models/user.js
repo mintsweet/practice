@@ -6,13 +6,14 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   
   nickname: { unqie: true, type: String, required: true },
-  avatar: { type: String },
-  location: { type: String },
-  signature: { type: String },
+  avatar: { type: String, default: '' },
+  location: { type: String, default: '' },
+  signature: { type: String, default: '' },
 
   score: { type: Number, default: 0 },
   
-  is_start: { type: Boolean, default: false },
+  is_star: { type: Boolean, default: false },
+  is_admin: { type: Boolean, default: false },
   is_block: { type: Boolean, default: false },
 
   topic_count: { type: Number, default: 0 },
@@ -22,7 +23,6 @@ const UserSchema = new Schema({
   follower_count: { type: Number, default: 0 },
   following_count: { type: Number, default: 0 },
 
-  is_admin: { type: Boolean, default: false },
   role: { type: Number, default: 0 },
 
   create_at: { type: Date, default: Date.now },
