@@ -24,7 +24,7 @@ router.get('/captcha/msg', Captcha.getMsgCaptcha);
 // 用户
 router.post('/signup', User.signup); // 注册
 router.post('/signin', User.signin); // 登录
-router.get('/signout', User.signout); // 登出
+router.delete('/signout', User.signout); // 登出
 router.post('/forget_pass', User.forgetPass); // 忘记密码
 router.get('/info', Auth.userRequired, User.getUserInfo); // 获取当前登录用户信息
 router.put('/setting', Auth.userRequired, User.updateUserInfo); // 更新个人信息

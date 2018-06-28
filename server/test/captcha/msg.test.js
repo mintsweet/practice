@@ -3,7 +3,7 @@ const request = require('supertest')(app);
 const should = require('should');
 
 describe('test /api/captcha/msg', function() {
-  it('should status 0 when mobile is not valid', function(done) {
+  it('should return status 0 when mobile is not valid', function(done) {
     request
       .get('/api/captcha/msg')
       .end(function(err, res) {
@@ -15,7 +15,7 @@ describe('test /api/captcha/msg', function() {
       });
   });
 
-  it('should return msgcaptcha', function(done) {
+  it('should return status 1', function(done) {
     request
       .get('/api/captcha/msg')
       .query({

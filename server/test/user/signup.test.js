@@ -26,12 +26,16 @@ describe('test /api/signup', function() {
     support
       .deleteUser('18800000000')
       .then(() => {
-        done();
+        support
+          .deleteUser('18800000001')
+          .then(() => {
+            done();
+          });
       });
   });
 
   // 手机号已经注册
-  it('should fail when the mobile is registered', function(done) {
+  it('should return status 0 when the mobile is registered', function(done) {
     request
       .post('/api/signup')
       .send({
@@ -50,7 +54,7 @@ describe('test /api/signup', function() {
   });
 
   // 昵称已经注册
-  it('should fail when the nickname is registered', function(done) {
+  it('should return status 0 when the nickname is registered', function(done) {
     request
       .post('/api/signup')
       .send({
@@ -69,7 +73,7 @@ describe('test /api/signup', function() {
   });
 
   // 手机号验证失败
-  it('should fail when the mobile is not valid', function(done) {
+  it('should return status 0 when the mobile is not valid', function(done) {
     request
       .post('/api/signup')
       .send({
@@ -88,7 +92,7 @@ describe('test /api/signup', function() {
   });
 
   // 密码验证失败
-  it('should fail when the password is not valid', function(done) {
+  it('should return status 0 when the password is not valid', function(done) {
     request
       .post('/api/signup')
       .send({
@@ -107,7 +111,7 @@ describe('test /api/signup', function() {
   });
 
   // 昵称验证失败
-  it('should fail when the nickname is not valid', function(done) {
+  it('should return status 0 when the nickname is not valid', function(done) {
     request
       .post('/api/signup')
       .send({
@@ -126,7 +130,7 @@ describe('test /api/signup', function() {
   });
 
   // 接收短信验证码的手机与填写的手机不匹配
-  it('should fail when the msgcaptcha and mobile do not match', function(done) {
+  it('should return status 0 when the msgcaptcha and mobile do not match', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
@@ -154,7 +158,7 @@ describe('test /api/signup', function() {
   });
 
   // 短信验证码不正确
-  it('should fail when the msgcaptcha is not valid', function(done) {
+  it('should return status 0 when the msgcaptcha is not valid', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
@@ -182,7 +186,7 @@ describe('test /api/signup', function() {
   });
 
   // 验证码过期
-  it('should fail when the msgcaptcha expired', function(done) {
+  it('should return status 0 when the msgcaptcha expired', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
@@ -211,7 +215,7 @@ describe('test /api/signup', function() {
   });
 
   // 正确的注册
-  it('should success', function(done) {
+  it('should return status 1', function(done) {
     request
       .get('/api/captcha/msg')
       .query({

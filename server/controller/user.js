@@ -5,6 +5,7 @@ const UserModel = require('../models/user');
 const BehaviorModel = require('../models/behavior');
 const TopicModel = require('../models/topic');
 const ReplyModel = require('../models/reply');
+const logger = require('../utils/logger');
 
 const SALT_WORK_FACTOR = 10;
 
@@ -21,6 +22,7 @@ class User extends BaseComponent {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
       if (err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
@@ -87,6 +89,7 @@ class User extends BaseComponent {
           status: 1
         });
       } catch(err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
           type: 'ERROR_SERVICE_FAILED',
@@ -107,6 +110,7 @@ class User extends BaseComponent {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
       if (err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
@@ -119,7 +123,7 @@ class User extends BaseComponent {
       try {
         if (!type || (type !== 'acc' && type !== 'mct')) {
           throw new Error('请输入正确的登录方式');
-        } else if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+        } else if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         }
       } catch(err) {
@@ -130,14 +134,15 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile }, '-__v -is_block -create_at -update_at');
-      if (!existUser) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_USER_IS_NOT_EXITS',
-          message: '手机账户尚未注册'
-        });
-      }
+      const existUser = await UserModel.findOne({ mobile });
+
+      // if (!existUser) {
+      //   return res.send({
+      //     status: 0,
+      //     type: 'ERROR_USER_IS_NOT_EXITS',
+      //     message: '手机账户尚未注册'
+      //   });
+      // }
 
       if (type === 'acc') {
         const isMatch = await bcrypt.compare(password, existUser.password);
@@ -188,13 +193,11 @@ class User extends BaseComponent {
         status: 1
       });
     } catch(err) {
-
-      console.log(err)
-
-      res.send({
+      logger.error(err.message);
+      return res.send({
         status: 0,
-        type: 'ERROR_SIGNOUT_FAILED',
-        message: err.message
+        type: 'ERROR_SERVICE_FAILED',
+        message: '服务器无响应，请稍后重试'
       });
     }
   }
@@ -204,13 +207,16 @@ class User extends BaseComponent {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
       if (err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
           message: '参数解析失败'
         });
       }
-      const { msg_code } = req.session;
+
+      let { msg_code } = req.session;
+      msg_code = msg_code || {};
       const { mobile, newPassword, msgcaptcha } = fields;
 
       try {
@@ -228,7 +234,7 @@ class User extends BaseComponent {
       } catch(err) {
         return res.send({
           status: 0,
-          type: 'ERROR_FORGET_PARMAS',
+          type: 'ERROR_PARMAS_OF_FORGET_PASS',
           message: err.message
         });
       }
@@ -244,18 +250,10 @@ class User extends BaseComponent {
   // 获取当前用户信息
   getUserInfo(req, res) {
     const { userInfo } = req.session;
-    if (userInfo) {
-      return res.send({
-        status: 1,
-        data: userInfo
-      });
-    } else {
-      return res.send({
-        status: 0,
-        type: 'ERROR_GET_USER_INFO',
-        message: '尚未登录'
-      });
-    }
+    return res.send({
+      status: 1,
+      data: userInfo
+    });
   }
 
   // 更新个人信息
@@ -272,6 +270,16 @@ class User extends BaseComponent {
 
       const { _id } = req.session.userInfo;
       const { nickname, avatar, location, signature } = fields;
+
+      const existUser = await UserModel.findOne({ nickname });
+
+      if (existUser) {
+        return res.send({
+          status: 0,
+          type: 'NICKNAME_HAS_BEEN_REGISTERED',
+          message: '昵称已经注册过了'
+        });
+      }
 
       try {
         const doc = await UserModel.findByIdAndUpdate(_id, { nickname, avatar, location, signature });

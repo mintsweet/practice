@@ -31,7 +31,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录方式不正确
-  it('should fail when the acc is not valid', function(done) {
+  it('should return status 0 when the type is not valid', function(done) {
     request
       .post('/api/signin')
       .send({
@@ -49,7 +49,7 @@ describe('test /api/signin', function() {
   });
 
   // 手机号是否正确
-  it('should fail when the mobile is not valid', function(done) {
+  it('should return status 0 when the mobile is not valid', function(done) {
     request
       .post('/api/signin')
       .send({
@@ -66,26 +66,26 @@ describe('test /api/signin', function() {
       });
   });
 
-  // 账户是否存在
-  it('should fail when the mobile is not registered', function(done) {
-    request
-      .post('/api/signin')
-      .send({
-        type: 'acc',
-        mobile: '18800000001',
-        password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(0);
-        res.body.type.should.equal('ERROR_USER_IS_NOT_EXITS');
-        res.body.message.should.equal('手机账户尚未注册');
-        done();
-      });
-  });
+  // // 账户是否存在
+  // it('should return status 0 when the mobile is not registered', function(done) {
+  //   request
+  //     .post('/api/signin')
+  //     .send({
+  //       type: 'acc',
+  //       mobile: '18800000001',
+  //       password: 'a123456'
+  //     })
+  //     .end(function(err, res) {
+  //       should.not.exist(err);
+  //       res.body.status.should.equal(0);
+  //       res.body.type.should.equal('ERROR_USER_IS_NOT_EXITS');
+  //       res.body.message.should.equal('手机账户尚未注册');
+  //       done();
+  //     });
+  // });
 
   // 登录类型为账户密码 - 密码错误
-  it('should fail when the pass is not match', function(done) {
+  it('should return status 0 when the pass is not match', function(done) {
     request
       .post('/api/signin')
       .send({
@@ -103,7 +103,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为账户密码 - 正确
-  it('should success', function(done) {
+  it('should return status 1', function(done) {
     request
       .post('/api/signin')
       .send({
@@ -120,7 +120,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 收取验证码手机与登录手机不匹配
-  it('should fail when the msgcaptcha and mobile is not match', function(done) {
+  it('should return status 0 when the msgcaptcha and mobile is not match', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
@@ -147,7 +147,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 短信验证码不对
-  it('should fail when the msgcaptcha is not valid', function(done) {
+  it('should return status 0 when the msgcaptcha is not valid', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
@@ -174,7 +174,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 短信验证码失效
-  it('should fail when the msgcaptcha is expired', function(done) {
+  it('should return status 0 when the msgcaptcha is expired', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
@@ -202,7 +202,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 登录成功
-  it('should success', function(done) {
+  it('should return status 1', function(done) {
     request
       .get('/api/captcha/msg')
       .query({
