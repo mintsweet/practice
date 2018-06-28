@@ -1,16 +1,16 @@
-const app = require('../app');
+const app = require('../../app');
 const request = require('supertest')(app);
 const should = require('should');
 
-describe('test /api', function() {
+describe('test /api/static/about', function() {
   it('should return status 1', function(done) {
     request
-      .get('/api')
+      .get('/api/static/about')
       .end(function(err, res) {
         should.not.exist(err);
         res.body.status.should.equal(1);
-        res.body.data.should.equal('欢迎使用 Mints - 薄荷糖社区 API接口')
-        done();
+        res.body.data.should.containEql('关于');
+        done(err);
       });
   });
 });

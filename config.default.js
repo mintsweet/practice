@@ -4,8 +4,6 @@
 const path = require('path');
 
 const config = {
-  debug: true,
-
   // Site base
   name: 'Mints - 薄荷糖社区',
   description: '简洁、快乐的交流社区',

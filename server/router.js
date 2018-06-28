@@ -10,7 +10,7 @@ const Reply = require('./controller/reply');
 const router = express.Router();
 
 // 测试
-router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用Mints(薄荷糖社区)API接口' }));
+router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用 Mints - 薄荷糖社区 API接口' }));
 
 // 静态
 router.get('/static/get_start', Static.getStart); // 获取快速开始文档

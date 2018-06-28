@@ -60,10 +60,10 @@ class Captcha extends BaseComponent {
   async getMsgCaptcha(req, res) {
     const { mobile } = req.query;
 
-    if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+    if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       return res.send({
         status: 0,
-        type: 'ERROR_MOBILE_FORMAT',
+        type: 'ERROR_MOBILE_IS_NOT_VALID',
         message: '手机号格式不正确'
       });
     }
@@ -76,7 +76,7 @@ class Captcha extends BaseComponent {
       };
 
       req.session.msg_code = {
-        mobile: mobile,
+        mobile,
         code: code.toString(),
         time: Date.now()
       }
