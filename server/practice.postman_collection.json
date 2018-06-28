@@ -1,85 +1,84 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "c6146edb-0d0f-4ef2-93e8-6abb5cf251e6",
 		"name": "practice",
-		"_postman_id": "d1966db3-6c72-fcc4-85c9-753a2a94ac1c",
-		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "入口",
 			"request": {
-				"url": "http://localhost:3000/api",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api"
 			},
 			"response": []
 		},
 		{
 			"name": "静态 - 获取快速开始文档",
 			"request": {
-				"url": "http://localhost:3000/api/static/get_start",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/static/get_start"
 			},
 			"response": []
 		},
 		{
 			"name": "静态 - 获取API说明文档",
 			"request": {
-				"url": "http://localhost:3000/api/static/api_introduction",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/static/api_introduction"
 			},
 			"response": []
 		},
 		{
 			"name": "静态 - 获取关于文档",
 			"request": {
-				"url": "http://localhost:3000/api/static/about",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/static/about"
 			},
 			"response": []
 		},
 		{
 			"name": "验证码 - 获取图形验证码",
 			"request": {
-				"url": "http://localhost:3000/api/captcha/pic",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/captcha/pic"
 			},
 			"response": []
 		},
 		{
 			"name": "验证码 - 短信验证码",
 			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:3000/api/captcha/msg?mobile=18800000000",
 					"protocol": "http",
@@ -95,27 +94,16 @@
 					"query": [
 						{
 							"key": "mobile",
-							"value": "18800000000",
-							"equals": true,
-							"description": ""
+							"value": "18800000000"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 注册",
 			"request": {
-				"url": "http://localhost:3000/api/signup",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -123,34 +111,29 @@
 					"urlencoded": [
 						{
 							"key": "nickname",
-							"value": "青湛",
-							"description": ""
+							"value": "青湛"
 						},
 						{
 							"key": "mobile",
-							"value": "18800000000",
-							"description": ""
+							"value": "18800000000"
 						},
 						{
 							"key": "password",
-							"value": "a123456",
-							"description": ""
+							"value": "a123456"
 						},
 						{
 							"key": "msgcaptcha",
-							"value": "120271",
-							"description": ""
+							"value": "120271"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/signup"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 登录",
 			"request": {
-				"url": "http://localhost:3000/api/signin",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -159,45 +142,40 @@
 						{
 							"key": "mobile",
 							"value": "18800000000",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "password",
 							"value": "a123456",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "type",
 							"value": "acc",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/signin"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 登出",
 			"request": {
-				"url": "http://localhost:3000/api/signout",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/signout"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 忘记密码",
 			"request": {
-				"url": "http://localhost:3000/api/forget_pass",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -206,46 +184,41 @@
 						{
 							"key": "mobile",
 							"value": "18800000000",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "newPassword",
 							"value": "a123456789",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "msgcaptcha",
 							"value": "481659",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/forget_pass"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 获取当前登录用户信息",
 			"request": {
-				"url": "http://localhost:3000/api/info",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/info"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 更新个人信息",
 			"request": {
-				"url": "http://localhost:3000/api/setting",
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "formdata",
@@ -253,20 +226,18 @@
 						{
 							"key": "nickname",
 							"value": "青湛",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/setting"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 修改密码",
 			"request": {
-				"url": "http://localhost:3000/api/update_pass",
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "formdata",
@@ -274,89 +245,121 @@
 						{
 							"key": "oldPassword",
 							"value": "a123456789",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "newPassword",
 							"value": "a123456",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/update_pass"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 获取星标用户列表",
 			"request": {
-				"url": "http://localhost:3000/api/users/start",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/users/start"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 获取积分榜前100用户列表",
 			"request": {
-				"url": "http://localhost:3000/api/users/top100",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/users/top100"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 根据ID获取用户信息",
 			"request": {
-				"url": "http://localhost:3000/api/user/5b32f6b5f5b58e313cb8e7a6",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/user/5b32f6b5f5b58e313cb8e7a6"
+			},
+			"response": []
+		},
+		{
+			"name": "用户 - 关注或者取消关注用户",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {},
+				"url": "http://localhost:3000/api/user/5b34468994986c0d48ea8426/follow_or_un"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 获取用户喜欢列表",
 			"request": {
-				"url": "http://localhost:3000/api/user/5b3390d9ed418b0362099ab2/likes",
 				"method": "GET",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/user/5b3390d9ed418b0362099ab2/likes"
 			},
 			"response": []
 		},
 		{
 			"name": "用户 - 获取用户收藏列表",
 			"request": {
-				"url": "http://localhost:3000/api/user/5b3390d9ed418b0362099ab2/collections",
 				"method": "GET",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/user/5b3390d9ed418b0362099ab2/collections"
+			},
+			"response": []
+		},
+		{
+			"name": "用户 - 获取用户回复列表",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "http://localhost:3000/api/user/5b334fdfdcac6e0158aac417/replies"
+			},
+			"response": []
+		},
+		{
+			"name": "用户 - 获取用户粉丝列表",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "http://localhost:3000/api/user/5b34468994986c0d48ea8426/follower"
+			},
+			"response": []
+		},
+		{
+			"name": "用户 - 获取用户关注列表",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": "http://localhost:3000/api/user/5b334fdfdcac6e0158aac417/following"
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 创建话题",
 			"request": {
-				"url": "http://localhost:3000/api/topic/create",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -365,46 +368,41 @@
 						{
 							"key": "tab",
 							"value": "ask",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "title",
 							"value": "如何书写自动化单元测试？",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "content",
 							"value": "# 如题呀",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/topic/create"
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 删除话题",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9/delete",
 				"method": "DELETE",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9/delete"
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 编辑话题",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9/edit",
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "formdata",
@@ -412,18 +410,23 @@
 						{
 							"key": "tab",
 							"value": "share",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9/edit"
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 获取话题列表",
 			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:3000/api/topic/list?page=1&size=2&tab=ask",
 					"protocol": "http",
@@ -439,38 +442,30 @@
 					"query": [
 						{
 							"key": "page",
-							"value": "1",
-							"equals": true,
-							"description": ""
+							"value": "1"
 						},
 						{
 							"key": "size",
-							"value": "2",
-							"equals": true,
-							"description": ""
+							"value": "2"
 						},
 						{
 							"key": "tab",
-							"value": "ask",
-							"equals": true,
-							"description": ""
+							"value": "ask"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 搜索话题",
 			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:3000/api//topic/search?page=1&size=5&title=如何",
 					"protocol": "http",
@@ -487,75 +482,57 @@
 					"query": [
 						{
 							"key": "page",
-							"value": "1",
-							"equals": true,
-							"description": ""
+							"value": "1"
 						},
 						{
 							"key": "size",
-							"value": "5",
-							"equals": true,
-							"description": ""
+							"value": "5"
 						},
 						{
 							"key": "title",
-							"value": "如何",
-							"equals": true,
-							"description": ""
+							"value": "如何"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 根据ID获取话题详情",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9",
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/topics/5b3326de1eae29250401d0c9"
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 喜欢或者取消喜欢话题",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/like_or_un",
 				"method": "POST",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/like_or_un"
 			},
 			"response": []
 		},
 		{
 			"name": "话题 - 收藏或者取消收藏话题",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/collect_or_un",
 				"method": "POST",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/collect_or_un"
 			},
 			"response": []
 		},
 		{
 			"name": "回复 - 创建回复",
 			"request": {
-				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/reply",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -564,19 +541,17 @@
 						{
 							"key": "content",
 							"value": "# 嘻嘻，测试一下回复",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/topics/5b339295fdfb11044d32511d/reply"
 			},
 			"response": []
 		},
 		{
 			"name": "回复 - 编辑回复",
 			"request": {
-				"url": "http://localhost:3000/api/replies/5b3396b458346806c5b0a7b1/edit",
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -585,56 +560,51 @@
 						{
 							"key": "content",
 							"value": "# 嘻嘻",
-							"description": "",
 							"type": "text"
 						}
 					]
 				},
-				"description": ""
+				"url": "http://localhost:3000/api/replies/5b3396b458346806c5b0a7b1/edit"
 			},
 			"response": []
 		},
 		{
 			"name": "回复 - 删除回复",
 			"request": {
-				"url": "http://localhost:3000/api/replies/5b3396b458346806c5b0a7b1/delete",
 				"method": "DELETE",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/replies/5b3396b458346806c5b0a7b1/delete"
 			},
 			"response": []
 		},
 		{
 			"name": "回复 - 回复点赞",
 			"request": {
-				"url": "http://localhost:3000/api/replies/5b339a2821900b07857d383d/up",
 				"method": "POST",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/replies/5b339a2821900b07857d383d/up"
 			},
 			"response": []
 		},
 		{
 			"name": "消息 - 获取用户消息",
 			"request": {
-				"url": "http://localhost:3000/api/notice/user",
 				"method": "GET",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/notice/user"
 			},
 			"response": []
 		},
 		{
 			"name": "消息 - 获取系统消息",
 			"request": {
-				"url": "http://localhost:3000/api/notice/system",
 				"method": "GET",
 				"header": [],
 				"body": {},
-				"description": ""
+				"url": "http://localhost:3000/api/notice/system"
 			},
 			"response": []
 		}

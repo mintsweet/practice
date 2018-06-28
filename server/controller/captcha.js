@@ -1,7 +1,7 @@
 const BaseComponent = require('../prototype/BaseComponent');
 const { BMP24 } = require('gd-bmp');
 
-class Common extends BaseComponent {
+class Captcha extends BaseComponent {
   constructor() {
     super();
     this.getPicCaptcha = this.getPicCaptcha.bind(this);
@@ -95,4 +95,4 @@ class Common extends BaseComponent {
   }
 }
 
-module.exports = new Common();
+module.exports = new Captcha();

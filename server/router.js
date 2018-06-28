@@ -27,24 +27,22 @@ router.post('/signin', User.signin); // 登录
 router.get('/signout', User.signout); // 登出
 router.post('/forget_pass', User.forgetPass); // 忘记密码
 router.get('/info', Auth.userRequired, User.getUserInfo); // 获取当前登录用户信息
-router.post('/setting', Auth.userRequired, User.updateUserInfo); // 更新个人信息
-router.post('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
+router.put('/setting', Auth.userRequired, User.updateUserInfo); // 更新个人信息
+router.patch('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
 router.get('/users/start', User.getStartList); // 获取星标用户列表
 router.get('/users/top100', User.getTop100); // 获取积分榜前100用户列表
 router.get('/user/:uid', User.getInfoById); // 根据ID获取用户信息
+router.patch('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUser); // 关注或者取消关注某个用户
 router.get('/user/:uid/likes', User.getUserLikes); // 获取用户喜欢列表
 router.get('/user/:uid/collections', User.getUserCollections);  // 获取用户收藏列表
-
-// 未测 ~~~~~~
 router.get('/user/:uid/replies', User.getUserReplies); // 用户回复的列表
 router.get('/user/:uid/follower', User.getUserFollower); // 获取用户粉丝列表
 router.get('/user/:uid/following', User.getUserFollowing); // 获取用户关注的人列表
-// 未测 ~~~~~~
 
 // 话题
 router.post('/topic/create', Auth.userRequired, Topic.createTopic); // 创建话题
 router.delete('/topics/:tid/delete', Auth.userRequired, Topic.deleteTopic); // 删除话题
-router.post('/topics/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑话题
+router.put('/topics/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑话题
 router.get('/topic/list', Topic.getTopicList); // 获取话题列表
 router.get('/topic/search', Topic.searchTopic); // 搜索话题列表
 router.get('/topics/:tid', Topic.getTopicById); // 根据ID获取话题详情

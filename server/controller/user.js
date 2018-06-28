@@ -4,6 +4,7 @@ const BaseComponent = require('../prototype/BaseComponent');
 const UserModel = require('../models/user');
 const BehaviorModel = require('../models/behavior');
 const TopicModel = require('../models/topic');
+const ReplyModel = require('../models/reply');
 
 const SALT_WORK_FACTOR = 10;
 
@@ -12,6 +13,7 @@ class User extends BaseComponent {
     super();
     this.signup = this.signup.bind(this);
     this.getUserLikes = this.getUserLikes.bind(this);
+    this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
   }
 
   // 注册
@@ -444,17 +446,134 @@ class User extends BaseComponent {
 
   // 用户回复的列表
   async getUserReplies(req, res) {
+    const { uid } = req.params;
 
+    if (!uid) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARAMS',
+        message: '无效的ID'
+      });
+    }
+
+    const replies = await ReplyModel.find({ author_id: uid });
+    const topics = await Promise.all(replies.map(item => {
+      return new Promise((resolve, reject) => {
+        resolve(TopicModel.findById(item.topic_id, '_id title'));
+      });
+    }));
+
+    const result = replies.map((item, i) => {
+      return { ...item.toObject(), topic: topics[i] }
+    });
+
+    return res.send({
+      status: 1,
+      data: result
+    });
   }
   
   // 获取用户粉丝列表
   async getUserFollower(req, res) {
+    const { uid } = req.params;
 
+    if (!uid) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARAMS',
+        message: '无效的ID'
+      });
+    }
+
+    const followerBehavior = await BehaviorModel.find({ type: 'follow', target_id: uid, delete: false });
+    const result = await Promise.all(followerBehavior.map(item => {
+      return new Promise((resolve, reject) => {
+        resolve(UserModel.findById(item.author_id, '_id nickname avatar'));
+      });
+    }));
+
+    return res.send({
+      status: 1,
+      data: result
+    });
   }
 
   // 获取用户关注的人列表
   async getUserFollowing(req, res) {
+    const { uid } = req.params;
 
+    if (!uid) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_PARAMS',
+        message: '无效的ID'
+      });
+    }
+
+    const followingBehavior = await BehaviorModel.find({ type: 'follow', author_id: uid, delete: false });
+    const result = await Promise.all(followingBehavior.map(item => {
+      return new Promise((resolve, reject) => {
+        resolve(UserModel.findById(item.target_id, '_id nickname avatar'));
+      });
+    }));
+
+    return res.send({
+      status: 1,
+      data: result
+    });
+  }
+
+  // 关注或者取消关注某个用户
+  async followOrUnfollowUser(req, res) {
+    const { uid } = req.params;
+    const { _id } = req.session.userInfo;
+
+    try {
+      let behavior;
+      
+      behavior = await this.findOneBehavior('follow', _id, uid);
+      
+      if (behavior) {
+        behavior.delete = !behavior.delete;
+        behavior = await behavior.save();
+      } else {
+        behavior = await this.createBehavior('follow', _id, uid);
+      }
+
+      const author = await UserModel.findById(_id);
+      const follow = await UserModel.findById(uid);
+
+      if (!author || !follow) {
+        throw new Error('未找到用户');
+      }
+
+      if (behavior.delete) {
+        follow.follower_count -= 1;
+        follow.save();
+        author.following_count -= 1;
+        author.save();
+        req.session.userInfo.following_count -= 1;
+      } else {
+        follow.follower_count += 1;
+        follow.save();
+        author.following_count += 1;
+        author.save();
+        req.session.userInfo.following_count += 1;
+        // 发送提醒 notice
+        await this.sendFollowNotice(_id, uid);
+      }
+
+      return res.send({
+        status: 1,
+        type: behavior.delete ? 'un_follow' : 'follow'
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_LIKE_OR_UN_LIKE_TOPIC',
+        message: '关注或者取消关注用户失败'
+      });
+    }
   }
 }
 
