@@ -426,6 +426,59 @@ class User extends BaseComponent {
       data: user
     });
   }
+  
+  // 关注或者取消关注某个用户
+  async followOrUnfollowUser(req, res) {
+    const { uid } = req.params;
+    const { _id } = req.session.userInfo;
+
+    try {
+      let behavior;
+      
+      behavior = await this.findOneBehavior('follow', _id, uid);
+      
+      if (behavior) {
+        behavior.delete = !behavior.delete;
+        behavior = await behavior.save();
+      } else {
+        behavior = await this.createBehavior('follow', _id, uid);
+      }
+
+      const author = await UserModel.findById(_id);
+      const follow = await UserModel.findById(uid);
+
+      if (!author || !follow) {
+        throw new Error('未找到用户');
+      }
+
+      if (behavior.delete) {
+        follow.follower_count -= 1;
+        follow.save();
+        author.following_count -= 1;
+        author.save();
+        req.session.userInfo.following_count -= 1;
+      } else {
+        follow.follower_count += 1;
+        follow.save();
+        author.following_count += 1;
+        author.save();
+        req.session.userInfo.following_count += 1;
+        // 发送提醒 notice
+        await this.sendFollowNotice(_id, uid);
+      }
+
+      return res.send({
+        status: 1,
+        type: behavior.delete ? 'un_follow' : 'follow'
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_LIKE_OR_UN_LIKE_TOPIC',
+        message: '关注或者取消关注用户失败'
+      });
+    }
+  }
 
   // 获取用户喜欢列表
   async getUserLikes(req, res) {
@@ -538,59 +591,6 @@ class User extends BaseComponent {
       status: 1,
       data: result
     });
-  }
-
-  // 关注或者取消关注某个用户
-  async followOrUnfollowUser(req, res) {
-    const { uid } = req.params;
-    const { _id } = req.session.userInfo;
-
-    try {
-      let behavior;
-      
-      behavior = await this.findOneBehavior('follow', _id, uid);
-      
-      if (behavior) {
-        behavior.delete = !behavior.delete;
-        behavior = await behavior.save();
-      } else {
-        behavior = await this.createBehavior('follow', _id, uid);
-      }
-
-      const author = await UserModel.findById(_id);
-      const follow = await UserModel.findById(uid);
-
-      if (!author || !follow) {
-        throw new Error('未找到用户');
-      }
-
-      if (behavior.delete) {
-        follow.follower_count -= 1;
-        follow.save();
-        author.following_count -= 1;
-        author.save();
-        req.session.userInfo.following_count -= 1;
-      } else {
-        follow.follower_count += 1;
-        follow.save();
-        author.following_count += 1;
-        author.save();
-        req.session.userInfo.following_count += 1;
-        // 发送提醒 notice
-        await this.sendFollowNotice(_id, uid);
-      }
-
-      return res.send({
-        status: 1,
-        type: behavior.delete ? 'un_follow' : 'follow'
-      });
-    } catch(err) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_LIKE_OR_UN_LIKE_TOPIC',
-        message: '关注或者取消关注用户失败'
-      });
-    }
   }
 }
 
