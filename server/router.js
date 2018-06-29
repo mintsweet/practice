@@ -18,18 +18,18 @@ router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API�
 router.get('/static/about', Static.getAbout); // 获取关于文档
 
 // 验证码
-router.get('/captcha/pic', Captcha.getPicCaptcha);
-router.get('/captcha/msg', Captcha.getMsgCaptcha);
+router.get('/captcha/pic', Captcha.getPicCaptcha); // 获取图形验证码
+router.get('/captcha/msg', Captcha.getMsgCaptcha); // 获取短信验证码
 
 // 用户
 router.post('/signup', User.signup); // 注册
 router.post('/signin', User.signin); // 登录
 router.delete('/signout', User.signout); // 登出
-router.post('/forget_pass', User.forgetPass); // 忘记密码
+router.patch('/forget_pass', User.forgetPass); // 忘记密码
 router.get('/info', Auth.userRequired, User.getUserInfo); // 获取当前登录用户信息
 router.put('/setting', Auth.userRequired, User.updateUserInfo); // 更新个人信息
 router.patch('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
-router.get('/users/start', User.getStartList); // 获取星标用户列表
+router.get('/users/star', User.getStarList); // 获取星标用户列表
 router.get('/users/top100', User.getTop100); // 获取积分榜前100用户列表
 router.get('/user/:uid', User.getInfoById); // 根据ID获取用户信息
 router.patch('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUser); // 关注或者取消关注某个用户
@@ -46,14 +46,14 @@ router.put('/topics/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑�
 router.get('/topic/list', Topic.getTopicList); // 获取话题列表
 router.get('/topic/search', Topic.searchTopic); // 搜索话题列表
 router.get('/topics/:tid', Topic.getTopicById); // 根据ID获取话题详情
-router.post('/topics/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
-router.post('/topics/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
+router.patch('/topics/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
+router.patch('/topics/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
 
 // 回复
 router.post('/topics/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
-router.put('/replies/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
-router.delete('/replies/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
-router.post('/replies/:rid/up', Auth.userRequired, Reply.upReply); // 回复点赞
+router.delete('/reply/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
+router.put('/reply/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
+router.patch('/reply/:rid/up', Auth.userRequired, Reply.upReply); // 回复点赞
 
 // 消息
 router.get('/notice/user', Auth.userRequired, Notice.getUserNotice); // 获取用户消息

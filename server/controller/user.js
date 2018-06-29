@@ -134,7 +134,7 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile });
+      const existUser = await UserModel.findOne({ mobile }, '-__v -password -is_block');
 
       // if (!existUser) {
       //   return res.send({
@@ -353,7 +353,7 @@ class User extends BaseComponent {
   }
 
   // 获取星标用户列表
-  async getStartList(req, res) {
+  async getStarList(req, res) {
     try {
       const userList = await UserModel.find({ is_start: true }, '_id nickname score');
       return res.send({
