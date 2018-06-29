@@ -5,22 +5,15 @@ const support = require('../support');
 
 describe('test /api/setting', function() {
   before(function(done) {
-    support
-      .createUser({
-        nickname: '青湛',
-        mobile: '18800000000',
-        password: 'a123456'
-      }).then(() => {
-        done();
-      });
+    support.createUser().then(() => {
+      done();
+    });
   });
 
   after(function(done) {
-    support
-      .deleteUser('18800000000')
-      .then(() => {
-        done();
-      });
+    support.deleteUser().then(() => {
+      done();
+    });
   });
 
   // 错误 - 尚未登录
@@ -72,7 +65,7 @@ describe('test /api/setting', function() {
   });
 
   // 成功
-  it('should return status 1', function() {
+  it('should return status 1', function(done) {
     request
       .post('/api/signin')
       .send({
@@ -83,7 +76,6 @@ describe('test /api/setting', function() {
       .end(function(err, res) {
         should.not.exist(err);
         res.body.status.should.equal(1);
-        res.body.data.should.have.property('_id');
         request
           .put('/api/setting')
           .send({

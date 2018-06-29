@@ -4,7 +4,8 @@
   "description": "data servcie base on node",
   "scripts": {
     "start": "node ./app.js",
-    "test": "mocha --recursive --timeout 5000"
+    "test": "mocha --recursive --timeout 5000 --exit",
+    "test-file": "mocha --exit --timeout 5000"
   },
   "license": "MIT",
   "dependencies": {

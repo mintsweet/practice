@@ -13,6 +13,7 @@ class User extends BaseComponent {
   constructor() {
     super();
     this.signup = this.signup.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
     this.getUserLikes = this.getUserLikes.bind(this);
     this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
   }
@@ -119,7 +120,7 @@ class User extends BaseComponent {
       }
 
       const { type, mobile, password, msgcaptcha } = fields;
-
+      
       try {
         if (!type || (type !== 'acc' && type !== 'mct')) {
           throw new Error('请输入正确的登录方式');
@@ -134,15 +135,15 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile }, '-__v -password -is_block');
+      const existUser = await UserModel.findOne({ mobile }, '-__v -is_block');
 
-      // if (!existUser) {
-      //   return res.send({
-      //     status: 0,
-      //     type: 'ERROR_USER_IS_NOT_EXITS',
-      //     message: '手机账户尚未注册'
-      //   });
-      // }
+      if (!existUser) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_USER_IS_NOT_EXITS',
+          message: '手机账户尚未注册'
+        });
+      }
 
       if (type === 'acc') {
         const isMatch = await bcrypt.compare(password, existUser.password);
@@ -161,6 +162,7 @@ class User extends BaseComponent {
         }
       } else if (type === 'mct') {
         const { msg_code } = req.session;
+
         try {
           if (msg_code.mobile !== mobile) {
             throw new Error('收取验证码的手机与登录手机不匹配');
@@ -214,20 +216,20 @@ class User extends BaseComponent {
           message: '参数解析失败'
         });
       }
-
+      
       let { msg_code } = req.session;
       msg_code = msg_code || {};
       const { mobile, newPassword, msgcaptcha } = fields;
 
       try {
-        if (mobile && mobile !== msg_code.mobile) {
-          throw new Error('提交手机号与获取验证码手机号不对应');
+        if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
+          throw new Error('请输入正确的手机号');
         } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+        } else if (mobile !== msg_code.mobile) {
+          throw new Error('提交手机号与获取验证码手机号不对应');
         } else if (msg_code.code !== msgcaptcha) {
           throw new Error('验证码错误');
-        } else if (msg_code.mobile !== mobile) {
-          throw new Error('收取验证码的手机与登录手机不匹配');
         } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
           throw new Error('验证码已失效，请重新获取');
         }
@@ -239,8 +241,19 @@ class User extends BaseComponent {
         });
       }
 
+      const existUser = await UserModel.findOne({ mobile });
+      if (!existUser) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_MOBILE_IS_NOT_SIGNUP',
+          message: '手机号尚未注册'
+        });
+      }
+
       const bcryptPassword = await this.encryption(newPassword);
-      await UserModel.findOneAndUpdate({ mobile }, {$set: {password: bcryptPassword}});
+      existUser.password = bcryptPassword;
+      await existUser.save();
+      
       return res.send({
         status: 1
       });

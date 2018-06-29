@@ -19,7 +19,7 @@ describe('test /api/captcha/msg', function() {
     request
       .get('/api/captcha/msg')
       .query({
-        mobile: '18800000000'
+        mobile: '13500000000'
       })
       .end(function(err, res) {
         should.not.exist(err);

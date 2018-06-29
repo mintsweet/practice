@@ -5,22 +5,15 @@ const support = require('../support');
 
 describe('test /api/info', function() {
   before(function(done) {
-    support
-      .createUser({
-        nickname: '青湛',
-        mobile: '18800000000',
-        password: 'a123456'
-      }).then(() => {
-        done();
-      });
+    support.createUser().then(() => {
+      done();
+    });
   });
 
   after(function(done) {
-    support
-      .deleteUser('18800000000')
-      .then(() => {
-        done();
-      });
+    support.deleteUser().then(() => {
+      done();
+    });
   });
 
   it('should return status 0 when user is not signin', function(done) {

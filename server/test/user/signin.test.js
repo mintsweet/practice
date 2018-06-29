@@ -9,25 +9,16 @@ describe('test /api/signin', function() {
 
   before(function(done) {
     clock = sinon.useFakeTimers();
-
-    support
-      .createUser({
-        nickname: '青湛',
-        mobile: '18800000000',
-        password: 'a123456'
-      }).then(() => {
-        done();
-      });
+    support.createUser().then(() => {
+      done();
+    });
   });
 
   after(function(done) {
     clock.restore();
-
-    support
-      .deleteUser('18800000000')
-      .then(() => {
-        done();
-      });
+    support.deleteUser().then(() => {
+      done();
+    });
   });
 
   // 登录方式不正确
@@ -66,23 +57,23 @@ describe('test /api/signin', function() {
       });
   });
 
-  // // 账户是否存在
-  // it('should return status 0 when the mobile is not registered', function(done) {
-  //   request
-  //     .post('/api/signin')
-  //     .send({
-  //       type: 'acc',
-  //       mobile: '18800000001',
-  //       password: 'a123456'
-  //     })
-  //     .end(function(err, res) {
-  //       should.not.exist(err);
-  //       res.body.status.should.equal(0);
-  //       res.body.type.should.equal('ERROR_USER_IS_NOT_EXITS');
-  //       res.body.message.should.equal('手机账户尚未注册');
-  //       done();
-  //     });
-  // });
+  // 账户是否存在
+  it('should return status 0 when the mobile is not registered', function(done) {
+    request
+      .post('/api/signin')
+      .send({
+        type: 'acc',
+        mobile: '18800000001',
+        password: 'a123456'
+      })
+      .end(function(err, res) {
+        should.not.exist(err);
+        res.body.status.should.equal(0);
+        res.body.type.should.equal('ERROR_USER_IS_NOT_EXITS');
+        res.body.message.should.equal('手机账户尚未注册');
+        done();
+      });
+  });
 
   // 登录类型为账户密码 - 密码错误
   it('should return status 0 when the pass is not match', function(done) {
@@ -103,7 +94,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为账户密码 - 正确
-  it('should return status 1', function(done) {
+  it('should return status 1 when type equal acc', function(done) {
     request
       .post('/api/signin')
       .send({
@@ -202,7 +193,7 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 登录成功
-  it('should return status 1', function(done) {
+  it('should return status 1 when type equal mct', function(done) {
     request
       .get('/api/captcha/msg')
       .query({

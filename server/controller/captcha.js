@@ -83,7 +83,7 @@ class Captcha extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: code
+        code
       });
     } catch (err) {
       return  res.send({

@@ -9,29 +9,18 @@ describe('test /api/signup', function() {
 
   before(function(done) {
     clock = sinon.useFakeTimers();
-
-    support
-      .createUser({
-        nickname: '青湛',
-        mobile: '18800000000',
-        password: 'a123456'
-      }).then(() => {
-        done();
-      });
+    support.createUser().then(() => {
+      done();
+    });
   });
 
   after(function(done) {
     clock.restore();
-
-    support
-      .deleteUser('18800000000')
-      .then(() => {
-        support
-          .deleteUser('18800000001')
-          .then(() => {
-            done();
-          });
+    support.deleteUser().then(() => {
+      support.deleteUserByMobile('18800000001').then(() => {
+        done();
       });
+    });
   });
 
   // 手机号已经注册
