@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "入口",
+			"name": "入口 - 测试",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -123,7 +123,7 @@
 						},
 						{
 							"key": "msgcaptcha",
-							"value": "120271"
+							"value": "326648"
 						}
 					]
 				},
@@ -293,7 +293,7 @@
 					"mode": "raw",
 					"raw": ""
 				},
-				"url": "http://localhost:3000/api/user/5b32f6b5f5b58e313cb8e7a6"
+				"url": "http://localhost:3000/api/user/5b358eb2bd7b051770095853"
 			},
 			"response": []
 		},

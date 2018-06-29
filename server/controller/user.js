@@ -14,6 +14,7 @@ class User extends BaseComponent {
     super();
     this.signup = this.signup.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
+    this.updatePass = this.updatePass.bind(this);
     this.getUserLikes = this.getUserLikes.bind(this);
     this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
   }
@@ -323,42 +324,37 @@ class User extends BaseComponent {
       }
 
       const { _id } = req.session.userInfo;
-      const { oldPassword , newPassword } = fields;
+      const { oldPass , newPass } = fields;
       
       try {
-        if (!oldPassword) {
+        if (!oldPass) {
           throw new Error('旧密码不能为空');
-        } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
+        } else if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
         }
       } catch(err) {
         return res.send({
           status: 0,
-          type: 'ERROR_FORGET_PARMAS',
+          type: 'ERROR_PARMAS_OF_UPDATE_PASS',
           message: err.message
         });
       }
   
-      const existUser = await UserModel.findById(_id, '-_id -__v');
-      if (!existUser) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_USER_IS_NOT_EXITS',
-          message: '手机账户账户不存在'
-        });
-      }
-  
-      const isMatch = await bcrypt.compare(oldPassword, existUser.password);
+      const existUser = await UserModel.findById(_id);
+      const isMatch = await bcrypt.compare(oldPass, existUser.password);
+
       if (isMatch) {
-        const bcryptPassword = await this.encryption(newPassword);
-        await UserModel.findByIdAndUpdate(_id, { password: bcryptPassword });
+        const bcryptPassword = await this.encryption(newPass);
+        existUser.password = bcryptPassword;
+        await existUser.save();
+
         return res.send({
           status: 1
         });
       } else {
         return res.send({
           status: 0,
-          type: 'ERROR_PASSWORD_IS_NOT_MAtCH',
+          type: 'ERROR_PASSWORD_IS_NOT_MATCH',
           message: '密码错误'
         });
       }
