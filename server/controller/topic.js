@@ -1,9 +1,7 @@
 const formidable = require('formidable');
 const BaseComponent = require('../prototype/BaseComponent');
 const TopicModel = require('../models/topic');
-// const BehaviorModel = require('../models/behavior');
 const UserModel = require('../models/user');
-// const NoticeModel = require('../models/notice');
 const md2html = require('../utils/md2html');
 const logger = require('../utils/logger');
 
@@ -20,6 +18,7 @@ class Topic extends BaseComponent {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
       if (err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
@@ -27,21 +26,21 @@ class Topic extends BaseComponent {
         });
       }
 
-      const { _id } = req.session.userInfo;
+      const { id } = req.session.userInfo;
       const { tab, title, content } = fields;
 
       try {
-        if (!_id) {
-          throw new Error('尚未登录')
+        if (!tab) {
+          throw new Error('话题所属标签不能为空');
         } else if (!title) {
-          throw new Error('标题不能为空')
+          throw new Error('话题标题不能为空');
         } else if (!content) {
-          throw new Error('内容不能为空')
+          throw new Error('话题内容不能为空');
         }
       } catch (err) {
         return res.send({
           status: 0,
-          type: 'ERROR_PARAMS_CREATE_TOPIC',
+          type: 'ERROR_PARAMS_OF_CREATE_TOPIC',
           message: err.message
         });
       }
@@ -50,12 +49,12 @@ class Topic extends BaseComponent {
         tab,
         title,
         content: md2html(content),
-        author_id: _id,
+        author_id: id,
       };
 
       try {
         const topic = await TopicModel.create(_topic);
-        await this.createBehavior('create', _id, topic.id);
+        await this.createBehavior('create', id, topic.id);
         return res.send({
           status: 1
         });

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const BaseModel = require('./base');
 
 const UserSchema = new Schema({
   mobile: { unqie: true, type: String, required: true },
@@ -33,6 +34,7 @@ UserSchema.virtual('isAdvanced').get(function() {
   return this.score > 1000 || this.is_start;
 });
 
+UserSchema.plugin(BaseModel);
 UserSchema.index({ mobile: 1 }, { unique: true });
 UserSchema.index({ score: -1 });
 

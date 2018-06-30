@@ -1,21 +1,15 @@
 const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs');
 
-exports.createUser = function() {
+exports.createUser = function(nickname, mobile) {
   return UserModel.create({
-    nickname: '青湛',
-    mobile: '18800000000',
+    nickname,
+    mobile,
     password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
   });
 }
 
-exports.deleteUser = function() {
-  return UserModel.findOneAndRemove({
-    mobile: '18800000000'
-  });
-}
-
-exports.deleteUserByMobile = function(mobile) {
+exports.deleteUser = function(mobile) {
   return UserModel.findOneAndRemove({
     mobile
   });

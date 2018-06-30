@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('../../config.default');
+const BaseModel = require('./base');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
@@ -28,6 +29,7 @@ const TopicSchema = new Schema({
   delete: { type: Boolean, default: false }
 });
 
+TopicSchema.plugin(BaseModel);
 TopicSchema.index({ create_at: -1 });
 TopicSchema.index({ top: -1, last_reply_at: -1 });
 TopicSchema.index({ author_id: 1, create_at: -1 });

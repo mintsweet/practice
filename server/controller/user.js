@@ -136,7 +136,7 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile }, '-__v -is_block');
+      const existUser = await UserModel.findOne({ mobile }, '-is_block');
 
       if (!existUser) {
         return res.send({

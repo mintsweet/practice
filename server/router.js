@@ -40,14 +40,14 @@ router.get('/user/:uid/follower', User.getUserFollower); // 获取用户粉丝�
 router.get('/user/:uid/following', User.getUserFollowing); // 获取用户关注的人列表
 
 // 话题
-router.post('/topic/create', Auth.userRequired, Topic.createTopic); // 创建话题
-router.delete('/topics/:tid/delete', Auth.userRequired, Topic.deleteTopic); // 删除话题
-router.put('/topics/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑话题
-router.get('/topic/list', Topic.getTopicList); // 获取话题列表
-router.get('/topic/search', Topic.searchTopic); // 搜索话题列表
-router.get('/topics/:tid', Topic.getTopicById); // 根据ID获取话题详情
-router.patch('/topics/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
-router.patch('/topics/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
+router.post('/create', Auth.userRequired, Topic.createTopic); // 创建话题
+router.delete('/topic/:tid/delete', Auth.userRequired, Topic.deleteTopic); // 删除话题
+router.put('/topic/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑话题
+router.get('/topics/list', Topic.getTopicList); // 获取话题列表
+router.get('/topics/search', Topic.searchTopic); // 搜索话题列表
+router.get('/topic/:tid', Topic.getTopicById); // 根据ID获取话题详情
+router.patch('/topic/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
+router.patch('/topic/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
 
 // 回复
 router.post('/topics/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
