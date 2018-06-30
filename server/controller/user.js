@@ -120,12 +120,10 @@ class User extends BaseComponent {
         });
       }
 
-      const { type, mobile, password, msgcaptcha } = fields;
+      const { mobile, password, is_sms, msgcaptcha } = fields;
       
       try {
-        if (!type || (type !== 'acc' && type !== 'mct')) {
-          throw new Error('请输入正确的登录方式');
-        } else if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
+        if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         }
       } catch(err) {
@@ -146,22 +144,7 @@ class User extends BaseComponent {
         });
       }
 
-      if (type === 'acc') {
-        const isMatch = await bcrypt.compare(password, existUser.password);
-        if (isMatch) {
-          req.session.userInfo = existUser;
-          return res.send({
-            status: 1,
-            data: existUser
-          });
-        } else {
-          return res.send({
-            status: 0,
-            type: 'ERROR_PASS_IS_NOT_MATCH',
-            message: '用户密码错误'
-          });
-        }
-      } else if (type === 'mct') {
+      if (is_sms) {
         const { msg_code } = req.session;
 
         try {
@@ -184,6 +167,21 @@ class User extends BaseComponent {
           status: 1,
           data: existUser
         });
+      } else {
+        const isMatch = await bcrypt.compare(password, existUser.password);
+        if (isMatch) {
+          req.session.userInfo = existUser;
+          return res.send({
+            status: 1,
+            data: existUser
+          });
+        } else {
+          return res.send({
+            status: 0,
+            type: 'ERROR_PASS_IS_NOT_MATCH',
+            message: '用户密码错误'
+          });
+        }
       }
     });
   }

@@ -15,6 +15,7 @@ describe('test /api/create', function() {
 
   after(function(done) {
     support.deleteUser('18800000000').then(function() {
+      mockUser = null;
       done();
     });
   });

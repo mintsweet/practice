@@ -55,6 +55,7 @@ class Topic extends BaseComponent {
       try {
         const topic = await TopicModel.create(_topic);
         await this.createBehavior('create', id, topic.id);
+
         return res.send({
           status: 1
         });
@@ -62,7 +63,7 @@ class Topic extends BaseComponent {
         logger.error(err.message);
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE_FAILED',
+          type: 'ERROR_SERVICE',
           message: '服务器无响应，请稍后重试'
         });
       }
@@ -72,26 +73,38 @@ class Topic extends BaseComponent {
   // 删除话题
   async deleteTopic(req, res) {
     const { tid } = req.params;
+    const { id } = req.session.userInfo;
     
-    if (!tid) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_PARAMS',
-        message: '无效的ID'
-      });
-    }
-
-    const { _id } = req.session.userInfo;
     const currentTopic = await TopicModel.findById(tid);
 
-    if (_id !== currentTopic.author_id.toString()) {
+    if (!currentTopic) {
       return res.send({
         status: 0,
-        type: 'ERROR_IS_NOT_AUTHOR',
-        message: '不能删除别人的话题'
+        type: 'ERROR_INVALID_TOPIC_ID',
+        message: '无效的话题ID'
       });
-    } else {
+    }
+    
+    if (currentTopic.author_id.toString() !== id) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_TOPIC_NOT_YOURS',
+        message: '无法删除不属于自己的话题'
+      });
+    }
+    
+    try {
       await TopicModel.findByIdAndUpdate(tid, { delete: true });
+      return res.send({
+        status: 1
+      });
+    } catch(err) {
+      logger.error(err.message);
+      return res.send({
+        status: 0,
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
+      });
     }
   }
   
