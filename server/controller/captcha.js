@@ -8,22 +8,30 @@ class Captcha extends BaseComponent {
   }
 
   rand (min, max) {
-    return Math.random() * (max - min + 1) + min || 0;
+    return Math.random() * (max - min + 1) + min | 0;
   }
 
   getPicCaptcha(req, res) {
-    const img = new BMP24(100, 38);
+    let { width, height, textColor, bgColor } = req.query;
 
+    width = width || 100;
+    height = height || 40;
+    textColor = textColor || 'a1a1a1';
+    bgColor = bgColor || 'ffffff';
+
+    const img = new BMP24(width, height, `0x${bgColor}`);
     let token = '';
 
-    img.fillRect(0, 0, 100, 38, '0xffffff');
-
+    // 设置背景
+    img.fillRect(0, 0, width, height, `0x${textColor}`);
+    // 随机字符列表
     const p = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
-
+    // 组成token
     for (let i = 0; i < 5; i++) {
-      token += p.charAt(Math.random() * p.length || 0);
+      token += p.charAt(Math.random() * p.length | 0);
     }
 
+    // 字符定位于背景 x,y 轴位置
     let x = 10, y = 2;
 
     for (let i = 0; i < token.length; i++) {
@@ -58,41 +66,33 @@ class Captcha extends BaseComponent {
     }
   }
 
-  async getMsgCaptcha(req, res) {
+  async getSmsCaptcha(req, res) {
     const { mobile } = req.query;
 
     if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       return res.send({
         status: 0,
-        type: 'ERROR_MOBILE_IS_NOT_VALID',
+        type: 'ERROR_MOBILE_IS_INVALID',
         message: '手机号格式不正确'
       });
     }
 
-    try {
-      let code = '';
+    let code = '';
 
-      for (let i = 0; i < 6; i++) {
-        code += Math.floor(Math.random() * 10);
-      }
-
-      req.session.msgCode = {
-        mobile,
-        code: code.toString(),
-        time: Date.now()
-      };
-
-      return res.send({
-        status: 1,
-        code
-      });
-    } catch(err) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_GET_MSG_CAPTCHA',
-        message: '获取短信验证码失败'
-      });
+    for (let i = 0; i < 6; i++) {
+      code += Math.floor(Math.random() * 10);
     }
+
+    req.session.smsCode = {
+      mobile,
+      code: code.toString(),
+      time: Date.now()
+    };
+
+    return res.send({
+      status: 1,
+      code
+    });
   }
 }
 

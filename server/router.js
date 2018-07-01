@@ -19,7 +19,7 @@ router.get('/static/about', Static.getAbout); // 获取关于文档
 
 // 验证码
 router.get('/captcha/pic', Captcha.getPicCaptcha); // 获取图形验证码
-router.get('/captcha/msg', Captcha.getMsgCaptcha); // 获取短信验证码
+router.get('/captcha/sms', Captcha.getSmsCaptcha); // 获取短信验证码
 
 // 用户
 router.post('/signup', User.signup); // 注册

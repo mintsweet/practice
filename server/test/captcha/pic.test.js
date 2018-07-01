@@ -7,11 +7,10 @@ describe('test /api/captcha/pic', function() {
   it('should return status 1', async function() {
     try {
       const res = await request.get('/api/captcha/pic');
-
       res.body.status.should.equal(1);
       res.body.data.token.length.should.equal(5);
     } catch(err) {
-      should.not.exist(err);
+      should.ifError(err.message);
     }
   });
 });
