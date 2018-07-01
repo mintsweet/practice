@@ -15,9 +15,9 @@
 
 ## API说明
 
-[使劲戳API详情](API.md)
+[使劲戳API详情](../API.md)
 
-> 目录中有一份`Postman`关于所有`API`测试的文件`practice.postman_collect.json`，大家可以自行导入`Postman`测试。
+> 目录中有一份`Postman`关于所有`API`测试的文件`/test/postman.json`，大家可以自行导入`Postman`测试。
 
 > 除了上述的手动测试以外，我也编写了大部分的单元测试，执行`npm test`可跑所有的单元测试。
 

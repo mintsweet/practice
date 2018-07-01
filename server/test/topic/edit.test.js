@@ -3,7 +3,7 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/topic/:tid/delete', function() {
+describe('test /api/topic/:uid/edit', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
@@ -18,7 +18,7 @@ describe('test /api/topic/:tid/delete', function() {
           done();
         });
       });
-    })
+    });
   });
 
   after(function(done) {
@@ -37,7 +37,12 @@ describe('test /api/topic/:tid/delete', function() {
   // 错误 - 尚未登录
   it('should return status 0 when the not signin in yet', function(done) {
     request
-      .delete(`/api/topic/${mockTopic.id}/delete`)
+      .put(`/api/topic/${mockTopic.id}/edit`)
+      .send({
+        tab: 'share',
+        title: '改名为分享类',
+        content: '# 随便改点内容'
+      })
       .end(function(err, res) {
         should.not.exist(err);
         res.body.status.should.equal(0);
@@ -47,37 +52,12 @@ describe('test /api/topic/:tid/delete', function() {
       });
   });
 
-  // 错误 - 无效的话题ID
-  it('should return status 0 when the tid is invalid', function(done) {
+  // 错误 - 无法编辑不属于自己的话题
+  it('should return status 0 when the topic is not belong to  yours', function(done) {
     request
       .post('/api/signin')
       .send({
-        mobile: '18800000000',
-        password: 'a123456'        
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        res.body.data.should.have.property('id');
-        res.body.data.id.should.equal(mockUser.id);
-        request
-          .delete(`/api/topic/${require('mongoose').Types.ObjectId()}/delete`)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(0);
-            res.body.type.should.equal('ERROR_INVALID_TOPIC_ID');
-            res.body.message.should.equal('无效的话题ID');
-            done();
-          });
-      });
-  });
-
-  // 错误 - 无法删除不属于自己的话题
-  it('should return status 0 when the topic is not belong to you', function(done) {
-    request
-      .post('/api/signin')
-      .send({
-        mobile: '18800000001',
+        mobile: mockUser2.mobile,
         password: 'a123456'
       })
       .end(function(err, res) {
@@ -86,12 +66,17 @@ describe('test /api/topic/:tid/delete', function() {
         res.body.data.should.have.property('id');
         res.body.data.id.should.equal(mockUser2.id);
         request
-          .delete(`/api/topic/${mockTopic.id}/delete`)
+          .put(`/api/topic/${mockTopic.id}/edit`)
+          .send({
+            tab: 'share',
+            title: '改名为分享类',
+            content: '# 随便改点内容'
+          })
           .end(function(err, res) {
             should.not.exist(err);
             res.body.status.should.equal(0);
             res.body.type.should.equal('ERROR_TOPIC_NOT_YOURS');
-            res.body.message.should.equal('无法删除不属于自己的话题');
+            res.body.message.should.equal('无法编辑不属于自己的话题');
             done();
           });
       });
@@ -102,8 +87,8 @@ describe('test /api/topic/:tid/delete', function() {
     request
       .post('/api/signin')
       .send({
-        mobile: '18800000000',
-        password: 'a123456'        
+        mobile: mockUser.mobile,
+        password: 'a123456'
       })
       .end(function(err, res) {
         should.not.exist(err);
@@ -111,7 +96,12 @@ describe('test /api/topic/:tid/delete', function() {
         res.body.data.should.have.property('id');
         res.body.data.id.should.equal(mockUser.id);
         request
-          .delete(`/api/topic/${mockTopic.id}/delete`)
+          .put(`/api/topic/${mockTopic.id}/edit`)
+          .send({
+            tab: 'share',
+            title: '改名为分享类',
+            content: '# 随便改点内容'
+          })
           .end(function(err, res) {
             should.not.exist(err);
             res.body.status.should.equal(1);

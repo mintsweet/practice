@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const UserModel = require('../models/user');
 const TopicModel = require('../models/topic');
+const BehaviorModel = require('../models/behavior');
 
 exports.createUser = function(nickname, mobile) {
   return UserModel.create({
@@ -25,8 +26,14 @@ exports.createTopic = function(author_id) {
   });
 }
 
-exports.deleteTopic = function() {
+exports.deleteTopic = function(author_id) {
   return TopicModel.findOneAndRemove({
-    title: '测试问题标题'
+    author_id
+  });
+}
+
+exports.deleteBehavior = function(author_id) {
+  return BehaviorModel.findOneAndRemove({
+    author_id
   });
 }

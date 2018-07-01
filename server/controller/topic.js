@@ -111,8 +111,9 @@ class Topic extends BaseComponent {
   // 编辑话题
   editTopic(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
+        logger.error(err);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
@@ -121,31 +122,34 @@ class Topic extends BaseComponent {
       }
 
       const { tid } = req.params;
-      const { _id } = req.session.userInfo;
-      const currentTopic = await TopicModel.findById(tid);
-
-      if (_id !== currentTopic.author_id.toString()) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_IS_NOT_AUTHOR',
-          message: '不能编辑别人的话题'
-        });
-      }
-
-      const { tab, title, content } = fields;
-
-      const topicInfo = {
-        tab: tab || currentTopic.tab,
-        title: title || currentTopic.title,
-        content: content || currentTopic.content
-      };
+      const { id } = req.session.userInfo;
 
       try {
+        const currentTopic = await TopicModel.findById(tid);
+
+        if (id !== currentTopic.author_id.toString()) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_TOPIC_NOT_YOURS',
+            message: '无法编辑不属于自己的话题'
+          });
+        }
+
+        const { tab, title, content } = fields;
+
+        const topicInfo = {
+          tab: tab || currentTopic.tab,
+          title: title || currentTopic.title,
+          content: md2html(content) || currentTopic.content
+        };
+
         await TopicModel.findByIdAndUpdate(tid, topicInfo); 
+
         return res.send({
           status: 1
         });
       } catch(err) {
+        logger.error(err);
         return res.send({
           status: 0,
           type: 'ERROR_SERVICE_FAILED',
@@ -167,12 +171,10 @@ class Topic extends BaseComponent {
 
     if (!tab || tab === 'all') {
       query = {};
+    } else if (tab === 'good') {
+      query.good = true;
     } else {
-      if (tab === 'good') {
-        query.good = true;
-      } else {
-        query.tab = tab;
-      }
+      query.tab = tab;
     }
 
     const options = {
@@ -200,17 +202,18 @@ class Topic extends BaseComponent {
         data: {
           topics: result,
           currentPage: page,
-          total: size,
+          total: topicCount,
           totalPage: Math.ceil(topicCount / size),
           tab,
           size
         },
       });
     } catch(err) {
+      logger.error(err);
       return res.send({
         status: 0,
-        type: 'ERROR_GET_TOPIC_LIST',
-        message: '获取话题失败'
+        type: 'ERROR_SERVICE_FAILED',
+        message: '服务器无响应，请稍后重试'
       });
     }
   }
