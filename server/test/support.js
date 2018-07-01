@@ -9,31 +9,31 @@ exports.createUser = function(nickname, mobile) {
     mobile,
     password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
   });
-}
+};
 
 exports.deleteUser = function(mobile) {
   return UserModel.findOneAndRemove({
     mobile
   });
-}
+};
 
-exports.createTopic = function(author_id) {
+exports.createTopic = function(authorId) {
   return TopicModel.create({
     tab: 'ask',
     title: '测试问题标题',
     content: '# 嘻嘻哈哈哈的内容',
-    author_id
+    authorId
   });
-}
+};
 
-exports.deleteTopic = function(author_id) {
+exports.deleteTopic = function(authorId) {
   return TopicModel.findOneAndRemove({
-    author_id
+    authorId
   });
-}
+};
 
-exports.deleteBehavior = function(author_id) {
+exports.deleteBehavior = function(authorId) {
   return BehaviorModel.findOneAndRemove({
-    author_id
+    authorId
   });
-}
+};

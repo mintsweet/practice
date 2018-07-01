@@ -25,7 +25,6 @@ describe('test /api/create', function() {
         title: '测试标题',
         content: '# 哈哈哈哈哈测试内容'
       });
-  
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
@@ -65,7 +64,6 @@ describe('test /api/create', function() {
   it('should return status 0 when the title is empty', async function() {
     try {
       let res;
-      
       res = await request.post('/api/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'

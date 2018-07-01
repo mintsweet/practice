@@ -2,12 +2,13 @@ const app = require('../../app');
 const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
+const tempId = require('mongoose').Types.ObjectId();
 
 describe('test /api/topic/:tid/delete', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
-  
+
   before(function(done) {
     support.createUser('测试', '18800000000').then(user => {
       mockUser = user;
@@ -18,7 +19,7 @@ describe('test /api/topic/:tid/delete', function() {
           done();
         });
       });
-    })
+    });
   });
 
   after(function(done) {
@@ -53,7 +54,7 @@ describe('test /api/topic/:tid/delete', function() {
       .post('/api/signin')
       .send({
         mobile: '18800000000',
-        password: 'a123456'        
+        password: 'a123456'
       })
       .end(function(err, res) {
         should.not.exist(err);
@@ -61,7 +62,7 @@ describe('test /api/topic/:tid/delete', function() {
         res.body.data.should.have.property('id');
         res.body.data.id.should.equal(mockUser.id);
         request
-          .delete(`/api/topic/${require('mongoose').Types.ObjectId()}/delete`)
+          .delete(`/api/topic/${tempId}/delete`)
           .end(function(err, res) {
             should.not.exist(err);
             res.body.status.should.equal(0);
@@ -103,7 +104,7 @@ describe('test /api/topic/:tid/delete', function() {
       .post('/api/signin')
       .send({
         mobile: '18800000000',
-        password: 'a123456'        
+        password: 'a123456'
       })
       .end(function(err, res) {
         should.not.exist(err);

@@ -4,6 +4,7 @@
   "description": "data servcie base on node",
   "scripts": {
     "start": "node ./app.js",
+    "lint": "eslint **/*.js",
     "test": "mocha --recursive --timeout 5000 --exit",
     "test:file": "mocha --exit --timeout 5000",
     "test:cover": "nyc --reporter=html mocha"
@@ -25,6 +26,7 @@
     "mongoose": "^5.0.12"
   },
   "devDependencies": {
+    "eslint": "^5.0.1",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
     "should": "^13.2.1",

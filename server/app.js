@@ -11,23 +11,23 @@ const router = require('./router');
 const app = new Express();
 
 // connect mongodb
-mongoose.connect(config.db, (error) => {
+mongoose.connect(config.db, error => {
   if (error) {
-    logger.error('MongoDB Connection Error: ', error)
+    logger.error('MongoDB Connection Error: ', error);
     process.exit(1);
   } else {
-    logger.info('MongoDB Connection Success!')
+    logger.info('MongoDB Connection Success!');
   }
 });
 
 
-// cross and interceptor
-const ALLOW_ORIGIN = [
-  'http://localhost:3001',
-  'http://localhost:3002',
-  'http://localhost:3003',
-  'http://localhost:3004'
-];
+// // cross and interceptor
+// const ALLOW_ORIGIN = [
+//   'http://localhost:3001',
+//   'http://localhost:3002',
+//   'http://localhost:3003',
+//   'http://localhost:3004'
+// ];
 
 // app.all('*', (req, res, next) => {
 //   const reqOrigin = req.headers.origin;
@@ -77,16 +77,17 @@ app.use((req, res) => {
   res.status(404).send({
     status: 0,
     type: 'ERROR_NOT_FIND_THAT',
-    message: 'Sorry can\'t find that!'
+    message: '找不到请求资源'
   });
 });
 
 // 500
 app.use((err, req, res) => {
+  logger.error(err);
   res.status(500).send({
     status: 0,
-    type: 'ERROR_SERVICE_NOT_RESP',
-    message: 'Something broke!'
+    type: 'ERROR_SERVICE',
+    message: '服务器无响应，请稍后重试'
   });
 });
 

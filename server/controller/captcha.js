@@ -8,7 +8,7 @@ class Captcha extends BaseComponent {
   }
 
   rand (min, max) {
-    return Math.random() * (max - min + 1) + min | 0;
+    return Math.random() * (max - min + 1) + min || 0;
   }
 
   getPicCaptcha(req, res) {
@@ -17,16 +17,16 @@ class Captcha extends BaseComponent {
     let token = '';
 
     img.fillRect(0, 0, 100, 38, '0xffffff');
-    
+
     const p = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
 
-    for (let i=0; i < 5; i ++) {
-      token += p.charAt(Math.random() * p.length | 0 );
+    for (let i = 0; i < 5; i++) {
+      token += p.charAt(Math.random() * p.length || 0);
     }
 
     let x = 10, y = 2;
-    
-    for (let i = 0; i < token.length; i ++) {
+
+    for (let i = 0; i < token.length; i++) {
       y = 2 + this.rand(-4, 4);
 
       img.drawChar(token[i], x, y, BMP24.font12x24, '0xa1a1a1');
@@ -34,21 +34,22 @@ class Captcha extends BaseComponent {
       x += 12 + this.rand(4, 8);
     }
 
-    const url = 'data:image/bmp;base64,' + img.getFileData().toString('base64');
+    const url = `data:image/bmp;base64,${img.getFileData().toString('base64')}`;
 
     try {
-      req.session.pic_token = {
+      req.session.picToken = {
         token,
         time: Date.now()
-      }
+      };
+
       return res.send({
         status: 1,
         data: {
           token,
           url
         }
-      })
-    } catch (err) {
+      });
+    } catch(err) {
       return res.send({
         status: 0,
         type: 'ERROR_GET_PIC_CAPTCHA',
@@ -70,23 +71,23 @@ class Captcha extends BaseComponent {
 
     try {
       let code = '';
-      
-      for (let i = 0;i < 6; i++) {
-        code += Math.floor(Math.random() * 10);
-      };
 
-      req.session.msg_code = {
+      for (let i = 0; i < 6; i++) {
+        code += Math.floor(Math.random() * 10);
+      }
+
+      req.session.msgCode = {
         mobile,
         code: code.toString(),
         time: Date.now()
-      }
+      };
 
       return res.send({
         status: 1,
         code
       });
-    } catch (err) {
-      return  res.send({
+    } catch(err) {
+      return res.send({
         status: 0,
         type: 'ERROR_GET_MSG_CAPTCHA',
         message: '获取短信验证码失败'

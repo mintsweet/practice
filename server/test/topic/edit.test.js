@@ -7,7 +7,7 @@ describe('test /api/topic/:uid/edit', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
-  
+
   before(function(done) {
     support.createUser('测试', '18800000000').then(user => {
       mockUser = user;
