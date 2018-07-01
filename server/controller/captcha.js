@@ -44,26 +44,18 @@ class Captcha extends BaseComponent {
 
     const url = `data:image/bmp;base64,${img.getFileData().toString('base64')}`;
 
-    try {
-      req.session.picToken = {
-        token,
-        time: Date.now()
-      };
+    req.session.picToken = {
+      token,
+      time: Date.now()
+    };
 
-      return res.send({
-        status: 1,
-        data: {
-          token,
-          url
-        }
-      });
-    } catch(err) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_GET_PIC_CAPTCHA',
-        message: '获取图形验证码失败'
-      });
-    }
+    return res.send({
+      status: 1,
+      data: {
+        token,
+        url
+      }
+    });
   }
 
   async getSmsCaptcha(req, res) {

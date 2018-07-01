@@ -9,15 +9,15 @@ const Reply = require('./controller/reply');
 
 const router = express.Router();
 
-// 测试
+// 测试 - finished
 router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用 Mints - 薄荷糖社区 API接口' }));
 
-// 静态
+// 静态 - finished
 router.get('/static/get_start', Static.getStart); // 获取快速开始文档
 router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API说明文档
 router.get('/static/about', Static.getAbout); // 获取关于文档
 
-// 验证码
+// 验证码 - finished
 router.get('/captcha/pic', Captcha.getPicCaptcha); // 获取图形验证码
 router.get('/captcha/sms', Captcha.getSmsCaptcha); // 获取短信验证码
 
@@ -55,7 +55,7 @@ router.delete('/reply/:rid/delete', Auth.userRequired, Reply.deleteReply); // �
 router.put('/reply/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
 router.patch('/reply/:rid/up', Auth.userRequired, Reply.upReply); // 回复点赞
 
-// 消息
+// 消息 - finished
 router.get('/notice/user', Auth.userRequired, Notice.getUserNotice); // 获取用户消息
 router.get('/notice/system', Auth.userRequired, Notice.getSystemNotice); // 获取系统消息
 
