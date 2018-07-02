@@ -7,7 +7,7 @@ describe('test /api/create', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser('测试', '18800000000');
+    mockUser = await support.createUser('话题创建者', '18800000000');
   });
 
   after(async function() {
@@ -29,7 +29,7 @@ describe('test /api/create', function() {
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
     } catch(err) {
-      should.not.exist(err);
+      should.ifError(err.message);
     }
   });
 
@@ -42,7 +42,6 @@ describe('test /api/create', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
-
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
@@ -51,12 +50,11 @@ describe('test /api/create', function() {
         title: '测试标题',
         content: '# 哈哈哈哈哈测试内容'
       });
-
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_PARAMS_OF_CREATE_TOPIC');
       res.body.message.should.equal('话题所属标签不能为空');
     } catch(err) {
-      should.not.exist(err);
+      should.ifError(err.message);
     }
   });
 
@@ -82,7 +80,7 @@ describe('test /api/create', function() {
       res.body.type.should.equal('ERROR_PARAMS_OF_CREATE_TOPIC');
       res.body.message.should.equal('话题标题不能为空');
     } catch(err) {
-      should.not.exist(err);
+      should.ifError(err.message);
     }
   });
 
@@ -109,7 +107,7 @@ describe('test /api/create', function() {
       res.body.type.should.equal('ERROR_PARAMS_OF_CREATE_TOPIC');
       res.body.message.should.equal('话题内容不能为空');
     } catch(err) {
-      should.not.exist(err);
+      should.ifError(err.message);
     }
   });
 
@@ -135,7 +133,7 @@ describe('test /api/create', function() {
 
       res.body.status.should.equal(1);
     } catch(err) {
-      should.not.exist(err);
+      should.ifError(err.message);
     }
   });
 });

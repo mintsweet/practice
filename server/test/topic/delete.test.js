@@ -9,115 +9,94 @@ describe('test /api/topic/:tid/delete', function() {
   let mockUser2;
   let mockTopic;
 
-  before(function(done) {
-    support.createUser('测试', '18800000000').then(user => {
-      mockUser = user;
-      support.createUser('测试2', '18800000001').then(user2 => {
-        mockUser2 = user2;
-        support.createTopic(mockUser.id).then(topic => {
-          mockTopic = topic;
-          done();
-        });
-      });
-    });
+  before(async function() {
+    mockUser = await support.createUser('话题创建者', '18800000000');
+    mockUser2 = await support.createUser('话题无关者', '18800000001');
+    mockTopic = await support.createTopic(mockUser.id);
   });
 
-  after(function(done) {
-    support.deleteTopic(mockUser.id).then(() => {
-      mockTopic = null;
-      support.deleteUser(mockUser.id).then(() => {
-        mockUser = null;
-        support.deleteUser(mockUser2.id).then(() => {
-          mockUser2 = null;
-          done();
-        });
-      });
-    });
+  after(async function() {
+    await support.deleteTopic(mockUser.id);
+    await support.deleteUser(mockUser.mobile);
+    await support.deleteUser(mockUser2.mobile);
+    mockTopic = null;
+    mockUser = null;
+    mockUser2 = null;
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when the not signin in yet', function(done) {
-    request
-      .delete(`/api/topic/${mockTopic.id}/delete`)
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(0);
-        res.body.type.should.equal('ERROR_NOT_SIGNIN');
-        res.body.message.should.equal('尚未登录');
-        done();
-      });
+  it('should return status 0 when the not signin in yet', async function() {
+    try {
+      const res = await request.delete(`/api/topic/${mockTopic.id}/delete`);
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_NOT_SIGNIN');
+      res.body.message.should.equal('尚未登录');
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 
-  // 错误 - 无效的话题ID
-  it('should return status 0 when the tid is invalid', function(done) {
-    request
-      .post('/api/signin')
-      .send({
+  // 错误 - 无效的ID
+  it('should return status 0 when the tid is invalid', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
         mobile: '18800000000',
         password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        res.body.data.should.have.property('id');
-        res.body.data.id.should.equal(mockUser.id);
-        request
-          .delete(`/api/topic/${tempId}/delete`)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(0);
-            res.body.type.should.equal('ERROR_INVALID_TOPIC_ID');
-            res.body.message.should.equal('无效的话题ID');
-            done();
-          });
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.delete(`/api/topic/${tempId}/delete`);
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_ID_IS_INVALID');
+      res.body.message.should.equal('无效的ID');
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 
-  // 错误 - 无法删除不属于自己的话题
-  it('should return status 0 when the topic is not belong to you', function(done) {
-    request
-      .post('/api/signin')
-      .send({
+  // 错误 - 不能删除别人的话题
+  it('should return status 0 when the topic is not belong to you', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
         mobile: '18800000001',
         password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        res.body.data.should.have.property('id');
-        res.body.data.id.should.equal(mockUser2.id);
-        request
-          .delete(`/api/topic/${mockTopic.id}/delete`)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(0);
-            res.body.type.should.equal('ERROR_TOPIC_NOT_YOURS');
-            res.body.message.should.equal('无法删除不属于自己的话题');
-            done();
-          });
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser2.id);
+
+      res = await request.delete(`/api/topic/${mockTopic.id}/delete`);
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_IS_NOT_AUTHOR');
+      res.body.message.should.equal('不能删除别人的话题');
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 
   // 正确
-  it('should return status 1', function(done) {
-    request
-      .post('/api/signin')
-      .send({
+  it('should return status 1', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
         mobile: '18800000000',
         password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        res.body.data.should.have.property('id');
-        res.body.data.id.should.equal(mockUser.id);
-        request
-          .delete(`/api/topic/${mockTopic.id}/delete`)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(1);
-            done();
-          });
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.delete(`/api/topic/${mockTopic.id}/delete`);
+      res.body.status.should.equal(1);
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 });

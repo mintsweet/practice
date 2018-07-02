@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node ./app.js",
     "lint": "eslint **/*.js",
-    "test": "mocha --recursive --timeout 5000 --exit",
-    "test:file": "mocha --exit --timeout 10000",
+    "test": "mocha",
+    "test:file": "mocha",
     "test:cover": "nyc --reporter=html mocha"
   },
   "license": "MIT",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "eslint": "^5.0.1",
+    "eslint-config-mints": "^0.3.0-rc.6",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
     "should": "^13.2.1",

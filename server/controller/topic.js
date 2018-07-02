@@ -2,6 +2,8 @@ const formidable = require('formidable');
 const BaseComponent = require('../prototype/BaseComponent');
 const TopicModel = require('../models/topic');
 const UserModel = require('../models/user');
+const ReplyModel = require('../models/reply');
+const BehaviorModel = require('../models/behavior');
 const md2html = require('../utils/md2html');
 const logger = require('../utils/logger');
 
@@ -16,9 +18,9 @@ class Topic extends BaseComponent {
   // 创建话题
   createTopic(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        logger.error(err.message);
+    form.parse(req, async (error, fields) => {
+      if (error) {
+        logger.error(error.message);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
@@ -46,8 +48,7 @@ class Topic extends BaseComponent {
       }
 
       const _topic = {
-        tab,
-        title,
+        ...fields,
         content: md2html(content),
         author_id: id,
       };
@@ -75,25 +76,25 @@ class Topic extends BaseComponent {
     const { tid } = req.params;
     const { id } = req.session.userInfo;
 
-    const currentTopic = await TopicModel.findById(tid);
-
-    if (!currentTopic) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_INVALID_TOPIC_ID',
-        message: '无效的话题ID'
-      });
-    }
-
-    if (currentTopic.author_id.toString() !== id) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_TOPIC_NOT_YOURS',
-        message: '无法删除不属于自己的话题'
-      });
-    }
-
     try {
+      const currentTopic = await TopicModel.findById(tid);
+
+      if (!currentTopic) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_ID_IS_INVALID',
+          message: '无效的ID'
+        });
+      }
+
+      if (!currentTopic.author_id.equals(id)) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_IS_NOT_AUTHOR',
+          message: '不能删除别人的话题'
+        });
+      }
+
       await TopicModel.findByIdAndUpdate(tid, { delete: true });
       return res.send({
         status: 1
@@ -127,11 +128,19 @@ class Topic extends BaseComponent {
       try {
         const currentTopic = await TopicModel.findById(tid);
 
+        if (!currentTopic) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_ID_IS_INVALID',
+            message: '无效的ID'
+          });
+        }
+
         if (id !== currentTopic.author_id.toString()) {
           return res.send({
             status: 0,
-            type: 'ERROR_TOPIC_NOT_YOURS',
-            message: '无法编辑不属于自己的话题'
+            type: 'ERROR_IS_NOT_AUTHOR',
+            message: '不能编辑别人的话题'
           });
         }
 
@@ -152,7 +161,7 @@ class Topic extends BaseComponent {
         logger.error(err);
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE_FAILED',
+          type: 'ERROR_SERVICE',
           message: '服务器无响应，请稍后重试'
         });
       }
@@ -212,7 +221,7 @@ class Topic extends BaseComponent {
       logger.error(err);
       return res.send({
         status: 0,
-        type: 'ERROR_SERVICE_FAILED',
+        type: 'ERROR_SERVICE',
         message: '服务器无响应，请稍后重试'
       });
     }
@@ -256,13 +265,15 @@ class Topic extends BaseComponent {
           currentPage: page,
           total: topicCount,
           totalPage: Math.ceil(topicCount / size),
+          size
         },
       });
     } catch(err) {
+      logger.error(err);
       return res.send({
         status: 0,
-        type: 'ERROR_GET_TOPIC_LIST',
-        message: '获取话题失败'
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
       });
     }
   }
@@ -271,27 +282,40 @@ class Topic extends BaseComponent {
   async getTopicById(req, res) {
     const { tid } = req.params;
 
-    if (!tid) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_PARAMS',
-        message: '无效的ID'
-      });
-    }
-
     try {
-      const topic = await TopicModel.findById(tid, '-__v');
-      const author = await UserModel.findById(topic.author_id, '_id nickname avatar score');
+      const currentTopic = await TopicModel.findById(tid);
+
+      if (!currentTopic) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_ID_IS_INVALID',
+          message: '无效的ID'
+        });
+      }
+
+      const author = await UserModel.findById(currentTopic.author_id, 'id nickname avatar score');
+      const replyList = await ReplyModel.find({ topic_id: currentTopic.id });
+
+      const promises = await Promise.all(replyList.map(item => (
+        new Promise(resolve => {
+          resolve(UserModel.findById(item.author_id, 'nickname avatar'));
+        })
+      )));
+
+      const replies = replyList.map((item, i) => {
+        return { ...item.toObject({ virtuals: true }), author: promises[i] };
+      });
 
       return res.send({
         status: 1,
-        data: { ...topic.toObject({ virtuals: true }), author }
+        data: { ...currentTopic.toObject({ virtuals: true }), author, replies }
       });
     } catch(err) {
+      logger.error(err);
       return res.send({
         status: 0,
-        type: 'ERROR_GET_TOPIC_DETAIL',
-        message: '获取话题详情失败'
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
       });
     }
   }
@@ -299,41 +323,45 @@ class Topic extends BaseComponent {
   // 喜欢或者取消喜欢话题
   async likeOrUnlikeTopic(req, res) {
     const { tid } = req.params;
-    const { _id } = req.session.userInfo;
+    const { id } = req.session.userInfo;
 
     try {
+      const currentTopic = await TopicModel.findById(tid);
+      const currentUser = await UserModel.findById(id);
+
+      if (!currentTopic) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_ID_IS_INVALID',
+          message: '无效的ID'
+        });
+      }
+
       let behavior;
 
-      behavior = await this.findOneBehavior('like', _id, tid);
+      behavior = await BehaviorModel.findOne({ type: 'like', author_id: id, target_id: tid });
 
       if (behavior) {
         behavior.delete = !behavior.delete;
         behavior = await behavior.save();
       } else {
-        behavior = await this.createBehavior('like', _id, tid);
-      }
-
-      const topic = await TopicModel.findById(tid);
-      const user = await UserModel.findById(_id);
-
-      if (!topic || !user) {
-        throw new Error('未找到话题或者用户');
+        behavior = await this.createBehavior('like', id, tid);
       }
 
       if (behavior.delete) {
-        topic.like_count -= 1;
-        topic.save();
-        user.like_count -= 1;
-        user.save();
+        currentTopic.like_count -= 1;
+        currentTopic.save();
+        currentUser.like_count -= 1;
+        currentUser.save();
         req.session.userInfo.like_count -= 1;
       } else {
-        topic.like_count += 1;
-        topic.save();
-        user.like_count += 1;
-        user.save();
+        currentTopic.like_count += 1;
+        currentTopic.save();
+        currentUser.like_count += 1;
+        currentUser.save();
         req.session.userInfo.like_count += 1;
         // 发送提醒 notice
-        await this.sendLikeNotice(_id, topic.author_id, topic._id);
+        await this.sendLikeNotice(id, currentTopic.author_id, currentTopic.id);
       }
 
       return res.send({
@@ -341,10 +369,11 @@ class Topic extends BaseComponent {
         type: behavior.delete ? 'un_like' : 'like'
       });
     } catch(err) {
+      logger.error(err);
       return res.send({
         status: 0,
-        type: 'ERROR_LIKE_OR_UN_LIKE_TOPIC',
-        message: '喜欢或者取消喜欢话题失败'
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
       });
     }
   }
@@ -352,41 +381,45 @@ class Topic extends BaseComponent {
   // 收藏或者取消收藏话题
   async collectOrUncollectTopic(req, res) {
     const { tid } = req.params;
-    const { _id } = req.session.userInfo;
+    const { id } = req.session.userInfo;
 
     try {
+      const currentTopic = await TopicModel.findById(tid);
+      const currentUser = await UserModel.findById(id);
+
+      if (!currentTopic) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_ID_IS_INVALID',
+          message: '无效的ID'
+        });
+      }
+
       let behavior;
 
-      behavior = await this.findOneBehavior('collect', _id, tid);
+      behavior = await BehaviorModel.findOne({ type: 'collect', author_id: id, target_id: tid });
 
       if (behavior) {
         behavior.delete = !behavior.delete;
         behavior.save();
       } else {
-        behavior = await this.createBehavior('collect', _id, tid);
-      }
-
-      const topic = await TopicModel.findById(tid);
-      const user = await UserModel.findById(_id);
-
-      if (!topic || !user) {
-        throw new Error('未找到话题或者用户');
+        behavior = await this.createBehavior('collect', id, tid);
       }
 
       if (behavior.delete) {
-        topic.collect_count -= 1;
-        topic.save();
-        user.collect_count -= 1;
-        user.save();
+        currentTopic.collect_count -= 1;
+        currentTopic.save();
+        currentUser.collect_count -= 1;
+        currentUser.save();
         req.session.userInfo.collect_count -= 1;
       } else {
-        topic.collect_count += 1;
-        topic.save();
-        user.collect_count += 1;
-        user.save();
+        currentTopic.collect_count += 1;
+        currentTopic.save();
+        currentUser.collect_count += 1;
+        currentUser.save();
         req.session.userInfo.collect_count += 1;
         // 发送提醒 notice
-        await this.sendCollectNotice(_id, topic.author_id, topic._id);
+        await this.sendCollectNotice(id, currentTopic.author_id, currentTopic.id);
       }
 
       return res.send({
@@ -394,11 +427,11 @@ class Topic extends BaseComponent {
         type: behavior.delete ? 'un_collect' : 'collect'
       });
     } catch(err) {
-      logger.error(err.message);
+      logger.error(err);
       return res.send({
         status: 0,
-        type: 'ERROR_COLLECT_OR_UN_COLLECT_TOPIC',
-        message: '收藏或者取消收藏话题失败'
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
       });
     }
   }

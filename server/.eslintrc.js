@@ -1,5 +1,9 @@
 const eslintConfig = {
-  extends: 'D:/study/mints/packages/eslint-config-mints/index.js'
+  env: {
+    mocha: true
+  },
+  
+  extends: 'mints'
 };
 
 module.exports = eslintConfig;
