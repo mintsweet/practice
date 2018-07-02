@@ -21,7 +21,6 @@ describe('test /api/captcha/sms', function() {
       const res = await request.get('/api/captcha/sms').query({
         mobile: '13500000000'
       });
-
       res.body.status.should.equal(1);
     } catch(err) {
       should.ifError(err.message);

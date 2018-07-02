@@ -2,12 +2,10 @@ const BehaviorModel = require('../models/behavior');
 const NoticeModel = require('../models/notice');
 
 module.exports = class BaseComponent {
+  // 创建行为
   async createBehavior(type, author_id, target_id) {
-    return await BehaviorModel.create({ type, author_id, target_id });
-  }
-
-  async findOneBehavior(type, author_id, target_id) {
-    return await BehaviorModel.findOne({ type, author_id, target_id });
+    const behavior = await BehaviorModel.create({ type, author_id, target_id });
+    return behavior; 
   }
 
   // 系统发送了消息给你(target_id)
@@ -38,5 +36,10 @@ module.exports = class BaseComponent {
   // 谁(author_id)关注了你(target_id)
   async sendFollowNotice(author_id, target_id) {
     await NoticeModel.create({ type: 'follow', author_id, target_id });
+  }
+
+  // 谁(author_id)点赞了你(target_id)的回复(reply_id)
+  async sendUpsNotice(author_id, target_id, reply_id) {
+    await NoticeModel.create({ type: 'ups', author_id, target_id, reply_id });
   }
 }

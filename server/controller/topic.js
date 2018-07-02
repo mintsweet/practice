@@ -16,7 +16,7 @@ class Topic extends BaseComponent {
   // 创建话题
   createTopic(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         logger.error(err.message);
         return res.send({
@@ -37,7 +37,7 @@ class Topic extends BaseComponent {
         } else if (!content) {
           throw new Error('话题内容不能为空');
         }
-      } catch (err) {
+      } catch(err) {
         return res.send({
           status: 0,
           type: 'ERROR_PARAMS_OF_CREATE_TOPIC',
@@ -74,7 +74,7 @@ class Topic extends BaseComponent {
   async deleteTopic(req, res) {
     const { tid } = req.params;
     const { id } = req.session.userInfo;
-    
+
     const currentTopic = await TopicModel.findById(tid);
 
     if (!currentTopic) {
@@ -84,7 +84,7 @@ class Topic extends BaseComponent {
         message: '无效的话题ID'
       });
     }
-    
+
     if (currentTopic.author_id.toString() !== id) {
       return res.send({
         status: 0,
@@ -92,7 +92,7 @@ class Topic extends BaseComponent {
         message: '无法删除不属于自己的话题'
       });
     }
-    
+
     try {
       await TopicModel.findByIdAndUpdate(tid, { delete: true });
       return res.send({
@@ -107,13 +107,13 @@ class Topic extends BaseComponent {
       });
     }
   }
-  
+
   // 编辑话题
   editTopic(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        logger.error(err);
+    form.parse(req, async (error, fields) => {
+      if (error) {
+        logger.error(error);
         return res.send({
           status: 0,
           type: 'ERROR_PARMAS',
@@ -143,7 +143,7 @@ class Topic extends BaseComponent {
           content: md2html(content) || currentTopic.content
         };
 
-        await TopicModel.findByIdAndUpdate(tid, topicInfo); 
+        await TopicModel.findByIdAndUpdate(tid, topicInfo);
 
         return res.send({
           status: 1
@@ -187,14 +187,14 @@ class Topic extends BaseComponent {
       const topicCount = await TopicModel.count(query);
       const topicList = await TopicModel.find(query, '-__v -lock', options);
 
-      const promises = await Promise.all(topicList.map(item => {
-        return new Promise((resolve, reject) => {
+      const promises = await Promise.all(topicList.map(item => (
+        new Promise(resolve => {
           resolve(UserModel.findById(item.author_id, 'nickname avatar'));
-        });
-      }));
+        })
+      )));
 
       const result = topicList.map((item, i) => {
-        return { ...item.toObject({ virtuals: true }), author: promises[i] }
+        return { ...item.toObject({ virtuals: true }), author: promises[i] };
       });
 
       return res.send({
@@ -224,7 +224,7 @@ class Topic extends BaseComponent {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 10;
 
-    let query = {
+    const query = {
       title: { $regex: title },
       lock: false
     };
@@ -234,19 +234,19 @@ class Topic extends BaseComponent {
       limit: size,
       sort: '-top -last_reply_at'
     };
-    
+
     try {
       const topicCount = await TopicModel.count(query);
       const topicList = await TopicModel.find(query, '-__v -lock', options);
 
-      const promises = await Promise.all(topicList.map(item => {
-        return new Promise((resolve, reject) => {
+      const promises = await Promise.all(topicList.map(item => (
+        new Promise(resolve => {
           resolve(UserModel.findById(item.author_id, 'nickname avatar'));
-        });
-      }));
+        })
+      )));
 
       const result = topicList.map((item, i) => {
-        return { ...item.toObject({ virtuals: true }), author: promises[i] }
+        return { ...item.toObject({ virtuals: true }), author: promises[i] };
       });
 
       return res.send({
@@ -266,7 +266,7 @@ class Topic extends BaseComponent {
       });
     }
   }
-  
+
   // 获取话题详情
   async getTopicById(req, res) {
     const { tid } = req.params;
@@ -285,7 +285,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: { ...topic.toObject({ virtuals: true }), author}
+        data: { ...topic.toObject({ virtuals: true }), author }
       });
     } catch(err) {
       return res.send({
@@ -303,9 +303,9 @@ class Topic extends BaseComponent {
 
     try {
       let behavior;
-      
+
       behavior = await this.findOneBehavior('like', _id, tid);
-      
+
       if (behavior) {
         behavior.delete = !behavior.delete;
         behavior = await behavior.save();
@@ -353,12 +353,12 @@ class Topic extends BaseComponent {
   async collectOrUncollectTopic(req, res) {
     const { tid } = req.params;
     const { _id } = req.session.userInfo;
-    
+
     try {
       let behavior;
 
       behavior = await this.findOneBehavior('collect', _id, tid);
-      
+
       if (behavior) {
         behavior.delete = !behavior.delete;
         behavior.save();

@@ -50,7 +50,7 @@ router.patch('/topic/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopi
 router.patch('/topic/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
 
 // 回复
-router.post('/topics/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
+router.post('/topic/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
 router.delete('/reply/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
 router.put('/reply/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
 router.patch('/reply/:rid/up', Auth.userRequired, Reply.upReply); // 回复点赞
