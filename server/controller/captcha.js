@@ -44,7 +44,7 @@ class Captcha extends BaseComponent {
 
     const url = `data:image/bmp;base64,${img.getFileData().toString('base64')}`;
 
-    req.session.picToken = {
+    req.session.pic_token = {
       token,
       time: Date.now()
     };
@@ -60,6 +60,7 @@ class Captcha extends BaseComponent {
 
   async getSmsCaptcha(req, res) {
     const { mobile } = req.query;
+    const expired = req.query.expired || 1000 * 60 * 10;
 
     if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       return res.send({
@@ -75,10 +76,10 @@ class Captcha extends BaseComponent {
       code += Math.floor(Math.random() * 10);
     }
 
-    req.session.smsCode = {
+    req.session.sms_code = {
       mobile,
       code: code.toString(),
-      time: Date.now()
+      expired: Date.now() + Number(expired)
     };
 
     return res.send({
