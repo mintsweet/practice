@@ -4,36 +4,33 @@ const should = require('should');
 const support = require('../support');
 
 describe('test /api/signout', function() {
-  before(function(done) {
-    support.createUser().then(() => {
-      done();
-    });
+  let mockUser;
+
+  before(async function() {
+    mockUser = await support.createUser('已注册用户', '18800000000');
   });
 
-  after(function(done) {
-    support.deleteUser().then(() => {
-      done();
-    });
+  after(async function() {
+    await support.deleteUser(mockUser.mobile);
   });
 
-  it('should return status 1', function(done) {
-    request
-      .post('/api/signin')
-      .send({
-        type: 'acc',
-        mobile: '18800000000',
+  // 正确
+  it('should return status 1', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser.mobile,
         password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        request
-          .delete('/api/signout')
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(1);
-            done();
-          });
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.delete('/api/signout');
+      res.body.status.should.equal(1);
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 });

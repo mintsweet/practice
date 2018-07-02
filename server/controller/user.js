@@ -128,7 +128,7 @@ class User extends BaseComponent {
       } catch(err) {
         return res.send({
           status: 0,
-          type: 'ERROR_SIGNIN_PARMAS',
+          type: 'ERROR_PARMAS_OF_SIGNIN',
           message: err.message
         });
       }
@@ -139,8 +139,8 @@ class User extends BaseComponent {
         if (!existUser) {
           return res.send({
             status: 0,
-            type: 'ERROR_MOBILE_IS_NOT_EXITS',
-            message: '手机账户尚未注册'
+            type: 'ERROR_USER_IS_NOT_EXITS',
+            message: '尚未注册'
           });
         }
 
@@ -159,11 +159,11 @@ class User extends BaseComponent {
               type: 'ERROR_PARAMS_OF_SIGNIN',
               message: '短信验证码不正确'
             });
-          } else if ((Date.now() - sms_code.time) > 1000) {
+          } else if (Date.now() > sms_code.expired) {
             return res.send({
               status: 0,
-              type: '短信验证码已经失效了，请重新获取',
-              message: '短信验证码不正确'
+              type: 'ERROR_PARAMS_OF_SIGNIN',
+              message: '短信验证码已经失效了，请重新获取'
             });
           }
 
@@ -202,19 +202,10 @@ class User extends BaseComponent {
 
   // 登出
   signout(req, res) {
-    try {
-      req.session.userInfo = null;
-      res.send({
-        status: 1
-      });
-    } catch(err) {
-      logger.error(err.message);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    req.session.userInfo = null;
+    res.send({
+      status: 1
+    });
   }
 
   // 忘记密码
@@ -230,8 +221,7 @@ class User extends BaseComponent {
         });
       }
 
-      let { sms_code } = req.session;
-      sms_code = sms_code || {};
+      const sms_code = req.session.sms_code || {};
       const { mobile, newPassword, smscaptcha } = fields;
 
       try {
@@ -243,7 +233,7 @@ class User extends BaseComponent {
           throw new Error('提交手机号与获取验证码手机号不对应');
         } else if (sms_code.code !== smscaptcha) {
           throw new Error('验证码错误');
-        } else if ((Date.now() - sms_code.time) / (1000 * 60) > 10) {
+        } else if (Date.now() > sms_code.expired) {
           throw new Error('验证码已失效，请重新获取');
         }
       } catch(err) {
@@ -254,22 +244,32 @@ class User extends BaseComponent {
         });
       }
 
-      const existUser = await UserModel.findOne({ mobile });
-      if (!existUser) {
+      try {
+        const existUser = await UserModel.findOne({ mobile });
+
+        if (!existUser) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_USER_IS_NOT_EXITS',
+            message: '尚未注册'
+          });
+        }
+
+        const bcryptPassword = await this.encryption(newPassword);
+        existUser.password = bcryptPassword;
+        await existUser.save();
+
+        return res.send({
+          status: 1
+        });
+      } catch(err) {
+        logger.error(err.message);
         return res.send({
           status: 0,
-          type: 'ERROR_MOBILE_IS_NOT_SIGNUP',
-          message: '手机号尚未注册'
+          type: 'ERROR_SERVICE',
+          message: '服务器无响应，请稍后重试'
         });
       }
-
-      const bcryptPassword = await this.encryption(newPassword);
-      existUser.password = bcryptPassword;
-      await existUser.save();
-
-      return res.send({
-        status: 1
-      });
     });
   }
 
