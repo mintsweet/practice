@@ -14,7 +14,7 @@ class Auth {
 
   // auth admin
   adminRequired(req, res, next) {
-    if (!req.session.userInfo) {
+    if (!req.session || !req.session.userInfo || !req.session.userInfo.id) {
       return res.send({
         status: 0,
         type: 'ERROR_NOT_SIGNIN',
@@ -35,7 +35,7 @@ class Auth {
 
   // auth root
   rootRequired(req, res, next) {
-    if (!req.session.userInfo) {
+    if (!req.session || !req.session.userInfo || !req.session.userInfo.id) {
       return res.send({
         status: 0,
         type: 'ERROR_NOT_SIGNIN',

@@ -19,11 +19,11 @@ class Captcha extends BaseComponent {
     textColor = textColor || 'a1a1a1';
     bgColor = bgColor || 'ffffff';
 
-    const img = new BMP24(width, height, `0x${bgColor}`);
+    const img = new BMP24(width, height, `0x${textColor}`);
     let token = '';
 
     // 设置背景
-    img.fillRect(0, 0, width, height, `0x${textColor}`);
+    img.fillRect(0, 0, width, height, `0x${bgColor}`);
     // 随机字符列表
     const p = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
     // 组成token

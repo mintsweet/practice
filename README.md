@@ -14,18 +14,21 @@ Practice 整个包涵盖了多种技术(Node、Express、Pug、MongoDB、React�
 
 ## 文档
 
-[快速开始](server/controller/static/get_start.md)<br>
+[快速开始](server/controller/static/get_start.md)
+
+---
+
 [API说明](API.md)
 
 ## 博客
 
-[终极实战(一) - 搞个 Node 的数据服务](https://github.com/mintsweet/blog/issues/2)<br>
-终极实战(二) - 用 Pug 模板输出传统网站<br>
-终极实战(三) - 来一个 React 后台管理应用<br>
-终极实战(四) - 再用 Vue 写一次 SPA<br>
-终极实战(五) - 不如再写一个微信小程序<br>
-终极实战(六) - 拥抱 RN 开启原生 APP<br>
-终极实战(七) - 桌面应用 Electron 的实现
+  - [终极实战(一) - 搞个 Node 的数据服务](https://github.com/mintsweet/blog/issues/2)
+  - 终极实战(二) - 用 Pug 模板输出传统网站
+  - 终极实战(三) - 来一个 React 后台管理应用
+  - 终极实战(四) - 再用 Vue 写一次 SPA
+  - 终极实战(五) - 不如再写一个微信小程序
+  - 终极实战(六) - 拥抱 RN 开启原生 APP
+  - 终极实战(七) - 桌面应用 Electron 的实现
 
 ## 更新
 

@@ -42,7 +42,7 @@ describe('test /api/signin', function() {
       });
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_USER_IS_NOT_EXITS');
-      res.body.message.should.equal('手机账户尚未注册');
+      res.body.message.should.equal('尚未注册');
     } catch(err) {
       should.ifError(err.message);
     }

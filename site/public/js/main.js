@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // toc 固定和back top 显示
-  $(window).scroll(function(event) {
+  $(window).scroll(function() {
     var tocTop = $(window).scrollTop();
     if (tocTop > 100) {
       $('.toc').addClass('toc-fixed');
@@ -12,8 +12,8 @@ $(document).ready(function () {
   });
 
   // back top 回到顶部
-  $(".back-top").click(function() {
-    $('html, body').animate({ scrollTop: 0 },500);
+  $('.back-top').click(function() {
+    $('html, body').animate({ scrollTop: 0 }, 500);
     return false;
   });
 
@@ -23,7 +23,7 @@ $(document).ready(function () {
   });
 
   // select option 选择
-  $('.option').click(function(e) {
+  $('.option').click(function() {
     $('.select-input').text($(this).text());
     $('.select-hidden').val($(this).attr('data-value'));
   });
@@ -45,13 +45,17 @@ $(document).ready(function () {
   var getcode = $('.getcode');
   var mobile = $('#mobile');
   var piccaptcha = $('#piccaptcha');
+  var countTime = 60;
+  var timer;
   getcode.click(function() {
     if ($(this).hasClass('disabled')) {
       return false;
     }
-    
-    if (!mobile.val() || !!/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
-      alert.text('请填写正确格式的用户名').slideDown();
+
+    getcode.addClass('disabled').text(`请${countTime}s后重试`);
+
+    if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
+      alert.text('请填写正确的手机号').slideDown();
       return false;
     }
 
@@ -60,18 +64,18 @@ $(document).ready(function () {
       return false;
     }
 
-    $.getJSON(`/common/msgcaptcha?piccaptcha=${piccaptcha.val()}&mobile=${mobile.val()}`, function(res) {
+    function countStats() {
+      countTime--;
+      if (countTime === 0) {
+        getcode.removeClass('disabled').text('获取验证码');
+        clearInterval(timer);
+        return false;
+      }
+    }
+
+    $.getJSON(`/captcha/sms?piccaptcha=${piccaptcha.val()}&mobile=${mobile.val()}`, function(res) {
       if (res.status === 1) {
-        var countTime = 60;
-        var timer = setInterval(function() {
-          countTime--;
-          if (countTime === 0) {
-            getcode.removeClass('disabled').text('获取验证码');
-            clearInterval(timer);
-            return false; 
-          }
-          getcode.addClass('disabled').text('请' + countTime + 's后重试');
-        }, 1000);
+        timer = setInterval(countStats, 1000);
       } else {
         alert.text(res.message).slideDown();
         return false;

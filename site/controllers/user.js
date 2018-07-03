@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const { getPicCaptcha, apiSignup, apiSignin, apiForgetPass, apiSignout } = require('../http/api');
+const { getPicCaptcha, signup, apiSignin, apiForgetPass, apiSignout } = require('../http/api');
 
 class User {
   constructor() {
@@ -32,7 +32,7 @@ class User {
   // 注册
   signup(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.render('user/signup', {
           title: '注册',
@@ -40,26 +40,26 @@ class User {
         });
       }
 
-      const { nickname, mobile, password, msgcaptcha } = fields;
-      const { msg_code } = req.app.locals;
-      const picToken = await this.getPicToken();
-      req.app.locals.pic_token = picToken.token;
-      
+      const { nickname, mobile, password, smscaptcha } = fields;
+      const sms_code = req.app.locals.sms_code || {};
+
       try {
         if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
-        } else if (!nickname || nickname.length > 8 || nickname.length < 4) {
-          throw new Error('请输入4-8位的名称');
-        } else if (msg_code.mobile !== mobile) {
+        } else if (!nickname || nickname.length > 8 || nickname.length < 2) {
+          throw new Error('请输入2-8位的名称');
+        } else if (sms_code.mobile !== mobile) {
           throw new Error('收取验证码的手机与登录手机不匹配');
-        } else if (msg_code.code !== msgcaptcha) {
-          throw new Error('短信验证码不正确')
-        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+        } else if (sms_code.code !== smscaptcha) {
+          throw new Error('短信验证码不正确');
+        } else if ((Date.now() - sms_code.time) / (1000 * 60) > 10) {
           throw new Error('短信验证码已经失效了，请重新获取');
         }
       } catch(err) {
+        const picToken = await this.getPicToken();
+        req.app.locals.pic_token = picToken.token;
         return res.render('user/signup', {
           title: '注册',
           picUrl: picToken.url,
@@ -67,7 +67,7 @@ class User {
         });
       }
 
-      const response = await apiSignup(fields);
+      const response = await signup(fields);
       if (response.status === 1) {
         return res.render('site/transfer', {
           title: '注册成功',
@@ -94,11 +94,11 @@ class User {
       });
     }
   }
-  
+
   // 登录
   signin(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.render('user/signin', {
           title: '登录',
@@ -161,7 +161,7 @@ class User {
   // 忘记密码
   async forgetPass(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.render('user/forget_pass', {
           title: '忘记密码',
@@ -169,19 +169,19 @@ class User {
         });
       }
 
-      const { msg_code } = req.app.locals;
-      const { mobile, password, msgcaptcha } = fields;
+      const { sms_code } = req.app.locals;
+      const { mobile, password, smscaptcha } = fields;
 
       try {
-        if (!mobile && mobile !== msg_code.mobile) {
+        if (!mobile && mobile !== sms_code.mobile) {
           throw new Error('提交手机号与获取验证码手机号不对应');
         } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
           throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
-        } else if (msg_code.code !== msgcaptcha) {
+        } else if (sms_code.code !== smscaptcha) {
           throw new Error('验证码错误');
-        } else if (msg_code.mobile !== mobile) {
+        } else if (sms_code.mobile !== mobile) {
           throw new Error('收取验证码的手机与登录手机不匹配');
-        } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+        } else if ((Date.now() - sms_code.time) / (1000 * 60) > 10) {
           throw new Error('验证码已失效，请重新获取');
         }
       } catch(err) {

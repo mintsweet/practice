@@ -129,11 +129,11 @@ textarea:focus, input:focus {border-color: #16982B;}
 
 /* site */
 .site {display: flex;}
-.site .content {flex: auto;padding: 25px 20px;margin-right: 20px;background: #fff;border-radius: 4px;}
+.site .content {flex: 3;padding: 25px 20px;margin-right: 20px;background: #fff;border-radius: 4px;}
 .site .tab-list {line-height: 30px;}
 .site .tab-list a {padding: 5px 10px;margin-right: 10px;font-size: 16px;}
 .site .tab-list a.active {background: #16982B;color: #fff;}
-.site .side {flex: 0 0 220px;}
+.site .side {flex: 1;}
 .site .side .download {padding: 10px 20px;margin-bottom: 10px;background: #fff;border-radius: 4px;}
 .site .side .top100 {background: #fff;border-radius: 4px;}
 .site .side .top100 .title {padding: 10px 20px;border-bottom: 1px solid #eee;}
@@ -216,6 +216,7 @@ textarea:focus, input:focus {border-color: #16982B;}
 .exception p span {display: block;}
 
 /* markdown */
+.markdown {padding: 20px 30px;background: #fff;border-radius: 4px;box-sizing: border-box;}
 .markdown h1,
 .markdown h2,
 .markdown h3,
@@ -231,19 +232,12 @@ textarea:focus, input:focus {border-color: #16982B;}
 .markdown ul, .markdown ol {padding-left: 2em;}
 .markdown ol li {list-style-type: decimal;}
 .markdown ul li {list-style-type: square;}
+.markdown p {margin: 10px 0;}
 .markdown a {color: #159329;}
 .markdown table {display: block;width: 100%;overflow: auto;}
 .markdown table tr {background-color: #fff;border-top: 1px solid #c6cbd1;}
 .markdown table th, .markdown table td {padding: 6px 13px;border: 1px solid #dfe2e5;}
 .markdown table tr:nth-child(2n) {background-color: #f6f8fa;}
-.markdown .toc {position: absolute;left: 20px;top: 100px;bottom: 0;padding: 10px 20px;overflow: scroll;border-right: 1px solid #ddd;}
-.markdown .toc.toc-fixed {position: fixed;top: 0;}
-.markdown .toc::-webkit-scrollbar { display: none; }
-@media (max-width: 1400px) {
-  .markdown .toc {
-    display: none;
-  }
-}
 .hljs {display:block;overflow-x:auto;padding:0.5em;background:#232323;color:#e6e1dc}
 .hljs-comment,.hljs-quote{color:#bc9458;font-style:italic}
 .hljs-keyword,.hljs-selector-tag{color:#c26230}

@@ -1,4 +1,4 @@
-const { getTopicList, apiGetUserTop100 } = require('../http/api');
+const { getTopicList, getUsersTop100 } = require('../http/api');
 
 class Site {
   // 首页
@@ -11,7 +11,7 @@ class Site {
       size: 10
     });
 
-    const resUserTop100 = await apiGetUserTop100();
+    const resUserTop100 = await getUsersTop100();
 
     if (resTopic.status === 1 && resUserTop100.status === 1) {
       res.render('site/index', {
