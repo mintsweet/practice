@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const BaseModel = require('./base');
 
 const UserSchema = new Schema({
   mobile: { unqie: true, type: String, required: true },
   password: { type: String, required: true },
-  
+
   nickname: { unqie: true, type: String, required: true },
   avatar: { type: String, default: '' },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
 
   score: { type: Number, default: 0 },
-  
+
   is_star: { type: Boolean, default: false },
   is_admin: { type: Boolean, default: false },
   is_block: { type: Boolean, default: false },

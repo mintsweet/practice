@@ -21,7 +21,7 @@ class Auth {
         message: '尚未登录'
       });
     }
-  
+
     if (!req.session.userInfo.is_admin && res.session.userInfo.role > 0) {
       return res.send({
         status: 0,
@@ -29,9 +29,9 @@ class Auth {
         message: '需要管理员权限'
       });
     }
-  
+
     next();
-  };
+  }
 
   // auth root
   rootRequired(req, res, next) {

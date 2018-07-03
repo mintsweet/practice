@@ -2,61 +2,76 @@ const app = require('../../app');
 const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
+const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /api/:uid/follow_or_un', function() {
-  let user_1;
-  let user_2;
+describe('test /api/topic/:tid/collect_or_un', function() {
+  let mockUser;
+  let mockUser2;
 
-  before(function(done) {
-    support.createUser('测试一', '18800000000').then(function(res) {
-      user_1 = res;
-      support.createUser('测试二', '18800000001').then(function(res) {
-        user_2 = res;
-        done();
-      });
-    });
+  before(async function() {
+    mockUser = await support.createUser('当前登录者', '18800000000');
+    mockUser2 = await support.createUser('被关注者', '18800000001');
   });
 
-  after(function(done) {
-    support.deleteUser('18800000000').then(function() {
-      support.deleteUser('18800000001').then(function() {
-        done();
-      });
-    });
+  after(async function() {
+    await support.deleteUser(mockUser.mobile);
+    await support.deleteUser(mockUser2.mobile);
+    await support.deleteBehavior(mockUser.id);
+    await support.deleteNotice(mockUser.id);
+    mockUser = null;
+    mockUser2 = null;
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when the not signin in yet', function(done) {
-    request
-      .patch(`/api/user/${user_2._id}/follow_or_un`)
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(0);
-        res.body.type.should.equal('ERROR_NO_SIGNIN');
-        res.body.message.should.equal('尚未登录');
-        done();
+  it('should return status 0 when the not signin in yet', async function() {
+    try {
+      const res = await request.patch(`/api/user/${mockUser2.id}/follow_or_un`);
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_NOT_SIGNIN');
+      res.body.message.should.equal('尚未登录');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // 错误 - 无效的ID
+  it('should return status 0 when the tid is invalid', async function() {
+    try {
+      let res;
+      res = await request.post('/api/signin').send({
+        mobile: mockUser.mobile,
+        password: 'a123456'
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.patch(`/api/user/${tempId}/follow_or_un`);
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_ID_IS_INVALID');
+      res.body.message.should.equal('无效的ID');
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 
   // 正确
-  it('should return status 1', function(done) {
-    request
-      .post('/api/signin')
-      .send({
-        type: 'acc',
-        mobile: user_1.mobile,
+  it('should return status 1', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser.mobile,
         password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        request
-          .patch(`/api/user/${user_2._id}/follow_or_un`)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(1);
-            done();
-          });
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.patch(`/api/user/${mockUser2.id}/follow_or_un`);
+      res.body.status.should.equal(1);
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 });

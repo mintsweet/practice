@@ -1,52 +1,51 @@
 const app = require('../../app');
 const request = require('supertest').agent(app);
-const shuold = require('should');
+const should = require('should');
 const support = require('../support');
 
 describe('test /api/info', function() {
-  before(function(done) {
-    support.createUser().then(() => {
-      done();
-    });
+  let mockUser;
+
+  before(async function() {
+    mockUser = await support.createUser('已注册用户', '18800000000');
   });
 
-  after(function(done) {
-    support.deleteUser().then(() => {
-      done();
-    });
+  after(async function() {
+    await support.deleteUser(mockUser.mobile);
+    mockUser = null;
   });
 
-  it('should return status 0 when user is not signin', function(done) {
-    request
-      .get('/api/info')
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(0);
-        res.body.type.should.equal('ERROR_NO_SIGNIN');
-        res.body.message.should.equal('尚未登录');
-        done();
-      });
+  // 错误 - 尚未登录
+  it('should return status 0 when user is not signin', async function() {
+    try {
+      const res = await request.get('/api/info');
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_NOT_SIGNIN');
+      res.body.message.should.equal('尚未登录');
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 
-  it('should return status 1', function(done) {
-    request
-      .post('/api/signin')
-      .send({
-        type: 'acc',
-        mobile: '18800000000',
+  // 正确
+  it('should return status 1', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser.mobile,
         password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        request
-          .get('/api/info')
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(1);
-            res.body.data.should.have.property('_id');
-            done();
-          });
       });
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.get('/api/info');
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 });

@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const config = require('../../config.default');
 const BaseModel = require('./base');
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const { Schema } = mongoose;
+const { ObjectId } = Schema;
 
 const TopicSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   author_id: { type: ObjectId, required: true },
-  
+
   top: { type: Boolean, default: false }, // 置顶
   good: { type: Boolean, default: false }, // 精华
   lock: { type: Boolean, default: false }, // 锁定
@@ -23,7 +23,7 @@ const TopicSchema = new Schema({
 
   last_reply: { type: ObjectId },
   last_reply_at: { type: Date, default: Date.now },
-  
+
   tab: { type: String },
 
   delete: { type: Boolean, default: false }
@@ -36,7 +36,7 @@ TopicSchema.index({ author_id: 1, create_at: -1 });
 
 TopicSchema.virtual('tabName').get(function() {
   const pair = config.tabs.find(item => item.url === this.tab);
-  return pair ? pair.name : ''; 
+  return pair ? pair.name : '';
 });
 
 const Topic = mongoose.model('Topic', TopicSchema);

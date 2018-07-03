@@ -13,7 +13,7 @@ class Static {
       }
 
       const result = md2html(data);
-      
+
       return res.send({
         status: 1,
         data: result
@@ -32,7 +32,7 @@ class Static {
       }
 
       const result = md2html(data);
-      
+
       return res.send({
         status: 1,
         data: result
@@ -51,7 +51,7 @@ class Static {
       }
 
       const result = md2html(data);
-      
+
       return res.send({
         status: 1,
         data: result

@@ -2,55 +2,40 @@ const app = require('../../app');
 const request = require('supertest')(app);
 const should = require('should');
 const support = require('../support');
+const tempId = require('mongoose').Types.ObjectId();
 
 describe('test /api/users/:uid', function() {
-  before(function(done) {
-    support.createUser().then(() => {
-      done();
-    });
+  let mockUser;
+
+  before(async function() {
+    mockUser = await support.createUser('已注册用户', '18800000000');
   });
 
-  after(function(done) {
-    support.deleteUser().then(() => {
-      done();
-    });
+  after(async function() {
+    await support.deleteUser(mockUser.mobile);
   });
 
-
-  // 错误 - 用户不存在
-  it('should return status 0 when uid is not valid', function(done) {
-    request
-      .get('/api/user/5b35f7c15b24e37bf0eb473f')
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(0);
-        res.body.type.should.equal('ERROR_USER_NOT_EXSIT');
-        res.body.message.should.equal('用户不存在');
-        done();
-      });
+  // 错误 - 无效的ID
+  it('should return status 0 when the uid is invalid', async function() {
+    try {
+      const res = await request.get(`/api/user/${tempId}`);
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_ID_IS_INVALID');
+      res.body.message.should.equal('无效的ID');
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 
   // 正确
-  it('should return status 1', function(done) {
-    request
-      .post('/api/signin')
-      .send({
-        type: 'acc',
-        mobile: '18800000000',
-        password: 'a123456'
-      })
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        res.body.data.should.have.property('_id');
-        request
-          .get(`/api/user/${res.body.data._id}`)
-          .end(function(err, res) {
-            should.not.exist(err);
-            res.body.status.should.equal(1);
-            res.body.data.should.have.property('_id');
-            done();
-          });
-      });
+  it('should return status 1', async function() {
+    try {
+      const res = await request.get(`/api/user/${mockUser.id}`);
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 });

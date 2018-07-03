@@ -4,14 +4,14 @@ const should = require('should');
 
 describe('test /api/users/star', function() {
   // 正确
-  it('should return status 1', function(done) {
-    request
-      .get('/api/users/star')
-      .end(function(err, res) {
-        should.not.exist(err);
-        res.body.status.should.equal(1);
-        res.body.data.should.be.an.Array();
-        done();
-      });
+  it('should return status 1', async function() {
+    try {
+      const res = await request.get('/api/users/star');
+      res.body.status.should.equal(1);
+      res.body.data.should.be.an.Array();
+      res.body.data.length.should.equal(0);
+    } catch(err) {
+      should.ifError(err.message);
+    }
   });
 });

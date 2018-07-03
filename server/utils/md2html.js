@@ -4,11 +4,11 @@ const md = require('markdown-it')({
   html: true,
   linkify: true,
   typography: true,
-  highlight: function (str, lang) {
+  highlight(str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       return `<pre><code class="hljs ${lang}">${hljs.highlight(lang, str, true).value}</code></pre>`;
     }
-    return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
+    return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`;
   }
 }).use(markdownItTocAndAnchor, {
   tocClassName: 'toc',
@@ -17,6 +17,6 @@ const md = require('markdown-it')({
   anchorClassName: 'anchor'
 });
 
-module.exports = (text) => {
+module.exports = text => {
   return md.render(text);
-}
+};

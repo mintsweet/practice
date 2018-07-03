@@ -9,11 +9,13 @@ module.exports = function(schema) {
     return moment(this.update_at).format('YYYY-MM-DD HH:mm');
   };
 
-  if (!schema.options.toObject) schema.options.toObject = {};
+  if (!schema.options.toObject) {
+    schema.options.toObject = {};
+  }
 
-  schema.options.toObject.transform = function(doc, ret, options) {
+  schema.options.toObject.transform = function(doc, ret) {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
-  }
-}
+  };
+};

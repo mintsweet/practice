@@ -56,7 +56,8 @@ class Reply extends BaseComponent {
           reply_id
         };
 
-        const reply = await ReplyModel.create(_reply);
+        await ReplyModel.create(_reply);
+
         if (reply_id) {
           // 发起行为
           await this.createBehavior('reply2', id, reply_id);
@@ -82,13 +83,13 @@ class Reply extends BaseComponent {
   }
 
   // 删除评论
-  async deleteReply(req, res) {    
+  async deleteReply(req, res) {
     const { rid } = req.params;
     const { id } = req.session.userInfo;
 
     try {
       const currentReply = await ReplyModel.findById(rid);
-      
+
       if (!currentReply) {
         return res.send({
           status: 0,
@@ -106,7 +107,7 @@ class Reply extends BaseComponent {
       }
 
       await ReplyModel.findByIdAndRemove(rid);
-      
+
       return res.send({
         status: 1
       });
@@ -123,7 +124,7 @@ class Reply extends BaseComponent {
   // 编辑回复
   editReply(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.send({
           status: 0,
@@ -137,7 +138,7 @@ class Reply extends BaseComponent {
 
       try {
         const currentReply = await ReplyModel.findById(rid);
-        
+
         if (!currentReply) {
           return res.send({
             status: 0,
@@ -200,7 +201,7 @@ class Reply extends BaseComponent {
       }
 
       let action;
-  
+
       const upIndex = currentReply.ups.indexOf(id);
       if (upIndex === -1) {
         currentReply.ups.push(id);
@@ -213,7 +214,7 @@ class Reply extends BaseComponent {
         currentReply.ups.splice(upIndex, 1);
         action = 'down';
       }
-  
+
       await currentReply.save();
       return res.send({
         status: 1,
