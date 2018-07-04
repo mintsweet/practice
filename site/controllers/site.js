@@ -8,7 +8,7 @@ class Site {
     let response;
     let currentTab;
     let topics;
-    let pages;
+    let totalPage;
     let currentPage;
     let top100;
 
@@ -20,7 +20,7 @@ class Site {
 
     if (response.status === 1) {
       topics = response.data.topics;
-      pages = response.data.pages;
+      totalPage = response.data.totalPage;
       currentPage = response.data.currentPage;
       currentTab = response.data.tab;
     } else {
@@ -38,7 +38,7 @@ class Site {
     res.render('site/index', {
       title: '首页',
       topics,
-      pages,
+      totalPage,
       currentPage,
       currentTab,
       top100

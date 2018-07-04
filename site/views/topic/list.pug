@@ -11,7 +11,7 @@ dl.topic-list
             span.tag.active 精华
           else
             span.tag #{topic.tabName}
-          a(href=`/topics/${topic.id}`) #{topic.title}
+          a(href=`/topic/${topic.id}`) #{topic.title}
       .last-time
         - var now = (new Date()).getTime();var lastTime = (new Date(topic.last_reply_at)).getTime();
         - var limit = now - lastTime;
@@ -33,9 +33,15 @@ dl.topic-list
         else
           span 很久以前
       .statistics
-        span #{topic.reply_count} 回复
-        span  / 
-        span #{topic.visit_count} 阅读
+        //- span(title="阅读数")
+        //-   i.practice &#xe647;
+        //-   | #{topic.visit_count}
+        span(title="喜欢数")
+          i.practice &#xe72f;
+          | #{topic.like_count}
+        span(title="回复数")
+          i.practice &#xe686;
+          | #{topic.reply_count}
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 ul.pagination
   if currentPage === 1
@@ -44,7 +50,7 @@ ul.pagination
   else
     li
       a.practice(href=`${baseUrl}${currentPage - 1}`) &#xe640;
-  - for(var i = 1; i <= pages; i++) {
+  - for(var i = 1; i <= totalPage; i++) {
       if currentPage === i
         li.active.disabled
           a #{i}
@@ -52,7 +58,7 @@ ul.pagination
         li
           a(href=`${baseUrl}${i}`) #{i}
   - }
-  if currentPage === pages
+  if currentPage === totalPage
     li.disabled
       a.practice &#xe63f;
   else

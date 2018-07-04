@@ -9,13 +9,13 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.1",
+    "eslint-config-mints": "^0.3.0-rc.8",
     "formidable": "^1.2.1",
     "pug": "^2.0.3",
     "request": "^2.85.0",
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
-    "eslint": "^5.0.1",
-    "eslint-config-mints": "^0.3.0-rc.7"
+    "eslint": "^5.0.1"
   }
 }

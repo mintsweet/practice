@@ -13,9 +13,12 @@ html
     block head
       link(rel="stylesheet", href="/static/css/style.css")
   body
-    include ./includes/header
+    block header
+      include ./includes/header
     .main
       .layout
           block content
     block footer
       include ./includes/footer
+    .back-top
+      i.practice.pra-up

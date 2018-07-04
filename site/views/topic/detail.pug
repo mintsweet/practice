@@ -1,5 +1,16 @@
 extends ../layout
 
 block content
-  .main
-    .layout
+  .topic-detail
+    .content
+      .author
+        a.avatar(href=`/user/${topic.author.id}`)
+          img(src=topic.author.avatar)
+        .text
+          a(href=`/user/${topic.author.id}`) #{topic.author.nickname}
+          span #{topic.create_at}
+          span 阅读 #{topic.visit_count}
+      h1.title #{topic.title}
+      .markdown
+        | !{topic.content}
+    .side

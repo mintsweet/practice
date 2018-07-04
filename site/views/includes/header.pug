@@ -14,15 +14,15 @@
     .user-info
       if user
         .action
-          a.practice.pra-plus(href="/topic/create", title="发布主题")
-          a.practice.pra-notice(href="/message", title="查看消息")
+          a.practice.pra-plus(href="/topics/create", title="发布主题")
+          a.practice.pra-notice(href="/notice/user", title="查看消息")
         .avatar-wrapper
           .avatar
             img(src=user.avatar)
           .nickname #{user.nickname}
           .drop-menus
             .item
-              a(href="/user/" + user.nickname) 个人主页
+              a(href=`/user/${user.id}`) 个人主页
             span.divider
             .item
               a(href="/signout") 退出登录

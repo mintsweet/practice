@@ -267,6 +267,20 @@ class User {
       info: response.data
     });
   }
+
+  // 更新个人设置页
+  renderSetting(req, res) {
+    res.render('user/setting', {
+      title: '个人资料'
+    });
+  }
+
+  // 修改密码页
+  renderUpdatePass(req, res) {
+    res.render('user/update_pass', {
+      title: '修改密码'
+    });
+  }
 }
 
 module.exports = new User();

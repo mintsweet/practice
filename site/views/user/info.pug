@@ -9,19 +9,20 @@ block content
         .desc
           h1 #{info.nickname}
           if user && info.id === user.id
-            a.edit(href=`/user/${user.id}/edit`) 编辑个人资料
+            a.action(href=`/setting`) 编辑个人资料
           else if user && !isFollow
-            a.edit(href=`/user/${user.id}/edit`) 关注
+            a.action(href=`/user/${user.id}/edit`) 关注
           else if user && isFollow
-            a.edit(href=`/user/${user.id}/edit`) 取消关注
+            a.action(href=`/user/${user.id}/edit`) 取消关注
       .gener
         .title
           a(href=`/user/${info.id}`) 动态
           a(href=`/user/${info.id}/likes`) 喜欢
           a(href=`/user/${info.id}/collections`) 收藏
+          a(href=`/user/${info.id}/replies`) 回复
           a(href=`/user/${info.id}/follower`) 粉丝
           a(href=`/user/${info.id}/following`) 关注
-        .content
+        ul.content
     .side
       .stat
         .title 个人成就

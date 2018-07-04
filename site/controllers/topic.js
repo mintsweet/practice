@@ -34,15 +34,12 @@ class Topic {
   async renderDetail(req, res) {
     const { tid } = req.params;
 
-    if (!tid) {
-      return res.redirect('/exception/404');
-    }
-
     const response = await getTopicDetail(tid);
 
     if (response.status === 1) {
       return res.render('topic/detail', {
-        title: '话题详情'
+        title: '话题详情',
+        topic: response.data
       });
     } else {
       return res.redirect('/exception/500');

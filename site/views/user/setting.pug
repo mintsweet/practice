@@ -1,0 +1,31 @@
+extends ../layout.pug
+
+append header
+  .setting-bar
+    .layout
+      a.active(href="/setting") 个人资料
+      a(href="/update_pass") 修改密码
+block content
+  .setting-content
+    .content
+      .title 个人资料
+      form.setting-form(method="post")
+        .form-item
+          label(for="avatar") 头像
+          .avatar
+            img(src=user.avatar)
+            p
+              span 支持 jpg、png 格式大小 1M 以内的图片
+              button.btn 点击上传
+        .form-item
+          label(for="nickname") 昵称
+          input(type="text", id="nickname", name="nickname", placeholder="请输入昵称", value=user.nickname)
+        .form-item
+          label(for="location") 所在地
+          input(type="text", id="location", name="location", placeholder="请输入所在地", value=user.location)
+        .form-item
+          label(for="signature") 个人介绍
+          input(type="text", id="signature", name="signature", placeholder="请输入个人介绍", value=user.signature)
+        .form-item
+          button.btn(type="submit") 更新个人资料
+    .side

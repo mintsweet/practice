@@ -36,11 +36,13 @@ router.get('/user/:uid/collections', User.renderCollections);
 router.get('/user/:uid/replies', User.renderReplies);
 router.get('/user/:uid/follower', User.renderFollower);
 router.get('/user/:uid/following', User.renderFolloing);
+router.get('/setting', Auth.userRequired, User.renderSetting);
+router.get('/update_pass', Auth.userRequired, User.renderUpdatePass);
 
 // 话题
 router.get('/topics/create', Auth.userRequired, Topic.renderCreateTopic);
 router.post('/topics/create', Auth.userRequired, Topic.createTopic);
-router.get('/topics/:id', Topic.renderDetail);
+router.get('/topic/:tid', Topic.renderDetail);
 
 // 消息
 router.get('/notice/user', Auth.userRequired, Notice.renderNoticeUser);

@@ -55,7 +55,12 @@ class Topic extends BaseComponent {
 
       try {
         const topic = await TopicModel.create(_topic);
+        // 记录用户创建行为
         await this.createBehavior('create', id, topic.id);
+        // 用户创建话题积3分
+        const currentUser = await UserModel.findById(id);
+        currentUser.score += 3;
+        await currentUser.save();
 
         return res.send({
           status: 1
@@ -283,7 +288,7 @@ class Topic extends BaseComponent {
     const { tid } = req.params;
 
     try {
-      const currentTopic = await TopicModel.findById(tid);
+      let currentTopic = await TopicModel.findById(tid);
 
       if (!currentTopic) {
         return res.send({
@@ -292,6 +297,9 @@ class Topic extends BaseComponent {
           message: '无效的ID'
         });
       }
+
+      currentTopic.visit_count += 1;
+      currentTopic = await currentTopic.save();
 
       const author = await UserModel.findById(currentTopic.author_id, 'id nickname avatar score');
       const replyList = await ReplyModel.find({ topic_id: currentTopic.id });

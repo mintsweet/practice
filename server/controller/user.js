@@ -544,9 +544,13 @@ class User extends BaseComponent {
         });
       }));
 
+      const data = behaviors.map((item, i) => {
+        return { ...result[i].toObject(), type: item.type };
+      });
+
       return res.send({
         status: 1,
-        data: result
+        data
       });
     } catch(err) {
       logger.error(err);
