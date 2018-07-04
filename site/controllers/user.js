@@ -3,7 +3,7 @@ const {
   getPicCaptcha, signup, signin, forgetPass,
   signout, getUsersTop100, getUserInfoById,
   getUserLikes, getUserCollections, getUserReplies,
-  getUserFollower, getUserFollowing
+  getUserBehaviors, getUserFollower, getUserFollowing
 } = require('../http/api');
 
 class User {
@@ -60,11 +60,7 @@ class User {
 
       const response = await signup(fields);
       if (response.status === 1) {
-        return res.render('site/transfer', {
-          title: '注册成功',
-          text: '注册成功',
-          type: 'success'
-        });
+        return res.redirect('/');
       } else {
         return res.render('user/signup', {
           title: '注册',
@@ -116,11 +112,7 @@ class User {
 
       const response = await signin({ mobile, password });
       if (response.status === 1) {
-        return res.render('site/transfer', {
-          title: '登录成功',
-          text: '登录成功',
-          type: 'success'
-        });
+        return res.redirect('/');
       } else {
         return res.render('user/signup', {
           title: '注册',
@@ -164,11 +156,7 @@ class User {
 
       const response = await forgetPass(fields);
       if (response.status === 1) {
-        return res.render('site/transfer', {
-          title: '密码重置成功',
-          text: '密码重置成功',
-          type: 'success'
-        });
+        return res.redirect('/');
       } else {
         return res.render('user/forget_pass', {
           title: '忘记密码',
@@ -183,11 +171,7 @@ class User {
   async signout(req, res) {
     const response = await signout();
     if (response.status === 1) {
-      return res.render('site/transfer', {
-        title: '退出成功',
-        text: '退出成功',
-        type: 'success'
-      });
+      return res.redirect('/');
     }
   }
 
@@ -203,11 +187,34 @@ class User {
 
   // 个人信息页
   async renderInfo(req, res) {
-    const response = await getUserInfoById();
+    const { uid } = req.params;
+
+    let response;
+    let info;
+    let isFollow;
+    let behaviors;
+
+    response = await getUserInfoById(uid);
+    if (response.status === 1) {
+      info = response.data;
+      isFollow = response.isFollow || false;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getUserBehaviors(uid);
+    if (response.status === 1) {
+      behaviors = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
 
     return res.render('user/info', {
       title: '动态 - 用户信息',
-      info: response.data
+      info,
+      data: behaviors,
+      type: 'behavior',
+      isFollow
     });
   }
 

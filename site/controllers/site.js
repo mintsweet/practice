@@ -5,27 +5,44 @@ class Site {
   async index(req, res) {
     const { tab, page } = req.query;
 
-    const resTopic = await getTopicList({
+    let response;
+    let currentTab;
+    let topics;
+    let pages;
+    let currentPage;
+    let top100;
+
+    response = await getTopicList({
       tab: tab || 'all',
       page: page || 1,
       size: 10
     });
 
-    const resUserTop100 = await getUsersTop100();
-
-    if (resTopic.status === 1 && resUserTop100.status === 1) {
-      res.render('site/index', {
-        title: '首页',
-        currentTab: tab || 'all',
-        topics: resTopic.data.topics,
-        pages: resTopic.data.pages,
-        tab: resTopic.data.tab,
-        currentPage: resTopic.data.currentPage,
-        top100: resUserTop100.data
-      });
+    if (response.status === 1) {
+      topics = response.data.topics;
+      pages = response.data.pages;
+      currentPage = response.data.currentPage;
+      currentTab = response.data.tab;
     } else {
       res.redirect('/exception/500');
     }
+
+    response = await getUsersTop100();
+
+    if (response.status === 1) {
+      top100 = response.data;
+    } else {
+      res.redirect('/exception/500');
+    }
+
+    res.render('site/index', {
+      title: '首页',
+      topics,
+      pages,
+      currentPage,
+      currentTab,
+      top100
+    });
   }
 }
 

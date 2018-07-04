@@ -33,6 +33,7 @@ router.get('/users/star', User.getStarList); // 获取星标用户列表
 router.get('/users/top100', User.getTop100); // 获取积分榜前100用户列表
 router.get('/user/:uid', User.getInfoById); // 根据ID获取用户信息
 router.patch('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUser); // 关注或者取消关注某个用户
+router.get('/user/:uid/behaviors', User.getUserBehaviors); // 获取用户动态
 router.get('/user/:uid/likes', User.getUserLikes); // 获取用户喜欢列表
 router.get('/user/:uid/collections', User.getUserCollections); // 获取用户收藏列表
 router.get('/user/:uid/replies', User.getUserReplies); // 用户回复的列表

@@ -440,22 +440,24 @@ class User extends BaseComponent {
         });
       }
 
-      const behaviorList = await BehaviorModel.find({ author_id: uid });
-      const behaviorResult = await Promise.all(behaviorList.map(item => {
-        return new Promise(resolve => {
-          if (item.type === 'follow') {
-            resolve(UserModel.findById(item.target_id, 'id nickname'));
-          } else if (item.type === 'ups') {
-            resolve(ReplyModel.findById(item.target_id, 'id'));
-          } else {
-            resolve(TopicModel.findById(item.target_id, 'id title'));
-          }
-        });
-      }));
+      const userInfo = req.session.userInfo || {};
+      let isFollow;
+
+      if (userInfo.id) {
+        const behavior = BehaviorModel.findOne({ type: 'follow', author_id: userInfo.id, target_id: uid });
+        if (behavior && behavior.delete) {
+          isFollow = true;
+        } else {
+          isFollow = false;
+        }
+      } else {
+        isFollow = false;
+      }
 
       return res.send({
         status: 1,
-        data: { ...currentUser.toObject(), behaviors: behaviorResult }
+        data: currentUser,
+        isFollow
       });
     } catch(err) {
       logger.error(err.message);
@@ -514,6 +516,37 @@ class User extends BaseComponent {
       return res.send({
         status: 1,
         type: behavior.delete ? 'un_follow' : 'follow'
+      });
+    } catch(err) {
+      logger.error(err);
+      return res.send({
+        status: 0,
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
+      });
+    }
+  }
+
+  // 获取用户动态
+  async getUserBehaviors(req, res) {
+    const { uid } = req.params;
+    try {
+      const behaviors = await BehaviorModel.find({ author_id: uid });
+      const result = await Promise.all(behaviors.map(item => {
+        return new Promise(resolve => {
+          if (item.type === 'follow') {
+            resolve(UserModel.findById(item.target_id, 'id nickname'));
+          } else if (item.type === 'ups') {
+            resolve(ReplyModel.findById(item.target_id, 'id'));
+          } else {
+            resolve(TopicModel.findById(item.target_id, 'id title'));
+          }
+        });
+      }));
+
+      return res.send({
+        status: 1,
+        data: result
       });
     } catch(err) {
       logger.error(err);

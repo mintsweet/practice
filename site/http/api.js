@@ -62,6 +62,8 @@ exports.getUsersTop100 = () => request('/users/top100');
 exports.getUserInfoById = uid => request(`/user/${uid}`);
 // 关注或者取消关注某个用户
 exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
+// 获取用户动态
+exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
 // 获取用户喜欢列表
 exports.getUserLikes = uid => request(`/user/${uid}/likes`);
 // 获取用户收藏列表
@@ -77,7 +79,7 @@ exports.getUserFollowing = uid => request(`/user/${uid}/following`);
 * 主题
 */
 // 创建话题
-exports.createTopic = obj => request('/topic/create', obj, 'POST');
+exports.createTopic = obj => request('/create', obj, 'POST');
 // 删除话题
 exports.deleteTopic = tid => request(`/topic/${tid}/delete`, {}, 'DELETE');
 // 编辑话题

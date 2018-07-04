@@ -5,17 +5,22 @@ block content
     .info
       .person
         .avatar
-          img(src=user.avatar, alt=user.nickname)
+          img(src=info.avatar)
         .desc
-          h1 #{user.nickname}
-          a.edit(href=`/user/${user.nickname}/edit`) 编辑个人资料
+          h1 #{info.nickname}
+          if user && info.id === user.id
+            a.edit(href=`/user/${user.id}/edit`) 编辑个人资料
+          else if user && !isFollow
+            a.edit(href=`/user/${user.id}/edit`) 关注
+          else if user && isFollow
+            a.edit(href=`/user/${user.id}/edit`) 取消关注
       .gener
         .title
-          a(href=`/user/${user.id}`) 动态
-          a(href=`/user/${user.id}/likes`) 喜欢
-          a(href=`/user/${user.id}/collections`) 收藏
-          a(href=`/user/${user.id}/follower`) 粉丝
-          a(href=`/user/${user.id}/following`) 关注
+          a(href=`/user/${info.id}`) 动态
+          a(href=`/user/${info.id}/likes`) 喜欢
+          a(href=`/user/${info.id}/collections`) 收藏
+          a(href=`/user/${info.id}/follower`) 粉丝
+          a(href=`/user/${info.id}/following`) 关注
         .content
     .side
       .stat
@@ -25,20 +30,20 @@ block content
             span.practice &#xe72f;
             .content
               | 获得喜欢
-              span.count #{user.collect_list}
+              span.count #{info.like_count}
               | 次
           .item
             span.practice &#xe6a4;
             .content
               | 获得积分
-              span.count #{user.score}
+              span.count #{info.score}
               | 分
       .follow
         .item
           .title 关注了
-          .count 5
+          .count #{info.following_count}
         .item
           .title 关注者
-          .count 0
-      .collect
-        a(href="/user/:nickname/collect") 收藏集
+          .count #{info.follower_count}
+      //- .collect
+      //-   a(href="/user/:nickname/collect") 收藏集

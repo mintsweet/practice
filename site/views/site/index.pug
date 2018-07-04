@@ -23,6 +23,6 @@ block content
         ul.list
           each user in top100
             li
-              a.nickname(href=`/user/${user.nickname}`) #{user.nickname}
+              a.nickname(href=`/user/${user.id}`) #{user.nickname}
               span.score #{user.score}
       
