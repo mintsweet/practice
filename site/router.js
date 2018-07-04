@@ -28,18 +28,23 @@ router.get('/signin', User.renderSignin);
 router.post('/signin', User.signin);
 router.get('/forget_pass', User.renderForgetPass);
 router.post('/forget_pass', User.forgetPass);
-// router.get('/signout', User.signout);
-// router.get('/user/:nickname', User.renderInfo);
-// router.get('/users/top100', User.renderTop100);
+router.get('/signout', User.signout);
+router.get('/users/top100', User.renderTop100);
+router.get('/user/:uid', User.renderInfo);
+router.get('/user/:uid/likes', User.renderLikes);
+router.get('/user/:uid/collections', User.renderCollections);
+router.get('/user/:uid/replies', User.renderReplies);
+router.get('/user/:uid/follower', User.renderFollower);
+router.get('/user/:uid/following', User.renderFolloing);
 
-// // 主题
+// 话题
 // router.get('/topic/create', Auth.userRequired, Topic.renderCreate);
 // router.post('/topic/create', Auth.userRequired, Topic.createTopic);
 // router.get('/topics/:id', Topic.renderDetail);
 // router.get('/topics/:id/edit', Auth.userRequired, Topic.renderEdit);
 
 // // 消息
-// router.get('/message', Auth.userRequired, Message.renderMessage);
+// router.get('/message/user', Auth.userRequired, Message.renderMessage);
 // router.get('/message/system', Auth.userRequired, Message.renderSystemMessage);
 
 module.exports = router;

@@ -4,7 +4,10 @@ class Captcha {
   async getPicCaptcha(req, res) {
     const response = await getPicCaptcha();
     if (response.status === 1) {
-      req.app.locals.pic_token = response.data.token;
+      req.app.locals.pic_token = {
+        token: response.data.token,
+        expired: Date.now() + 1000 * 60 * 5
+      };
       return res.send({
         status: 1,
         data: response.data.url
@@ -19,12 +22,20 @@ class Captcha {
 
   async getSmsCaptcha(req, res) {
     const { piccaptcha, mobile } = req.query;
-    if (piccaptcha.toLowerCase() !== req.app.locals.pic_token.toLowerCase()) {
+    const { pic_token } = req.app.locals;
+
+    if (pic_token.token !== piccaptcha.toUpperCase()) {
       return res.send({
         status: 0,
         message: '图形验证码不正确'
       });
+    } else if (Date.now() > pic_token.expired) {
+      return res.send({
+        status: 0,
+        message: '图形验证码已过期'
+      });
     }
+
     const response = await getSmsCaptcha({ mobile });
     if (response.status === 1) {
       req.app.locals.sms_code = {

@@ -59,15 +59,15 @@ exports.getUsersStart = () => request('/users/start');
 // 获取积分榜前一百
 exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
-exports.getUserInfoByName = uid => request(`/user/${uid}`);
+exports.getUserInfoById = uid => request(`/user/${uid}`);
 // 关注或者取消关注某个用户
 exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
 // 获取用户喜欢列表
 exports.getUserLikes = uid => request(`/user/${uid}/likes`);
 // 获取用户收藏列表
-exports.getUserCollection = uid => request(`/user/${uid}/collections`);
+exports.getUserCollections = uid => request(`/user/${uid}/collections`);
 // 获取用户回复列表
-exports.getUserReply = uid => request(`/user/${uid}/replies`);
+exports.getUserReplies = uid => request(`/user/${uid}/replies`);
 // 获取用户粉丝列表
 exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 // 获取用户关注列表

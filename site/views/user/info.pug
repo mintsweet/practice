@@ -10,6 +10,13 @@ block content
           h1 #{user.nickname}
           a.edit(href=`/user/${user.nickname}/edit`) 编辑个人资料
       .gener
+        .title
+          a(href=`/user/${user.id}`) 动态
+          a(href=`/user/${user.id}/likes`) 喜欢
+          a(href=`/user/${user.id}/collections`) 收藏
+          a(href=`/user/${user.id}/follower`) 粉丝
+          a(href=`/user/${user.id}/following`) 关注
+        .content
     .side
       .stat
         .title 个人成就

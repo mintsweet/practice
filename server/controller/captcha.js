@@ -82,6 +82,8 @@ class Captcha extends BaseComponent {
       expired: Date.now() + Number(expired)
     };
 
+    console.warn(code);
+
     return res.send({
       status: 1,
       code

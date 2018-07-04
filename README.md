@@ -14,10 +14,7 @@ Practice 整个包涵盖了多种技术(Node、Express、Pug、MongoDB、React�
 
 ## 文档
 
-[快速开始](server/controller/static/get_start.md)
-
----
-
+[快速开始](server/controller/static/get_start.md)<br>
 [API说明](API.md)
 
 ## 博客

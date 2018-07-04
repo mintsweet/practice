@@ -52,7 +52,7 @@ $(document).ready(function () {
       return false;
     }
 
-    getcode.addClass('disabled').text(`请${countTime}s后重试`);
+    getcode.addClass('disabled');
 
     if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
       alert.text('请填写正确的手机号').slideDown();
@@ -66,6 +66,7 @@ $(document).ready(function () {
 
     function countStats() {
       countTime--;
+      getcode.text(`请${countTime}s后重试`);
       if (countTime === 0) {
         getcode.removeClass('disabled').text('获取验证码');
         clearInterval(timer);
