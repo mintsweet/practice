@@ -32,12 +32,13 @@ router.get('/signout', User.signout);
 router.get('/users/top100', User.renderTop100);
 router.get('/user/:uid', User.renderInfo);
 router.get('/user/:uid/likes', User.renderLikes);
-router.get('/user/:uid/collections', User.renderCollections);
 router.get('/user/:uid/replies', User.renderReplies);
 router.get('/user/:uid/follower', User.renderFollower);
 router.get('/user/:uid/following', User.renderFolloing);
 router.get('/setting', Auth.userRequired, User.renderSetting);
+router.post('/setting', Auth.userRequired, User.setting);
 router.get('/update_pass', Auth.userRequired, User.renderUpdatePass);
+router.post('/update_pass', Auth.userRequired, User.updatePass);
 
 // 话题
 router.get('/topics/create', Auth.userRequired, Topic.renderCreateTopic);

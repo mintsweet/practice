@@ -7,7 +7,11 @@ block content
         .avatar
           img(src=info.avatar)
         .desc
-          h1 #{info.nickname}
+          h1
+            | #{info.nickname}
+            if info.location
+              span.practice &#xe602; #{info.location}
+          h2 #{info.signature}
           if user && info.id === user.id
             a.action(href=`/setting`) 编辑个人资料
           else if user && !isFollow
@@ -16,13 +20,24 @@ block content
             a.action(href=`/user/${user.id}/edit`) 取消关注
       .gener
         .title
-          a(href=`/user/${info.id}`) 动态
-          a(href=`/user/${info.id}/likes`) 喜欢
-          a(href=`/user/${info.id}/collections`) 收藏
-          a(href=`/user/${info.id}/replies`) 回复
-          a(href=`/user/${info.id}/follower`) 粉丝
-          a(href=`/user/${info.id}/following`) 关注
+          a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
+          a(href=`/user/${info.id}/likes`, class={active: type === 'like'}) 喜欢
+          a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
+          span 更多
+            .more
+              a(href=`/user/${info.id}/follower`) 粉丝
+              a(href=`/user/${info.id}/following`) 关注
         ul.content
+          if data.length > 0
+            each item in data
+              case item.type
+                when 'create'
+                  li 
+                    span 发布了话题
+                    time #{item.create_at}
+                    a.topic(href=`/topic/${item.id}`) #{item.title}
+          else
+            .no-content 暂无内容
     .side
       .stat
         .title 个人成就
@@ -42,9 +57,12 @@ block content
       .follow
         .item
           .title 关注了
-          .count #{info.following_count}
+          a.count(href=`/user/${info.id}/following`) #{info.following_count}
         .item
           .title 关注者
-          .count #{info.follower_count}
-      //- .collect
-      //-   a(href="/user/:nickname/collect") 收藏集
+          a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
+append footer
+  script.
+    $('.gener .title>span').hover(function() {
+      $('.gener .more').fadeToggle();
+    });

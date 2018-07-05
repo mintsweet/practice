@@ -10,6 +10,7 @@ block content
     .content
       .title 个人资料
       form.setting-form(method="post")
+        .alert.alert-error(class=error ? '' : 'hidden') #{error}
         .form-item
           label(for="avatar") 头像
           .avatar

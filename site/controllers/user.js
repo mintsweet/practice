@@ -2,8 +2,9 @@ const formidable = require('formidable');
 const {
   getPicCaptcha, signup, signin, forgetPass,
   signout, getUsersTop100, getUserInfoById,
-  getUserLikes, getUserCollections, getUserReplies,
-  getUserBehaviors, getUserFollower, getUserFollowing
+  getUserLikes, getUserReplies,
+  getUserBehaviors, getUserFollower, getUserFollowing,
+  setting, updatePass, getCurrentUserInfo
 } = require('../http/api');
 
 class User {
@@ -220,51 +221,133 @@ class User {
 
   // 用户喜欢页
   async renderLikes(req, res) {
-    const response = await getUserLikes();
+    const { uid } = req.params;
+
+    let response;
+    let info;
+    let isFollow;
+    let behaviors;
+
+    response = await getUserInfoById(uid);
+    if (response.status === 1) {
+      info = response.data;
+      isFollow = response.isFollow || false;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getUserLikes(uid);
+    if (response.status === 1) {
+      behaviors = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
 
     return res.render('user/info', {
       title: '喜欢 - 用户信息',
-      info: response.data
-    });
-  }
-
-  // 用户收藏页
-  async renderCollections(req, res) {
-    const response = await getUserCollections();
-
-    return res.render('user/info', {
-      title: '收藏 - 个人信息',
-      info: response.data
+      info,
+      data: behaviors,
+      type: 'like',
+      isFollow
     });
   }
 
   // 用户回复页
   async renderReplies(req, res) {
-    const response = await getUserReplies();
+    const { uid } = req.params;
+
+    let response;
+    let info;
+    let isFollow;
+    let behaviors;
+
+    response = await getUserInfoById(uid);
+    if (response.status === 1) {
+      info = response.data;
+      isFollow = response.isFollow || false;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getUserReplies(uid);
+    if (response.status === 1) {
+      behaviors = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
 
     return res.render('user/info', {
-      title: '收藏 - 个人信息',
-      info: response.data
+      title: '回复 - 用户信息',
+      info,
+      data: behaviors,
+      type: 'reply',
+      isFollow
     });
   }
 
   // 用户粉丝页
   async renderFollower(req, res) {
-    const response = await getUserFollower();
+    const { uid } = req.params;
+
+    let response;
+    let info;
+    let isFollow;
+    let behaviors;
+
+    response = await getUserInfoById(uid);
+    if (response.status === 1) {
+      info = response.data;
+      isFollow = response.isFollow || false;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getUserFollower(uid);
+    if (response.status === 1) {
+      behaviors = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
 
     return res.render('user/info', {
-      title: '粉丝 - 个人信息',
-      info: response.data
+      title: '粉丝 - 用户信息',
+      info,
+      data: behaviors,
+      type: 'follower',
+      isFollow
     });
   }
 
   // 用户关注页
   async renderFolloing(req, res) {
-    const response = await getUserFollowing();
+    const { uid } = req.params;
+
+    let response;
+    let info;
+    let isFollow;
+    let behaviors;
+
+    response = await getUserInfoById(uid);
+    if (response.status === 1) {
+      info = response.data;
+      isFollow = response.isFollow || false;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getUserFollowing(uid);
+    if (response.status === 1) {
+      behaviors = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
 
     return res.render('user/info', {
-      title: '关注 - 个人信息',
-      info: response.data
+      title: '关注 - 用户信息',
+      info,
+      data: behaviors,
+      type: 'following',
+      isFollow
     });
   }
 
@@ -275,10 +358,66 @@ class User {
     });
   }
 
+  // 更新个人设置
+  setting(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        return res.render('user/setting', {
+          title: '个人资料',
+          error: err
+        });
+      }
+
+      const response = await setting({ ...fields });
+
+      if (response.status === 1) {
+        const userInfo = await getCurrentUserInfo();
+        if (userInfo.status === 1) {
+          req.app.locals.user = userInfo.data;
+        }
+        return res.render('user/setting', {
+          title: '个人资料'
+        });
+      } else {
+        return res.render('user/setting', {
+          title: '个人资料',
+          error: response.message
+        });
+      }
+    });
+  }
+
   // 修改密码页
   renderUpdatePass(req, res) {
     res.render('user/update_pass', {
       title: '修改密码'
+    });
+  }
+
+  // 修改密码
+  updatePass(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        return res.render('user/update_pass', {
+          title: '修改密码',
+          error: err
+        });
+      }
+
+      const response = await updatePass({ ...fields });
+
+      if (response.status === 1) {
+        return res.render('user/update_pass', {
+          title: '修改密码'
+        });
+      } else {
+        return res.render('user/update_pass', {
+          title: '修改密码',
+          error: response.message
+        });
+      }
     });
   }
 }

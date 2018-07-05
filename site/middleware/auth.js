@@ -13,6 +13,7 @@ class Auth {
 
   async getUserInfo(req, res, next) {
     const response = await getCurrentUserInfo();
+
     if (response.status === 1) {
       req.app.locals.user = response.data;
     } else {

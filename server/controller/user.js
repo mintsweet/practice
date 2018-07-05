@@ -276,6 +276,7 @@ class User extends BaseComponent {
   // 获取当前用户信息
   getUserInfo(req, res) {
     const { userInfo } = req.session;
+
     return res.send({
       status: 1,
       data: userInfo
@@ -295,12 +296,12 @@ class User extends BaseComponent {
         });
       }
 
-      const { id } = req.session.userInfo;
+      const { id, nickname: currentNickname } = req.session.userInfo;
       const { nickname } = fields;
 
       try {
         const existUser = await UserModel.findOne({ nickname });
-        if (existUser) {
+        if (existUser && nickname !== currentNickname) {
           return res.send({
             status: 0,
             type: 'NICKNAME_HAS_BEEN_REGISTERED',
@@ -308,9 +309,12 @@ class User extends BaseComponent {
           });
         }
 
-        const doc = await UserModel.findByIdAndUpdate(id, { ...fields });
+        const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, {
+          new: true
+        });
 
         req.session.userInfo = doc.toObject();
+
         return res.send({
           status: 1
         });
@@ -535,11 +539,11 @@ class User extends BaseComponent {
       const result = await Promise.all(behaviors.map(item => {
         return new Promise(resolve => {
           if (item.type === 'follow') {
-            resolve(UserModel.findById(item.target_id, 'id nickname'));
+            resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
           } else if (item.type === 'ups') {
-            resolve(ReplyModel.findById(item.target_id, 'id'));
+            resolve(ReplyModel.findById(item.target_id, 'id create_at'));
           } else {
-            resolve(TopicModel.findById(item.target_id, 'id title'));
+            resolve(TopicModel.findById(item.target_id, 'id title create_at'));
           }
         });
       }));
@@ -566,17 +570,20 @@ class User extends BaseComponent {
   async getUserLikes(req, res) {
     const { uid } = req.params;
     try {
-      const likeBehavior = await BehaviorModel.find({ type: 'like', author_id: uid, delete: false });
-      const likeTopicIds = likeBehavior.map(item => item.target_id.toString());
-      const result = await Promise.all(likeTopicIds.map(item => {
+      const likeBehaviors = await BehaviorModel.find({ type: 'like', author_id: uid, delete: false });
+      const result = await Promise.all(likeBehaviors.map(item => {
         return new Promise(resolve => {
-          resolve(TopicModel.findById(item, 'id title'));
+          resolve(TopicModel.findById(item.target_id, 'id title create_at'));
         });
       }));
 
+      const data = likeBehaviors.map((item, i) => {
+        return { ...result[i].toObject(), type: 'like' };
+      });
+
       return res.send({
         status: 1,
-        data: result
+        data
       });
     } catch(err) {
       logger.error(err);

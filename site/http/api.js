@@ -66,8 +66,6 @@ exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
 exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
 // 获取用户喜欢列表
 exports.getUserLikes = uid => request(`/user/${uid}/likes`);
-// 获取用户收藏列表
-exports.getUserCollections = uid => request(`/user/${uid}/collections`);
 // 获取用户回复列表
 exports.getUserReplies = uid => request(`/user/${uid}/replies`);
 // 获取用户粉丝列表
