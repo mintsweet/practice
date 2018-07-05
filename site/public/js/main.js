@@ -13,7 +13,7 @@ $(document).ready(function () {
 
   // 下拉菜单
   $('.avatar-wrapper').hover(function() {
-    $('.drop-menus').slideToggle();
+    $('.drop-menus').stop(true, false).slideToggle();
   });
 
   // back top 回到顶部

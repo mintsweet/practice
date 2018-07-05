@@ -1,8 +1,8 @@
 extends ../layout
 
 block content
-  .topic-detail
-    .content
+  .layout-content
+    .topic-detail
       .author
         a.avatar(href=`/user/${topic.author.id}`)
           img(src=topic.author.avatar)
@@ -13,4 +13,32 @@ block content
       h1.title #{topic.title}
       .markdown
         | !{topic.content}
-    .side
+    .reply-title 评论
+    .reply-create#reply
+      if user
+        .avatar(for="reply")
+          img(src=user.avatar)
+        form#replyForm.reply-form(action="post")
+          textarea#reply(name="content", rows="2", placeholder="说说你的看法...")
+          button.btn(type="submit") 评论
+      else
+        | 请先登录
+    ul.reply-list
+      li
+        .avatar
+          img(src=user.avatar)
+        .detail
+          .nickname 青湛
+          .content 测试一段回复内容 .... 嘻嘻嘻 哈哈哈哈
+          .action
+            a.up(href="")
+            a.reply(href="")
+            time 9分钟前
+  .layout-sider
+  .float-action
+    a.practice &#xe63b;
+      span.number 323
+    a.practice(href="#reply") &#xe619;
+      span.number 46
+    a.practice &#xe65f;
+      span.number 5

@@ -65,5 +65,5 @@ block content
 append footer
   script.
     $('.user-gener .title>span').hover(function() {
-      $('.user-gener .more').fadeToggle();
+      $('.user-gener .more').stop(true, false).fadeToggle();
     });
