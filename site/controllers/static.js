@@ -1,14 +1,14 @@
 const {
-  getStartData,
-  getApiData,
-  getAboutData
+  getStartDoc,
+  getApiDoc,
+  getAboutDoc
 } = require('../http/api');
 
 class Static {
   // 快速开始
   async getStart(req, res) {
-    const response = await getStartData();
-    res.render('static/get_start', {
+    const response = await getStartDoc();
+    res.render('static/md_template', {
       title: '快速开始',
       text: response.data
     });
@@ -16,8 +16,8 @@ class Static {
 
   // API说明
   async getApiIntroduction(req, res) {
-    const response = await getApiData();
-    res.render('static/api_introduction', {
+    const response = await getApiDoc();
+    res.render('static/md_template', {
       title: 'API说明',
       text: response.data
     });
@@ -25,8 +25,8 @@ class Static {
 
   // 关于
   async getAbout(req, res) {
-    const response = await getAboutData();
-    res.render('static/about', {
+    const response = await getAboutDoc();
+    res.render('static/md_template', {
       title: '关于',
       text: response.data
     });

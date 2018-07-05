@@ -23,11 +23,11 @@ const request = (url, data, method = 'GET') => {
 * 静态 static
 */
 // 快速开始
-exports.getStartData = () => request('/static/get_start');
+exports.getStartDoc = () => request('/static/get_start');
 // API说明
-exports.getApiData = () => request('/static/api_introduction');
+exports.getApiDoc = () => request('/static/api_introduction');
 // 关于
-exports.getAboutData = () => request('/static/about');
+exports.getAboutDoc = () => request('/static/about');
 
 /*
 * 验证码 captcha

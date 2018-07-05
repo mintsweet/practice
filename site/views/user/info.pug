@@ -1,68 +1,69 @@
 extends ../layout
 
 block content
-  .user-info
-    .info
-      .person
-        .avatar
-          img(src=info.avatar)
-        .desc
-          h1
-            | #{info.nickname}
-            if info.location
-              span.practice &#xe602; #{info.location}
-          h2 #{info.signature}
-          if user && info.id === user.id
-            a.action(href=`/setting`) 编辑个人资料
-          else if user && !isFollow
-            a.action(href=`/user/${user.id}/edit`) 关注
-          else if user && isFollow
-            a.action(href=`/user/${user.id}/edit`) 取消关注
-      .gener
-        .title
-          a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
-          a(href=`/user/${info.id}/likes`, class={active: type === 'like'}) 喜欢
-          a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
-          span 更多
-            .more
-              a(href=`/user/${info.id}/follower`) 粉丝
-              a(href=`/user/${info.id}/following`) 关注
-        ul.content
-          if data.length > 0
-            each item in data
-              case item.type
-                when 'create'
-                  li 
-                    span 发布了话题
-                    time #{item.create_at}
-                    a.topic(href=`/topic/${item.id}`) #{item.title}
-          else
-            .no-content 暂无内容
-    .side
-      .stat
-        .title 个人成就
-        .body
-          .item
-            span.practice &#xe72f;
-            .content
-              | 获得喜欢
-              span.count #{info.like_count}
-              | 次
-          .item
-            span.practice &#xe6a4;
-            .content
-              | 获得积分
-              span.count #{info.score}
-              | 分
-      .follow
+  .layout-content
+    .user-info
+      .avatar
+        img(src=info.avatar)
+      .desc
+        h1
+          | #{info.nickname}
+          if info.location
+            span.practice &#xe602; #{info.location}
+        h2 #{info.signature}
+        if user && info.id === user.id
+          a.action(href=`/setting`) 编辑个人资料
+        else if user && !isFollow
+          a.action(href=`/user/${user.id}/edit`) 关注
+        else if user && isFollow
+          a.action(href=`/user/${user.id}/edit`) 取消关注
+    .user-gener
+      .title
+        a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
+        a(href=`/user/${info.id}/likes`, class={active: type === 'like'}) 喜欢
+        a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
+        span 更多
+          .more
+            a(href=`/user/${info.id}/follower`) 粉丝
+            a(href=`/user/${info.id}/following`) 关注
+      ul.content
+        if data.length > 0
+          each item in data
+            case item.type
+              when 'create'
+                li 
+                  span 发布了话题
+                  time #{item.create_at}
+                  a.topic(href=`/topic/${item.id}`) #{item.title}
+        else
+          .no-content 暂无内容
+  .layout-sider
+    .user-stat
+      .title 个人成就
+      .body
         .item
-          .title 关注了
-          a.count(href=`/user/${info.id}/following`) #{info.following_count}
+          span.practice &#xe72f;
+          .content
+            | 获得喜欢
+            span.count #{info.like_count}
+            | 次
         .item
-          .title 关注者
-          a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
+          span.practice &#xe6a4;
+          .content
+            | 获得积分
+            span.count #{info.score}
+            | 分
+    .user-follow
+      .item
+        .title 关注了
+        a.count(href=`/user/${info.id}/following`) #{info.following_count}
+      .item
+        .title 关注者
+        a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
+    //- .user-collect
+    //-   a(href=`/user/${info.id}/collections`) 收藏集
 append footer
   script.
-    $('.gener .title>span').hover(function() {
-      $('.gener .more').fadeToggle();
+    $('.user-gener .title>span').hover(function() {
+      $('.user-gener .more').fadeToggle();
     });

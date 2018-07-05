@@ -13,6 +13,8 @@ class User {
     this.signup = this.signup.bind(this);
     this.renderSignin = this.renderSignin.bind(this);
     this.signin = this.signin.bind(this);
+    this.renderForgetPass = this.renderForgetPass.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
   }
 
   async getPicCaptcha(req) {
@@ -115,8 +117,8 @@ class User {
       if (response.status === 1) {
         return res.redirect('/');
       } else {
-        return res.render('user/signup', {
-          title: '注册',
+        return res.render('user/signin', {
+          title: '登录',
           error: response.message,
           picUrl: url
         });
@@ -178,12 +180,16 @@ class User {
 
   // 积分榜前一百
   async renderTop100(req, res) {
-    const resUserTop100 = await getUsersTop100();
+    const response = await getUsersTop100();
 
-    return res.render('user/top100', {
-      title: '积分榜前一百',
-      top100: resUserTop100
-    });
+    if (response.status === 1) {
+      return res.render('user/top100', {
+        title: '积分榜前一百',
+        top100: response.data
+      });
+    } else {
+      return res.redirect('/exception/500');
+    }
   }
 
   // 个人信息页

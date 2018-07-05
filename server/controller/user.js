@@ -410,7 +410,7 @@ class User extends BaseComponent {
   // 获取积分榜前一百用户
   async getTop100(req, res) {
     try {
-      const userList = await UserModel.find({}, 'id nickname score', {
+      const userList = await UserModel.find({}, 'id nickname score avatar topic_count follower_count', {
         limit: 100,
         sort: '-score'
       });

@@ -7,7 +7,7 @@ block content
       | 用户注册
     .user-form
       form#signupForm.form.form-horizontal(method="post")
-        .alert.alert-error(class=error ? '' : 'hidden') #{error}
+        .alert.alert-error(class={hidden: !error}) #{error}
         .control-group
           label.control-label(for="nickname") 昵称：
           .controls

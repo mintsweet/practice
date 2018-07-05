@@ -1,28 +1,34 @@
 extends ../layout
 
 block content
-  .site
-    .content
-      .tab-list
-        each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
-          if currentTab === item.url
-            a.active(href="?tab=" + item.url) #{item.name}
-          else
-            a(href="?tab=" + item.url) #{item.name}
-      if topics.length > 0
-        include ../topic/list
-      else
-        div.no-content 暂无内容
-    .side
-      .download
-        a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
-      .top100
-        .title
-          | 积分榜
-          a(href="/users/top100") 更多
-        ul.list
-          each user in top100
-            li
-              a.nickname(href=`/user/${user.id}`) #{user.nickname}
-              span.score #{user.score}
+  .layout-content
+    .tab-list
+      each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
+        if currentTab === item.url
+          a.active(href="?tab=" + item.url) #{item.name}
+        else
+          a(href="?tab=" + item.url) #{item.name}
+    if topics.length > 0
+      include ../topic/list
+    else
+      .no-content 暂无内容
+  .layout-sider
+    .site-download
+      a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
+    .site-block.site-top100
+      .title
+        | 积分榜
+        a(href="/users/top100") 更多
+      ul.score-list
+        each user in top100
+          li
+            a.nickname(href=`/user/${user.id}`) #{user.nickname}
+            span.score #{user.score}
+    .site-block.site-links
+      .title 友情社区
+      ul.links-list
+        li
+          a(href="https://cnodejs.org/", target="_blank")
+            img(src="/static/img/cnode_logo_32.png", alt="")
+
       

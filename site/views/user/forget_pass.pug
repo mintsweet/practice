@@ -7,10 +7,7 @@ block content
       | 忘记密码
     .user-form
       form#forgetForm.form.form-horizontal(method="post")
-        if error
-          .alert.alert-error #{error}
-        else
-          .alert.alert-error.hidden
+        .alert.alert-error(class={hidden: !error}) #{error}
         .control-group
           label.control-label(for="mobile") 手机号：
           .controls

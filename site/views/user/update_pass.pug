@@ -6,24 +6,23 @@ append header
       a(href="/setting") 个人资料
       a.active(href="/update_pass") 修改密码
 block content
-  .setting-content
-    .content
-      .title 修改密码
-      form#updatePassForm.setting-form(method="post")
-        .alert.alert-error(class=error ? '' : 'hidden') #{error}
-        .form-item
-          label(for="oldPass") 旧密码
-          input(type="password", id="oldPass", name="oldPass", placeholder="请输入旧密码")
-          a(href="/forget_pass") 忘记密码？
-        .form-item
-          label(for="newPass") 新密码
-          input(type="password", id="newPass", name="newPass", placeholder="请输入新密码")
-        .form-item
-          label(for="confimPass") 确认密码
-          input(type="password", id="confimPass", placeholder="请再一次输入新密码")
-        .form-item
-          button.btn(type="submit") 保存修改
-    .side
+  .layout-content
+    .setting-title 修改密码
+    form#updatePassForm.setting-form(method="post")
+      .alert.alert-error(class=error ? '' : 'hidden') #{error}
+      .form-item
+        label(for="oldPass") 旧密码
+        input(type="password", id="oldPass", name="oldPass", placeholder="请输入旧密码")
+        a(href="/forget_pass") 忘记密码？
+      .form-item
+        label(for="newPass") 新密码
+        input(type="password", id="newPass", name="newPass", placeholder="请输入新密码")
+      .form-item
+        label(for="confimPass") 确认密码
+        input(type="password", id="confimPass", placeholder="请再一次输入新密码")
+      .form-item
+        button.btn(type="submit") 保存修改
+  .layout-sider
 append footer
   script.
     var oldPass = $('#oldPass'),
