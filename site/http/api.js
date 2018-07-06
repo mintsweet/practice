@@ -89,9 +89,9 @@ exports.getTopicBySearch = title => request('/topics/search', title);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
 // 喜欢或者取消喜欢话题
-exports.likeOrUnlikeTopic = tid => request(`/topic/${tid}/like_or_un`);
+exports.likeOrUnlikeTopic = tid => request(`/topic/${tid}/like_or_un`, {}, 'PATCH');
 // 收藏或者取消收藏话题
-exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`);
+exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
 
 /*
 * 回复

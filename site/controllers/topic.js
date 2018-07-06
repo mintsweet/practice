@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const { createTopic, getTopicDetail } = require('../http/api');
+const { createTopic, getTopicDetail, likeOrUnlikeTopic } = require('../http/api');
 
 class Topic {
   // 创建话题
@@ -43,6 +43,33 @@ class Topic {
       });
     } else {
       return res.redirect('/exception/500');
+    }
+  }
+
+  // 喜欢或者取消喜欢
+  async likeOrUnlikeTopic(req, res) {
+    const { tid } = req.params;
+    const { user } = req.app.locals;
+
+    if (!user) {
+      return res.send({
+        status: 0,
+        message: '尚未登录'
+      });
+    }
+
+    const response = await likeOrUnlikeTopic(tid);
+
+    if (response.status === 1) {
+      return res.send({
+        status: 1,
+        action: response.type
+      });
+    } else {
+      return res.send({
+        status: 0,
+        message: response.message
+      });
     }
   }
 }

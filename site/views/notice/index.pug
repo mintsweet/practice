@@ -1,8 +1,22 @@
 extends ../layout
 
+append header
+  .setting-bar
+    .layout
+      a(href="/notice/user", class={active: type === 'user'}) 用户消息
+      a(href="/notice/system", class={active: type === 'system'}) 系统消息
 block content
-  .message
-    .message-header
-      a(href="/message") 用户消息
-      a(href="/message/system") 系统消息
-    .message-body
+  .layout-content
+    each item in data
+      case item.type
+        when 'like'
+          .notice-item.like
+            a(href=`/user/${item.author.id}`).avatar
+              img(src=item.author.avatar)
+            .detail
+              .nickname #{item.author.nickname}
+              .desc #{item.create_at}
+              .topic
+                span 喜欢了你的文章：
+                a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+  .layout-sider

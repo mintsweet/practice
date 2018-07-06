@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .layout-content
+  .layout-content.layout-white-block
     .topic-detail
       .author
         a.avatar(href=`/user/${topic.author.id}`)
@@ -22,23 +22,48 @@ block content
           textarea#reply(name="content", rows="2", placeholder="说说你的看法...")
           button.btn(type="submit") 评论
       else
-        | 请先登录
+        span 评论，请先登录
     ul.reply-list
-      li
-        .avatar
-          img(src=user.avatar)
-        .detail
-          .nickname 青湛
-          .content 测试一段回复内容 .... 嘻嘻嘻 哈哈哈哈
-          .action
-            a.up(href="")
-            a.reply(href="")
-            time 9分钟前
+      //- li
+      //-   .avatar
+      //-     img(src=user.avatar)
+      //-   .detail
+      //-     .nickname 青湛
+      //-     .content 测试一段回复内容 .... 嘻嘻嘻 哈哈哈哈
+      //-     .action
+      //-       a.up(href="")
+      //-       a.reply(href="")
+      //-       time 9分钟前
   .layout-sider
   .float-action
-    a.practice &#xe63b;
-      span.number 323
+    a.practice.like-action(href="javascript:;", class={ active: topic.isLike }) &#xe63b;
+      span.number #{topic.like_count}
     a.practice(href="#reply") &#xe619;
-      span.number 46
-    a.practice &#xe65f;
-      span.number 5
+      span.number #{topic.reply_count}
+    //- a.practice(href="javascript:;", class={ active: topic.isCollect }) &#xe65f;
+    //-   span.number #{topic.collect_count}
+  .message
+    .message-notice
+      .content
+append footer
+  script.
+    $('.like-action').click(function() {
+      $.getJSON(`${location.pathname}/like_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'like') {
+            $('.like-action .number').text(parseInt($('.like-action .number').text()) + 1);
+            $('.like-action').addClass('active');
+          } else {
+            $('.like-action .number').text(parseInt($('.like-action .number').text()) - 1);
+            $('.like-action').removeClass('active');
+          }
+        } else {
+          $('.message .message-notice').fadeIn();
+          $('.message .message-notice .content').addClass('error').text(res.message).fadeIn();
+          setTimeout(function() {
+            $('.message .message-notice').fadeOut();
+          }, 2000);
+          return false;
+        }
+      });
+    });

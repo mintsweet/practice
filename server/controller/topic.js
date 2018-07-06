@@ -286,6 +286,7 @@ class Topic extends BaseComponent {
   // 获取话题详情
   async getTopicById(req, res) {
     const { tid } = req.params;
+    const { userInfo } = req.session;
 
     try {
       let currentTopic = await TopicModel.findById(tid);
@@ -310,13 +311,24 @@ class Topic extends BaseComponent {
         })
       )));
 
+      let likeBehavior;
+      let collectBehavior;
+
+      if (userInfo && userInfo.id) {
+        likeBehavior = await BehaviorModel.findOne({ type: 'like', author_id: userInfo.id, target_id: currentTopic.id });
+        collectBehavior = await BehaviorModel.findOne({ type: 'collect', author_id: userInfo.id, target_id: currentTopic.id });
+      }
+
+      const isLike = (likeBehavior && !likeBehavior.delete) || false;
+      const isCollect = (collectBehavior && !collectBehavior.delete) || false;
+
       const replies = replyList.map((item, i) => {
         return { ...item.toObject({ virtuals: true }), author: promises[i] };
       });
 
       return res.send({
         status: 1,
-        data: { ...currentTopic.toObject({ virtuals: true }), author, replies }
+        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, isLike, isCollect }
       });
     } catch(err) {
       logger.error(err);
@@ -356,17 +368,23 @@ class Topic extends BaseComponent {
         behavior = await this.createBehavior('like', id, tid);
       }
 
+      const tagetUser = await UserModel.findById(currentTopic.author_id);
+
       if (behavior.delete) {
         currentTopic.like_count -= 1;
-        currentTopic.save();
+        await currentTopic.save();
         currentUser.like_count -= 1;
-        currentUser.save();
+        await currentUser.save();
+        tagetUser.score -= 5;
+        await tagetUser.save();
         req.session.userInfo.like_count -= 1;
       } else {
         currentTopic.like_count += 1;
         currentTopic.save();
         currentUser.like_count += 1;
         currentUser.save();
+        tagetUser.score += 5;
+        await tagetUser.save();
         req.session.userInfo.like_count += 1;
         // 发送提醒 notice
         await this.sendLikeNotice(id, currentTopic.author_id, currentTopic.id);

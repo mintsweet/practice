@@ -44,6 +44,7 @@ router.post('/update_pass', Auth.userRequired, User.updatePass);
 router.get('/topics/create', Auth.userRequired, Topic.renderCreateTopic);
 router.post('/topics/create', Auth.userRequired, Topic.createTopic);
 router.get('/topic/:tid', Topic.renderDetail);
+router.get('/topic/:tid/like_or_un', Topic.likeOrUnlikeTopic);
 
 // 消息
 router.get('/notice/user', Auth.userRequired, Notice.renderNoticeUser);

@@ -15,7 +15,11 @@ module.exports = class BaseComponent {
 
   // 谁(author_id)喜欢了你(target_id)的话题(topic_id)
   async sendLikeNotice(author_id, target_id, topic_id) {
-    await NoticeModel.create({ type: 'like', author_id, target_id, topic_id });
+    await NoticeModel.findOneAndUpdate({ type: 'like', author_id, target_id, topic_id }, {
+      has_read: false, create_at: Date.now()
+    }, {
+      upsert: true
+    });
   }
 
   // 谁(author_id)收藏了你(target_id)的话题(topic_id)

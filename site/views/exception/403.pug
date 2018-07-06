@@ -1,12 +1,13 @@
 extends ../layout
 
 block content
-  .layout.exception
-    h1 403
-    h2 抱歉！你无权访问该页面
-    p
-      strong 可能原因：
-      span 尚未登录>请先登录用户。
-      span 尚未成为管理员>请申请成为管理员。
-    p
-      a.btn(href="/") 去首页看看
+  .layout
+    .exception
+      h1 403
+      h2 抱歉！你无权访问该页面
+      p
+        strong 可能原因：
+        span 尚未登录>请先登录用户。
+        span 尚未成为管理员>请申请成为管理员。
+      p
+        a.btn(href="/") 去首页看看

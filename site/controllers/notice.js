@@ -1,16 +1,33 @@
+const { getUserNotice, getSystemNotice } = require('../http/api');
+
 class Notice {
   // 用户消息
-  renderNoticeUser(req, res) {
-    return res.render('notice/index', {
-      title: '用户消息'
-    });
+  async renderNoticeUser(req, res) {
+    const response = await getUserNotice(req.app.locals.user.id);
+
+    if (response.status === 1) {
+      return res.render('notice/index', {
+        title: '用户消息',
+        type: 'user',
+        data: response.data
+      });
+    } else {
+      return res.redirect('/exception/500');
+    }
   }
 
   // 系统消息
-  renderNoticeSystem(req, res) {
-    return res.render('notice/index', {
-      title: '系统消息'
-    });
+  async renderNoticeSystem(req, res) {
+    const response = await getSystemNotice(req.app.locals.user.id);
+
+    if (response.status === 1) {
+      return res.render('notice/index', {
+        title: '系统消息',
+        type: 'system'
+      });
+    } else {
+      return res.redirect('/exception/500');
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .layout-content
+  .layout-content.layout-white-block
     .tab-list
       each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
         if currentTab === item.url

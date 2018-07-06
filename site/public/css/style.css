@@ -42,7 +42,8 @@ body {background:#f5f5f5;color:#333;border-top: 4px solid #16982B;}
 a {color:#444;transition: color .3s;}
 a:hover {color: #16982B;}
 .layout {margin: 0 auto;width: 960px;display: flex;}
-.layout-content {flex: 3;margin-right: 20px;padding: 25px 20px;background: #fff;border-radius: 4px;}
+.layout-content {flex: 3;margin-right: 20px;}
+.layout-white-block {padding: 25px 20px;background: #fff;}
 .layout-sider {flex: 1;}
 .no-content {line-height: 250px;font-size: 60px;text-align: center;}
 .hidden {display: none;}
@@ -158,6 +159,7 @@ textarea:focus, input:focus {border-color: #16982B;}
 .topic-create .title {font-size: 20px;margin-bottom: 20px;}
 .topic-create .control-group {margin-top: 10px;}
 .topic-create .control-label {display: block;margin-bottom: 6px;}
+.topic-detail {margin-bottom: 150px;}
 .topic-detail .author {margin-bottom: 50px;width: 400px;}
 .topic-detail .author .avatar {display: inline-block;margin-right: 10px;width: 40px;height: 40px;border-radius: 50%;vertical-align: middle;}
 .topic-detail .author .avatar img {display: block;width: 100%;height: 100%;border-radius: 50%;}
@@ -171,6 +173,12 @@ textarea:focus, input:focus {border-color: #16982B;}
 .float-action {position: fixed;left: 200px;top: 50%;transform: translateY(-50%);}
 .float-action a {position: relative;display: block;margin-bottom: 10px;width: 40px;height: 40px;line-height: 40px;font-size: 18px;text-align: center;background: #fff;box-shadow: 1px 1px 6px rgba(0,0,0,.2);border-radius: 50%;}
 .float-action a .number {position: absolute;top: -4px;right: 0px;height: 12px;line-height: 12px;padding: 0 3px;font-size: 10px;color: #fff;background: #ccc;border-radius: 6px;}
+.float-action a.active {color: #16982B;}
+@media (max-width: 1400px) {
+  .float-action {
+    display: none;
+  }
+}
 
 /* reply */
 .reply-title {position: relative;padding: 0 40%;margin: 20px 0;text-align: center;}
@@ -254,6 +262,22 @@ textarea:focus, input:focus {border-color: #16982B;}
 .user-top100 .list span.topics {flex: 1;}
 .user-top100 .list span.follower {flex: 1;}
 
+/* notice */
+.notice-item {display: flex;margin-bottom: 10px;padding: 25px 20px;background: #fff;box-shadow: 1px 1px 1px rgba(0,0,0,.1);}
+.notice-item .avatar {flex: 0 0 60px;margin-right: 20px;height: 60px;border-radius: 50%;}
+.notice-item .avatar img {width: 100%;height: 100%;border-radius: 50%;}
+.notice-item .detail {flex: auto;}
+.notice-item .detail .nickname {font-weight: 600;font-size: 16px;line-height: 1.2;}
+.notice-item .detail .desc {display: block;font-size: 12px;color: #a1a1a1;}
+.notice-item .detail .topic {background: #f1f1f1;padding: 4px 10px;margin-top: 6px;}
+.notice-item .detail .topic a {font-weight: 600;}
+
+/* message */
+.message {position: fixed;width: 100%;top: 40px;left: 0;pointer-events: none;z-index: 9999;}
+.message-notice {display: none;padding: 8px;text-align: center;}
+.message-notice .content {display: inline-block;padding: 8px 16px;font-size: 14px;color: #fff;box-shadow: 0px 4px 12px rgba(0,0,0,.15);border-radius:4px;pointer-events: all;}
+.message-notice .content.error {background: #e4696f;}
+
 /* back top */
 .back-top {display: none;position: fixed;bottom: 60px;right: 40px;width: 40px;height: 40px;line-height: 40px;color: #fff;text-align: center;background: #16982B;cursor: pointer;border-radius: 50%;}
 .back-top i {font-size: 24px;}
@@ -269,7 +293,7 @@ textarea:focus, input:focus {border-color: #16982B;}
 .pagination li .practice {font-size: 12px;}
 
 /* exception */
-.exception {text-align:center;}
+.exception {flex: 1;text-align:center;}
 .exception h1 {font-size:120px;line-height:180px;margin-top:100px;}
 .exception h2 {margin: 10px 0;font-size:18px;}
 .exception p {font-size:14px;}
