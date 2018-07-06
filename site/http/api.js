@@ -23,9 +23,9 @@ const request = (url, data, method = 'GET') => {
 * 静态 static
 */
 // 快速开始
-exports.getStartDoc = () => request('/static/get_start');
+exports.getStartDoc = () => request('/static/start');
 // API说明
-exports.getApiDoc = () => request('/static/api_introduction');
+exports.getApiDoc = () => request('/static/api');
 // 关于
 exports.getAboutDoc = () => request('/static/about');
 
@@ -86,6 +86,8 @@ exports.editTopic = (tid, obj) => request(`/topic/${tid}/edit`, obj, 'PUT');
 exports.getTopicList = page => request('/topics/list', page);
 // 搜索话题列表
 exports.getTopicBySearch = title => request('/topics/search', title);
+// 获取无人回复的话题
+exports.getNoReplyTopic = number => request('/topics/no_reply', number);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
 // 喜欢或者取消喜欢话题

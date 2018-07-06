@@ -19,4 +19,7 @@ block content
               .topic
                 span 喜欢了你的文章：
                 a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+    else
+      span 暂无消息
   .layout-sider
+    include ../topic/no_reply.pug

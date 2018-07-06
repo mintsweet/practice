@@ -12,7 +12,7 @@ $(document).ready(function () {
   });
 
   // 下拉菜单
-  $('.avatar-wrapper').hover(function() {
+  $('.header .wrapper').hover(function() {
     $('.drop-menus').stop(true, false).slideToggle();
   });
 

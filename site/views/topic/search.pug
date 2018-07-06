@@ -1,0 +1,10 @@
+extends ../layout.pug
+
+block content
+  .layout-content.layout-white-block
+    h1.search-title 搜索结果
+    h2.search-statis.
+      关于"#[span #{q}]"的结果，共查询到#[span #{total}]条数据
+    include ./list.pug  
+  .layout-sider
+    include ./no_reply.pug

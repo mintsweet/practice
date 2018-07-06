@@ -180,7 +180,8 @@ class Topic extends BaseComponent {
     const size = parseInt(req.query.size) || 10;
 
     let query = {
-      lock: false
+      is_lock: false,
+      delete: false
     };
 
     if (!tab || tab === 'all') {
@@ -199,16 +200,27 @@ class Topic extends BaseComponent {
 
     try {
       const topicCount = await TopicModel.count(query);
-      const topicList = await TopicModel.find(query, '-__v -lock', options);
+      const topicList = await TopicModel.find(query, '-is_lock -delete', options);
 
-      const promises = await Promise.all(topicList.map(item => (
-        new Promise(resolve => {
-          resolve(UserModel.findById(item.author_id, 'nickname avatar'));
-        })
-      )));
+      const promiseAuthor = await Promise.all(topicList.map(item => {
+        return new Promise(resolve => {
+          resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
+        });
+      }));
+
+      const promiseLastReply = await Promise.all(topicList.map(item => {
+        return new Promise(resolve => {
+          resolve(UserModel.findById(item.last_reply, 'id nickname avatar'));
+        });
+      }));
 
       const result = topicList.map((item, i) => {
-        return { ...item.toObject({ virtuals: true }), author: promises[i] };
+        return {
+          ...item.toObject({ virtuals: true }),
+          author: promiseAuthor[i],
+          last_reply_author: promiseLastReply[i],
+          last_reply_at_ago: item.last_reply_at_ago()
+        };
       });
 
       return res.send({
@@ -234,13 +246,14 @@ class Topic extends BaseComponent {
 
   // 搜索话题
   async searchTopic(req, res) {
-    const { title } = req.query;
+    const title = req.query.title || '';
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 10;
 
     const query = {
       title: { $regex: title },
-      lock: false
+      is_lock: false,
+      delete: false
     };
 
     const options = {
@@ -251,13 +264,13 @@ class Topic extends BaseComponent {
 
     try {
       const topicCount = await TopicModel.count(query);
-      const topicList = await TopicModel.find(query, '-__v -lock', options);
+      const topicList = await TopicModel.find(query, '-is_lock -delete', options);
 
-      const promises = await Promise.all(topicList.map(item => (
-        new Promise(resolve => {
+      const promises = await Promise.all(topicList.map(item => {
+        return new Promise(resolve => {
           resolve(UserModel.findById(item.author_id, 'nickname avatar'));
-        })
-      )));
+        });
+      }));
 
       const result = topicList.map((item, i) => {
         return { ...item.toObject({ virtuals: true }), author: promises[i] };
@@ -272,6 +285,36 @@ class Topic extends BaseComponent {
           totalPage: Math.ceil(topicCount / size),
           size
         },
+      });
+    } catch(err) {
+      logger.error(err);
+      return res.send({
+        status: 0,
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
+      });
+    }
+  }
+
+  // 获取无人回复话题
+  async getNoReplyTopic(req, res) {
+    const query = {
+      is_lock: false,
+      delete: false,
+      reply_count: 0
+    };
+
+    const options = {
+      limit: 10,
+      sort: '-top -last_reply_at'
+    };
+
+    try {
+      const topicList = await TopicModel.find(query, 'id title', options);
+
+      return res.send({
+        status: 1,
+        data: topicList
       });
     } catch(err) {
       logger.error(err);

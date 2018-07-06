@@ -60,8 +60,8 @@ block content
       .item
         .title 关注者
         a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
-    //- .user-collect
-    //-   a(href=`/user/${info.id}/collections`) 收藏集
+    .user-collect
+      a(href=`/user/${info.id}/collections`) 收藏集
 append footer
   script.
     $('.user-gener .title>span').hover(function() {

@@ -1,9 +1,10 @@
 const fs = require('fs');
+const path = require('path');
 const md2html = require('../utils/md2html');
 
 class Static {
-  getStart(req, res) {
-    fs.readFile('./controller/static/get_start.md', 'utf-8', (err, data) => {
+  getQuickStart(req, res) {
+    fs.readFile('./controller/static/quick_start.md', 'utf-8', (err, data) => {
       if (err) {
         return res.send({
           status: 0,
@@ -21,8 +22,8 @@ class Static {
     });
   }
 
-  getApiIntroduction(req, res) {
-    fs.readFile('./controller/static/api.md', 'utf-8', (err, data) => {
+  getApiDoc(req, res) {
+    fs.readFile(path.join(__dirname, '../../API.md'), 'utf-8', (err, data) => {
       if (err) {
         return res.send({
           status: 0,

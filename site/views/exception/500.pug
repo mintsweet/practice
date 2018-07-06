@@ -1,7 +1,11 @@
 extends ../layout
 
 block content
-  .layout
-    .exception
-      h1 500
-      h2 抱歉！服务器开了个小差
+  .exception
+    h1 500
+    h2 抱歉！服务器开了个小差
+    p
+      strong 可能原因：
+      span 服务器状况不佳>请稍后重试。
+    p
+      a.btn(href="/") 去首页看看

@@ -8,7 +8,7 @@ class Static {
   // 快速开始
   async getStart(req, res) {
     const response = await getStartDoc();
-    res.render('static/md_template', {
+    res.render('static/template', {
       title: '快速开始',
       text: response.data
     });
@@ -17,7 +17,7 @@ class Static {
   // API说明
   async getApiIntroduction(req, res) {
     const response = await getApiDoc();
-    res.render('static/md_template', {
+    res.render('static/template', {
       title: 'API说明',
       text: response.data
     });
@@ -26,7 +26,7 @@ class Static {
   // 关于
   async getAbout(req, res) {
     const response = await getAboutDoc();
-    res.render('static/md_template', {
+    res.render('static/template', {
       title: '关于',
       text: response.data
     });

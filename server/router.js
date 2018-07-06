@@ -13,8 +13,8 @@ const router = express.Router();
 router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用 Mints - 薄荷糖社区 API接口' }));
 
 // 静态
-router.get('/static/get_start', Static.getStart); // 获取快速开始文档
-router.get('/static/api_introduction', Static.getApiIntroduction); // 获取API说明文档
+router.get('/static/start', Static.getQuickStart); // 获取快速开始文档
+router.get('/static/api', Static.getApiDoc); // 获取API说明文档
 router.get('/static/about', Static.getAbout); // 获取关于文档
 
 // 验证码
@@ -46,6 +46,7 @@ router.delete('/topic/:tid/delete', Auth.userRequired, Topic.deleteTopic); // �
 router.put('/topic/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑话题
 router.get('/topics/list', Topic.getTopicList); // 获取话题列表
 router.get('/topics/search', Topic.searchTopic); // 搜索话题列表
+router.get('/topics/no_reply', Topic.getNoReplyTopic); // 获取无人回复的话题
 router.get('/topic/:tid', Topic.getTopicById); // 根据ID获取话题详情
 router.patch('/topic/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
 router.patch('/topic/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题

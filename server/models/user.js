@@ -23,7 +23,7 @@ const UserSchema = new Schema({
 
   // 统计
   topic_count: { type: Number, default: 0 },
-  like_count: { type: Number, default: 0 },
+  star_count: { type: Number, default: 0 },
   collect_count: { type: Number, default: 0 },
   reply_count: { type: Number, default: 0 },
   follower_count: { type: Number, default: 0 },

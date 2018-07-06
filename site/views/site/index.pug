@@ -8,10 +8,7 @@ block content
           a.active(href="?tab=" + item.url) #{item.name}
         else
           a(href="?tab=" + item.url) #{item.name}
-    if topics.length > 0
-      include ../topic/list
-    else
-      .no-content 暂无内容
+    include ../topic/list
   .layout-sider
     .site-download
       a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
@@ -29,6 +26,5 @@ block content
       ul.links-list
         li
           a(href="https://cnodejs.org/", target="_blank")
-            img(src="/static/img/cnode_logo_32.png", alt="")
-
-      
+            img(src="/static/img/cnode_logo_32.png")
+    include ../topic/no_reply.pug

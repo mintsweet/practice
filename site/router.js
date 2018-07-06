@@ -13,8 +13,8 @@ const router = express.Router();
 router.get('/', Site.index);
 
 // 静态
-router.get('/get_start', Static.getStart);
-router.get('/api_introduction', Static.getApiIntroduction);
+router.get('/start', Static.getStart);
+router.get('/api', Static.getApiIntroduction);
 router.get('/about', Static.getAbout);
 
 // 验证码
@@ -45,6 +45,7 @@ router.get('/topics/create', Auth.userRequired, Topic.renderCreateTopic);
 router.post('/topics/create', Auth.userRequired, Topic.createTopic);
 router.get('/topic/:tid', Topic.renderDetail);
 router.get('/topic/:tid/like_or_un', Topic.likeOrUnlikeTopic);
+router.get('/topics/search', Topic.renderSearch);
 
 // 消息
 router.get('/notice/user', Auth.userRequired, Notice.renderNoticeUser);

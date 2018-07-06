@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const { createTopic, getTopicDetail, likeOrUnlikeTopic } = require('../http/api');
+const { createTopic, getTopicDetail, likeOrUnlikeTopic, getTopicBySearch, getNoReplyTopic } = require('../http/api');
 
 class Topic {
   // 创建话题
@@ -71,6 +71,47 @@ class Topic {
         message: response.message
       });
     }
+  }
+
+  // 搜索结果页
+  async renderSearch(req, res) {
+    const { q } = req.query;
+
+    let response;
+    let topics;
+    let currentPage;
+    let totalPage;
+    let total;
+    let noReplyList;
+
+    response = await getTopicBySearch({ title: q });
+
+    if (response.status === 1) {
+      // topics = response.data.topics;
+      // currentPage = response.data.currentPage;
+      totalPage = response.data.currentPage;
+      // total = response.data.total;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getNoReplyTopic();
+
+    if (response.status === 1) {
+      noReplyList = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    return res.render('topic/search', {
+      title: '搜索结果',
+      topics,
+      currentPage,
+      totalPage,
+      total,
+      q,
+      noReplyList
+    });
   }
 }
 
