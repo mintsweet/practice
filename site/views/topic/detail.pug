@@ -18,25 +18,41 @@ block content
       if user
         .avatar(for="reply")
           img(src=user.avatar)
-        form#replyForm.reply-form(action="post")
-          textarea#reply(name="content", rows="2", placeholder="说说你的看法...")
-          button.btn(type="submit") 评论
+        form#replyForm.reply-form(action=`/topic/${topic.id}/reply`, method="post")
+          textarea(name="content", rows="2", placeholder="说说你的看法...")
+          button.btn.reply-btn(type="submit") 评论
       else
         span 评论，请先登录
     ul.reply-list
-      //- li
-      //-   .avatar
-      //-     img(src=user.avatar)
-      //-   .detail
-      //-     .nickname 青湛
-      //-     .content 测试一段回复内容 .... 嘻嘻嘻 哈哈哈哈
-      //-     .action
-      //-       a.up(href="")
-      //-       a.reply(href="")
-      //-       time 9分钟前
+      each reply in topic.replies
+        li
+          a.avatar(href=`/user/${reply.author.id}`)
+            img(src=reply.author.avatar)
+          .detail
+            a.nickname(href=`/user/${reply.author.id}`) #{reply.author.nickname}
+            .content #{reply.content}
+            .action
+              a.practice(href="") &#xe72f;
+              a.practice(href="") &#xe619; 
+              time #{reply.create_at_ago}
+      else
+        span 暂无回复
   .layout-sider
-    .site-block
+    .site-block.topic-user
       .title 关于作者
+      .info
+        a.avatar(href=`/user/${topic.author.id}`)
+          img(src=topic.author.avatar)
+        a.nickname(href=`/user/${topic.author.id}`)
+          | #{topic.author.nickname}
+          if topic.author.location
+            span.location.practice &#xe602;#{topic.author.location}
+      .other
+        .score 积分：#{topic.author.score}
+        if topic.author.signature
+          .signature(title=topic.author.signature) **#{topic.author.signature}**
+        else
+          .signature **这家伙很懒，莫有签名**
     include ../topic/no_reply.pug
   .float-action
     a.practice.like-action(href="javascript:;", class={ active: topic.isLike }) &#xe63b;
@@ -50,6 +66,13 @@ block content
       .content
 append footer
   script.
+    $('#replyForm').submit(function() {
+      if (!content) {
+        globalMessage('error', '回复内容不能为空');
+        return false;
+      }
+    });
+
     $('.like-action').click(function() {
       $.getJSON(`${location.pathname}/like_or_un`, function(res) {
         if (res.status === 1) {
@@ -61,12 +84,7 @@ append footer
             $('.like-action').removeClass('active');
           }
         } else {
-          $('.message .message-notice').fadeIn();
-          $('.message .message-notice .content').addClass('error').text(res.message).fadeIn();
-          setTimeout(function() {
-            $('.message .message-notice').fadeOut();
-          }, 2000);
-          return false;
+          globalMessage('error', res.message);
         }
       });
     });

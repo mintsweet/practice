@@ -21,10 +21,10 @@ block content
           li
             a.nickname(href=`/user/${user.id}`) #{user.nickname}
             span.score #{user.score}
+    include ../topic/no_reply.pug
     .site-block.site-links
       .title 友情社区
       ul.links-list
         li
           a(href="https://cnodejs.org/", target="_blank")
             img(src="/static/img/cnode_logo_32.png")
-    include ../topic/no_reply.pug

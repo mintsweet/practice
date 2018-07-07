@@ -6,6 +6,7 @@ const Captcha = require('./controllers/captcha');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Notice = require('./controllers/notice');
+const Reply = require('./controllers/reply');
 
 const router = express.Router();
 
@@ -46,6 +47,9 @@ router.post('/topics/create', Auth.userRequired, Topic.createTopic);
 router.get('/topic/:tid', Topic.renderDetail);
 router.get('/topic/:tid/like_or_un', Topic.likeOrUnlikeTopic);
 router.get('/topics/search', Topic.renderSearch);
+
+// 回复
+router.post('/topic/:tid/reply', Reply.createReply);
 
 // 消息
 router.get('/notice/user', Auth.userRequired, Notice.renderNoticeUser);

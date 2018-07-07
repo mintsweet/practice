@@ -1,4 +1,4 @@
-const { getTopicList, getUsersTop100 } = require('../http/api');
+const { getTopicList, getUsersTop100, getNoReplyTopic } = require('../http/api');
 
 class Site {
   // 首页
@@ -11,6 +11,7 @@ class Site {
     let totalPage;
     let currentPage;
     let top100;
+    let noReplyTopic;
 
     response = await getTopicList({
       tab: tab || 'all',
@@ -35,13 +36,22 @@ class Site {
       res.redirect('/exception/500');
     }
 
+    response = await getNoReplyTopic();
+
+    if (response.status === 1) {
+      noReplyTopic = response.data;
+    } else {
+      res.redirect('/exception/500');
+    }
+
     res.render('site/index', {
       title: '首页',
       topics,
       totalPage,
       currentPage,
       currentTab,
-      top100
+      top100,
+      noReplyTopic
     });
   }
 }

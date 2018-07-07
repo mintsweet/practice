@@ -50,7 +50,7 @@ class Reply extends BaseComponent {
         }
 
         const _reply = {
-          content: md2html(content),
+          content,
           topic_id: tid,
           author_id: id,
           reply_id

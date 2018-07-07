@@ -345,14 +345,14 @@ class Topic extends BaseComponent {
       currentTopic.visit_count += 1;
       currentTopic = await currentTopic.save();
 
-      const author = await UserModel.findById(currentTopic.author_id, 'id nickname avatar score');
+      const author = await UserModel.findById(currentTopic.author_id, 'id nickname avatar location signature score');
       const replyList = await ReplyModel.find({ topic_id: currentTopic.id });
 
-      const promises = await Promise.all(replyList.map(item => (
-        new Promise(resolve => {
-          resolve(UserModel.findById(item.author_id, 'nickname avatar'));
-        })
-      )));
+      const promises = await Promise.all(replyList.map(item => {
+        return new Promise(resolve => {
+          resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
+        });
+      }));
 
       let likeBehavior;
       let collectBehavior;
@@ -366,7 +366,11 @@ class Topic extends BaseComponent {
       const isCollect = (collectBehavior && !collectBehavior.delete) || false;
 
       const replies = replyList.map((item, i) => {
-        return { ...item.toObject({ virtuals: true }), author: promises[i] };
+        return {
+          ...item.toObject({ virtuals: true }),
+          author: promises[i],
+          create_at_ago: item.create_at_ago()
+        };
       });
 
       return res.send({

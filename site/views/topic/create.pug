@@ -8,7 +8,7 @@ block content
     .title 发布主题
     .inner
       form.form(method="post")
-        .alert.alert-error(class=error ? '' : 'hidden')
+        .alert.alert-error(class=error ? '' : 'hidden') #{error}
         .control-group
           label.control-label(for="tab")
           .controls
@@ -21,7 +21,7 @@ block content
         .control-group
           label.control-label(for="title") 标题：
           .controls
-            input#title(type="text", name="title")
+            input#title(type="text", name="title", autocomplete="off")
         .control-group
           label.control-label(for="content") 内容：
           .controls
@@ -51,5 +51,5 @@ append footer
         return false;
       }
 
-      $('.content-hidden').val(simplemde.value());
+      $('.content-hidden').val(simplemde.value() || '测试啦啦啦');
     });

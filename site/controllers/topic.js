@@ -34,16 +34,72 @@ class Topic {
   async renderDetail(req, res) {
     const { tid } = req.params;
 
-    const response = await getTopicDetail(tid);
+    let response;
+    let topic;
+    let noReplyTopic;
+
+    response = await getTopicDetail(tid);
 
     if (response.status === 1) {
-      return res.render('topic/detail', {
-        title: '话题详情',
-        topic: response.data
-      });
+      topic = response.data;
     } else {
       return res.redirect('/exception/500');
     }
+
+    response = await getNoReplyTopic();
+
+    if (response.status === 1) {
+      noReplyTopic = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    return res.render('topic/detail', {
+      title: '话题详情',
+      topic,
+      noReplyTopic
+    });
+  }
+
+  // 搜索结果页
+  async renderSearch(req, res) {
+    const { q } = req.query;
+
+    let response;
+    let topics;
+    let currentPage;
+    let totalPage;
+    let total;
+    let noReplyTopic;
+
+    response = await getTopicBySearch({ title: q });
+
+    if (response.status === 1) {
+      topics = response.data.topics;
+      currentPage = response.data.currentPage;
+      totalPage = response.data.currentPage;
+      total = response.data.total;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getNoReplyTopic();
+
+    if (response.status === 1) {
+      noReplyTopic = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    return res.render('topic/search', {
+      title: '搜索结果',
+      topics,
+      currentPage,
+      totalPage,
+      total,
+      q,
+      noReplyTopic
+    });
   }
 
   // 喜欢或者取消喜欢
@@ -71,47 +127,6 @@ class Topic {
         message: response.message
       });
     }
-  }
-
-  // 搜索结果页
-  async renderSearch(req, res) {
-    const { q } = req.query;
-
-    let response;
-    let topics;
-    let currentPage;
-    let totalPage;
-    let total;
-    let noReplyList;
-
-    response = await getTopicBySearch({ title: q });
-
-    if (response.status === 1) {
-      // topics = response.data.topics;
-      // currentPage = response.data.currentPage;
-      totalPage = response.data.currentPage;
-      // total = response.data.total;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    response = await getNoReplyTopic();
-
-    if (response.status === 1) {
-      noReplyList = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('topic/search', {
-      title: '搜索结果',
-      topics,
-      currentPage,
-      totalPage,
-      total,
-      q,
-      noReplyList
-    });
   }
 }
 

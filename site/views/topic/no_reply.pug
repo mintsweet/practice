@@ -1,4 +1,7 @@
 .site-block
   .title 无人回复的话题
-  ul.not-reply
+  ul.no-reply
+    each item in noReplyTopic
+      li
+        a(href=`/topic/${item.id}`) #{item.title}
               
