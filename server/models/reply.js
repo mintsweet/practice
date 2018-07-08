@@ -18,7 +18,7 @@ const ReplySchema = new Schema({
 
 ReplySchema.plugin(BaseModel);
 
-ReplySchema.index({ topic_id: 1, author_id: 1 }, { unique: true });
+ReplySchema.index({ topic_id: 1, author_id: 1 });
 ReplySchema.index({ author_id: 1, create_at: -1 });
 
 ReplySchema.pre('save', function(next) {

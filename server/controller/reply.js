@@ -58,6 +58,11 @@ class Reply extends BaseComponent {
 
         await ReplyModel.create(_reply);
 
+        currentTopic.last_reply = id;
+        currentTopic.last_reply_at = new Date();
+        currentTopic.reply_count += 1;
+        await currentTopic.save();
+
         if (reply_id) {
           // 发起行为
           await this.createBehavior('reply2', id, reply_id);

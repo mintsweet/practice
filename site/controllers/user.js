@@ -61,7 +61,7 @@ class User {
         });
       }
 
-      const response = await signup(fields);
+      const response = await signup({ ...fields, avatar: 'http://image.yujunren.com/avatar.jpg' });
       if (response.status === 1) {
         return res.redirect('/');
       } else {

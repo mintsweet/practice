@@ -26,7 +26,6 @@ const NoticeSchema = new Schema({
   create_at: { type: Date, default: Date.now }
 });
 
-NoticeSchema.index({ type: 1, target_id: 1, author_id: 1 }, { unique: true });
 NoticeSchema.index({ create_at: -1 });
 
 const Notice = mongoose.model('Notice', NoticeSchema);

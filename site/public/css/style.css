@@ -86,26 +86,9 @@ textarea:focus, input:focus {border-color: #16982B;}
 .header .logo a:hover {color: #333;}
 .header .menu {float: left;margin-left: 80px;}
 .header .menu li {display: inline-block;margin-right: 20px;}
-.header .search {
-  position: relative;
-  float: left;
-  margin-left: 60px;
-}
-.header .search input {
-  padding: 6px 30px 6px 10px;
-  min-width: 200px;
-  border: none;
-  border-bottom: 1px solid #ddd;
-}
-.header .search button {
-  position: absolute;
-  right: 10px;
-  top: 15px;
-  border: none;
-  background: transparent;
-  outline: none;
-}
-
+.header .search {position: relative;float: left;margin-left: 60px;}
+.header .search input {padding: 6px 30px 6px 10px;min-width: 200px;border: none;border-bottom: 1px solid #ddd;}
+.header .search button {position: absolute;right: 10px;top: 15px;border: none;background: transparent;outline: none;}
 .header .user {position: absolute;top: 0;right: 0;padding: 0 10px;line-height: 55px;}
 .header .user .wrapper {position: relative;display: inline-block;padding: 0 15px;}
 .header .user .avatar {display: inline-block;width: 40px;height: 40px;border-radius: 50%;vertical-align: middle;}
@@ -176,6 +159,9 @@ textarea:focus, input:focus {border-color: #16982B;}
 .topic-list .topic .statistics i {margin-right: 4px;font-size: 14px;vertical-align: top;}
 .topic-list .topic .statistics span {display: inline-block;width: 40px;}
 .topic-list .topic .last-time {position: absolute;right: 10px;top: 0;width: 140px;font-size: 12px;text-align: center;}
+.topic-list .topic .last-time a {display: inline-block;width: 30px;height: 30px;vertical-align: middle;}
+.topic-list .topic .last-time img {width: 100%;height: 100%;}
+.topic-list .topic .last-time span {margin-left: 6px;vertical-align: middle;}
 .topic-create {flex: 1;padding: 20px 30px;background: #fff;border-radius: 4px;}
 .topic-create .title {font-size: 20px;margin-bottom: 20px;}
 .topic-create .control-group {margin-top: 10px;}
@@ -197,12 +183,9 @@ textarea:focus, input:focus {border-color: #16982B;}
 .topic-user .other .signature {width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;font-style: italic;color: #a1a1a1;font-size: 13px;}
 
 /* no reply */
-.no-reply {
-  padding: 10px 20px;
-}
-.no-reply li {
-  line-height: 30px;
-}
+.no-reply {padding: 10px 20px;width: 100%;overflow: hidden;box-sizing: border-box;}
+.no-reply li {line-height: 30px;}
+.no-reply li a {display: block;width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 
 /* search */
 .search-title {font-size: 22px;}
@@ -241,19 +224,7 @@ textarea:focus, input:focus {border-color: #16982B;}
 .reply-list .detail .nickname {font-weight: 600;line-height: 1;}
 .reply-list .detail .content {line-height: 30px;}
 .reply-list .detail .action {font-size: 12px;color: #d1d1d1;}
-.reply-list .detail .action a {
-  display: inline-block;
-  width: 30px;
-  line-height: 20px;
-  font-size: 14px;
-  color: #d1d1d1;
-  vertical-align: middle;
-}
-
-.reply-list .detail .action time {
-  line-height: 20px;
-  vertical-align: middle;
-}
+.reply-list .detail .action time {line-height: 20px;vertical-align: middle;}
 
 /* user */
 .user-acc {flex: 1;padding: 20px 30px;background: #fff;border-radius: 4px;}
