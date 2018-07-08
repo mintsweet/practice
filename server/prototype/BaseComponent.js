@@ -2,9 +2,16 @@ const BehaviorModel = require('../models/behavior');
 const NoticeModel = require('../models/notice');
 
 module.exports = class BaseComponent {
-  // 创建行为
+  // 创建一个行为
   async createBehavior(type, author_id, target_id) {
-    const behavior = await BehaviorModel.create({ type, author_id, target_id });
+    let behavior;
+    behavior = await BehaviorModel.findOne({ type, author_id, target_id });
+    if (behavior) {
+      behavior.is_un = !behavior.is_un;
+      behavior.save();
+    } else {
+      behavior = await BehaviorModel.create({ type, author_id, target_id });
+    }
     return behavior;
   }
 

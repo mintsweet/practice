@@ -6,6 +6,10 @@ module.exports = function(schema) {
     return moment(this.create_at).toNow();
   };
 
+  schema.methods.update_at_ago = function() {
+    return moment(this.update_at).toNow();
+  }
+
   schema.methods.last_reply_at_ago = function() {
     return moment(this.last_reply_at).toNow();
   };
@@ -14,8 +18,6 @@ module.exports = function(schema) {
   schema.options.toObject = schema.options.toJSON = {
     transform(doc, ret) {
       ret.id = ret._id;
-      ret.create_at = moment(ret.create_at).format('YYYY-MM-DD HH:mm');
-      ret.update_at = moment(ret.update_at).format('YYYY-MM-DD HH:mm');
       delete ret.__v;
       delete ret._id;
     }

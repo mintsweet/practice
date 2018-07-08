@@ -34,7 +34,7 @@ router.get('/users/top100', User.getTop100); // 获取积分榜前100用户列�
 router.get('/user/:uid', User.getInfoById); // 根据ID获取用户信息
 router.patch('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUser); // 关注或者取消关注某个用户
 router.get('/user/:uid/behaviors', User.getUserBehaviors); // 获取用户动态
-router.get('/user/:uid/likes', User.getUserLikes); // 获取用户喜欢列表
+router.get('/user/:uid/stars', User.getUserStars); // 获取用户喜欢列表
 router.get('/user/:uid/collections', User.getUserCollections); // 获取用户收藏列表
 router.get('/user/:uid/replies', User.getUserReplies); // 用户回复的列表
 router.get('/user/:uid/follower', User.getUserFollower); // 获取用户粉丝列表
@@ -48,7 +48,7 @@ router.get('/topics/list', Topic.getTopicList); // 获取话题列表
 router.get('/topics/search', Topic.searchTopic); // 搜索话题列表
 router.get('/topics/no_reply', Topic.getNoReplyTopic); // 获取无人回复的话题
 router.get('/topic/:tid', Topic.getTopicById); // 根据ID获取话题详情
-router.patch('/topic/:tid/like_or_un', Auth.userRequired, Topic.likeOrUnlikeTopic); // 喜欢或者取消喜欢话题
+router.patch('/topic/:tid/star_or_un', Auth.userRequired, Topic.starOrUnstarTopic); // 喜欢或者取消喜欢话题
 router.patch('/topic/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUncollectTopic); // 收藏或者取消收藏话题
 
 // 回复

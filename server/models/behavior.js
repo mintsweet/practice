@@ -9,7 +9,9 @@ const BaseModel = require('./base');
 * 2. star 喜欢了
 * 3. collect 收藏了
 * 4. follow 关注了
-* 5. up 点赞了
+* 5. reply 回复了话题
+* 6. reply2 回复了回复
+* 7. up 点赞了
 */
 
 const BehaviorSchema = new Schema({

@@ -2,6 +2,7 @@ const formidable = require('formidable');
 const BaseComponent = require('../prototype/BaseComponent');
 const ReplyModel = require('../models/reply');
 const TopicModel = require('../models/topic');
+const UserModel = require('../models/user');
 const md2html = require('../utils/md2html');
 const logger = require('../utils/logger');
 
@@ -63,10 +64,12 @@ class Reply extends BaseComponent {
         currentTopic.reply_count += 1;
         await currentTopic.save();
 
+        const createUser = await UserModel.findById(id);
+        createUser.reply_count += 1;
+        await createUser.save();
+
         if (reply_id) {
-          // 发起行为
           await this.createBehavior('reply2', id, reply_id);
-          // 发送提醒
           await this.sendReply2Notice(id, currentTopic.author_id, currentTopic.id, reply_id);
         } else {
           await this.createBehavior('reply', id, currentTopic.id);

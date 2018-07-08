@@ -12,12 +12,10 @@ class Captcha extends BaseComponent {
   }
 
   getPicCaptcha(req, res) {
-    let { width, height, textColor, bgColor } = req.query;
-
-    width = width || 100;
-    height = height || 40;
-    textColor = textColor || 'a1a1a1';
-    bgColor = bgColor || 'ffffff';
+    const width = req.query.width || 100;
+    const height = req.query.height || 40;
+    const textColor = req.query.textColor || 'a1a1a1';
+    const bgColor = req.query.bgColor || 'ffffff';
 
     const img = new BMP24(width, height, `0x${textColor}`);
     let token = '';

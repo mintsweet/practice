@@ -15,7 +15,7 @@ class User extends BaseComponent {
     this.signup = this.signup.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
-    this.getUserLikes = this.getUserLikes.bind(this);
+    this.getUserStars = this.getUserStars.bind(this);
     this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
   }
 
@@ -276,7 +276,6 @@ class User extends BaseComponent {
   // 获取当前用户信息
   getUserInfo(req, res) {
     const { userInfo } = req.session;
-
     return res.send({
       status: 1,
       data: userInfo
@@ -479,10 +478,10 @@ class User extends BaseComponent {
     const { id } = req.session.userInfo;
 
     try {
-      const currentFollow = await UserModel.findById(uid);
+      const currentTarget = await UserModel.findById(uid);
       const currentAuthor = await UserModel.findById(id);
 
-      if (!currentFollow) {
+      if (!currentTarget) {
         return res.send({
           status: 0,
           type: 'ERROR_ID_IS_INVALID',
@@ -490,36 +489,26 @@ class User extends BaseComponent {
         });
       }
 
-      let behavior;
+      const behavior = await this.createBehavior('follow', id, uid);
 
-      behavior = await BehaviorModel.findOne({ type: 'follow', author_id: id, target_id: uid });
-
-      if (behavior) {
-        behavior.delete = !behavior.delete;
-        behavior = await behavior.save();
-      } else {
-        behavior = await this.createBehavior('follow', id, uid);
-      }
-
-      if (behavior.delete) {
-        currentFollow.follower_count -= 1;
-        currentFollow.save();
+      if (behavior.is_un) {
+        currentTarget.follower_count -= 1;
+        await currentTarget.save();
         currentAuthor.following_count -= 1;
-        currentAuthor.save();
+        await currentAuthor.save();
         req.session.userInfo.following_count -= 1;
       } else {
-        currentFollow.follower_count += 1;
-        currentFollow.save();
+        currentTarget.follower_count += 1;
+        await currentTarget.save();
         currentAuthor.following_count += 1;
-        currentAuthor.save();
+        await currentAuthor.save();
         req.session.userInfo.following_count += 1;
-        // 发送提醒 notice
         await this.sendFollowNotice(id, uid);
       }
 
       return res.send({
         status: 1,
-        type: behavior.delete ? 'un_follow' : 'follow'
+        type: behavior.actualType
       });
     } catch(err) {
       logger.error(err);
@@ -567,18 +556,18 @@ class User extends BaseComponent {
   }
 
   // 获取用户喜欢列表
-  async getUserLikes(req, res) {
+  async getUserStars(req, res) {
     const { uid } = req.params;
     try {
-      const likeBehaviors = await BehaviorModel.find({ type: 'like', author_id: uid, delete: false });
-      const result = await Promise.all(likeBehaviors.map(item => {
+      const starBehaviors = await BehaviorModel.find({ type: 'star', author_id: uid, delete: false });
+      const result = await Promise.all(starBehaviors.map(item => {
         return new Promise(resolve => {
           resolve(TopicModel.findById(item.target_id, 'id title create_at'));
         });
       }));
 
-      const data = likeBehaviors.map((item, i) => {
-        return { ...result[i].toObject(), type: 'like' };
+      const data = starBehaviors.map((item, i) => {
+        return { ...result[i].toObject(), type: 'star' };
       });
 
       return res.send({

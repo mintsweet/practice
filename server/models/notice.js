@@ -4,13 +4,13 @@ const { ObjectId } = Schema;
 
 /*
 * 根据类型区分消息 type
-* 0. system 系统
-* 1. star 喜欢话题
-* 2. collect 收藏话题
-* 3. reply 回复话题
-* 4. reply2 回复评论
-* 5. follow 关注用户
-* 6. up 点赞回复
+* 1. system 系统
+* 2. star 喜欢话题
+* 3. collect 收藏话题
+* 4. follow 关注用户
+* 5. reply 回复话题
+* 6. reply2 回复评论
+* 7. up 点赞回复
 */
 
 const NoticeSchema = new Schema({
@@ -26,6 +26,7 @@ const NoticeSchema = new Schema({
   create_at: { type: Date, default: Date.now }
 });
 
+NoticeSchema.index({ target_id: 1, create_at: -1 });
 NoticeSchema.index({ create_at: -1 });
 
 const Notice = mongoose.model('Notice', NoticeSchema);

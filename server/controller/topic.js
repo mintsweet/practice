@@ -11,7 +11,7 @@ class Topic extends BaseComponent {
   constructor() {
     super();
     this.createTopic = this.createTopic.bind(this);
-    this.likeOrUnlikeTopic = this.likeOrUnlikeTopic.bind(this);
+    this.starOrUnstarTopic = this.starOrUnstarTopic.bind(this);
     this.collectOrUncollectTopic = this.collectOrUncollectTopic.bind(this);
   }
 
@@ -354,15 +354,15 @@ class Topic extends BaseComponent {
         });
       }));
 
-      let likeBehavior;
+      let starBehavior;
       let collectBehavior;
 
       if (userInfo && userInfo.id) {
-        likeBehavior = await BehaviorModel.findOne({ type: 'like', author_id: userInfo.id, target_id: currentTopic.id });
+        starBehavior = await BehaviorModel.findOne({ type: 'star', author_id: userInfo.id, target_id: currentTopic.id });
         collectBehavior = await BehaviorModel.findOne({ type: 'collect', author_id: userInfo.id, target_id: currentTopic.id });
       }
 
-      const isLike = (likeBehavior && !likeBehavior.delete) || false;
+      const isstar = (starBehavior && !starBehavior.delete) || false;
       const isCollect = (collectBehavior && !collectBehavior.delete) || false;
 
       const replies = replyList.map((item, i) => {
@@ -375,7 +375,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, isLike, isCollect }
+        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, isstar, isCollect }
       });
     } catch(err) {
       logger.error(err);
@@ -388,7 +388,7 @@ class Topic extends BaseComponent {
   }
 
   // 喜欢或者取消喜欢话题
-  async likeOrUnlikeTopic(req, res) {
+  async starOrUnstarTopic(req, res) {
     const { tid } = req.params;
     const { id } = req.session.userInfo;
 
@@ -406,40 +406,40 @@ class Topic extends BaseComponent {
 
       let behavior;
 
-      behavior = await BehaviorModel.findOne({ type: 'like', author_id: id, target_id: tid });
+      behavior = await BehaviorModel.findOne({ type: 'star', author_id: id, target_id: tid });
 
       if (behavior) {
         behavior.delete = !behavior.delete;
         behavior = await behavior.save();
       } else {
-        behavior = await this.createBehavior('like', id, tid);
+        behavior = await this.createBehavior('star', id, tid);
       }
 
       const tagetUser = await UserModel.findById(currentTopic.author_id);
 
       if (behavior.delete) {
-        currentTopic.like_count -= 1;
+        currentTopic.star_count -= 1;
         await currentTopic.save();
-        currentUser.like_count -= 1;
+        currentUser.star_count -= 1;
         await currentUser.save();
-        tagetUser.score -= 5;
+        tagetUser.score -= 10;
         await tagetUser.save();
-        req.session.userInfo.like_count -= 1;
+        req.session.userInfo.star_count -= 1;
       } else {
-        currentTopic.like_count += 1;
+        currentTopic.star_count += 1;
         currentTopic.save();
-        currentUser.like_count += 1;
+        currentUser.star_count += 1;
         currentUser.save();
-        tagetUser.score += 5;
+        tagetUser.score += 10;
         await tagetUser.save();
-        req.session.userInfo.like_count += 1;
+        req.session.userInfo.star_count += 1;
         // 发送提醒 notice
-        await this.sendLikeNotice(id, currentTopic.author_id, currentTopic.id);
+        await this.sendstarNotice(id, currentTopic.author_id, currentTopic.id);
       }
 
       return res.send({
         status: 1,
-        type: behavior.delete ? 'un_like' : 'like'
+        type: behavior.delete ? 'un_star' : 'star'
       });
     } catch(err) {
       logger.error(err);
@@ -479,17 +479,23 @@ class Topic extends BaseComponent {
         behavior = await this.createBehavior('collect', id, tid);
       }
 
+      const tagetUser = await UserModel.findById(currentTopic.author_id);
+
       if (behavior.delete) {
         currentTopic.collect_count -= 1;
         currentTopic.save();
         currentUser.collect_count -= 1;
         currentUser.save();
+        tagetUser.score -= 1;
+        tagetUser.save();
         req.session.userInfo.collect_count -= 1;
       } else {
         currentTopic.collect_count += 1;
         currentTopic.save();
         currentUser.collect_count += 1;
         currentUser.save();
+        tagetUser.score += 11;
+        await tagetUser.save();
         req.session.userInfo.collect_count += 1;
         // 发送提醒 notice
         await this.sendCollectNotice(id, currentTopic.author_id, currentTopic.id);
