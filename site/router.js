@@ -32,7 +32,7 @@ router.post('/forget_pass', User.forgetPass);
 router.get('/signout', User.signout);
 router.get('/users/top100', User.renderTop100);
 router.get('/user/:uid', User.renderInfo);
-router.get('/user/:uid/likes', User.renderLikes);
+router.get('/user/:uid/stars', User.renderStars);
 router.get('/user/:uid/replies', User.renderReplies);
 router.get('/user/:uid/follower', User.renderFollower);
 router.get('/user/:uid/following', User.renderFolloing);
@@ -40,13 +40,15 @@ router.get('/setting', Auth.userRequired, User.renderSetting);
 router.post('/setting', Auth.userRequired, User.setting);
 router.get('/update_pass', Auth.userRequired, User.renderUpdatePass);
 router.post('/update_pass', Auth.userRequired, User.updatePass);
+router.get('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUser);
 
 // 话题
 router.get('/topics/create', Auth.userRequired, Topic.renderCreateTopic);
 router.post('/topics/create', Auth.userRequired, Topic.createTopic);
-router.get('/topic/:tid', Topic.renderDetail);
-router.get('/topic/:tid/like_or_un', Topic.likeOrUnlikeTopic);
 router.get('/topics/search', Topic.renderSearch);
+router.get('/topic/:tid', Topic.renderDetail);
+router.get('/topic/:tid/star_or_un', Topic.starOrUnstarTopic);
+router.get('/topic/:tid/collect_or_un', Topic.collectOrUncollectTopic);
 
 // 回复
 router.post('/topic/:tid/reply', Reply.createReply);

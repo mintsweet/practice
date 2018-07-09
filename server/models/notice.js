@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
+const BaseModel = require('./base');
 
 /*
 * 根据类型区分消息 type
@@ -21,13 +22,14 @@ const NoticeSchema = new Schema({
   topic_id: { type: ObjectId },
   reply_id: { type: ObjectId },
 
-  has_read: { type: Boolean, default: false },
-
-  create_at: { type: Date, default: Date.now }
+  create_at: { type: Date, default: Date.now },
+  update_at: { type: Date, default: Date.now }
 });
 
+NoticeSchema.plugin(BaseModel);
+
 NoticeSchema.index({ target_id: 1, create_at: -1 });
-NoticeSchema.index({ create_at: -1 });
+NoticeSchema.index({ author_id: 1, create_at: -1 });
 
 const Notice = mongoose.model('Notice', NoticeSchema);
 

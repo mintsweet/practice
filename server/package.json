@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "data servcie base on node",
   "scripts": {
-    "start": "node ./app.js",
+    "start": "cross-env NODE_ENV=development node ./app.js",
     "lint": "eslint **/*.js",
     "test": "mocha",
     "test:file": "mocha",
@@ -26,6 +26,7 @@
     "mongoose": "^5.0.12"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.0.1",
     "eslint-config-mints": "^0.3.0-rc.8",
     "mocha": "^5.2.0",

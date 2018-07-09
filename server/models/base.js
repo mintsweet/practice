@@ -18,6 +18,9 @@ module.exports = function(schema) {
   schema.options.toObject = schema.options.toJSON = {
     transform(doc, ret) {
       ret.id = ret._id;
+      ret.create_at = moment(ret.create_at).format('YYYY-MM-DD HH:mm');
+      ret.update_at = moment(ret.update_at).format('YYYY-MM-DD HH:mm');
+      ret.id = ret._id;
       delete ret.__v;
       delete ret._id;
     }

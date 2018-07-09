@@ -2,13 +2,13 @@ const BehaviorModel = require('../models/behavior');
 const NoticeModel = require('../models/notice');
 
 module.exports = class BaseComponent {
-  // 创建一个行为
-  async createBehavior(type, author_id, target_id) {
+  // 创建或者改变一个行为
+  async generateBehavior(type, author_id, target_id) {
     let behavior;
     behavior = await BehaviorModel.findOne({ type, author_id, target_id });
     if (behavior) {
       behavior.is_un = !behavior.is_un;
-      behavior.save();
+      await behavior.save();
     } else {
       behavior = await BehaviorModel.create({ type, author_id, target_id });
     }
@@ -21,8 +21,8 @@ module.exports = class BaseComponent {
   }
 
   // 谁(author_id)喜欢了你(target_id)的话题(topic_id)
-  async sendLikeNotice(author_id, target_id, topic_id) {
-    await NoticeModel.findOneAndUpdate({ type: 'like', author_id, target_id, topic_id }, {
+  async sendStarNotice(author_id, target_id, topic_id) {
+    await NoticeModel.findOneAndUpdate({ type: 'star', author_id, target_id, topic_id }, {
       has_read: false,
       create_at: Date.now()
     }, {

@@ -50,29 +50,32 @@ class Reply extends BaseComponent {
           });
         }
 
-        const _reply = {
-          content,
-          topic_id: tid,
-          author_id: id,
-          reply_id
-        };
+        // 保存回复
+        const reply = new ReplyModel();
+        reply.content = content;
+        reply.topic_id = tid;
+        reply.author_id = id;
+        if (reply_id) {
+          reply.reply_id = reply_id;
+        }
+        await reply.save();
 
-        await ReplyModel.create(_reply);
-
+        // 修改话题
         currentTopic.last_reply = id;
         currentTopic.last_reply_at = new Date();
         currentTopic.reply_count += 1;
         await currentTopic.save();
 
+        // 修改用户
         const createUser = await UserModel.findById(id);
         createUser.reply_count += 1;
         await createUser.save();
 
         if (reply_id) {
-          await this.createBehavior('reply2', id, reply_id);
+          await this.generateBehavior('reply2', id, reply_id);
           await this.sendReply2Notice(id, currentTopic.author_id, currentTopic.id, reply_id);
         } else {
-          await this.createBehavior('reply', id, currentTopic.id);
+          await this.generateBehavior('reply', id, currentTopic.id);
           await this.sendReplyNotice(id, currentTopic.author_id, currentTopic.id);
         }
 

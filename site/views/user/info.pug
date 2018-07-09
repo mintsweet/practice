@@ -14,29 +14,47 @@ block content
         if user && info.id === user.id
           a.action(href=`/setting`) 编辑个人资料
         else if user && !isFollow
-          a.action(href=`/user/${user.id}/edit`) 关注
+          a.action.follow(href="javascript:;") 关注
         else if user && isFollow
-          a.action(href=`/user/${user.id}/edit`) 取消关注
+          a.action.follow(href=href="javascript:;") 取消关注
     .user-gener
       .title
         a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
-        a(href=`/user/${info.id}/likes`, class={active: type === 'like'}) 喜欢
+        a(href=`/user/${info.id}/stars`, class={active: type === 'star'}) 喜欢
         a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
         span 更多
           .more
             a(href=`/user/${info.id}/follower`) 粉丝
             a(href=`/user/${info.id}/following`) 关注
+            a(href=`/user/${info.id}/collections`) 收藏集
       ul.content
-        if data.length > 0
+        if type === 'reply'
           each item in data
-            case item.type
-              when 'create'
-                li 
-                  span 发布了话题
-                  time #{item.create_at}
-                  a.topic(href=`/topic/${item.id}`) #{item.title}
+            li 
+              span 回复了话题
+              time #{item.create_at}
+              a.topic(href=`/topic/${item.topic.id}`) #{item.topic.title}
+              span.content 回复内容：#{item.content}
+          else
+            include ../includes/no_content.pug
         else
-          .no-content 暂无内容
+          each item in data
+            li 
+              case item.type
+                when 'create'
+                  span 发布了话题
+                when 'star'
+                  span 喜欢了话题
+                when 'collect'
+                  span 收藏了话题
+                when 'reply'
+                  span 回复了话题
+                when 'follow'
+                  span 关注了用户
+              time #{item.create_at}
+              a.topic(href=`/topic/${item.id}`) #{item.title}
+          else
+            include ../includes/no_content.pug
   .layout-sider
     .user-stat
       .title 个人成就
@@ -46,6 +64,12 @@ block content
           .content
             | 获得喜欢
             span.count #{info.star_count}
+            | 次
+        .item
+          span.practice &#xe65f;
+          .content
+            | 获得收藏
+            span.count #{info.collect_count}
             | 次
         .item
           span.practice &#xe6a4;
@@ -66,4 +90,10 @@ append footer
   script.
     $('.user-gener .title>span').hover(function() {
       $('.user-gener .more').stop(true, false).fadeToggle();
+    });
+
+    $('.action.follow').click(function() {
+      $.getJSON(`${location.pathname}/follow_or_un`, function(res) {
+        console.log(res);
+      });
     });

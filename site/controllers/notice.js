@@ -4,6 +4,7 @@ class Notice {
   // 用户消息
   async renderNoticeUser(req, res) {
     const response = await getUserNotice(req.app.locals.user.id);
+
     if (response.status === 1) {
       return res.render('notice/template', {
         title: '用户消息',

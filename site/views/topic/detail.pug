@@ -55,11 +55,11 @@ block content
           .signature **这家伙很懒，莫有签名**
     include ../topic/no_reply.pug
   .float-action
-    a.practice.like-action(href="javascript:;", class={ active: topic.isLike }) &#xe63b;
+    a.practice.star-action(href="javascript:;", class={ active: topic.isStar }) &#xe63b;
       span.number #{topic.star_count}
     a.practice(href="#reply") &#xe619;
       span.number #{topic.reply_count}
-    a.practice(href="javascript:;", class={ active: topic.isCollect }) &#xe65f;
+    a.practice.collect-action(href="javascript:;", class={ active: topic.isCollect }) &#xe65f;
       span.number #{topic.collect_count}
   .message
     .message-notice
@@ -73,15 +73,31 @@ append footer
       }
     });
 
-    $('.like-action').click(function() {
-      $.getJSON(`${location.pathname}/like_or_un`, function(res) {
+    $('.star-action').click(function() {
+      $.getJSON(`${location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
-          if (res.action === 'like') {
-            $('.like-action .number').text(parseInt($('.like-action .number').text()) + 1);
-            $('.like-action').addClass('active');
+          if (res.action === 'star') {
+            $('.star-action .number').text(parseInt($('.star-action .number').text()) + 1);
+            $('.star-action').addClass('active');
           } else {
-            $('.like-action .number').text(parseInt($('.like-action .number').text()) - 1);
-            $('.like-action').removeClass('active');
+            $('.star-action .number').text(parseInt($('.star-action .number').text()) - 1);
+            $('.star-action').removeClass('active');
+          }
+        } else {
+          globalMessage('error', res.message);
+        }
+      });
+    });
+
+    $('.collect-action').click(function() {
+      $.getJSON(`${location.pathname}/collect_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'collect') {
+            $('.collect-action .number').text(parseInt($('.collect-action .number').text()) + 1);
+            $('.collect-action').addClass('active');
+          } else {
+            $('.collect-action .number').text(parseInt($('.collect-action .number').text()) - 1);
+            $('.collect-action').removeClass('active');
           }
         } else {
           globalMessage('error', res.message);

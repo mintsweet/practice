@@ -1,4 +1,4 @@
-extends ../layout
+extends ../layout.pug
 
 append header
   .setting-bar
@@ -8,18 +8,20 @@ append header
 block content
   .layout-content
     each item in data
-      case item.type
-        when 'like'
-          .notice-item.like
-            a(href=`/user/${item.author.id}`).avatar
-              img(src=item.author.avatar)
-            .detail
-              .nickname #{item.author.nickname}
-              .desc #{item.create_at}
-              .topic
-                span 喜欢了你的文章：
-                a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+      .notice-item
+        a(href=`/user/${item.author.id}`).avatar
+          img(src=item.author.avatar)
+        .detail
+          a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
+          .desc #{item.create_at}
+          .topic
+            case item.type
+              when 'star'
+                span 喜欢了你的话题：
+              when 'collect'
+                span 收藏了你的话题：
+              when 'reply'
+                span 回复了你的话题：
+            a(href=`/topic/${item.topic.id}`) #{item.topic.title}
     else
-      span 暂无消息
-  .layout-sider
-    include ../topic/no_reply.pug
+      include ../includes/no_content.pug

@@ -1,7 +1,7 @@
 dl.topic-list
   each topic in topics
     dd.topic
-      a.avatar(href=`/user/${topic.author.nickname}`, title=topic.author.nickname)
+      a.avatar(href=`/user/${topic.author.id}`, title=topic.author.nickname)
         img(src=topic.author.avatar)
       .topic-content
         .title
@@ -25,7 +25,7 @@ dl.topic-list
             img(src=topic.last_reply_author.avatar)
           span #{topic.last_reply_at_ago}
         else
-          | 创建于#{topic.create_at}
+          | #{topic.create_at}
   else
     .no-content 暂无内容
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`

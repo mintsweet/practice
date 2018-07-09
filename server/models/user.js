@@ -9,7 +9,7 @@ const UserSchema = new Schema({
 
   // 用户信息
   nickname: { unqie: true, type: String, required: true },
-  avatar: { type: String, default: '' },
+  avatar: { type: String, default: 'http://image.yujunren.com/avatar.jpg' },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
 
@@ -17,17 +17,17 @@ const UserSchema = new Schema({
   score: { type: Number, default: 0 },
 
   // 星标用户 - 预留
-  is_star: { type: Boolean, default: false },
+  star: { type: Boolean, default: false },
   // 封号 - 管理员行为
-  is_lock: { type: Boolean, default: false },
+  lock: { type: Boolean, default: false },
 
   // 统计
-  topic_count: { type: Number, default: 0 },
-  star_count: { type: Number, default: 0 },
-  collect_count: { type: Number, default: 0 },
-  reply_count: { type: Number, default: 0 },
-  follower_count: { type: Number, default: 0 },
-  following_count: { type: Number, default: 0 },
+  topic_count: { type: Number, default: 0 }, // 累计发布话题数
+  star_count: { type: Number, default: 0 }, // 累计话题被喜欢数
+  collect_count: { type: Number, default: 0 }, // 累计话题被收藏数
+  reply_count: { type: Number, default: 0 }, // 累计回复数
+  follower_count: { type: Number, default: 0 }, // 累计粉丝数
+  following_count: { type: Number, default: 0 }, // 累计关注数
 
   // 管理员等级
   role: { type: Number, default: 0 },

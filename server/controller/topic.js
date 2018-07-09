@@ -55,11 +55,10 @@ class Topic extends BaseComponent {
 
       try {
         const topic = await TopicModel.create(_topic);
-        // 记录用户创建行为
-        await this.createBehavior('create', id, topic.id);
-        // 用户创建话题积3分
+        await this.generateBehavior('create', id, topic.id);
         const currentUser = await UserModel.findById(id);
-        currentUser.score += 3;
+        currentUser.score += 1;
+        currentUser.topic_count += 1;
         await currentUser.save();
 
         return res.send({
@@ -180,7 +179,7 @@ class Topic extends BaseComponent {
     const size = parseInt(req.query.size) || 10;
 
     let query = {
-      is_lock: false,
+      lock: false,
       delete: false
     };
 
@@ -200,7 +199,7 @@ class Topic extends BaseComponent {
 
     try {
       const topicCount = await TopicModel.count(query);
-      const topicList = await TopicModel.find(query, '-is_lock -delete', options);
+      const topicList = await TopicModel.find(query, '-lock -delete', options);
 
       const promiseAuthor = await Promise.all(topicList.map(item => {
         return new Promise(resolve => {
@@ -252,7 +251,7 @@ class Topic extends BaseComponent {
 
     const query = {
       title: { $regex: title },
-      is_lock: false,
+      lock: false,
       delete: false
     };
 
@@ -264,7 +263,7 @@ class Topic extends BaseComponent {
 
     try {
       const topicCount = await TopicModel.count(query);
-      const topicList = await TopicModel.find(query, '-is_lock -delete', options);
+      const topicList = await TopicModel.find(query, '-lock -delete', options);
 
       const promises = await Promise.all(topicList.map(item => {
         return new Promise(resolve => {
@@ -299,7 +298,7 @@ class Topic extends BaseComponent {
   // 获取无人回复话题
   async getNoReplyTopic(req, res) {
     const query = {
-      is_lock: false,
+      lock: false,
       delete: false,
       reply_count: 0
     };
@@ -362,7 +361,7 @@ class Topic extends BaseComponent {
         collectBehavior = await BehaviorModel.findOne({ type: 'collect', author_id: userInfo.id, target_id: currentTopic.id });
       }
 
-      const isstar = (starBehavior && !starBehavior.delete) || false;
+      const isStar = (starBehavior && !starBehavior.delete) || false;
       const isCollect = (collectBehavior && !collectBehavior.delete) || false;
 
       const replies = replyList.map((item, i) => {
@@ -375,7 +374,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, isstar, isCollect }
+        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, isStar, isCollect }
       });
     } catch(err) {
       logger.error(err);
@@ -394,7 +393,7 @@ class Topic extends BaseComponent {
 
     try {
       const currentTopic = await TopicModel.findById(tid);
-      const currentUser = await UserModel.findById(id);
+      const currentAuhtor = await UserModel.findById(currentTopic.author_id);
 
       if (!currentTopic) {
         return res.send({
@@ -404,42 +403,34 @@ class Topic extends BaseComponent {
         });
       }
 
-      let behavior;
-
-      behavior = await BehaviorModel.findOne({ type: 'star', author_id: id, target_id: tid });
-
-      if (behavior) {
-        behavior.delete = !behavior.delete;
-        behavior = await behavior.save();
-      } else {
-        behavior = await this.createBehavior('star', id, tid);
+      if (currentTopic.author_id.equals(id)) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_NOT_STAR_YOURSELF',
+          message: '不能喜欢自己的话题哟'
+        });
       }
 
-      const tagetUser = await UserModel.findById(currentTopic.author_id);
+      const behavior = await this.generateBehavior('star', id, tid);
 
-      if (behavior.delete) {
+      if (behavior.is_un) {
         currentTopic.star_count -= 1;
         await currentTopic.save();
-        currentUser.star_count -= 1;
-        await currentUser.save();
-        tagetUser.score -= 10;
-        await tagetUser.save();
-        req.session.userInfo.star_count -= 1;
+        currentAuhtor.star_count -= 1;
+        currentAuhtor.score -= 10;
+        await currentAuhtor.save();
       } else {
         currentTopic.star_count += 1;
         currentTopic.save();
-        currentUser.star_count += 1;
-        currentUser.save();
-        tagetUser.score += 10;
-        await tagetUser.save();
-        req.session.userInfo.star_count += 1;
-        // 发送提醒 notice
-        await this.sendstarNotice(id, currentTopic.author_id, currentTopic.id);
+        currentAuhtor.star_count += 1;
+        currentAuhtor.score += 10;
+        await currentAuhtor.save();
+        await this.sendStarNotice(id, currentTopic.author_id, currentTopic.id);
       }
 
       return res.send({
         status: 1,
-        type: behavior.delete ? 'un_star' : 'star'
+        type: behavior.actualType
       });
     } catch(err) {
       logger.error(err);
@@ -458,7 +449,7 @@ class Topic extends BaseComponent {
 
     try {
       const currentTopic = await TopicModel.findById(tid);
-      const currentUser = await UserModel.findById(id);
+      const currentAuthor = await UserModel.findById(currentTopic.author_id);
 
       if (!currentTopic) {
         return res.send({
@@ -468,42 +459,34 @@ class Topic extends BaseComponent {
         });
       }
 
-      let behavior;
-
-      behavior = await BehaviorModel.findOne({ type: 'collect', author_id: id, target_id: tid });
-
-      if (behavior) {
-        behavior.delete = !behavior.delete;
-        behavior.save();
-      } else {
-        behavior = await this.createBehavior('collect', id, tid);
+      if (currentTopic.author_id.equals(id)) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_NOT_COLLECT_YOURSELF',
+          message: '不能收藏自己的话题哟'
+        });
       }
 
-      const tagetUser = await UserModel.findById(currentTopic.author_id);
+      const behavior = await this.generateBehavior('collect', id, tid);
 
-      if (behavior.delete) {
+      if (behavior.is_un) {
         currentTopic.collect_count -= 1;
         currentTopic.save();
-        currentUser.collect_count -= 1;
-        currentUser.save();
-        tagetUser.score -= 1;
-        tagetUser.save();
-        req.session.userInfo.collect_count -= 1;
+        currentAuthor.collect_count -= 1;
+        currentAuthor.score -= 3;
+        currentAuthor.save();
       } else {
         currentTopic.collect_count += 1;
         currentTopic.save();
-        currentUser.collect_count += 1;
-        currentUser.save();
-        tagetUser.score += 11;
-        await tagetUser.save();
-        req.session.userInfo.collect_count += 1;
-        // 发送提醒 notice
+        currentAuthor.collect_count += 1;
+        currentAuthor.score += 3;
+        await currentAuthor.save();
         await this.sendCollectNotice(id, currentTopic.author_id, currentTopic.id);
       }
 
       return res.send({
         status: 1,
-        type: behavior.delete ? 'un_collect' : 'collect'
+        type: behavior.actualType
       });
     } catch(err) {
       logger.error(err);

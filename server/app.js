@@ -11,7 +11,9 @@ const router = require('./router');
 const app = new Express();
 
 // connect mongodb
-mongoose.connect(config.db, error => {
+const dbpath = process.env === 'production' ? config.db : 'mongodb://localhost/practice-test';
+
+mongoose.connect(dbpath, error => {
   if (error) {
     logger.error('MongoDB Connection Error: ', error);
     process.exit(1);
@@ -21,35 +23,33 @@ mongoose.connect(config.db, error => {
 });
 
 
-// // cross and interceptor
-// const ALLOW_ORIGIN = [
-//   'http://localhost:3001',
-//   'http://localhost:3002',
-//   'http://localhost:3003',
-//   'http://localhost:3004'
-// ];
+// cross and interceptor
+const ALLOW_ORIGIN = [
+  'localhost:3000',
+  'http://localhost:3001'
+];
 
-// app.all('*', (req, res, next) => {
-//   const reqOrigin = req.headers.origin;
-//   if (ALLOW_ORIGIN.includes(reqOrigin)) {
-//     res.header("Access-Control-Allow-Origin", reqOrigin);
-//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-//     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-//     res.header("Access-Control-Allow-Credentials", true);
-//     res.header("X-Powered-By", '3.2.1');
-//     if (req.method == 'OPTIONS') {
-//       res.sendStatus(200);
-//     } else {
-//       next();
-//     }
-//   } else {
-//     res.send({
-//       status: 0,
-//       type: 'ILLEGAL DOMAIN NAME',
-//       message: '非法的域名'
-//     });
-//   }
-// });
+app.all('*', (req, res, next) => {
+  const reqOrigin = req.headers.origin || req.headers.host;
+  if (ALLOW_ORIGIN.includes(reqOrigin)) {
+    res.header('Access-Control-Allow-Origin', reqOrigin);
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('X-Powered-By', '3.2.1');
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  } else {
+    res.send({
+      status: 0,
+      type: 'ILLEGAL DOMAIN NAME',
+      message: '非法的域名'
+    });
+  }
+});
 
 // cookie and session
 const MongoStore = connectMongo(session);
@@ -65,7 +65,7 @@ app.use(session({
     maxAge: 2592000000,
   },
   store: new MongoStore({
-    url: config.db
+    url: dbpath
   })
 }));
 

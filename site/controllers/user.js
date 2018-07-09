@@ -2,9 +2,9 @@ const formidable = require('formidable');
 const {
   getPicCaptcha, signup, signin, forgetPass,
   signout, getUsersTop100, getUserInfoById,
-  getUserLikes, getUserReplies,
+  getUserStars, getUserReplies,
   getUserBehaviors, getUserFollower, getUserFollowing,
-  setting, updatePass, getCurrentUserInfo
+  setting, updatePass, getCurrentUserInfo, followOrUn
 } = require('../http/api');
 
 class User {
@@ -61,7 +61,7 @@ class User {
         });
       }
 
-      const response = await signup({ ...fields, avatar: 'http://image.yujunren.com/avatar.jpg' });
+      const response = await signup(fields);
       if (response.status === 1) {
         return res.redirect('/');
       } else {
@@ -202,6 +202,7 @@ class User {
     let behaviors;
 
     response = await getUserInfoById(uid);
+
     if (response.status === 1) {
       info = response.data;
       isFollow = response.isFollow || false;
@@ -226,7 +227,7 @@ class User {
   }
 
   // 用户喜欢页
-  async renderLikes(req, res) {
+  async renderStars(req, res) {
     const { uid } = req.params;
 
     let response;
@@ -242,7 +243,7 @@ class User {
       return res.redirect('/exception/500');
     }
 
-    response = await getUserLikes(uid);
+    response = await getUserStars(uid);
     if (response.status === 1) {
       behaviors = response.data;
     } else {
@@ -253,7 +254,7 @@ class User {
       title: '喜欢 - 用户信息',
       info,
       data: behaviors,
-      type: 'like',
+      type: 'star',
       isFollow
     });
   }
@@ -425,6 +426,25 @@ class User {
         });
       }
     });
+  }
+
+  // 关注或者取消关注
+  async followOrUnfollowUser(req, res) {
+    const { uid } = req.params;
+
+    const response = await followOrUn(uid);
+
+    if (response.status === 1) {
+      return res.send({
+        status: 1,
+        action: response.action
+      });
+    } else {
+      return res.send({
+        status: 0,
+        message: response.message
+      });
+    }
   }
 }
 

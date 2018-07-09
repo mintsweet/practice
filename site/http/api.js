@@ -60,18 +60,18 @@ exports.getUsersStart = () => request('/users/start');
 exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
 exports.getUserInfoById = uid => request(`/user/${uid}`);
-// 关注或者取消关注某个用户
-exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
 // 获取用户动态
 exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
 // 获取用户喜欢列表
-exports.getUserLikes = uid => request(`/user/${uid}/likes`);
+exports.getUserStars = uid => request(`/user/${uid}/stars`);
 // 获取用户回复列表
 exports.getUserReplies = uid => request(`/user/${uid}/replies`);
 // 获取用户粉丝列表
 exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 // 获取用户关注列表
 exports.getUserFollowing = uid => request(`/user/${uid}/following`);
+// 关注或者取消关注某个用户
+exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
 
 /*
 * 主题
@@ -91,7 +91,7 @@ exports.getNoReplyTopic = number => request('/topics/no_reply', number);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
 // 喜欢或者取消喜欢话题
-exports.likeOrUnlikeTopic = tid => request(`/topic/${tid}/like_or_un`, {}, 'PATCH');
+exports.starOrUnstarTopic = tid => request(`/topic/${tid}/star_or_un`, {}, 'PATCH');
 // 收藏或者取消收藏话题
 exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
 

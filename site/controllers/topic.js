@@ -1,5 +1,8 @@
 const formidable = require('formidable');
-const { createTopic, getTopicDetail, likeOrUnlikeTopic, getTopicBySearch, getNoReplyTopic } = require('../http/api');
+const {
+  createTopic, getTopicDetail, starOrUnstarTopic,
+  getTopicBySearch, getNoReplyTopic, collectOrUncollectTopic
+} = require('../http/api');
 
 class Topic {
   // 创建话题
@@ -103,7 +106,7 @@ class Topic {
   }
 
   // 喜欢或者取消喜欢
-  async likeOrUnlikeTopic(req, res) {
+  async starOrUnstarTopic(req, res) {
     const { tid } = req.params;
     const { user } = req.app.locals;
 
@@ -114,7 +117,34 @@ class Topic {
       });
     }
 
-    const response = await likeOrUnlikeTopic(tid);
+    const response = await starOrUnstarTopic(tid);
+
+    if (response.status === 1) {
+      return res.send({
+        status: 1,
+        action: response.type
+      });
+    } else {
+      return res.send({
+        status: 0,
+        message: response.message
+      });
+    }
+  }
+
+  // 收藏或者取消收藏
+  async collectOrUncollectTopic(req, res) {
+    const { tid } = req.params;
+    const { user } = req.app.locals;
+
+    if (!user) {
+      return res.send({
+        status: 0,
+        message: '尚未登录'
+      });
+    }
+
+    const response = await collectOrUncollectTopic(tid);
 
     if (response.status === 1) {
       return res.send({

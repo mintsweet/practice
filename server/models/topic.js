@@ -15,7 +15,7 @@ const TopicSchema = new Schema({
   good: { type: Boolean, default: false }, // 精华
 
   // 封贴 - 管理员行为
-  is_lock: { type: Boolean, default: false },
+  lock: { type: Boolean, default: false },
 
   // 统计
   star_count: { type: Number, default: 0 },

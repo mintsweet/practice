@@ -391,7 +391,7 @@ class User extends BaseComponent {
   // 获取星标用户列表
   async getStarList(req, res) {
     try {
-      const userList = await UserModel.find({ is_start: true }, 'id nickname score');
+      const userList = await UserModel.find({ is_star: true }, 'id nickname score');
       return res.send({
         status: 1,
         data: userList
@@ -447,8 +447,8 @@ class User extends BaseComponent {
       let isFollow;
 
       if (userInfo.id) {
-        const behavior = BehaviorModel.findOne({ type: 'follow', author_id: userInfo.id, target_id: uid });
-        if (behavior && behavior.delete) {
+        const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: userInfo.id, target_id: uid });
+        if (behavior && behavior.actualType.indexOf('un') < 0) {
           isFollow = true;
         } else {
           isFollow = false;
@@ -489,7 +489,7 @@ class User extends BaseComponent {
         });
       }
 
-      const behavior = await this.createBehavior('follow', id, uid);
+      const behavior = await this.generateBehavior('follow', id, uid);
 
       if (behavior.is_un) {
         currentTarget.follower_count -= 1;
@@ -508,7 +508,7 @@ class User extends BaseComponent {
 
       return res.send({
         status: 1,
-        type: behavior.actualType
+        action: behavior.actualType
       });
     } catch(err) {
       logger.error(err);
@@ -530,7 +530,7 @@ class User extends BaseComponent {
           if (item.type === 'follow') {
             resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
           } else if (item.type === 'ups') {
-            resolve(ReplyModel.findById(item.target_id, 'id create_at'));
+            resolve(ReplyModel.findById(item.target_id, 'id content create_at'));
           } else {
             resolve(TopicModel.findById(item.target_id, 'id title create_at'));
           }
@@ -559,7 +559,7 @@ class User extends BaseComponent {
   async getUserStars(req, res) {
     const { uid } = req.params;
     try {
-      const starBehaviors = await BehaviorModel.find({ type: 'star', author_id: uid, delete: false });
+      const starBehaviors = await BehaviorModel.find({ type: 'star', author_id: uid, is_un: false });
       const result = await Promise.all(starBehaviors.map(item => {
         return new Promise(resolve => {
           resolve(TopicModel.findById(item.target_id, 'id title create_at'));
@@ -588,7 +588,7 @@ class User extends BaseComponent {
   async getUserCollections(req, res) {
     const { uid } = req.params;
     try {
-      const collectBehavior = await BehaviorModel.find({ type: 'collect', author_id: uid, delete: false });
+      const collectBehavior = await BehaviorModel.find({ type: 'collect', author_id: uid, is_un: false });
       const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
       const result = await Promise.all(collectTopicIds.map(item => {
         return new Promise(resolve => {
@@ -644,7 +644,7 @@ class User extends BaseComponent {
   async getUserFollower(req, res) {
     const { uid } = req.params;
     try {
-      const followerBehavior = await BehaviorModel.find({ type: 'follow', target_id: uid, delete: false });
+      const followerBehavior = await BehaviorModel.find({ type: 'follow', target_id: uid, is_un: false });
       const result = await Promise.all(followerBehavior.map(item => {
         return new Promise(resolve => {
           resolve(UserModel.findById(item.author_id, '_id nickname avatar'));
@@ -669,7 +669,7 @@ class User extends BaseComponent {
   async getUserFollowing(req, res) {
     const { uid } = req.params;
     try {
-      const followingBehavior = await BehaviorModel.find({ type: 'follow', author_id: uid, delete: false });
+      const followingBehavior = await BehaviorModel.find({ type: 'follow', author_id: uid, is_un: false });
       const result = await Promise.all(followingBehavior.map(item => {
         return new Promise(resolve => {
           resolve(UserModel.findById(item.target_id, '_id nickname avatar'));
