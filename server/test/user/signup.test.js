@@ -19,7 +19,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 手机号验证失败
-  it('should return status 0 when the mobile is not valid', async function() {
+  it('should / status 0 when the mobile is not valid', async function() {
     try {
       const res = await request.post('/api/signup').send({
         nickname: '小明',
@@ -36,7 +36,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 密码验证失败
-  it('should return status 0 when the password is not valid', async function() {
+  it('should / status 0 when the password is not valid', async function() {
     try {
       const res = await request.post('/api/signup').send({
         nickname: '小明',
@@ -54,7 +54,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 昵称验证失败
-  it('should return status 0 when the nickname is not valid', async function() {
+  it('should / status 0 when the nickname is not valid', async function() {
     try {
       const res = await request.post('/api/signup').send({
         nickname: '小',
@@ -71,7 +71,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 接收短信验证码的手机与填写的手机不匹配
-  it('should return status 0 when the smscaptcha and mobile not match', async function() {
+  it('should / status 0 when the smscaptcha and mobile not match', async function() {
     try {
       let res;
 
@@ -79,6 +79,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         expired: 1000
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signup').send({
@@ -97,7 +98,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 短信验证码不正确
-  it('should return status 0 when the smscaptcha is invalid', async function() {
+  it('should / status 0 when the smscaptcha is invalid', async function() {
     try {
       let res;
 
@@ -105,6 +106,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         expired: 1000
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signup').send({
@@ -122,7 +124,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 验证码过期
-  it('should return status 0 when the smscaptcha expired', async function() {
+  it('should / status 0 when the smscaptcha expired', async function() {
     try {
       let res;
 
@@ -130,6 +132,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         expired: 1000 * 60
       });
+
       res.body.status.should.equal(1);
 
       clock.tick(1000 * 61);
@@ -140,6 +143,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         smscaptcha: res.body.code
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_PARMAS_OF_SIGNUP');
       res.body.message.should.equal('短信验证码已经失效了，请重新获取');
@@ -149,7 +153,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 手机号已经注册
-  it('should return status 0 when the mobile is registered', async function() {
+  it('should / status 0 when the mobile is registered', async function() {
     try {
       let res;
 
@@ -157,6 +161,7 @@ describe('test /api/signup', function() {
         mobile: '18800000000',
         expired: 1000
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signup').send({
@@ -165,6 +170,7 @@ describe('test /api/signup', function() {
         mobile: '18800000000',
         smscaptcha: res.body.code
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('MOBILE_HAS_BEEN_REGISTERED');
       res.body.message.should.equal('手机号已经注册过了');
@@ -174,7 +180,7 @@ describe('test /api/signup', function() {
   });
 
   // 错误 - 昵称已经注册
-  it('should return status 0 when the nickname is registered', async function() {
+  it('should / status 0 when the nickname is registered', async function() {
     try {
       let res;
 
@@ -182,6 +188,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         expired: 1000
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signup').send({
@@ -190,6 +197,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         smscaptcha: res.body.code
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('NICKNAME_HAS_BEEN_REGISTERED');
       res.body.message.should.equal('昵称已经注册过了');
@@ -199,7 +207,7 @@ describe('test /api/signup', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       let res;
 
@@ -207,6 +215,7 @@ describe('test /api/signup', function() {
         mobile: '18800000001',
         expired: 1000
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signup').send({

@@ -23,9 +23,10 @@ describe('test /api/topic/:tid/collect_or_un', function() {
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when the not signin in yet', async function() {
+  it('should / status 0 when the not signin in yet', async function() {
     try {
       const res = await request.patch(`/api/user/${mockUser2.id}/follow_or_un`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
@@ -35,18 +36,21 @@ describe('test /api/topic/:tid/collect_or_un', function() {
   });
 
   // 错误 - 无效的ID
-  it('should return status 0 when the tid is invalid', async function() {
+  it('should / status 0 when the tid is invalid', async function() {
     try {
       let res;
+
       res = await request.post('/api/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
       res = await request.patch(`/api/user/${tempId}/follow_or_un`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_ID_IS_INVALID');
       res.body.message.should.equal('无效的ID');
@@ -64,11 +68,13 @@ describe('test /api/topic/:tid/collect_or_un', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
       res = await request.patch(`/api/user/${mockUser2.id}/follow_or_un`);
+
       res.body.status.should.equal(1);
     } catch(err) {
       should.ifError(err.message);

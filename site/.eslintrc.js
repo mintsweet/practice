@@ -6,10 +6,13 @@ const eslintConfig = {
     alert: true
   },
 
+  env: {
+    mocha: true
+  },
+
   extends: "mints",
 
   rules: {
-    'no-console': 'off',
     'no-var': 'off',
     'no-plusplus': 'off'
   }

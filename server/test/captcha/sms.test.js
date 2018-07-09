@@ -4,7 +4,7 @@ const should = require('should');
 
 describe('test /api/captcha/sms', function() {
   // 错误 - 手机号格式不正确
-  it('should return status 0 when mobile is invalid', async function() {
+  it('should / status 0 when mobile is invalid', async function() {
     try {
       const res = await request.get('/api/captcha/sms');
       res.body.status.should.equal(0);
@@ -16,12 +16,13 @@ describe('test /api/captcha/sms', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       const res = await request.get('/api/captcha/sms').query({
-        mobile: '13500000000'
+        mobile: '18800000000'
       });
       res.body.status.should.equal(1);
+      res.body.code.length.should.equal(6);
     } catch(err) {
       should.ifError(err.message);
     }

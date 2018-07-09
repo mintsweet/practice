@@ -28,11 +28,12 @@ describe('test /api/topic/:tid/reply', function() {
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when the not signin', async function() {
+  it('should / status 0 when the not signin', async function() {
     try {
       const res = await request.post(`/api/topic/${mockTopic.id}/reply`).send({
         content: '# 这是一段测试回复内容'
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
@@ -42,7 +43,7 @@ describe('test /api/topic/:tid/reply', function() {
   });
 
   // 错误 - 未找到话题
-  it('should return status 0 when the not find topic', async function() {
+  it('should / status 0 when the not find topic', async function() {
     try {
       let res;
 
@@ -50,6 +51,7 @@ describe('test /api/topic/:tid/reply', function() {
         mobile: mockUser2.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser2.id);
@@ -57,57 +59,62 @@ describe('test /api/topic/:tid/reply', function() {
       res = await request.post(`/api/topic/${tempId}/reply`).send({
         content: '# 这是一段测试回复内容'
       });
+
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_NO_TOPIC');
+      res.body.type.should.equal('ERROR_NOT_FIND_TOPIC');
       res.body.message.should.equal('未找到话题');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误 - 回复内容不能为空
-  it('should return status 0 when the not find topic', async function() {
-    try {
-      let res;
+  // // 错误 - 回复内容不能为空
+  // it('should / status 0 when the not find topic', async function() {
+  //   try {
+  //     let res;
 
-      res = await request.post('/api/signin').send({
-        mobile: mockUser2.mobile,
-        password: 'a123456'
-      });
-      res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser2.id);
+  //     res = await request.post('/api/signin').send({
+  //       mobile: mockUser2.mobile,
+  //       password: 'a123456'
+  //     });
 
-      res = await request.post(`/api/topic/${tempId}/reply`).send({
-        content: ''
-      });
-      res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_NO_TOPIC');
-      res.body.message.should.equal('未找到话题');
-    } catch(err) {
-      should.ifError(err.message);
-    }
-  });
+  //     res.body.status.should.equal(1);
+  //     res.body.data.should.have.property('id');
+  //     res.body.data.id.should.equal(mockUser2.id);
 
-  // 正确
-  it('should return status 1', async function() {
-    try {
-      let res;
+  //     res = await request.post(`/api/topic/${tempId}/reply`).send({
+  //       content: ''
+  //     });
 
-      res = await request.post('/api/signin').send({
-        mobile: mockUser2.mobile,
-        password: 'a123456'
-      });
-      res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser2.id);
+  //     res.body.status.should.equal(0);
+  //     res.body.type.should.equal('ERROR_NO_CONTENT_OF_REPLY');
+  //     res.body.message.should.equal('回复内容不能为空');
+  //   } catch(err) {
+  //     should.ifError(err.message);
+  //   }
+  // });
 
-      res = await request.post(`/api/topic/${mockTopic.id}/reply`).send({
-        content: '# 这是一段测试回复内容'
-      });
-      res.body.status.should.equal(1);
-    } catch(err) {
-      should.ifError(err.message);
-    }
-  });
+  // // 正确
+  // it('should / status 1', async function() {
+  //   try {
+  //     let res;
+
+  //     res = await request.post('/api/signin').send({
+  //       mobile: mockUser2.mobile,
+  //       password: 'a123456'
+  //     });
+
+  //     res.body.status.should.equal(1);
+  //     res.body.data.should.have.property('id');
+  //     res.body.data.id.should.equal(mockUser2.id);
+
+  //     res = await request.post(`/api/topic/${mockTopic.id}/reply`).send({
+  //       content: '# 这是一段测试回复内容'
+  //     });
+
+  //     res.body.status.should.equal(1);
+  //   } catch(err) {
+  //     should.ifError(err.message);
+  //   }
+  // });
 });

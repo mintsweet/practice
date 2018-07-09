@@ -16,9 +16,10 @@ describe('test /api/info', function() {
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when user is not signin', async function() {
+  it('should / status 0 when user is not signin', async function() {
     try {
       const res = await request.get('/api/info');
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
@@ -28,7 +29,7 @@ describe('test /api/info', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       let res;
 
@@ -36,11 +37,13 @@ describe('test /api/info', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
       res = await request.get('/api/info');
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);

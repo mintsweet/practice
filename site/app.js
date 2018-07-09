@@ -44,3 +44,5 @@ if (!module.parent) {
     console.log(`Mints PC Client listening on ${chalk.greenBright(`http://localhost:${config.site_port}`)}`);
   });
 }
+
+module.exports = app;

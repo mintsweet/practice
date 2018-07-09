@@ -5,11 +5,12 @@ const ReplyModel = require('../models/reply');
 const NoticeModel = require('../models/notice');
 const BehaviorModel = require('../models/behavior');
 
-exports.createUser = function(nickname, mobile) {
+exports.createUser = function(nickname, mobile, other) {
   return UserModel.create({
     nickname,
     mobile,
-    password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
+    password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10)),
+    ...other
   });
 };
 

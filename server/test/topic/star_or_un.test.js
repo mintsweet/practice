@@ -4,7 +4,7 @@ const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /api/topic/:tid/like_or_un', function() {
+describe('test /api/topic/:tid/star_or_un', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
@@ -27,9 +27,10 @@ describe('test /api/topic/:tid/like_or_un', function() {
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when the not signin in yet', async function() {
+  it('should / status 0 when the not signin in yet', async function() {
     try {
-      const res = await request.patch(`/api/topic/${mockTopic.id}/like_or_un`);
+      const res = await request.patch(`/api/topic/${mockTopic.id}/star_or_un`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
@@ -39,18 +40,21 @@ describe('test /api/topic/:tid/like_or_un', function() {
   });
 
   // 错误 - 无效的ID
-  it('should return status 0 when the tid is invalid', async function() {
+  it('should / status 0 when the tid is invalid', async function() {
     try {
       let res;
+
       res = await request.post('/api/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.patch(`/api/topic/${tempId}/like_or_un`);
+      res = await request.patch(`/api/topic/${tempId}/star_or_un`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_ID_IS_INVALID');
       res.body.message.should.equal('无效的ID');
@@ -59,8 +63,32 @@ describe('test /api/topic/:tid/like_or_un', function() {
     }
   });
 
+  // 错误 - 不能收藏自己的话题哟
+  it('should / status 0 when the topic is yours', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser2.mobile,
+        password: 'a123456'
+      });
+
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser2.id);
+
+      res = await request.patch(`/api/topic/${mockTopic.id}/star_or_un`);
+
+      res.body.status.should.equal(0);
+      res.body.type.should.equal('ERROR_NOT_STAR_YOURS');
+      res.body.message.should.equal('不能喜欢自己的话题哟');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       let res;
 
@@ -68,11 +96,13 @@ describe('test /api/topic/:tid/like_or_un', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.patch(`/api/topic/${mockTopic.id}/like_or_un`);
+      res = await request.patch(`/api/topic/${mockTopic.id}/star_or_un`);
+
       res.body.status.should.equal(1);
     } catch(err) {
       should.ifError(err.message);

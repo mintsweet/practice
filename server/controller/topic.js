@@ -11,8 +11,8 @@ class Topic extends BaseComponent {
   constructor() {
     super();
     this.createTopic = this.createTopic.bind(this);
-    this.starOrUnstarTopic = this.starOrUnstarTopic.bind(this);
-    this.collectOrUncollectTopic = this.collectOrUncollectTopic.bind(this);
+    this.starOrUnStar = this.starOrUnStar.bind(this);
+    this.collectOrUnCollect = this.collectOrUnCollect.bind(this);
   }
 
   // 创建话题
@@ -28,7 +28,7 @@ class Topic extends BaseComponent {
         });
       }
 
-      const { id } = req.session.userInfo;
+      const { id } = req.session.user;
       const { tab, title, content } = fields;
 
       try {
@@ -55,7 +55,9 @@ class Topic extends BaseComponent {
 
       try {
         const topic = await TopicModel.create(_topic);
+
         await this.generateBehavior('create', id, topic.id);
+
         const currentUser = await UserModel.findById(id);
         currentUser.score += 1;
         currentUser.topic_count += 1;
@@ -78,7 +80,7 @@ class Topic extends BaseComponent {
   // 删除话题
   async deleteTopic(req, res) {
     const { tid } = req.params;
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
 
     try {
       const currentTopic = await TopicModel.findById(tid);
@@ -127,7 +129,7 @@ class Topic extends BaseComponent {
       }
 
       const { tid } = req.params;
-      const { id } = req.session.userInfo;
+      const { id } = req.session.user;
 
       try {
         const currentTopic = await TopicModel.findById(tid);
@@ -140,7 +142,7 @@ class Topic extends BaseComponent {
           });
         }
 
-        if (id !== currentTopic.author_id.toString()) {
+        if (!currentTopic.author_id.equals(id)) {
           return res.send({
             status: 0,
             type: 'ERROR_IS_NOT_AUTHOR',
@@ -328,7 +330,7 @@ class Topic extends BaseComponent {
   // 获取话题详情
   async getTopicById(req, res) {
     const { tid } = req.params;
-    const { userInfo } = req.session;
+    const { user } = req.session;
 
     try {
       let currentTopic = await TopicModel.findById(tid);
@@ -356,13 +358,13 @@ class Topic extends BaseComponent {
       let starBehavior;
       let collectBehavior;
 
-      if (userInfo && userInfo.id) {
-        starBehavior = await BehaviorModel.findOne({ type: 'star', author_id: userInfo.id, target_id: currentTopic.id });
-        collectBehavior = await BehaviorModel.findOne({ type: 'collect', author_id: userInfo.id, target_id: currentTopic.id });
+      if (user && user.id) {
+        starBehavior = await BehaviorModel.findOne({ type: 'star', author_id: user.id, target_id: currentTopic.id });
+        collectBehavior = await BehaviorModel.findOne({ type: 'collect', author_id: user.id, target_id: currentTopic.id });
       }
 
-      const isStar = (starBehavior && !starBehavior.delete) || false;
-      const isCollect = (collectBehavior && !collectBehavior.delete) || false;
+      const star = (starBehavior && !starBehavior.delete) || false;
+      const collect = (collectBehavior && !collectBehavior.delete) || false;
 
       const replies = replyList.map((item, i) => {
         return {
@@ -374,7 +376,9 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, isStar, isCollect }
+        data: { ...currentTopic.toObject({ virtuals: true }), author, replies },
+        star,
+        collect
       });
     } catch(err) {
       logger.error(err);
@@ -387,13 +391,12 @@ class Topic extends BaseComponent {
   }
 
   // 喜欢或者取消喜欢话题
-  async starOrUnstarTopic(req, res) {
+  async starOrUnStar(req, res) {
     const { tid } = req.params;
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
 
     try {
       const currentTopic = await TopicModel.findById(tid);
-      const currentAuhtor = await UserModel.findById(currentTopic.author_id);
 
       if (!currentTopic) {
         return res.send({
@@ -403,10 +406,12 @@ class Topic extends BaseComponent {
         });
       }
 
+      const currentAuhtor = await UserModel.findById(currentTopic.author_id);
+
       if (currentTopic.author_id.equals(id)) {
         return res.send({
           status: 0,
-          type: 'ERROR_NOT_STAR_YOURSELF',
+          type: 'ERROR_NOT_STAR_YOURS',
           message: '不能喜欢自己的话题哟'
         });
       }
@@ -443,13 +448,12 @@ class Topic extends BaseComponent {
   }
 
   // 收藏或者取消收藏话题
-  async collectOrUncollectTopic(req, res) {
+  async collectOrUnCollect(req, res) {
     const { tid } = req.params;
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
 
     try {
       const currentTopic = await TopicModel.findById(tid);
-      const currentAuthor = await UserModel.findById(currentTopic.author_id);
 
       if (!currentTopic) {
         return res.send({
@@ -459,10 +463,12 @@ class Topic extends BaseComponent {
         });
       }
 
+      const currentAuthor = await UserModel.findById(currentTopic.author_id);
+
       if (currentTopic.author_id.equals(id)) {
         return res.send({
           status: 0,
-          type: 'ERROR_NOT_COLLECT_YOURSELF',
+          type: 'ERROR_NOT_COLLECT_YOURS',
           message: '不能收藏自己的话题哟'
         });
       }

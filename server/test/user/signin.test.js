@@ -19,14 +19,15 @@ describe('test /api/signin', function() {
   });
 
   // 错误 - 手机号不正确
-  it('should return status 0 when the mobile is invalid', async function() {
+  it('should / status 0 when the mobile is invalid', async function() {
     try {
       const res = await request.post('/api/signin').send({
         mobile: '12345678901',
         password: 'a123456'
       });
+
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_PARMAS_OF_SIGNIN');
+      res.body.type.should.equal('ERROR_MOBILE_IS_INVALID');
       res.body.message.should.equal('请输入正确的手机号');
     } catch(err) {
       should.ifError(err.message);
@@ -34,12 +35,13 @@ describe('test /api/signin', function() {
   });
 
   // 错误 - 账户不存在
-  it('should return status 0 when the mobile is not registered', async function() {
+  it('should / status 0 when the mobile is not registered', async function() {
     try {
       const res = await request.post('/api/signin').send({
         mobile: '18800000001',
         password: 'a123456'
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_USER_IS_NOT_EXITS');
       res.body.message.should.equal('尚未注册');
@@ -49,12 +51,13 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为账户密码 - 密码错误
-  it('should return status 0 when the pass is not match', async function() {
+  it('should / status 0 when the pass is not match', async function() {
     try {
       const res = await request.post('/api/signin').send({
         mobile: '18800000000',
         password: 'a123456789'
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_PASS_IS_NOT_MATCH');
       res.body.message.should.equal('用户密码错误');
@@ -64,12 +67,13 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为账户密码 - 正确
-  it('should return status 1 when type equal acc', async function() {
+  it('should / status 1 when type equal acc', async function() {
     try {
       const res = await request.post('/api/signin').send({
         mobile: '18800000000',
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
@@ -79,13 +83,14 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 收取验证码手机与登录手机不匹配
-  it('should return status 0 when the smscaptcha and mobile is not match', async function() {
+  it('should / status 0 when the smscaptcha and mobile is not match', async function() {
     try {
       let res;
 
       res = await request.get('/api/captcha/sms').query({
         mobile: '18800000001'
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signin').send({
@@ -93,6 +98,7 @@ describe('test /api/signin', function() {
         mobile: '18800000000',
         smscaptcha: '123456'
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_PARAMS_OF_SIGNIN');
       res.body.message.should.equal('收取验证码的手机与登录手机不匹配');
@@ -102,13 +108,14 @@ describe('test /api/signin', function() {
   });
 
   // 登录类型为短信验证码 - 短信验证码不对
-  it('should return status 0 when the smscaptcha is invalid', async function() {
+  it('should / status 0 when the smscaptcha is invalid', async function() {
     try {
       let res;
 
       res = await request.get('/api/captcha/sms').query({
         mobile: '18800000000'
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signin').send({
@@ -116,6 +123,7 @@ describe('test /api/signin', function() {
         mobile: '18800000000',
         smscaptcha: '123456'
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_PARAMS_OF_SIGNIN');
       res.body.message.should.equal('短信验证码不正确');
@@ -133,7 +141,9 @@ describe('test /api/signin', function() {
         mobile: '18800000000',
         expired: 1000 * 60
       });
+
       res.body.status.should.equal(1);
+
       clock.tick(1000 * 61);
 
       res = await request.post('/api/signin').send({
@@ -141,6 +151,7 @@ describe('test /api/signin', function() {
         mobile: '18800000000',
         smscaptcha: res.body.code
       });
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_PARAMS_OF_SIGNIN');
       res.body.message.should.equal('短信验证码已经失效了，请重新获取');
@@ -157,6 +168,7 @@ describe('test /api/signin', function() {
       res = await request.get('/api/captcha/sms').query({
         mobile: '18800000000'
       });
+
       res.body.status.should.equal(1);
 
       res = await request.post('/api/signin').send({
@@ -164,6 +176,7 @@ describe('test /api/signin', function() {
         mobile: '18800000000',
         smscaptcha: res.body.code
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);

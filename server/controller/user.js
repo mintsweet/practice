@@ -16,7 +16,7 @@ class User extends BaseComponent {
     this.forgetPass = this.forgetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
     this.getUserStars = this.getUserStars.bind(this);
-    this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
+    this.followOrUnFollow = this.followOrUnFollow.bind(this);
   }
 
   // 注册
@@ -33,7 +33,7 @@ class User extends BaseComponent {
       }
 
       const sms_code = req.session.sms_code || {};
-      const { nickname, mobile, password, smscaptcha } = fields;
+      const { mobile, password, nickname, smscaptcha } = fields;
 
       try {
         if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
@@ -79,13 +79,14 @@ class User extends BaseComponent {
         }
 
         const bcryptPassword = await this.encryption(password);
-        const _user = {
+        const user = {
           nickname,
           mobile,
           password: bcryptPassword
         };
 
-        await UserModel.create(_user);
+        await UserModel.create(user);
+
         return res.send({
           status: 1
         });
@@ -121,15 +122,11 @@ class User extends BaseComponent {
 
       const { mobile, password, issms, smscaptcha } = fields;
 
-      try {
-        if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
-          throw new Error('请输入正确的手机号');
-        }
-      } catch(err) {
+      if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
         return res.send({
           status: 0,
-          type: 'ERROR_PARMAS_OF_SIGNIN',
-          message: err.message
+          type: 'ERROR_MOBILE_IS_INVALID',
+          message: '请输入正确的手机号'
         });
       }
 
@@ -167,7 +164,7 @@ class User extends BaseComponent {
             });
           }
 
-          req.session.userInfo = existUser;
+          req.session.user = existUser;
           return res.send({
             status: 1,
             data: existUser
@@ -183,7 +180,7 @@ class User extends BaseComponent {
             });
           }
 
-          req.session.userInfo = existUser;
+          req.session.user = existUser;
           return res.send({
             status: 1,
             data: existUser
@@ -202,7 +199,7 @@ class User extends BaseComponent {
 
   // 登出
   signout(req, res) {
-    req.session.userInfo = null;
+    req.session.user = null;
     res.send({
       status: 1
     });
@@ -228,7 +225,7 @@ class User extends BaseComponent {
         if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
-          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+          throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
         } else if (mobile !== sms_code.mobile) {
           throw new Error('提交手机号与获取验证码手机号不对应');
         } else if (sms_code.code !== smscaptcha) {
@@ -275,10 +272,9 @@ class User extends BaseComponent {
 
   // 获取当前用户信息
   getUserInfo(req, res) {
-    const { userInfo } = req.session;
     return res.send({
       status: 1,
-      data: userInfo
+      data: req.session.user
     });
   }
 
@@ -295,7 +291,7 @@ class User extends BaseComponent {
         });
       }
 
-      const { id, nickname: currentNickname } = req.session.userInfo;
+      const { id, nickname: currentNickname } = req.session.user;
       const { nickname } = fields;
 
       try {
@@ -308,11 +304,9 @@ class User extends BaseComponent {
           });
         }
 
-        const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, {
-          new: true
-        });
+        const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, { new: true }).lean();
 
-        req.session.userInfo = doc.toObject();
+        req.session.user = doc;
 
         return res.send({
           status: 1
@@ -341,14 +335,14 @@ class User extends BaseComponent {
         });
       }
 
-      const { id } = req.session.userInfo;
+      const { id } = req.session.user;
       const { oldPass, newPass } = fields;
 
       try {
         if (!oldPass) {
           throw new Error('旧密码不能为空');
         } else if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
-          throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+          throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
         }
       } catch(err) {
         return res.send({
@@ -374,7 +368,7 @@ class User extends BaseComponent {
           return res.send({
             status: 0,
             type: 'ERROR_PASSWORD_IS_NOT_MATCH',
-            message: '密码错误'
+            message: '旧密码错误'
           });
         }
       } catch(err) {
@@ -391,7 +385,7 @@ class User extends BaseComponent {
   // 获取星标用户列表
   async getStarList(req, res) {
     try {
-      const userList = await UserModel.find({ is_star: true }, 'id nickname score');
+      const userList = await UserModel.find({ star: true }, 'id avatar nickname location signature star');
       return res.send({
         status: 1,
         data: userList
@@ -409,7 +403,7 @@ class User extends BaseComponent {
   // 获取积分榜前一百用户
   async getTop100(req, res) {
     try {
-      const userList = await UserModel.find({}, 'id nickname score avatar topic_count follower_count', {
+      const userList = await UserModel.find({}, 'id nickname score avatar topic_count star_count collect_count follower_count', {
         limit: 100,
         sort: '-score'
       });
@@ -443,75 +437,25 @@ class User extends BaseComponent {
         });
       }
 
-      const userInfo = req.session.userInfo || {};
-      let isFollow;
+      const user = req.session.user || {};
+      let follow = false;
 
-      if (userInfo.id) {
-        const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: userInfo.id, target_id: uid });
+      if (user.id) {
+        const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: user.id, target_id: uid });
         if (behavior && behavior.actualType.indexOf('un') < 0) {
-          isFollow = true;
+          follow = true;
         } else {
-          isFollow = false;
+          follow = false;
         }
-      } else {
-        isFollow = false;
       }
 
       return res.send({
         status: 1,
         data: currentUser,
-        isFollow
+        follow
       });
     } catch(err) {
       logger.error(err.message);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
-  }
-
-  // 关注或者取消关注某个用户
-  async followOrUnfollowUser(req, res) {
-    const { uid } = req.params;
-    const { id } = req.session.userInfo;
-
-    try {
-      const currentTarget = await UserModel.findById(uid);
-      const currentAuthor = await UserModel.findById(id);
-
-      if (!currentTarget) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_ID_IS_INVALID',
-          message: '无效的ID'
-        });
-      }
-
-      const behavior = await this.generateBehavior('follow', id, uid);
-
-      if (behavior.is_un) {
-        currentTarget.follower_count -= 1;
-        await currentTarget.save();
-        currentAuthor.following_count -= 1;
-        await currentAuthor.save();
-        req.session.userInfo.following_count -= 1;
-      } else {
-        currentTarget.follower_count += 1;
-        await currentTarget.save();
-        currentAuthor.following_count += 1;
-        await currentAuthor.save();
-        req.session.userInfo.following_count += 1;
-        await this.sendFollowNotice(id, uid);
-      }
-
-      return res.send({
-        status: 1,
-        action: behavior.actualType
-      });
-    } catch(err) {
-      logger.error(err);
       return res.send({
         status: 0,
         type: 'ERROR_SERVICE',
@@ -679,6 +623,54 @@ class User extends BaseComponent {
       return res.send({
         status: 1,
         data: result
+      });
+    } catch(err) {
+      logger.error(err);
+      return res.send({
+        status: 0,
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
+      });
+    }
+  }
+
+  // 关注或者取消关注某个用户
+  async followOrUnFollow(req, res) {
+    const { uid } = req.params;
+    const { id } = req.session.user;
+
+    try {
+      const currentTarget = await UserModel.findById(uid);
+      const currentAuthor = await UserModel.findById(id);
+
+      if (!currentTarget) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_ID_IS_INVALID',
+          message: '无效的ID'
+        });
+      }
+
+      const behavior = await this.generateBehavior('follow', id, uid);
+
+      if (behavior.is_un) {
+        currentTarget.follower_count -= 1;
+        await currentTarget.save();
+        currentAuthor.following_count -= 1;
+        await currentAuthor.save();
+        req.session.user.following_count -= 1;
+      } else {
+        currentTarget.follower_count += 1;
+        await currentTarget.save();
+        currentAuthor.following_count += 1;
+        await currentAuthor.save();
+        req.session.user.following_count += 1;
+        await this.sendFollowNotice(id, uid);
+      }
+
+      return res.send({
+        status: 1,
+        action: behavior.actualType
       });
     } catch(err) {
       logger.error(err);

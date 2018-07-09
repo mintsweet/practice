@@ -16,9 +16,10 @@ describe('test /api/users/:uid', function() {
   });
 
   // 错误 - 无效的ID
-  it('should return status 0 when the uid is invalid', async function() {
+  it('should / status 0 when the uid is invalid', async function() {
     try {
       const res = await request.get(`/api/user/${tempId}`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_ID_IS_INVALID');
       res.body.message.should.equal('无效的ID');
@@ -28,12 +29,14 @@ describe('test /api/users/:uid', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       const res = await request.get(`/api/user/${mockUser.id}`);
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
+      res.body.follow.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }

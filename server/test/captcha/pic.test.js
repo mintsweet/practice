@@ -4,7 +4,7 @@ const should = require('should');
 
 describe('test /api/captcha/pic', function() {
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       const res = await request.get('/api/captcha/pic');
       res.body.status.should.equal(1);

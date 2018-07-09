@@ -2,13 +2,13 @@ const app = require('../../app');
 const request = require('supertest')(app);
 const should = require('should');
 
-describe('test /api/static/api_introduction', function() {
+describe('test /api/static/api', function() {
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/static/get_start');
+      const res = await request.get('/api/static/api');
       res.body.status.should.equal(1);
-      res.body.data.should.containEql('快速开始');
+      res.body.data.should.containEql('API文档');
     } catch(err) {
       should.ifError(err.message);
     }

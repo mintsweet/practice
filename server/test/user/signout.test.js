@@ -15,7 +15,7 @@ describe('test /api/signout', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       let res;
 
@@ -23,6 +23,7 @@ describe('test /api/signout', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);

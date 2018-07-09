@@ -35,7 +35,7 @@ class Reply extends BaseComponent {
         if (!currentTopic) {
           return res.send({
             status: 0,
-            type: 'ERROR_NO_TOPIC',
+            type: 'ERROR_NOT_FIND_TOPIC',
             message: '未找到话题'
           });
         }

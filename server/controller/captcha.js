@@ -57,8 +57,7 @@ class Captcha extends BaseComponent {
   }
 
   async getSmsCaptcha(req, res) {
-    const { mobile } = req.query;
-    const expired = req.query.expired || 1000 * 60 * 10;
+    const { mobile, expired } = req.query;
 
     if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       return res.send({
@@ -77,14 +76,14 @@ class Captcha extends BaseComponent {
     req.session.sms_code = {
       mobile,
       code: code.toString(),
-      expired: Date.now() + Number(expired)
+      expired: Date.now() + Number(expired || (1000 * 60 * 10)) 
     };
 
-    console.warn(code);
+    process.env === 'development' && console.warn(code);
 
     return res.send({
       status: 1,
-      code
+      code: process.env === 'production' ? '' : code
     });
   }
 }

@@ -5,9 +5,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node ./app.js",
     "lint": "eslint **/*.js",
-    "test": "mocha",
-    "test:file": "mocha",
-    "test:cover": "nyc --reporter=html mocha"
+    "test": "cross-env NODE_ENV=test mocha",
+    "test:file": "cross-env NODE_ENV=test mocha",
+    "test:cover": "cross-env NODE_ENV=test nyc --reporter=html mocha"
   },
   "license": "MIT",
   "dependencies": {

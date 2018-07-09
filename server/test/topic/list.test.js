@@ -19,9 +19,10 @@ describe('test /api/topics/list', function() {
   });
 
   // 正确 - 默认
-  it('should return status 1 when the query is default', async function() {
+  it('should / status 1 when the query is default', async function() {
     try {
       const res = await request.get('/api/topics/list');
+      
       res.body.status.should.equal(1);
       res.body.data.topics.length.should.equal(2);
       res.body.data.currentPage.should.equal(1);
@@ -35,11 +36,12 @@ describe('test /api/topics/list', function() {
   });
 
   // 正确 - 精华话题
-  it('should return status 1 when the query tab is good', async function() {
+  it('should / status 1 when the query tab is good', async function() {
     try {
       const res = await request.get('/api/topics/list').query({
         tab: 'good'
       });
+      
       res.body.status.should.equal(1);
       res.body.data.topics.length.should.equal(0);
       res.body.data.currentPage.should.equal(1);
@@ -53,13 +55,14 @@ describe('test /api/topics/list', function() {
   });
 
   // 正确 - 带参数限制
-  it('should return status 1 when the has query', async function() {
+  it('should / status 1 when the has query', async function() {
     try {
       const res = await request.get('/api/topics/list').query({
         tab: 'ask',
         page: 2,
         size: 1
       });
+      
       res.body.status.should.equal(1);
       res.body.data.topics.length.should.equal(1);
       res.body.data.currentPage.should.equal(2);

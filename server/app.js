@@ -11,7 +11,7 @@ const router = require('./router');
 const app = new Express();
 
 // connect mongodb
-const dbpath = process.env === 'production' ? config.db : 'mongodb://localhost/practice-test';
+const dbpath = process.env === 'production' ? config.db : 'mongodb://localhost/practice-mode-test';
 
 mongoose.connect(dbpath, error => {
   if (error) {
@@ -22,34 +22,6 @@ mongoose.connect(dbpath, error => {
   }
 });
 
-
-// cross and interceptor
-const ALLOW_ORIGIN = [
-  'localhost:3000',
-  'http://localhost:3001'
-];
-
-app.all('*', (req, res, next) => {
-  const reqOrigin = req.headers.origin || req.headers.host;
-  if (ALLOW_ORIGIN.includes(reqOrigin)) {
-    res.header('Access-Control-Allow-Origin', reqOrigin);
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('X-Powered-By', '3.2.1');
-    if (req.method === 'OPTIONS') {
-      res.sendStatus(200);
-    } else {
-      next();
-    }
-  } else {
-    res.send({
-      status: 0,
-      type: 'ILLEGAL DOMAIN NAME',
-      message: '非法的域名'
-    });
-  }
-});
 
 // cookie and session
 const MongoStore = connectMongo(session);
@@ -68,6 +40,34 @@ app.use(session({
     url: dbpath
   })
 }));
+
+// cross and interceptor
+// const ALLOW_ORIGIN = [
+//   'localhost:3000',
+//   'http://localhost:3001'
+// ];
+
+// app.all('*', (req, res, next) => {
+//   const reqOrigin = req.headers.origin || req.headers.host;
+//   if (ALLOW_ORIGIN.includes(reqOrigin)) {
+//     res.header('Access-Control-Allow-Origin', reqOrigin);
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+//     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+//     res.header('Access-Control-Allow-Credentials', true);
+//     res.header('X-Powered-By', '3.2.1');
+//     if (req.method === 'OPTIONS') {
+//       res.sendStatus(200);
+//     } else {
+//       next();
+//     }
+//   } else {
+//     res.send({
+//       status: 0,
+//       type: 'ILLEGAL DOMAIN NAME',
+//       message: '非法的域名'
+//     });
+//   }
+// });
 
 // router
 app.use('/api', router);

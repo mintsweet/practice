@@ -23,9 +23,10 @@ describe('test /api/topic/:tid', function() {
   });
 
   // 错误 - 无效的ID
-  it('should return status 0 when the tid is invalid', async function() {
+  it('should / status 0 when the tid is invalid', async function() {
     try {
       const res = await request.get(`/api/topic/${tempId}`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_ID_IS_INVALID');
       res.body.message.should.equal('无效的ID');
@@ -35,10 +36,15 @@ describe('test /api/topic/:tid', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       const res = await request.get(`/api/topic/${mockTopic.id}`);
+
       res.body.status.should.equal(1);
+      res.body.data.author.id.should.equal(mockUser.id);
+      res.body.data.replies.length.should.equal(1);
+      res.body.star.should.equal(false);
+      res.body.collect.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }
