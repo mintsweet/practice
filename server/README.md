@@ -4,7 +4,7 @@
 
 ## 简介
 
-此包可以单独使用，可作为任何项目的数据依赖，所有接口都有详细描述，并且在初始化时都设有模拟数据。
+此包可以单独使用，可作为任何项目的数据依赖，所有接口都有详细描述。
 
 ## 快速开始
 
@@ -13,13 +13,13 @@
   3. 执行 npm start 或者是 yarn start
   4. 检查服务是否开始，浏览器访问 http://localhost:3000/api 是否有返回JSON。
 
-## API说明
+## API文档
 
-[使劲戳API详情](../API.md)
+[使劲戳API文档](../API.md)
 
-> 目录中有一份`Postman`关于所有`API`测试的文件`/test/postman.json`，大家可以自行导入`Postman`测试。
+## 测试覆盖率
 
-> 除了上述的手动测试以外，我也编写了大部分的单元测试，执行`npm test`可跑所有的单元测试。
+![测试覆盖率](./screenshots/test_cover.jpg)
 
 ## 非法的域名
 
@@ -28,22 +28,19 @@
 
 ```javascript
 const ALLOW_ORIGIN = [
-  'http://localhost:3001',
-  'http://localhost:3002',
-  'http://localhost:3003',
-  'http://localhost:3004',
-  'http://localhost:3005'
+  'localhost:3000',
+  'http://localhost:3001'
 ];
 
 app.all('*', (req, res, next) => {
-  const reqOrigin = req.headers.origin;
+  const reqOrigin = req.headers.origin || req.headers.host;
   if (ALLOW_ORIGIN.includes(reqOrigin)) {
-    res.header("Access-Control-Allow-Origin", reqOrigin);
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("X-Powered-By", '3.2.1');
-    if (req.method == 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', reqOrigin);
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('X-Powered-By', '3.2.1');
+    if (req.method === 'OPTIONS') {
       res.sendStatus(200);
     } else {
       next();

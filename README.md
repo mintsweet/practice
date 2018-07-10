@@ -14,13 +14,15 @@ Practice 整个包涵盖了多种技术(Node、Express、Pug、MongoDB、React�
 
 ## 文档
 
-[快速开始](server/controller/static/quick_start.md)<br>
-[API说明](API.md)
+  - [快速开始](server/controller/static/quick_start.md)
+  - [API文档](API.md)
+  - [Server文档](server/README.md)
+  - [Site 文档](site/README.md)
 
 ## 博客
 
   - [终极实战(一) - 搞个 Node 的数据服务](https://github.com/mintsweet/blog/issues/2)
-  - 终极实战(二) - 用 Pug 模板输出传统网站
+  - [终极实战(二) - 用 Pug 模板输出传统网站](https://github.com/mintsweet/blog/issues/3)
   - 终极实战(三) - 来一个 React 后台管理应用
   - 终极实战(四) - 再用 Vue 写一次 SPA
   - 终极实战(五) - 不如再写一个微信小程序
