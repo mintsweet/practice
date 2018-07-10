@@ -1,11 +1,11 @@
 extends ../layout
 
 block content
-  .user-acc
+  .layout-full.user-acc
     .title
       span.practice &#xe653; 
       | 用户登录
-    .user-form
+    .content
       form#signinForm.form.form-horizontal(method="post")
         .alert.alert-error(class={hidden: !error}) #{error}
         .control-group

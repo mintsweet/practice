@@ -1,0 +1,17 @@
+.topic-create {
+  flex: 1;
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 4px;
+  .title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .control-group {
+    margin-top: 10px;
+  }
+  .control-label {
+    display: block;
+    margin-bottom: 6px;
+  }
+}

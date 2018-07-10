@@ -62,23 +62,4 @@ router.post('/topic/:tid/reply', Reply.createReply);
 router.get('/notice/user', Auth.userRequired, Notice.renderNoticeUser);
 router.get('/notice/system', Auth.userRequired, Notice.renderNoticeSystem);
 
-// 错误页面
-router.get('/exception/500', (req, res) => {
-  res.render('exception/500', {
-    title: '500'
-  });
-});
-
-router.get('/exception/404', (req, res) => {
-  res.render('exception/404', {
-    title: '404'
-  });
-});
-
-router.get('/exception/403', (req, res) => {
-  res.render('exception/403', {
-    title: '403'
-  });
-});
-
 module.exports = router;

@@ -1,0 +1,12 @@
+.no-content {
+  text-align: center;
+  &>img {
+    display: block;
+    margin: 0 auto 20px;
+    width: 300px;
+    height: 300px;
+  }
+  &>span.placeholder {
+    font-size: 36px;
+  }
+}

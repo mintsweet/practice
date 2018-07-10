@@ -14,8 +14,8 @@ block content
           .controls
             input.select-hidden(type="hidden", name="tab")
             .select
-              a.select-input(href="javascript:;") 请选择类别
-              .select-options
+              a.placeholder(href="javascript:;") 请选择类别
+              .options
                 each item in config.tabs
                   .option(data-value=item.url) #{item.name}
         .control-group

@@ -3,7 +3,7 @@ dl.topic-list
     dd.topic
       a.avatar(href=`/user/${topic.author.id}`, title=topic.author.nickname)
         img(src=topic.author.avatar)
-      .topic-content
+      .content
         .title
           if topic.top
             span.tag.active 置顶
@@ -19,7 +19,7 @@ dl.topic-list
         span(title="回复数")
           i.practice &#xe619;
           | #{topic.reply_count}
-      .last-time
+      .date
         if topic.last_reply_author
           a(href=`/user/${topic.last_reply_author.id}`)
             img(src=topic.last_reply_author.avatar)

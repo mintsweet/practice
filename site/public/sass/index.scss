@@ -1,18 +1,30 @@
 @charset 'utf-8';
 
 // base
-@import './reset.scss';
 @import './variable.scss';
 @import './base.scss';
 
 // components
 @import './components/font.scss';
+@import './components/btn.scss';
+@import './components/form.scss';
+@import './components/markdown.scss';
 @import './components/header.scss';
 @import './components/footer.scss';
 @import './components/back_top.scss';
 @import './components/pagination.scss';
-@import './components/topic.scss';
-@import './components/site.scss';
-@import './components/no_reply.scss';
 
 // pages
+@import './pages/site.scss';
+
+@import './pages/topic/create.scss';
+@import './pages/topic/detail.scss';
+@import './pages/topic/list.scss';
+@import './pages/topic/author.scss';
+@import './pages/topic/no_reply.scss';
+
+@import './pages/user/acc.scss';
+
+@import './pages/no_content.scss';
+
+@import './pages/exception.scss';

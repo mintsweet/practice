@@ -1,0 +1,48 @@
+.tab-list {
+  line-height: 50px;
+  border-bottom: 1px dashed #d5d5d5;
+  a {
+    padding: 5px 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    &.active {
+      background: $theme-color;
+      color: #fff;
+    }
+  }
+}
+
+.aside-block {
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 4px;
+  &.no-title {
+    padding: 10px 20px;
+  }
+  .title {
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
+    a {
+      float: right;
+      margin-top: 2px;
+      color: $theme-color;
+      font-size: 12px;
+    }
+  }
+  .content {
+    padding: 10px 20px;
+    &.score-list {
+      li {
+        line-height: 26px;
+      }
+      .nickname {
+        font-size: 13px;
+      }
+      .score {
+        float: right;
+        font-size: 12px;
+        color: $theme-color;
+      }
+    }
+  }
+}

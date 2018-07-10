@@ -1,0 +1,30 @@
+.user-acc {
+  .title {
+    margin-bottom: 20px;
+    font-size: 20px;
+    .practice {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+  }
+  .content {
+    display: flex;
+    .form, .text {
+      flex: 1;
+      min-height: 360px;
+    }
+    .form {
+      padding: 10px 20px;
+      box-sizing: border-box;
+    }
+    .text {
+      padding: 35px;
+      border-left: 1px solid #ddd;
+      box-sizing: border-box;
+      a {
+        margin: 0 6px;
+        color: $theme-color;
+      }
+    }
+  }
+}

@@ -1,4 +1,21 @@
-/* button */
-.btn {display: inline-block;border: none;text-align: center;background: #16982B;color: #fff;min-height: 30px;line-height: 30px;padding: 0 15px;transition: background 0.3s,border 0.3s;}
-.btn:hover {background: #0e721f;}
-.btn.disabled {background:#f1f1f1;border-color:#aaa;color:#aaa;cursor:no-drop;}
+.btn {
+  display: inline-block;
+  padding: 0 15px;
+  min-height: 30px;
+  line-height: 30px;
+  border: none;
+  text-align: center;
+  color: #fff;
+  background: $theme-color;
+  transition: background 0.6s;
+  &:hover {
+    color: #fff;
+    background: darken($theme-color, 10%);
+  }
+  &.disabled {
+    background: #f1f1f1;
+    border-color: #aaa;
+    color: #aaa;
+    cursor: no-drop;
+  }
+}

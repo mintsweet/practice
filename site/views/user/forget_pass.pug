@@ -1,11 +1,11 @@
 extends ../layout
 
 block content
-  .user-acc
+  .layout-full.user-acc
     .title
       span.practice &#xe601;
       | 忘记密码
-    .user-form
+    .content
       form#forgetForm.form.form-horizontal(method="post")
         .alert.alert-error(class={hidden: !error}) #{error}
         .control-group

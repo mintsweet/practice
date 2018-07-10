@@ -1,13 +1,5 @@
 /* user */
-.user-acc {flex: 1;padding: 20px 30px;background: #fff;border-radius: 4px;}
-.user-acc .title {margin-bottom: 20px;font-size: 20px;}
-.user-acc .title .practice {margin-right: 10px;font-size: 20px;}
-.user-acc .user-form {display: flex;}
-.user-acc .user-form .form,
-.user-acc .user-form .text {flex: 1;min-height: 360px;}
-.user-acc .user-form .form {padding: 10px 20px;box-sizing: border-box;}
-.user-acc .user-form .text {padding: 35px;border-left: 1px solid #ddd;box-sizing: border-box;}
-.user-acc .user-form .text a {margin: 0 6px;color: #16982B;}
+
 .user-info {display: flex;padding: 20px 30px;background: #fff;border-radius: 4px;}
 .user-info .avatar {flex: 0 0 100px;margin-right: 40px;width: 100%;height: 100px;border-radius: 50%;}
 .user-info .avatar img {width: 100%;height: 100%;border-radius: 50%;}

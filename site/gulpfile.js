@@ -6,7 +6,7 @@ const prdPath = 'dist';
 
 gulp.task('sass', () => {
   gulp.src(`${srcPath}/sass/index.scss`)
-    .pipe($.sass({ outputStyle: 'compressed' }))
+    .pipe($.sass({ outputStyle: 'compressed' }).on('error', $.sass.logError))
     .pipe(gulp.dest(`${prdPath}/css/`));
 });
 

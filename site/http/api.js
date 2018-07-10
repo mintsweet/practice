@@ -1,7 +1,7 @@
 const rq = require('request-promise');
 const { baseUrl } = require('./env');
 
-const request = (url, data, method = 'GET') => {
+const request = async (url, data, method = 'GET') => {
   const query = {
     baseUrl,
     url,
@@ -16,7 +16,9 @@ const request = (url, data, method = 'GET') => {
     query.body = data;
   }
 
-  return rq(query);
+  const res = await rq(query);
+
+  return res;
 };
 
 /*

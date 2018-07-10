@@ -10,21 +10,21 @@ block content
           a(href="?tab=" + item.url) #{item.name}
     include ../topic/list
   aside.layout-sider
-    .site-download
+    .aside-block.no-title
       a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
-    .site-block.site-top100
+    .aside-block
       .title
         | 积分榜
         a(href="/users/top100") 更多
-      ul.score-list
+      ul.content.score-list
         each user in top100
           li
             a.nickname(href=`/user/${user.id}`) #{user.nickname}
             span.score #{user.score}
     include ../topic/no_reply.pug
-    .site-block.site-links
+    .aside-block
       .title 友情社区
-      ul.links-list
+      ul.content
         li
           a(href="https://cnodejs.org/", target="_blank")
             img(src="/static/img/cnode_logo_32.png")

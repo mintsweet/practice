@@ -12,14 +12,19 @@ class Auth {
   }
 
   async getUserInfo(req, res, next) {
-    const response = await getCurrentUserInfo();
-
-    if (response.status === 1) {
-      req.app.locals.user = response.data;
-    } else {
-      req.app.locals.user = null;
+    try {
+      const response = await getCurrentUserInfo();
+      if (response.status === 1) {
+        req.app.locals.user = response.data;
+      } else {
+        req.app.locals.user = null;
+      }
+      next();
+    } catch(err) {
+      res.render('exception/500', {
+        title: '500'
+      });
     }
-    next();
   }
 }
 

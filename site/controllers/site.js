@@ -13,46 +13,53 @@ class Site {
     let top100;
     let noReplyTopic;
 
-    response = await getTopicList({
-      tab: tab || 'all',
-      page: page || 1,
-      size: 10
-    });
+    try {
+      response = await getTopicList({
+        tab: tab || 'all',
+        page: page || 1,
+        size: 10
+      });
 
-    if (response.status === 1) {
-      topics = response.data.topics;
-      totalPage = response.data.totalPage;
-      currentPage = response.data.currentPage;
-      currentTab = response.data.tab;
-    } else {
-      res.redirect('/exception/500');
+      if (response.status === 1) {
+        topics = response.data.topics;
+        totalPage = response.data.totalPage;
+        currentPage = response.data.currentPage;
+        currentTab = response.data.tab;
+      } else {
+        throw new Error(response.message);
+      }
+
+      response = await getUsersTop100();
+
+      if (response.status === 1) {
+        top100 = response.data;
+      } else {
+        throw new Error(response.message);
+      }
+
+      response = await getNoReplyTopic();
+
+      if (response.status === 1) {
+        noReplyTopic = response.data;
+      } else {
+        throw new Error(response.message);
+      }
+
+      res.render('site/index', {
+        title: '首页',
+        topics,
+        totalPage,
+        currentPage,
+        currentTab,
+        top100,
+        noReplyTopic
+      });
+    } catch(err) {
+      res.redner('exception/500', {
+        title: 500,
+        error: err.message
+      });
     }
-
-    response = await getUsersTop100();
-
-    if (response.status === 1) {
-      top100 = response.data;
-    } else {
-      res.redirect('/exception/500');
-    }
-
-    response = await getNoReplyTopic();
-
-    if (response.status === 1) {
-      noReplyTopic = response.data;
-    } else {
-      res.redirect('/exception/500');
-    }
-
-    res.render('site/index', {
-      title: '首页',
-      topics,
-      totalPage,
-      currentPage,
-      currentTab,
-      top100,
-      noReplyTopic
-    });
   }
 }
 

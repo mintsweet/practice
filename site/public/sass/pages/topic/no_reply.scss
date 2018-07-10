@@ -1,0 +1,18 @@
+.no-reply {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  li {
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    color: #a1a1a1;
+    a {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
