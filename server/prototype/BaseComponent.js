@@ -16,8 +16,8 @@ module.exports = class BaseComponent {
   }
 
   // 系统发送了消息给你(target_id)
-  async sendSystemNotice(target_id) {
-    await NoticeModel.create({ type: 'system', target_id });
+  async sendSystemNotice(target_id, content) {
+    await NoticeModel.create({ type: 'system', target_id, content });
   }
 
   // 谁(author_id)喜欢了你(target_id)的话题(topic_id)

@@ -20,7 +20,7 @@ describe('test /api/topic/:tid/collect_or_un', function() {
     await support.deleteUser(mockUser2.mobile);
     await support.deleteTopic(mockUser2.id);
     await support.deleteBehavior(mockUser.id);
-    await support.deleteNotice(mockUser.id);
+    await support.deleteNotice(mockUser2.id);
     mockUser = null;
     mockUser2 = null;
     mockTopic = null;
@@ -87,8 +87,8 @@ describe('test /api/topic/:tid/collect_or_un', function() {
     }
   });
 
-  // 正确
-  it('should / status 1', async function() {
+  // 正确 - 收藏
+  it('should / status 1 | action collect', async function() {
     try {
       let res;
 
@@ -104,6 +104,30 @@ describe('test /api/topic/:tid/collect_or_un', function() {
       res = await request.patch(`/api/topic/${mockTopic.id}/collect_or_un`);
 
       res.body.status.should.equal(1);
+      res.body.action.should.equal('collect');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // 正确 - 取消收藏
+  it('should / status 1 | action un_collect', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser.mobile,
+        password: 'a123456'
+      });
+
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+
+      res = await request.patch(`/api/topic/${mockTopic.id}/collect_or_un`);
+
+      res.body.status.should.equal(1);
+      res.body.action.should.equal('un_collect');
     } catch(err) {
       should.ifError(err.message);
     }

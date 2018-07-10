@@ -4,19 +4,19 @@ const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /api/topic/:tid/collect_or_un', function() {
+describe('test /api/topic/:tid/follow_or_un', function() {
   let mockUser;
   let mockUser2;
 
   before(async function() {
-    mockUser = await support.createUser('当前登录者', '18800000000');
-    mockUser2 = await support.createUser('被关注者', '18800000001');
+    mockUser = await support.createUser('被关注着', '18800000000');
+    mockUser2 = await support.createUser('关注者', '18800000001');
   });
 
   after(async function() {
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
-    await support.deleteBehavior(mockUser.id);
+    await support.deleteBehavior(mockUser2.id);
     await support.deleteNotice(mockUser.id);
     mockUser = null;
     mockUser2 = null;
@@ -59,23 +59,47 @@ describe('test /api/topic/:tid/collect_or_un', function() {
     }
   });
 
-  // 正确
-  it('should return status 1', async function() {
+  // 正确 - 关注
+  it('should / status 1', async function() {
     try {
       let res;
 
       res = await request.post('/api/signin').send({
-        mobile: mockUser.mobile,
+        mobile: mockUser2.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
+      res.body.data.id.should.equal(mockUser2.id);
 
-      res = await request.patch(`/api/user/${mockUser2.id}/follow_or_un`);
+      res = await request.patch(`/api/user/${mockUser.id}/follow_or_un`);
 
       res.body.status.should.equal(1);
+      res.body.action.should.equal('follow');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // 正确 - 取消关注
+  it('should / status 1', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser2.mobile,
+        password: 'a123456'
+      });
+
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser2.id);
+
+      res = await request.patch(`/api/user/${mockUser.id}/follow_or_un`);
+
+      res.body.status.should.equal(1);
+      res.body.action.should.equal('un_follow');
     } catch(err) {
       should.ifError(err.message);
     }

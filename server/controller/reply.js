@@ -3,7 +3,6 @@ const BaseComponent = require('../prototype/BaseComponent');
 const ReplyModel = require('../models/reply');
 const TopicModel = require('../models/topic');
 const UserModel = require('../models/user');
-const md2html = require('../utils/md2html');
 const logger = require('../utils/logger');
 
 class Reply extends BaseComponent {
@@ -27,7 +26,7 @@ class Reply extends BaseComponent {
       }
 
       const { tid } = req.params;
-      const { id } = req.session.userInfo;
+      const { id } = req.session.user;
 
       try {
         const currentTopic = await TopicModel.findById(tid);
@@ -96,7 +95,7 @@ class Reply extends BaseComponent {
   // 删除评论
   async deleteReply(req, res) {
     const { rid } = req.params;
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
 
     try {
       const currentReply = await ReplyModel.findById(rid);
@@ -145,7 +144,7 @@ class Reply extends BaseComponent {
       }
 
       const { rid } = req.params;
-      const { id } = req.session.userInfo;
+      const { id } = req.session.user;
 
       try {
         const currentReply = await ReplyModel.findById(rid);
@@ -169,7 +168,7 @@ class Reply extends BaseComponent {
         const { content } = fields;
 
         const _reply = {
-          content: md2html(content) || currentReply.content
+          content: content || currentReply.content
         };
 
         await ReplyModel.findByIdAndUpdate(rid, _reply);
@@ -190,7 +189,7 @@ class Reply extends BaseComponent {
   // 回复点赞
   async upReply(req, res) {
     const { rid } = req.params;
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
 
     try {
       const currentReply = await ReplyModel.findById(rid);
@@ -207,19 +206,19 @@ class Reply extends BaseComponent {
         return res.send({
           status: 0,
           type: 'ERROR_YOURSELF_NOT_DO_IT',
-          message: '不能给自己点赞'
+          message: '不能给自己点赞哟'
         });
       }
 
       let action;
 
       const upIndex = currentReply.ups.indexOf(id);
+
+      await this.generateBehavior('ups', id, currentReply.id);
+
       if (upIndex === -1) {
         currentReply.ups.push(id);
         action = 'up';
-        // 发起行为
-        await this.createBehavior('ups', id, currentReply.id);
-        // 发送提醒
         await this.sendUpsNotice(id, currentReply.author_id, currentReply.id);
       } else {
         currentReply.ups.splice(upIndex, 1);
@@ -227,6 +226,7 @@ class Reply extends BaseComponent {
       }
 
       await currentReply.save();
+
       return res.send({
         status: 1,
         action

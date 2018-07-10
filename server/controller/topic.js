@@ -435,7 +435,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        type: behavior.actualType
+        action: behavior.actualType
       });
     } catch(err) {
       logger.error(err);
@@ -492,7 +492,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        type: behavior.actualType
+        action: behavior.actualType
       });
     } catch(err) {
       logger.error(err);

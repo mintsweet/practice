@@ -28,7 +28,7 @@ class Notice extends BaseComponent {
 
   // 获取用户消息
   async getUserNotice(req, res) {
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
 
     try {
       const userNotices = await NoticeModel.find({ target_id: id }, '', {
@@ -57,18 +57,14 @@ class Notice extends BaseComponent {
 
   // 获取系统消息
   async getSystemNotice(req, res) {
-    const { id } = req.session.userInfo;
+    const { id } = req.session.user;
+
     try {
       const systemNotices = await NoticeModel.find({ target_id: id, type: 'system' });
-      const result = await Promise.all(systemNotices.map(item => (
-        new Promise(resolve => {
-          resolve(this.normalNotice(item));
-        })
-      )));
 
       return res.send({
         status: 1,
-        data: result
+        data: systemNotices
       });
     } catch(err) {
       logger.error(err.message);

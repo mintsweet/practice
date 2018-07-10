@@ -7,8 +7,9 @@ const md = require('markdown-it')({
   highlight(str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       return `<pre><code class="hljs ${lang}">${hljs.highlight(lang, str, true).value}</code></pre>`;
+    } else {
+      return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`;
     }
-    return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`;
   }
 }).use(markdownItTocAndAnchor, {
   tocClassName: 'toc',

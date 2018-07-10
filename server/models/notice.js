@@ -22,6 +22,8 @@ const NoticeSchema = new Schema({
   topic_id: { type: ObjectId },
   reply_id: { type: ObjectId },
 
+  content: { type: String },
+
   create_at: { type: Date, default: Date.now },
   update_at: { type: Date, default: Date.now }
 });

@@ -76,7 +76,7 @@ class Captcha extends BaseComponent {
     req.session.sms_code = {
       mobile,
       code: code.toString(),
-      expired: Date.now() + Number(expired || (1000 * 60 * 10)) 
+      expired: Date.now() + Number(expired || (1000 * 60 * 10))
     };
 
     process.env === 'development' && console.warn(code);

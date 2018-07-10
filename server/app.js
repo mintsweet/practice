@@ -6,6 +6,7 @@ const session = require('express-session');
 const logger = require('./utils/logger');
 const config = require('../config.default');
 const router = require('./router');
+const errorHandler = require('./middleware/error-handler');
 
 // init
 const app = new Express();
@@ -72,24 +73,9 @@ app.use(session({
 // router
 app.use('/api', router);
 
-// 404
-app.use((req, res) => {
-  res.status(404).send({
-    status: 0,
-    type: 'ERROR_NOT_FIND_THAT',
-    message: '找不到请求资源'
-  });
-});
-
-// 500
-app.use((err, req, res) => {
-  logger.error(err);
-  res.status(500).send({
-    status: 0,
-    type: 'ERROR_SERVICE',
-    message: '服务器无响应，请稍后重试'
-  });
-});
+// error handle
+app.use(errorHandler.error404);
+app.use(errorHandler.error500);
 
 if (!module.parent) {
   app.listen(config.server_port, () => {

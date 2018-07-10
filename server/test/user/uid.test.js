@@ -6,13 +6,16 @@ const tempId = require('mongoose').Types.ObjectId();
 
 describe('test /api/users/:uid', function() {
   let mockUser;
+  let mockUser2;
 
   before(async function() {
     mockUser = await support.createUser('已注册用户', '18800000000');
+    mockUser2 = await support.createUser('访问用户', '18800000001');
   });
 
   after(async function() {
     await support.deleteUser(mockUser.mobile);
+    await support.deleteUser(mockUser2.mobile);
   });
 
   // 错误 - 无效的ID
@@ -28,10 +31,35 @@ describe('test /api/users/:uid', function() {
     }
   });
 
-  // 正确
+  // 正确 - 未登录
   it('should / status 1', async function() {
     try {
       const res = await request.get(`/api/user/${mockUser.id}`);
+
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser.id);
+      res.body.follow.should.equal(false);
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // 正确 - 已登录
+  it('should / status 1', async function() {
+    try {
+      let res;
+
+      res = await request.post('/api/signin').send({
+        mobile: mockUser2.mobile,
+        password: 'a123456'
+      });
+
+      res.body.status.should.equal(1);
+      res.body.data.should.have.property('id');
+      res.body.data.id.should.equal(mockUser2.id);
+
+      res = await request.get(`/api/user/${mockUser.id}`);
 
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');

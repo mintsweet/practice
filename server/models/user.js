@@ -45,15 +45,7 @@ UserSchema.index({ mobile: 1 }, { unique: true });
 UserSchema.index({ score: -1 });
 
 UserSchema.virtual('isAdvanced').get(function() {
-  return this.score > 1000 || this.is_start;
-});
-
-UserSchema.virtual('isAdmin').get(function() {
-  return this.role > 0;
-});
-
-UserSchema.virtual('isRoot').get(function() {
-  return this.role > 100;
+  return this.score > 1000 || this.star;
 });
 
 UserSchema.pre('save', function(next) {

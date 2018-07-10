@@ -49,9 +49,25 @@ exports.deleteReply = function(topic_id) {
   });
 };
 
-exports.deleteNotice = function(author_id) {
+exports.createNotice = function(type, target_id, other) {
+  return NoticeModel.create({
+    type,
+    target_id,
+    ...other
+  });
+};
+
+exports.deleteNotice = function(target_id) {
   return NoticeModel.remove({
-    author_id
+    target_id
+  });
+};
+
+exports.createBehavior = function(type, author_id, target_id) {
+  return BehaviorModel.create({
+    type,
+    author_id,
+    target_id
   });
 };
 

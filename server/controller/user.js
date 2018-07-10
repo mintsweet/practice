@@ -451,7 +451,7 @@ class User extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: currentUser,
+        data: currentUser.toObject({ virtuals: true }),
         follow
       });
     } catch(err) {
@@ -469,11 +469,12 @@ class User extends BaseComponent {
     const { uid } = req.params;
     try {
       const behaviors = await BehaviorModel.find({ author_id: uid });
+
       const result = await Promise.all(behaviors.map(item => {
         return new Promise(resolve => {
           if (item.type === 'follow') {
             resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
-          } else if (item.type === 'ups') {
+          } else if (item.type === 'up') {
             resolve(ReplyModel.findById(item.target_id, 'id content create_at'));
           } else {
             resolve(TopicModel.findById(item.target_id, 'id title create_at'));

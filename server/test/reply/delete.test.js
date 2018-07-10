@@ -29,9 +29,10 @@ describe('test /api/reply/:rid/delete', function() {
   });
 
   // 错误 - 尚未登录
-  it('should return status 0 when the not signin', async function() {
+  it('should / status 0 when the not signin', async function() {
     try {
       const res = await request.delete(`/api/reply/${mockReply.id}/delete`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
@@ -41,7 +42,7 @@ describe('test /api/reply/:rid/delete', function() {
   });
 
   // 错误 - 无效的ID
-  it('should return status 0 when the id is invalid', async function() {
+  it('should / status 0 when the id is invalid', async function() {
     try {
       let res;
 
@@ -49,11 +50,13 @@ describe('test /api/reply/:rid/delete', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
       res = await request.delete(`/api/reply/${tempId}/delete`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_ID_IS_INVALID');
       res.body.message.should.equal('无效的ID');
@@ -63,7 +66,7 @@ describe('test /api/reply/:rid/delete', function() {
   });
 
   // 错误 - 不能删除别人的回复
-  it('should return status 0 when the not signin', async function() {
+  it('should / status 0 when the not signin', async function() {
     try {
       let res;
 
@@ -71,11 +74,13 @@ describe('test /api/reply/:rid/delete', function() {
         mobile: mockUser2.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser2.id);
 
       res = await request.delete(`/api/reply/${mockReply.id}/delete`);
+
       res.body.status.should.equal(0);
       res.body.type.should.equal('ERROR_IS_NOT_AUTHOR');
       res.body.message.should.equal('不能删除别人的回复');
@@ -85,7 +90,7 @@ describe('test /api/reply/:rid/delete', function() {
   });
 
   // 正确
-  it('should return status 1', async function() {
+  it('should / status 1', async function() {
     try {
       let res;
 
@@ -93,11 +98,13 @@ describe('test /api/reply/:rid/delete', function() {
         mobile: mockUser.mobile,
         password: 'a123456'
       });
+
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
 
       res = await request.delete(`/api/reply/${mockReply.id}/delete`);
+
       res.body.status.should.equal(1);
     } catch(err) {
       should.ifError(err.message);

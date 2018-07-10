@@ -6,10 +6,6 @@ module.exports = function(schema) {
     return moment(this.create_at).toNow();
   };
 
-  schema.methods.update_at_ago = function() {
-    return moment(this.update_at).toNow();
-  }
-
   schema.methods.last_reply_at_ago = function() {
     return moment(this.last_reply_at).toNow();
   };
