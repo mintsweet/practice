@@ -9,6 +9,6 @@
 ## 快速开始
 
   1. 执行 npm install 或者是 yarn 安装依赖
-  2. 启动 Server 服务
+  2. 启动 server 服务
   3. 执行 npm start 或者 yarn start
   4. 浏览器访问 http://localhost:3001

@@ -79,11 +79,11 @@ class Captcha extends BaseComponent {
       expired: Date.now() + Number(expired || (1000 * 60 * 10))
     };
 
-    process.env === 'development' && console.warn(code);
+    process.env.NODE_ENV === 'development' && console.warn(code);
 
     return res.send({
       status: 1,
-      code: process.env === 'production' ? '' : code
+      code: process.env.NODE_ENV === 'production' ? '' : code
     });
   }
 }

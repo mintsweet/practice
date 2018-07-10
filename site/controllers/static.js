@@ -6,7 +6,7 @@ const {
 
 class Static {
   // 快速开始
-  async getStart(req, res) {
+  async renderStartDoc(req, res) {
     const response = await getStartDoc();
     res.render('static/template', {
       title: '快速开始',
@@ -15,7 +15,7 @@ class Static {
   }
 
   // API说明
-  async getApiIntroduction(req, res) {
+  async renderApiDoc(req, res) {
     const response = await getApiDoc();
     res.render('static/template', {
       title: 'API说明',
@@ -24,7 +24,7 @@ class Static {
   }
 
   // 关于
-  async getAbout(req, res) {
+  async renderAboutDoc(req, res) {
     const response = await getAboutDoc();
     res.render('static/template', {
       title: '关于',

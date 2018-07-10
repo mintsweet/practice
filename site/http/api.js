@@ -55,7 +55,7 @@ exports.setting = info => request('/setting', info, 'PUT');
 // 修改密码
 exports.updatePass = content => request('/update_pass', content, 'PATCH');
 // 获取星标用户列表
-exports.getUsersStart = () => request('/users/start');
+exports.getUsersStar = () => request('/users/star');
 // 获取积分榜前一百
 exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
@@ -64,6 +64,8 @@ exports.getUserInfoById = uid => request(`/user/${uid}`);
 exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
 // 获取用户喜欢列表
 exports.getUserStars = uid => request(`/user/${uid}/stars`);
+// 获取用户收藏列表
+exports.getUserCollections = uid => request(`/user/${uid}/collections`);
 // 获取用户回复列表
 exports.getUserReplies = uid => request(`/user/${uid}/replies`);
 // 获取用户粉丝列表

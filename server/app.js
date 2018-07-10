@@ -12,7 +12,7 @@ const errorHandler = require('./middleware/error-handler');
 const app = new Express();
 
 // connect mongodb
-const dbpath = process.env === 'production' ? config.db : 'mongodb://localhost/practice-mode-test';
+const dbpath = process.env.NODE_ENV === 'test' ? 'mongodb://localhost/practice-test' : config.db;
 
 mongoose.connect(dbpath, error => {
   if (error) {

@@ -55,4 +55,19 @@ UserSchema.pre('save', function(next) {
 
 const User = mongoose.model('User', UserSchema);
 
+// insert root data
+const userData = require('./data/root');
+const bcrypt = require('bcryptjs');
+User.findOne((err, data) => {
+  if (err) {
+    console.error(err);
+  }
+  if (!data) {
+    User.create({
+      ...userData,
+      password: bcrypt.hashSync(userData.password, bcrypt.genSaltSync(10))
+    });
+  }
+});
+
 module.exports = User;

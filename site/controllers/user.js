@@ -179,7 +179,7 @@ class User {
   }
 
   // 积分榜前一百
-  async renderTop100(req, res) {
+  async renderUserTop100(req, res) {
     const response = await getUsersTop100();
 
     if (response.status === 1) {
@@ -193,7 +193,7 @@ class User {
   }
 
   // 个人信息页
-  async renderInfo(req, res) {
+  async renderUserInfo(req, res) {
     const { uid } = req.params;
 
     let response;
@@ -227,7 +227,7 @@ class User {
   }
 
   // 用户喜欢页
-  async renderStars(req, res) {
+  async renderUserStars(req, res) {
     const { uid } = req.params;
 
     let response;
@@ -259,8 +259,12 @@ class User {
     });
   }
 
+  // 用户收藏页
+  async renderUserCollections(req, res) {
+  }
+
   // 用户回复页
-  async renderReplies(req, res) {
+  async renderUserReplies(req, res) {
     const { uid } = req.params;
 
     let response;
@@ -293,7 +297,7 @@ class User {
   }
 
   // 用户粉丝页
-  async renderFollower(req, res) {
+  async renderUserFollower(req, res) {
     const { uid } = req.params;
 
     let response;
@@ -326,7 +330,7 @@ class User {
   }
 
   // 用户关注页
-  async renderFolloing(req, res) {
+  async renderUserFolloing(req, res) {
     const { uid } = req.params;
 
     let response;

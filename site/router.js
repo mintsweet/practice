@@ -1,5 +1,5 @@
 const express = require('express');
-const Auth = require('./middleware/auth');
+const Auth = require('./middlewares/auth');
 const Site = require('./controllers/site');
 const Static = require('./controllers/static');
 const Captcha = require('./controllers/captcha');
@@ -10,13 +10,17 @@ const Reply = require('./controllers/reply');
 
 const router = express.Router();
 
+/*
+* 控制器中带 render 字段皆为页面渲染路由
+*/
+
 // 首页
 router.get('/', Site.index);
 
 // 静态
-router.get('/start', Static.getStart);
-router.get('/api', Static.getApiIntroduction);
-router.get('/about', Static.getAbout);
+router.get('/start', Static.renderStartDoc);
+router.get('/api', Static.renderApiDoc);
+router.get('/about', Static.renderAboutDoc);
 
 // 验证码
 router.get('/captcha/pic', Captcha.getPicCaptcha);
@@ -30,12 +34,13 @@ router.post('/signin', User.signin);
 router.get('/forget_pass', User.renderForgetPass);
 router.post('/forget_pass', User.forgetPass);
 router.get('/signout', User.signout);
-router.get('/users/top100', User.renderTop100);
-router.get('/user/:uid', User.renderInfo);
-router.get('/user/:uid/stars', User.renderStars);
-router.get('/user/:uid/replies', User.renderReplies);
-router.get('/user/:uid/follower', User.renderFollower);
-router.get('/user/:uid/following', User.renderFolloing);
+router.get('/users/top100', User.renderUserTop100);
+router.get('/user/:uid', User.renderUserInfo);
+router.get('/user/:uid/stars', User.renderUserStars);
+router.get('/user/:uid/collections', User.renderUserCollections);
+router.get('/user/:uid/replies', User.renderUserReplies);
+router.get('/user/:uid/follower', User.renderUserFollower);
+router.get('/user/:uid/following', User.renderUserFolloing);
 router.get('/setting', Auth.userRequired, User.renderSetting);
 router.post('/setting', Auth.userRequired, User.setting);
 router.get('/update_pass', Auth.userRequired, User.renderUpdatePass);

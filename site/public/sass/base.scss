@@ -1,0 +1,40 @@
+body {
+  background:#f5f5f5;
+  color:#333;
+  border-top: 4px solid $theme-color;
+}
+
+a {
+  color: #444;
+  transition: color .3s;
+}
+
+a:hover {
+  color: $theme-color;
+}
+
+.layout {
+  display: flex;
+  margin: 0 auto;
+  width: 960px;
+}
+
+.layout-content {
+  flex: 3;
+  margin-right: 20px;
+  overflow: hidden;
+  &.attach {
+    padding: 25px 20px;background: #fff;
+  }
+}
+
+aside.layout-sider {
+  flex: 1;
+  overflow: hidden;
+}
+
+.main {
+  padding: 20px 0;
+  min-height: 400px;
+}
+

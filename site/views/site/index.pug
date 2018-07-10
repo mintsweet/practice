@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .layout-content.layout-white-block
+  .layout-content.attach
     .tab-list
       each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(config.tabs)
         if currentTab === item.url
@@ -9,7 +9,7 @@ block content
         else
           a(href="?tab=" + item.url) #{item.name}
     include ../topic/list
-  .layout-sider
+  aside.layout-sider
     .site-download
       a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
     .site-block.site-top100

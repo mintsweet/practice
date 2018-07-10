@@ -1,0 +1,4 @@
+/* button */
+.btn {display: inline-block;border: none;text-align: center;background: #16982B;color: #fff;min-height: 30px;line-height: 30px;padding: 0 15px;transition: background 0.3s,border 0.3s;}
+.btn:hover {background: #0e721f;}
+.btn.disabled {background:#f1f1f1;border-color:#aaa;color:#aaa;cursor:no-drop;}

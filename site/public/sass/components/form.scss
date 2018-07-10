@@ -1,0 +1,19 @@
+
+/* form */
+.form .select {position: relative;padding: 0 10px;width: 232px;height: 40px;line-height: 38px;border: 1px solid #d7d7d7;background: #fff;box-sizing: border-box;}
+.form .select::after {content: '';position: absolute;right: 10px;top: 15px;width: 0;height: 0;border-left: 4px solid transparent;border-right: 4px solid transparent;border-top: 6px solid #333;}
+.form .select .select-input {display: block;width: 100%;height: 100%;}
+.form .select .select-input:hover {color: #333;}
+.form .select .select-options {display: none;position: absolute;top: 38px;left: -1px;right: -1px;background: #fff;border: 1px solid #d7d7d7;z-index: 2;}
+.form .select .option {padding: 0 10px;height: 40px;box-sizing: border-box;cursor: pointer;transition: all .3s;}
+.form .select .option:hover {background: #16982B;color: #fff;}
+.form .select .option + .option {border-top: 1px solid #d7d7d7;}
+.form-horizontal {padding-top: 15px;}
+.form-horizontal .control-group {position: relative;margin-bottom: 9px;}
+.form-horizontal .control-label {display: inline-block;margin-right: 10px;width: 100px;text-align: right;vertical-align: middle;}
+.form-horizontal .controls {position: relative;;display: inline-block;padding: 5px 0;vertical-align: middle;}
+input[type="text"], input[type="password"], input[type="search"] {padding: 8px 15px;min-width: 240px;height: 22px;line-height: 1;background-color: #fff;border: 1px solid #ddd;transition: border linear 0.2s;vertical-align: middle;border-radius: 2px;}
+textarea:focus, input:focus {border-color: #16982B;}
+.form-horizontal .getcode {position: absolute;right: 4px;top: 10px;width: 80px;cursor: pointer;}
+.form-horizontal .captcha {position: absolute;right: 1px;top: 6px;}
+.form-horizontal .submit {width: 232px;border-radius: 4px;line-height: 40px;}
