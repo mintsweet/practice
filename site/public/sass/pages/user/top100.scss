@@ -1,0 +1,64 @@
+.user-top100 {
+  flex: 1;
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 4px;
+  .title {
+    font-size: 22px;
+    padding-bottom: 0.3em;
+    margin-top: 20px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .list {
+    margin-bottom: 40px;
+    li {
+      display: flex;
+      padding: 0 10px;
+      height: 46px;
+      line-height: 46px;
+      background: #e9f1e7;
+      &:first-child {
+        background: #e1e1e1;
+        span {
+          font-weight: 600;
+        }
+      }
+      &:nth-child(even) {
+        background: #fff;
+      }
+    }
+    span.rank {
+      flex: 1;
+    }
+    span.nickname {
+      flex: 5;
+      a.avatar {
+        display: inline-block;
+        margin-top: 5px;
+        margin-right: 6px;
+        width: 36px;
+        height: 36px;
+        vertical-align: top;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      a + a {
+        margin-right: 6px;
+        vertical-align: top;
+      }
+    }
+    span.score {
+      flex: 2;
+    }
+    span.topics {
+      flex: 1;
+    }
+    span.follower {
+      flex: 1;
+    }
+  }
+}

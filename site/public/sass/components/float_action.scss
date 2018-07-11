@@ -1,0 +1,38 @@
+.float-action {
+  position: fixed;
+  left: 160px;
+  top: 50%;
+  float: left;
+  transform: translateY(-50%);
+  a {
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    text-align: center;
+    background: #fff;
+    box-shadow: 1px 1px 6px rgba(0,0,0,.2);
+    border-radius: 50%;
+    &.active {
+      background: $theme-color;
+    }
+    .number {
+      position: absolute;
+      top: -4px;
+      right: 0px;
+      height: 12px;
+      line-height: 12px;
+      padding: 0 3px;
+      font-size: 10px;
+      color: #fff;
+      background: #ccc;
+      border-radius: 6px;
+    }
+  }
+  @media (max-width: 1400px) {
+    display: none;
+  }
+}

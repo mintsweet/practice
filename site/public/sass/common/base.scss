@@ -82,8 +82,9 @@ del, ins, u, s, a, a:hover {
   text-decoration: none;
 }
 
-body, textarea, input, button,
-select, keygen, legend {
+body, textarea, input,
+button, select, keygen,
+legend {
   font: 14px/1.8 "Microsoft YaHei UI", "Microsoft YaHei", Arial,SimSun, "Segoe UI", Tahoma, Helvetica, sans-serif;
   outline: 0;
 }

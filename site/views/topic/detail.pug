@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .layout-content.layout-white-block
+  .layout-content.attach
     .topic-detail
       .author
         a.avatar(href=`/user/${topic.author.id}`)
@@ -37,8 +37,8 @@ block content
               time #{reply.create_at_ago}
       else
         span 暂无回复
-  .layout-sider
-    .site-block.topic-author
+  aside.layout-sider
+    .aside-block.topic-author
       .title 关于作者
       .info
         a.avatar(href=`/user/${topic.author.id}`)

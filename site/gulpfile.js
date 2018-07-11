@@ -37,8 +37,8 @@ gulp.task('font', () => {
 gulp.task('watch', () => {
   gulp.watch(`${srcPath}/sass/**/*.scss`, ['sass']);
   gulp.watch(`${srcPath}/js/**/*.js`, ['js']);
-  gulp.watch(`${srcPath}/img/**/*`, ['img']);
-  gulp.watch(`${srcPath}/lib/**/*`, ['lib']);
+  // gulp.watch(`${srcPath}/img/**/*`, ['img']);
+  // gulp.watch(`${srcPath}/lib/**/*`, ['lib']);
   gulp.watch(`${srcPath}/font/**/*`, ['font']);
 });
 

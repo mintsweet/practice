@@ -10,7 +10,7 @@ const config = {
   keywords: 'mints, community',
   author: '青湛(github/mintsweet)',
 
-  site_icon: '/static/favicon.ico',
+  site_icon: '/static/img/favicon.ico',
 
   // Server
   server_port: 3000,

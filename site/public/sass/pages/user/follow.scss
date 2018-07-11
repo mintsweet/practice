@@ -1,0 +1,17 @@
+.user-follow {
+  display: flex;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #fff;
+  border-radius: 4px;
+  .item {
+    flex: 1;
+    text-align: center;
+    & + .item {
+      border-left: 1px solid #eee;
+    }
+  }
+  .count {
+    font-weight: 600;
+  }
+}
