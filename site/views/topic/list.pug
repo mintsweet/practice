@@ -4,14 +4,13 @@ dl.topic-list
       a.avatar(href=`/user/${topic.author.id}`, title=topic.author.nickname)
         img(src=topic.author.avatar)
       .content
-        .title
-          if topic.top
-            span.tag.active 置顶
-          else if topic.good
-            span.tag.active 精华
-          else
-            span.tag #{topic.tabName}
-          a(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}
+        if topic.top
+          span.tag.stress 置顶
+        else if topic.good
+          span.tag.stress 精华
+        else
+          span.tag #{topic.tabName}
+        a.title(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}
       .statistics
         span(title="喜欢数")
           i.practice &#xe63b;

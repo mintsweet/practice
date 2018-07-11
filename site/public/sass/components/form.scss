@@ -94,16 +94,19 @@
 
 input[type="text"], input[type="password"], input[type="search"] {
   padding: 8px 15px;
-  min-width: 240px;
-  height: 22px;
+  min-width: 200px;
+  height: 24px;
   line-height: 1;
   background-color: #fff;
   border: 1px solid #ddd;
   vertical-align: middle;
   border-radius: 2px;
-  transition: border linear 0.2s;
+  @include transition(border linear 0.2s);
 }
 
-textarea:focus, input:focus {
-  border-color: $theme-color;
+textarea:focus,
+input:focus {
+  @include hover-focus {
+    border-color: $theme-color;
+  }
 }

@@ -1,8 +1,9 @@
 .header {
-  position: relative;
-  height: 55px;
-  line-height: 55px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  height: $header-height;
+  line-height: $header-height;
+  @if $header-has-shadow {
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  }
   background-color: #fff;
   &>.layout {
     position: relative;
@@ -11,24 +12,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 20px;
-    width: 55px;
-    height: 55px;
-    a, img {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
+    @include size($header-height);
     span {
-      font-size: 0;
-    }
-  }
-  .menu {
-    float: left;
-    margin-left: 80px;
-    li {
-      display: inline-block;
-      margin-right: 20px;
+      @include text-hiden();
     }
   }
   .search {
@@ -39,7 +25,11 @@
       padding: 6px 30px 6px 10px;
       min-width: 200px;
       border: none;
-      border-bottom: 1px solid #ddd;
+      color: $dark-gray;
+      border-bottom: 1px solid $light-gray;
+      @include hover-focus {
+        border-color: $theme-color;
+      }
     }
     button {
       position: absolute;
@@ -48,6 +38,17 @@
       border: none;
       background: transparent;
       outline: none;
+      @include hover-focus {
+        border-color: $theme-color;
+      }
+    }
+  }
+  .menu {
+    float: left;
+    margin-left: 60px;
+    li {
+      display: inline-block;
+      margin-right: 20px;
     }
   }
   .user {
@@ -55,58 +56,55 @@
     top: 0;
     right: 0;
     padding: 0 10px;
-    line-height: 55px;
-    .wrapper {
+    line-height: $header-height;
+    .info {
       position: relative;
       display: inline-block;
       padding: 0 15px;
-    }
-    .avatar {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      vertical-align: middle;
-    }
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-    .nickname {
-      display: inline-block;
-      margin-left: 20px;
-      vertical-align: middle;
-    }
-    .divider {
-      margin: 0 10px;
-    }
-    .drop-menus {
-      display: none;
-      position: absolute;
-      top: 55px;
-      left: 50%;
-      width: 120px;
-      color: #fff;
-      text-align: center;
-      background: #a4d1aa;
-      transition: opacity .3s;
-      z-index: 10;
-      transform: translateX(-50%);
-      .item {
-        line-height: 34px;
-        cursor: pointer;
-        a {
-          display: block;
-          color: #fff;
+      .avatar {
+        display: inline-block;
+        @include size(40px);
+        vertical-align: middle;
+        img {
+          border-radius: 50%;
         }
       }
-      .divider {
-        display: block;
-        margin: 0;
-        width: 100%;
-        height: 1px;
-        background: #ddd;
+      .nickname {
+        display: inline-block;
+        margin-left: 20px;
+        vertical-align: middle;
       }
+      .drop-menus {
+        display: none;
+        position: absolute;
+        top: 55px;
+        left: 50%;
+        width: 120px;
+        color: $white;
+        text-align: center;
+        background: #a4d1aa;
+        transition: opacity .3s;
+        z-index: 10;
+        transform: translateX(-50%);
+        .item {
+          line-height: 34px;
+          cursor: pointer;
+          a {
+            display: block;
+            color: #fff;
+          }
+        }
+        .divider {
+          display: block;
+          margin: 0;
+          width: 100%;
+          height: 1px;
+          background: #ddd;
+        }
+      }
+    }
+    &>.divider {
+      margin: 0 10px;
     }
   }
   .action {

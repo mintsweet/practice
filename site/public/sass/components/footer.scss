@@ -1,9 +1,9 @@
 .footer {
-  margin-top: 20px;
-  height: 120px;
+  margin-top: $footer-margin-top;
+  height: $footer-height;
   text-align: center;
-  .footer-link a {
-    font-size: 30px;
+  .footer-link a.practice {
+    font-size: $footer-icon-size;
     line-height: 1;
   }
   .footer-copy p {

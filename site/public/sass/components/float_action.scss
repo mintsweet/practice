@@ -1,19 +1,17 @@
 .float-action {
   position: fixed;
-  left: 160px;
+  left: 150px;
   top: 50%;
-  float: left;
   transform: translateY(-50%);
   a {
     position: relative;
     display: block;
     margin-bottom: 10px;
-    width: 40px;
-    height: 40px;
+    @include size(40px);
     line-height: 40px;
     font-size: 18px;
     text-align: center;
-    background: #fff;
+    background: $white;
     box-shadow: 1px 1px 6px rgba(0,0,0,.2);
     border-radius: 50%;
     &.active {
@@ -32,7 +30,10 @@
       border-radius: 6px;
     }
   }
-  @media (max-width: 1400px) {
+  @media (max-width: $global-body-width + 400px) {
+    left: 20px;
+  }
+  @media (max-width: $global-body-width + 150px) {
     display: none;
   }
 }

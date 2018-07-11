@@ -1,0 +1,56 @@
+// 宽高 - 不传高度为正方形
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+// 垂直水平居中
+@mixin v-h-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 隐藏文字
+@mixin text-hiden {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background: transparent;
+  border: 0;
+}
+
+// 图片最大化
+@mixin img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+// 命中样式附加
+@mixin hover {
+  &:hover { @content; }
+}
+
+@mixin hover-focus {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+// CSS3效果
+@mixin transition($transition...) {
+  @if length($transition) == 0 {
+    transition: $global-transition-base;
+  } @else {
+    transition: $transition;
+  }
+}
+
+// 文字超长省略
+@mixin text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

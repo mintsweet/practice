@@ -1,7 +1,9 @@
 @charset 'utf-8';
 
-// base
+// common
 @import './common/variable.scss';
+@import './common/mixin.scss';
+@import './common/reset.scss';
 @import './common/base.scss';
 
 // components
@@ -15,6 +17,7 @@
 @import './components/pagination.scss';
 @import './components/float_action.scss';
 @import './components/no_content.scss';
+@import './components/message.scss';
 
 // pages
 @import './pages/topic/create.scss';

@@ -4,6 +4,9 @@
       a(href="/")
         img(src="/static/img/logo.png")
       span Mints - 薄荷糖社区
+    form.search(action="/topics/search")
+      input(type="text", name="q", placeholder="请输入搜索内容", autocomplete="off")
+      button.practice(type="submit") &#xe7de;
     ul.menu
         li
           a(href='/start') 新手入门
@@ -11,15 +14,12 @@
           a(href='/api') API文档
         li
           a(href='/about') 关于
-    form.search(action="/topics/search")
-      input(type="text", name="q", placeholder="请输入搜索内容", autocomplete="off")
-      button.practice(type="submit") &#xe7de;
     .user
       if user
         .action
           a.practice(href="/topics/create", title="发布主题") &#xea35;
           a.practice(href="/notice/user", title="查看消息") &#xe60c;
-        .wrapper
+        .info
           .avatar
             img(src=user.avatar)
           .nickname #{user.nickname}
