@@ -1,19 +1,23 @@
 .float-action {
   position: fixed;
-  left: 150px;
+  @if $float-action-right {
+    right: $float-action-horizontal;
+  } @else {
+    left: $float-action-horizontal;
+  }
   top: 50%;
   transform: translateY(-50%);
   a {
     position: relative;
     display: block;
     margin-bottom: 10px;
-    @include size(40px);
-    line-height: 40px;
-    font-size: 18px;
+    @include size($float-action-size);
+    line-height: $float-action-size;
+    font-size: $float-action-icon-size;
     text-align: center;
     background: $white;
+    border-radius: $falot-action-radius;
     box-shadow: 1px 1px 6px rgba(0,0,0,.2);
-    border-radius: 50%;
     &.active {
       background: $theme-color;
     }
@@ -25,8 +29,8 @@
       line-height: 12px;
       padding: 0 3px;
       font-size: 10px;
-      color: #fff;
-      background: #ccc;
+      color: $white;
+      background: $dark-gray;
       border-radius: 6px;
     }
   }

@@ -1,6 +1,6 @@
 .btn {
   display: inline-block;
-  padding: 0 5px;
+  padding: $btn-padding;
   min-height: $btn-min-height;
   line-height: $btn-min-height;
   text-align: center;
@@ -13,7 +13,7 @@
   cursor: pointer;
   box-sizing: border-box;
   @include hover {
-    color: #fff;
+    color: $white;
     background: darken($theme-color, 10%);
   }
   &.disabled {

@@ -1,21 +1,13 @@
 /* eslint-disable */
-function globalMessage(type, message, duration = 2000) {
-  $('.message .message-notice').fadeIn();
-  $('.message .message-notice .content').addClass(type).text(message).fadeIn();
-  setTimeout(function() {
-    $('.message .message-notice').fadeOut();
-  }, duration);
-}
-
 (function(window, document, $, undefined) {
   var Utils = {};
 
   // 信息页跳转
   Utils.redirect = function() {
-    var time = $('#time'),
-        countTime = 3,
-        url = time.attr('data-url'),
-        timer;
+    var time = $('#time');
+    var countTime = 3;
+    var url = time.attr('data-url');
+    var timer;
 
     timer = window.setInterval(function() {
       countTime --;
@@ -26,7 +18,7 @@ function globalMessage(type, message, duration = 2000) {
       }
       time.text(countTime);
     }, 1000);
-  }
+  };
 
   // 获取短信验证码
   Utils.getSMSCode = function() {
@@ -70,7 +62,81 @@ function globalMessage(type, message, duration = 2000) {
         }
       });
     });
-  }
+  };
+
+  // 模拟下拉框
+  Utils.modalSelect = function() {
+    $('.select').click(function() {
+      $('.select>.options').slideToggle();
+    });
+
+    $('.option').click(function() {
+      $('.select-hidden').val($(this).attr('data-value'));
+      $('.select>.placeholder').text($(this).text());
+    });
+  };
+
+  // 全局消息提示
+  Utils.globalMessage = function(type, message, duration = 2000) {
+    $('.message .message-notice').fadeIn();
+    $('.message .message-notice .content').addClass(type).text(message).fadeIn();
+    setTimeout(function() {
+      $('.message .message-notice').fadeOut();
+    }, duration);
+  };
+
+  // 回到顶部
+  Utils.backTop = function() {
+    $('.back-top').click(function() {
+      $('html, body').animate({ scrollTop: 0 }, 500);
+      return false;
+    });
+  };
+
+  // 更新图形验证码
+  Utils.updateCaptcha = function() {
+    var captcha = $('.captcha');
+    captcha.click(function() {
+      $.getJSON('/captcha/pic', function(res) {
+        if (res.status === 1) {
+          captcha.attr('src', res.data);
+        } else {
+          alert.text(res.message).slideDown();
+          return false;
+        }
+      });
+    });
+  };
+
+  // 头部下拉菜单
+  Utils.headerDropMenu = function() {
+    $('.header .info').hover(function() {
+      $('.drop-menus').stop(true, false).slideToggle();
+    });
+  };
+
+  // 创建话题表单校验赋值
+  Utils.createTopicJS = function() {
+    var simplemde = new SimpleMDE({ element: $("#editor")[0] });
+    var tab = $('.select-hidden');
+    var title = $('#title');
+    var alert = $('.alert');
+
+    $('#createTopic').submit(function() {
+      if (!tab.val()) {
+        alert.text('请选择分类').slideDown();
+        return false;
+      } else if (!title.val()) {
+        alert.text('标题不能为空').slideDown();
+        return false;
+      } else if (!simplemde.value()) {
+        alert.text('内容不能为空').slideDown();
+        return false;
+      }
+
+      $('.content-hidden').val(simplemde.value());
+    });
+  };
 
   window.Utils = Utils;
 

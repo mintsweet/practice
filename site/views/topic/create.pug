@@ -2,54 +2,34 @@ extends ../layout.pug
 
 append head
   link(rel="stylesheet", href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css")
-
 block content
   .topic-create
     .title 发布主题
-    .inner
-      form.form(method="post")
-        .alert.alert-error(class=error ? '' : 'hidden') #{error}
-        .control-group
-          label.control-label(for="tab")
-          .controls
-            input.select-hidden(type="hidden", name="tab")
-            .select
-              a.placeholder(href="javascript:;") 请选择类别
-              .options
-                each item in config.tabs
-                  .option(data-value=item.url) #{item.name}
-        .control-group
-          label.control-label(for="title") 标题：
-          .controls
-            input#title(type="text", name="title", autocomplete="off")
-        .control-group
-          label.control-label(for="content") 内容：
-          .controls
-            input.content-hidden(type="hidden", name="content")
-            textarea#editor
-        .control-group
-          .controls
-            button.btn.submit(type="submit") 发布主题
+    form#createTopic.form(method="post")
+      .alert.alert-error(class=error ? '' : 'hidden') #{error}
+      .form-item
+        label.label(for="tab")
+        .control
+          input.select-hidden(type="hidden", name="tab")
+          .select
+            a.placeholder(href="javascript:;") 请选择类别
+            .options
+              each item in config.tabs
+                .option(data-value=item.url) #{item.name}
+      .form-item
+        label.label(for="title") 标题：
+        .control
+          input#title(type="text", name="title", autocomplete="off")
+      .form-item
+        label.label(for="content") 内容：
+        .control
+          input.content-hidden(type="hidden", name="content")
+          textarea#editor
+      .form-item
+        .control
+          button.btn.submit(type="submit") 发布主题
 append footer
   script(src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js")
-
   script.
-    var simplemde = new SimpleMDE({ element: $("#editor")[0] }),
-        tab = $('.select-hidden');
-        title = $('#title'),
-        alert = $('.alert');
-
-    $('.form').submit(function() {
-      if (!tab.val()) {
-        alert.text('请选择分类').slideDown();
-        return false;
-      } else if (!title.val()) {
-        alert.text('标题不能为空').slideDown();
-        return false;
-      } else if (!simplemde.value()) {
-        alert.text('内容不能为空').slideDown();
-        return false;
-      }
-
-      $('.content-hidden').val(simplemde.value() || '测试啦啦啦');
-    });
+    Utils.modalSelect();
+    Utils.createTopicJS();

@@ -3,7 +3,7 @@ const $ = require('gulp-load-plugins')();
 const path = require('path');
 
 gulp.task('sass', () => {
-  gulp.src('./public/sass/index.scss')
+  gulp.src('./public/sass/style.scss')
     .pipe($.sass({
       includePaths: [path.join(__dirname, './public/sass/**/*.scss')],
       outputStyle: 'compressed'

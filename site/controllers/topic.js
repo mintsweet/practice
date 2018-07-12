@@ -23,7 +23,11 @@ class Topic {
       const response = await createTopic(fields);
 
       if (response.status === 1) {
-        return res.redirect('/');
+        res.render('site/transform', {
+          title: '发布话题成功',
+          type: 'success',
+          message: '发布话题成功'
+        });
       } else {
         return res.render('topic/create', {
           title: '发布话题',

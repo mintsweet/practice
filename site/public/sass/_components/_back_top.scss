@@ -1,0 +1,20 @@
+.back-top {
+  display: none;
+  position: fixed;
+  bottom: $back-top-vertical;
+  @if $back-top-right {
+    right: $back-top-horizontal;
+  } @else {
+    left: $back-top-horizontal;
+  }
+  @include size($back-top-size);
+  line-height: $back-top-size;
+  color: $white;
+  text-align: center;
+  background: $theme-color;
+  cursor: pointer;
+  border-radius: $back-top-radius;
+  i {
+    font-size: $back-top-horizontal / 2;
+  }
+}

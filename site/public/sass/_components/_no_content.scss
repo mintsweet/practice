@@ -3,10 +3,9 @@
   &>img {
     display: block;
     margin: 0 auto 20px;
-    width: 300px;
-    height: 300px;
+    @include size($no-content-img-width, $no-content-img-height);
   }
   &>span.placeholder {
-    font-size: 36px;
+    font-size: $no-content-font-size;
   }
 }

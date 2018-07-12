@@ -6,7 +6,7 @@ $theme-color: #16982B;
 // Color
 $primary:               #007bff !default;
 $error:                 #dc3545 !default;
-$success:                 #28a745 !default;
+$success:               #28a745 !default;
 $warn:                  #fd7e14 !default;
 $black:                 #0a0a0a !default;
 $white:                 #fefefe !default;
@@ -19,25 +19,43 @@ $dark-gray:             #8a8a8a !default;
 
 // 内容宽度
 $global-body-width: 960px !default;
+
 // 背景色
 $global-body-bg: #f5f5f5 !default;
+
 // 字号
 $global-font-size: 14px !default;
-$global-font-small: 12px !default;
+$global-font-size-small: 12px !default;
+$global-font-size-large: 16px !default;
+
 // 行高
 $global-line-height: 1.5 !default;
+
 // 字体色
 $global-font-color: $black !default;
+
 // 字体
 $global-font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif !default;
+
 // 安全字体
 $global-serif-font-family: Athelas, STHeiti, Microsoft Yahei, serif !default;
+
 // 默认padding
 $global-default-padding: 25px 20px !default;
+
 // 最小内容高度
 $global-min-height: 400px !default;
+
 // CSS3效果
 $global-transition-base: all .3s ease-in-out !default;
+
+// Zinex 等级
+$zIndex-0: -1 !default;
+$zIndex-1: 1001 !default;
+$zIndex-2: 1002 !default;
+$zIndex-3: 1003 !default;
+$zIndex-4: 1004 !default;
+$zIndex-5: 1005 !default;
 
 // --------------------
 // Alert
@@ -49,18 +67,51 @@ $alert-bg-color: #fcf8e3 !default;
 $alert-border-radius: 4px !default;
 
 // --------------------
+// Back Top
+
+$back-top-right: true !default;
+$back-top-horizontal: 40px !default;
+$back-top-vertical: 60px !default;
+$back-top-size: 40px !default;
+$back-top-radius: 50% !default;
+
+// --------------------
 // Button
 
+$btn-padding: 0 5px !default;
 $btn-min-height: 30px !default;
 $btn-border-radius: 0 !default;
 
 // --------------------
-// Input
+// Float Action
+
+$float-action-right: false !default;
+$float-action-horizontal: 150px !default;
+$float-action-size: 40px !default;
+$float-action-icon-size: 18px !default;
+$falot-action-radius: 50% !default;
+
+// --------------------
+// Footer
+
+$footer-margin-top: 20px !default;
+$footer-height: 120px !default;
+$footer-icon-size: 30px !default;
+
+// --------------------
+// Form
 
 $input-padding: 6px 15px !default;
 $input-min-width: 240px !default;
 $input-min-height: 36px !default;
 $input-border-radius: 2px !default;
+
+// --------------------
+// Global Message
+
+$global-message-top: 40px !default;
+$global-message-padding: 8px 16px !default;
+$global-message-radius: 4px !default;
 
 // --------------------
 // Header
@@ -69,11 +120,26 @@ $header-height: 55px !default;
 $header-has-shadow: true !default;
 
 // --------------------
-// Footer
+// Markdown
 
-$footer-margin-top: 20px !default;
-$footer-height: 120px !default;
-$footer-icon-size: 30px !default;
+// --------------------
+// No Content
+
+$no-content-img-width: 300px !default;
+$no-content-img-height: 300px !default;
+$no-content-font-size: 36px !default;
+
+// --------------------
+// Pagination
+
+$pagination-margin-top: 10px 0 0 0 !default;
+$pagination-block-size: 24px !default;
+$pagination-block-radius: 4px !default;
+
+// --------------------
+// Setting Bar
+
+$setting-bar-height: 40px !default;
 
 // --------------------
 // Topic List

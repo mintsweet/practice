@@ -22,7 +22,7 @@
         margin-right: 8px;
         height: 20px;
         line-height: 20px;
-        font-size: $global-font-small;
+        font-size: $global-font-size-small;
         color: $white;
         background: $dark-gray;
         border-radius: 2px;
@@ -42,7 +42,7 @@
       align-items: center;
       span {
         flex: 1;
-        font-size: $global-font-small;
+        font-size: $global-font-size-small;
         i.practice {
           margin-right: 4px;
           font-size: 13px;
@@ -52,7 +52,7 @@
     }
     .date {
       flex: 0 0 110px;
-      font-size: $global-font-small;
+      font-size: $global-font-size-small;
       text-align: left;
       a {
         display: inline-block;

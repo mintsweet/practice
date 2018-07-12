@@ -2,11 +2,10 @@
   .select {
     position: relative;
     padding: 0 10px;
-    width: 232px;
-    height: 40px;
-    line-height: 38px;
-    border: 1px solid #d7d7d7;
-    background: #fff;
+    width: $input-min-width;
+    height: $input-min-height;
+    line-height: $input-min-height;
+    border: 1px solid $light-gray;
     box-sizing: border-box;
     &::after {
       content: '';
@@ -15,14 +14,13 @@
       top: 15px;
       width: 0;
       height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 6px solid #333;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid $black;
     }
     .placeholder  {
       display: block;
-      width: 100%;
-      height: 100%;
+      @include size(100%, 100%);
       &:hover {
         color: #333;
       }
@@ -30,17 +28,16 @@
     .options {
       display: none;
       position: absolute;
-      top: 38px;
+      top: $input-min-height;
       left: -1px;
       right: -1px;
       background: #fff;
-      border: 1px solid #d7d7d7;
+      border: 1px solid $light-gray;
       z-index: 2;
     }
     .option {
       padding: 0 10px;
-      height: 40px;
-      box-sizing: border-box;
+      height: $input-min-height;
       cursor: pointer;
       transition: all .3s;
       &:hover {
@@ -48,16 +45,23 @@
         color: #fff;
       }
       & + & {
-        border-top: 1px solid #d7d7d7;
+        border-top: 1px solid $light-gray;
       }
     }
+  }
+
+  .form-item {
+    margin-bottom: 10px;
+    .label {
+      display: block;
+      margin-bottom: 6px;
+    }  
   }
 
   &.form-horizontal {
     .form-item {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
     }
     .label {
       flex: 0 0 100px;
@@ -92,7 +96,9 @@
   }
 }
 
-input[type="text"], input[type="password"], input[type="search"] {
+input[type="text"], 
+input[type="password"], 
+input[type="search"] {
   padding: $input-padding;
   min-width: $input-min-width;
   height: $input-min-height;
