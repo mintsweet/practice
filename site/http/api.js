@@ -16,9 +16,7 @@ const request = async (url, data, method = 'GET') => {
     query.body = data;
   }
 
-  const res = await rq(query);
-
-  return res;
+  return rq(query);
 };
 
 /*
@@ -35,7 +33,7 @@ exports.getAboutDoc = () => request('/static/about');
 * 验证码 captcha
 */
 // 获取图形验证码
-exports.getPicCaptcha = () => request('/captcha/pic', { width: 100, height: 38 });
+exports.getPicCaptcha = () => request('/captcha/pic', { width: 100, height: 34 });
 // 获取短信验证码
 exports.getSmsCaptcha = mobile => request('/captcha/sms', mobile);
 

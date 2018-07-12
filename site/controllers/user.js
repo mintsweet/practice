@@ -2,7 +2,7 @@ const formidable = require('formidable');
 const {
   getPicCaptcha, signup, signin, forgetPass,
   signout, getUsersTop100, getUserInfoById,
-  getUserStars, getUserReplies,
+  getUserStars, getUserCollections, getUserReplies,
   getUserBehaviors, getUserFollower, getUserFollowing,
   setting, updatePass, getCurrentUserInfo, followOrUn
 } = require('../http/api');
@@ -18,14 +18,18 @@ class User {
   }
 
   async getPicCaptcha(req) {
-    const response = await getPicCaptcha();
-    if (response.status === 1) {
-      req.app.locals.pic_token = {
-        token: response.data.token,
-        expired: Date.now() + 1000 * 60 * 10
-      };
-      return response.data.url;
-    } else {
+    try {
+      const response = await getPicCaptcha();
+      if (response.status === 1) {
+        req.app.locals.pic_token = {
+          token: response.data.token,
+          expired: Date.now() + 1000 * 60 * 10
+        };
+        return response.data.url;
+      } else {
+        return '';
+      }
+    } catch(err) {
       return '';
     }
   }
@@ -63,7 +67,11 @@ class User {
 
       const response = await signup(fields);
       if (response.status === 1) {
-        return res.redirect('/');
+        return res.render('site/transform', {
+          title: '注册成功',
+          type: 'success',
+          message: '注册成功'
+        });
       } else {
         return res.render('user/signup', {
           title: '注册',
@@ -115,7 +123,11 @@ class User {
 
       const response = await signin({ mobile, password });
       if (response.status === 1) {
-        return res.redirect('/');
+        return res.render('site/transform', {
+          title: '登录成功',
+          type: 'success',
+          message: '登录成功'
+        });
       } else {
         return res.render('user/signin', {
           title: '登录',
@@ -159,7 +171,11 @@ class User {
 
       const response = await forgetPass(fields);
       if (response.status === 1) {
-        return res.redirect('/');
+        return res.render('site/transform', {
+          title: '找回密码成功',
+          type: 'success',
+          message: '找回密码成功'
+        });
       } else {
         return res.render('user/forget_pass', {
           title: '忘记密码',
@@ -174,7 +190,11 @@ class User {
   async signout(req, res) {
     const response = await signout();
     if (response.status === 1) {
-      return res.redirect('/');
+      return res.render('site/transform', {
+        title: '退出成功',
+        type: 'success',
+        message: '退出成功'
+      });
     }
   }
 
@@ -261,6 +281,35 @@ class User {
 
   // 用户收藏页
   async renderUserCollections(req, res) {
+    const { uid } = req.params;
+
+    let response;
+    let info;
+    let isFollow;
+    let behaviors;
+
+    response = await getUserInfoById(uid);
+    if (response.status === 1) {
+      info = response.data;
+      isFollow = response.isFollow || false;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    response = await getUserCollections(uid);
+    if (response.status === 1) {
+      behaviors = response.data;
+    } else {
+      return res.redirect('/exception/500');
+    }
+
+    return res.render('user/info', {
+      title: '喜欢 - 用户信息',
+      info,
+      data: behaviors,
+      type: 'star',
+      isFollow
+    });
   }
 
   // 用户回复页

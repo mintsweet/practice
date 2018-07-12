@@ -1,0 +1,21 @@
+.transform {
+  padding: 15px 0;
+  width: 100%;
+  text-align: center;
+  background: #fff;
+  box-sizing: border-box;
+  i {
+    font-size: 80px;
+  }
+  strong {
+    display: block;
+    margin: 10px 0;
+    font-size: 18px;
+  }
+  .pra-success {
+    color: $success;
+  }
+  .pra-error {
+    color: $error;
+  }
+}

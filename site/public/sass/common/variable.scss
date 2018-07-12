@@ -6,7 +6,7 @@ $theme-color: #16982B;
 // Color
 $primary:               #007bff !default;
 $error:                 #dc3545 !default;
-$green:                 #28a745 !default;
+$success:                 #28a745 !default;
 $warn:                  #fd7e14 !default;
 $black:                 #0a0a0a !default;
 $white:                 #fefefe !default;
@@ -38,6 +38,29 @@ $global-default-padding: 25px 20px !default;
 $global-min-height: 400px !default;
 // CSS3效果
 $global-transition-base: all .3s ease-in-out !default;
+
+// --------------------
+// Alert
+
+$alert-padding: 8px 16px !default;
+$alert-font-color: #c09853 !default;
+$alert-border-color: #fbeed5 !default;
+$alert-bg-color: #fcf8e3 !default;
+$alert-border-radius: 4px !default;
+
+// --------------------
+// Button
+
+$btn-min-height: 30px !default;
+$btn-border-radius: 0 !default;
+
+// --------------------
+// Input
+
+$input-padding: 6px 15px !default;
+$input-min-width: 240px !default;
+$input-min-height: 36px !default;
+$input-border-radius: 2px !default;
 
 // --------------------
 // Header

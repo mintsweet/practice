@@ -52,60 +52,55 @@
       }
     }
   }
-}
 
-.form-horizontal {
-  padding-top: 15px;
-  .control-group {
-    position: relative;
-    margin-bottom: 9px;
-  }
-  .control-label {
-    display: inline-block;
-    margin-right: 10px;
-    width: 100px;
-    text-align: right;
-    vertical-align: middle;
-  }
-  .controls {
-    position: relative;
-    display: inline-block;
-    padding: 5px 0;
-    vertical-align: middle;
-  }
-  .getcode {
-    position: absolute;
-    right: 4px;
-    top: 10px;
-    width: 80px;
-    cursor: pointer;
-  }
-  .captcha {
-    position: absolute;
-    right: 1px;
-    top: 6px;
-  }
-  .submit {
-    width: 232px;
-    border-radius: 4px;
-    line-height: 40px;
+  &.form-horizontal {
+    .form-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .label {
+      flex: 0 0 100px;
+      margin-right: 10px;
+      text-align: right;
+    }
+    .control {
+      position: relative;
+      flex: auto;
+      padding: 5px 0;
+      input {
+        width: 100%;
+        padding-right: 120px;
+      }
+    }
+    .getcode {
+      position: absolute;
+      top: 8px;
+      right: 1px;
+      width: 100px;
+    }
+    .captcha {
+      position: absolute;
+      right: 1px;
+      top: 6px;
+    }
+    .submit {
+      @include size(100%, 40px);
+      line-height: 40px;
+      border-radius: 4px;
+    }
   }
 }
 
 input[type="text"], input[type="password"], input[type="search"] {
-  padding: 8px 15px;
-  min-width: 200px;
-  height: 24px;
+  padding: $input-padding;
+  min-width: $input-min-width;
+  height: $input-min-height;
   line-height: 1;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  vertical-align: middle;
-  border-radius: 2px;
+  border: 1px solid $light-gray;
+  border-radius: $input-border-radius;
+  box-sizing: border-box;
   @include transition(border linear 0.2s);
-}
-
-textarea:focus,
-input:focus {
   @include hover-focus {
     border-color: $theme-color;
   }

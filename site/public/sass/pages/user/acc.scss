@@ -9,21 +9,22 @@
   }
   .content {
     display: flex;
-    .form, .text {
+    .form, .other {
       flex: 1;
-      min-height: 360px;
+      box-sizing: border-box;
     }
     .form {
-      padding: 10px 20px;
-      box-sizing: border-box;
+      padding: 10px 60px 10px 20px;
     }
-    .text {
+    .other {
       padding: 35px;
       border-left: 1px solid #ddd;
-      box-sizing: border-box;
       a {
-        margin: 0 6px;
+        margin: 0 4px;
         color: $theme-color;
+        @include hover {
+          color: darken($theme-color, 20%);
+        }
       }
     }
   }

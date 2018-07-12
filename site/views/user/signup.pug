@@ -8,33 +8,33 @@ block content
     .content
       form#signupForm.form.form-horizontal(method="post")
         .alert.alert-error(class={hidden: !error}) #{error}
-        .control-group
-          label.control-label(for="nickname") 昵称：
-          .controls
+        .form-item
+          label.label(for="nickname") 昵称：
+          .control
             input(type="text", id="nickname", name="nickname", minlength="2", maxlength="8", placeholder="请输入你的昵称", autocomplete="off")
-        .control-group
-          label.control-label(for="mobile") 手机号：
-          .controls
+        .form-item
+          label.label(for="mobile") 手机号：
+          .control
             input(type="text", id="mobile", name="mobile", minlength="11", maxlength="11", placeholder="请输入你的手机号", autocomplete="off")
-        .control-group
-          label.control-label(for="password") 密码：
-          .controls
+        .form-item
+          label.label(for="password") 密码：
+          .control
             input(type="password", id="password", name="password", minlength="6", maxlength="18", placeholder="请输入你的密码", autocomplete="off")
-        .control-group
-          label.control-label(for="piccaptcha") 验证码：
-          .controls
+        .form-item
+          label.label(for="piccaptcha") 验证码：
+          .control
             input(type="text", id="piccaptcha", name="piccaptcha", minlength="5", maxlength="5", placeholder="请输入六位验证", autocomplete="off")
             img.captcha(src=picUrl, alt="图形验证码")
-        .control-group
-          label.control-label(for="smscaptcha") 手机验证码：
-          .controls
+        .form-item
+          label.label(for="smscaptcha") 手机验证码：
+          .control
             input(type="text", id="smscaptcha", name="smscaptcha", minlength="6", maxlength="6", placeholder="请输入手机验证码", autocomplete="off")
             .getcode.btn 获取验证码
-        .control-group
-          label.control-label
-          .controls
+        .form-item
+          label.label
+          .control
             button.btn.submit(type="submit") 立即注册
-      .text
+      .other
         p 已经拥有账号？
         p 请直接
           a(href="/signin") 登录

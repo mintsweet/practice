@@ -1,14 +1,17 @@
 .alert {
-  padding: 8px 35px 8px 14px;
+  padding: $alert-padding;
   margin-bottom: 20px;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-  border: 1px solid #fbeed5;
-  background-color: #fcf8e3;
-  border-radius: 4px;
-  color: #c09853;
+  color: $alert-font-color;
+  background-color: $alert-bg-color;
+  border: 1px solid $alert-border-color;
+  border-radius: $alert-border-radius;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.4);
   &.alert-error {
-    color: #b94a48;
-    background-color: #f2dede;
-    border-color: #eed3d7;
+    color: $white;
+    background-color: $error;
+  }
+  &.alert-warn {
+    color: $white;
+    background-color: $warn;
   }
 }

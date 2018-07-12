@@ -2,7 +2,7 @@ const { getTopicList, getUsersTop100, getNoReplyTopic } = require('../http/api')
 
 class Site {
   // 首页
-  async index(req, res) {
+  async renderIndex(req, res) {
     const { tab, page } = req.query;
 
     let response;
@@ -26,15 +26,21 @@ class Site {
         currentPage = response.data.currentPage;
         currentTab = response.data.tab;
       } else {
-        throw new Error(response.message);
+        res.render('exception/error', {
+          title: '首页',
+          error: response.message
+        });
       }
 
       response = await getUsersTop100();
 
       if (response.status === 1) {
-        top100 = response.data;
+        top100 = response.data.slice(0, 10);
       } else {
-        throw new Error(response.message);
+        res.render('exception/error', {
+          title: '首页',
+          error: response.message
+        });
       }
 
       response = await getNoReplyTopic();
@@ -42,7 +48,10 @@ class Site {
       if (response.status === 1) {
         noReplyTopic = response.data;
       } else {
-        throw new Error(response.message);
+        res.render('exception/error', {
+          title: '首页',
+          error: response.message
+        });
       }
 
       res.render('site/index', {

@@ -8,24 +8,24 @@ block content
     .content
       form#signinForm.form.form-horizontal(method="post")
         .alert.alert-error(class={hidden: !error}) #{error}
-        .control-group
-          label.control-label(for="mobile") 手机号：
-          .controls
-            input(type="text", id="mobile", name="mobile", minlength="11", maxlength="11", required="required", placeholder="请输入你的手机号", autocomplete="off")
-        .control-group
-          label.control-label(for="password") 密码：
-          .controls
-            input(type="password", id="password", name="password", minlength="6", maxlength="18", required="required", placeholder="请输入你的密码", autocomplete="off")
-        .control-group
-          label.control-label(for="piccaptcha") 验证码：
-          .controls
-            input(type="text", id="piccaptcha", name="piccaptcha", minlength="5", maxlength="5", required="required", placeholder="请输入六位验证", autocomplete="off")
+        .form-item
+          label.label(for="mobile") 手机号：
+          .control
+            input(type="text", id="mobile", name="mobile", minlength="11", maxlength="11", placeholder="请输入你的手机号", autocomplete="off")
+        .form-item
+          label.label(for="password") 密码：
+          .control
+            input(type="password", id="password", name="password", minlength="6", maxlength="18", placeholder="请输入你的密码", autocomplete="off")
+        .form-item
+          label.label(for="piccaptcha") 验证码：
+          .control
+            input(type="text", id="piccaptcha", name="piccaptcha", minlength="5", maxlength="5", placeholder="请输入六位验证", autocomplete="off")
             img.captcha(src=picUrl, alt="图形验证码")
-        .control-group
-          label.control-label
-          .controls
+        .form-item
+          label.label
+          .control
             button.btn.submit(type="submit") 立即登录
-      .text
+      .other
         p 尚未拥有账号？
         p 请点击
           a(href="/signup") 注册

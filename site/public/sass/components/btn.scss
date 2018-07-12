@@ -1,21 +1,25 @@
 .btn {
   display: inline-block;
-  padding: 0 15px;
-  min-height: 30px;
-  line-height: 30px;
-  border: none;
+  padding: 0 5px;
+  min-height: $btn-min-height;
+  line-height: $btn-min-height;
   text-align: center;
-  color: #fff;
+  color: $white;
+  border: none;
+  outline: none;
   background: $theme-color;
-  transition: background 0.6s;
-  &:hover {
+  border-radius: $btn-border-radius;
+  @include transition(background 0.6s);
+  cursor: pointer;
+  box-sizing: border-box;
+  @include hover {
     color: #fff;
     background: darken($theme-color, 10%);
   }
   &.disabled {
-    background: #f1f1f1;
-    border-color: #aaa;
-    color: #aaa;
+    background: $light-gray;
+    border-color: $gray;
+    color: $gray;
     cursor: no-drop;
   }
 }

@@ -15,7 +15,7 @@ const router = express.Router();
 */
 
 // 首页
-router.get('/', Site.index);
+router.get('/', Site.renderIndex);
 
 // 静态
 router.get('/start', Static.renderStartDoc);
