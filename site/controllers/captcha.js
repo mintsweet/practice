@@ -24,7 +24,7 @@ class Captcha {
     const { piccaptcha, mobile } = req.query;
     const { pic_token } = req.app.locals;
 
-    if (pic_token.token !== piccaptcha.toUpperCase()) {
+    if (pic_token && pic_token.token !== piccaptcha.toUpperCase()) {
       return res.send({
         status: 0,
         message: '图形验证码不正确'

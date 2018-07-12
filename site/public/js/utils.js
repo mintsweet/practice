@@ -184,7 +184,7 @@
     var mobile = $('#mobile');
     var newPassword = $('#newPassword');
     var piccaptcha = $('#piccaptcha');
-    var msgcaptcha = $('#msgcaptcha');
+    var smscaptcha = $('#smscaptcha');
     var alert = $('.alert');
 
     $('#forgetForm').submit(function() {
@@ -197,7 +197,7 @@
       } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
         alert.text('请填写正确格式的图形验证码').slideDown();
         return false;
-      } else if (!msgcaptcha.val() || msgcaptcha.val().length !== 6) {
+      } else if (!smscaptcha.val() || smscaptcha.val().length !== 6) {
         alert.text('请填写正确格式的手机验证码').slideDown();
         return false;
       }
