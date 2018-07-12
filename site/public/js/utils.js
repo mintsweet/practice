@@ -22,7 +22,6 @@
 
   // 获取短信验证码
   Utils.getSMSCode = function() {
-    console.log(1);
     var getcode = $('.getcode');
     var mobile = $('#mobile');
     var piccaptcha = $('#piccaptcha');
@@ -177,6 +176,98 @@
           globalMessage('error', res.message);
         }
       });
+    });
+  };
+
+  // 忘记密码JS
+  Utils.forgetPassJS = function() {
+    var mobile = $('#mobile');
+    var newPassword = $('#newPassword');
+    var piccaptcha = $('#piccaptcha');
+    var msgcaptcha = $('#msgcaptcha');
+    var alert = $('.alert');
+
+    $('#forgetForm').submit(function() {
+      if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
+        alert.text('请填写正确格式的手机号').slideDown();
+        return false;
+      } else if (!newPassword.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword.val())) {
+        alert.text('请填写正确格式的新密码').slideDown();
+        return false;
+      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
+        alert.text('请填写正确格式的图形验证码').slideDown();
+        return false;
+      } else if (!msgcaptcha.val() || msgcaptcha.val().length !== 6) {
+        alert.text('请填写正确格式的手机验证码').slideDown();
+        return false;
+      }
+    });
+  };
+
+  // 注册JS
+  Utils.signupJS = function() {
+    var nickname = $('#nickname');
+    var mobile = $('#mobile');
+    var password = $('#password');
+    var piccaptcha = $('#piccaptcha');
+    var smscaptcha = $('#smscaptcha');
+    var alert = $('.alert');
+
+    $('#signupForm').submit(function() {
+      if (!nickname.val() || nickname.val().length > 8 || nickname.val().length < 2) {
+        alert.text('请填写2-8位的昵称').slideDown();
+        return false;
+      } else if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
+        alert.text('请填写正确格式的手机号').slideDown();
+        return false;
+      } else if (!password.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password.val())) {
+        alert.text('请填写6-18位数字、字母和特殊字符任意两种组合').slideDown();
+        return false;
+      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
+        alert.text('请填写5位的图形验证码').slideDown();
+        return false;
+      } else if (!smscaptcha.val() || smscaptcha.val().length !== 6) {
+        alert.text('请填写6位的手机验证码').slideDown();
+        return false;
+      }
+    });
+  };
+
+  // 登录JS
+  Utils.signinJS = function() {
+    var mobile = $('#mobile');
+    var piccaptcha = $('#piccaptcha');
+    var alert = $('.alert');
+    
+    $('#signinForm').submit(function() {
+      if (!mobile.val() || !(/^1[3,5,7,8,9]\d{9}$/.test(mobile.val()))) {
+        alert.text('请填写正确格式的手机号').slideDown();
+        return false;
+      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
+        alert.text('请填写正确格式的图形验证码').slideDown();
+        return false;
+      }
+    });
+  };
+
+  // 修改密码JS
+  Utils.updatePassJS = function() {
+    var oldPass = $('#oldPass');
+    var newPass = $('#newPass');
+    var confimPass = $('#confimPass');
+    var alert = $('.alert');
+
+    $('#updatePassForm').submit(function() {
+      if (!oldPass.val()) {
+        alert.text('旧密码不能为空').slideDown();
+        return false;
+      } else if (!newPass.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass.val())) {
+        alert.text('请填写6-18位数字、字母和特殊字符任意两种组合的密码').slideDown();
+        return false;
+      } else if (newPass.val() !== confimPass.val()) {
+        alert.text('两次密码不一致').slideDown();
+        return false;
+      }
     });
   };
 

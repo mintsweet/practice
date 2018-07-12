@@ -12,7 +12,7 @@ class Topic extends BaseComponent {
   }
 
   // 创建话题
-  renderCreateTopic(req, res) {
+  renderCreate(req, res) {
     res.render('topic/create', {
       title: '发布话题'
     });

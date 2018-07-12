@@ -34,7 +34,7 @@ router.post('/signin', User.signin);
 router.get('/forget_pass', User.renderForgetPass);
 router.post('/forget_pass', User.forgetPass);
 router.get('/signout', User.signout);
-router.get('/users/top100', User.renderUserTop100);
+router.get('/users/top100', User.renderUsersTop100);
 router.get('/user/:uid', User.renderUserInfo);
 router.get('/user/:uid/stars', User.renderUserStars);
 router.get('/user/:uid/collections', User.renderUserCollections);
@@ -48,7 +48,7 @@ router.post('/update_pass', Auth.userRequired, User.updatePass);
 router.get('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUser);
 
 // 话题
-router.get('/topics/create', Auth.userRequired, Topic.renderCreateTopic);
+router.get('/topics/create', Auth.userRequired, Topic.renderCreate);
 router.post('/topics/create', Auth.userRequired, Topic.createTopic);
 router.get('/topics/search', Topic.renderSearch);
 router.get('/topic/:tid', Topic.renderDetail);

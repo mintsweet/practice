@@ -16,12 +16,15 @@ class User extends BaseComponent {
     this.signin = this.signin.bind(this);
     this.renderForgetPass = this.renderForgetPass.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
+    this.renderUsersTop100 = this.renderUsersTop100.bind(this);
     this.renderUserInfo = this.renderUserInfo.bind(this);
     this.renderUserStars = this.renderUserStars.bind(this);
     this.renderUserCollections = this.renderUserCollections.bind(this);
     this.renderUserReplies = this.renderUserReplies.bind(this);
     this.renderUserFollower = this.renderUserFollower.bind(this);
     this.renderUserFollowing = this.renderUserFollowing.bind(this);
+    this.renderSetting = this.renderSetting.bind(this);
+    this.renderUpdatePass = this.renderUpdatePass.bind(this);
   }
 
   // 注册页
@@ -189,7 +192,7 @@ class User extends BaseComponent {
   }
 
   // 积分榜前一百
-  async renderUserTop100(req, res) {
+  async renderUsersTop100(req, res) {
     const top100 = await this.getUsersTop100();
 
     return res.render('user/top100', {

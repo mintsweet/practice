@@ -8,6 +8,7 @@
     &>a, &>span {
       position: relative;
       flex: 1;
+      margin: 0 20px;
       height: 40px;
       line-height: 40px;
       font-size: 16px;
@@ -15,7 +16,8 @@
       border-bottom: 2px solid #fff;
       box-sizing: border-box;
     }
-    &>a.active {
+    &>a.active,
+    &>span.active  {
       position: relative;
       bottom: -1px;
       border-bottom: 3px solid #16982B;
@@ -46,6 +48,9 @@
         border-top: 1px solid #f1f1f1;
         &:first-child {
           border-top: none;
+        }
+        &.active {
+          color: $theme-color;
         }
       }
     }

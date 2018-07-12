@@ -22,11 +22,11 @@ block content
         a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
         a(href=`/user/${info.id}/stars`, class={active: type === 'star'}) 喜欢
         a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
-        span(class={active: type === 'follower' || type === 'following' || type === 'collections' }) 更多
+        span(class={active: type === 'following' || type === 'follower' || type === 'collect' }) 更多
           .more
-            a(href=`/user/${info.id}/follower`) 粉丝
-            a(href=`/user/${info.id}/following`) 关注
-            a(href=`/user/${info.id}/collections`) 收藏集
+            a(href=`/user/${info.id}/following`, class={active: type === 'following'}) 关注
+            a(href=`/user/${info.id}/follower`, class={active: type === 'follower'}) 粉丝
+            a(href=`/user/${info.id}/collections`, class={active: type === 'collect'}) 收藏集
       ul.content
         if type === 'reply'
           each item in data
