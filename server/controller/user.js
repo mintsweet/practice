@@ -451,8 +451,7 @@ class User extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: currentUser.toObject({ virtuals: true }),
-        follow
+        data: { ...currentUser.toObject({ virtuals: true }), follow }
       });
     } catch(err) {
       logger.error(err.message);

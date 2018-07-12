@@ -1,10 +1,16 @@
 const formidable = require('formidable');
+const BaseComponent = require('../prototype/BaseComponent');
 const {
   createTopic, getTopicDetail, starOrUnstarTopic,
   getTopicBySearch, getNoReplyTopic, collectOrUncollectTopic
 } = require('../http/api');
 
-class Topic {
+class Topic extends BaseComponent {
+  constructor() {
+    super();
+    this.renderDetail = this.renderDetail.bind(this);
+  }
+
   // 创建话题
   renderCreateTopic(req, res) {
     res.render('topic/create', {
@@ -41,31 +47,27 @@ class Topic {
   async renderDetail(req, res) {
     const { tid } = req.params;
 
-    let response;
-    let topic;
-    let noReplyTopic;
+    try {
+      const noReplyTopic = await this.getNoReplyTopic();
+      const response = await getTopicDetail(tid);
 
-    response = await getTopicDetail(tid);
-
-    if (response.status === 1) {
-      topic = response.data;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        res.render('topic/detail', {
+          title: '话题详情',
+          topic: response.data,
+          noReplyTopic
+        });
+      } else {
+        res.render('/exception/error', {
+          title: '错误页',
+          error: response.message
+        });
+      }
+    } catch(err) {
+      res.render('/exception/500', {
+        title: '错误页'
+      });
     }
-
-    response = await getNoReplyTopic();
-
-    if (response.status === 1) {
-      noReplyTopic = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('topic/detail', {
-      title: '话题详情',
-      topic,
-      noReplyTopic
-    });
   }
 
   // 搜索结果页

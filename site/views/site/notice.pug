@@ -1,4 +1,4 @@
-extends ../layout.pug
+extends ./layout.pug
 
 append header
   .setting-bar
@@ -24,4 +24,4 @@ block content
                 span 回复了你的话题：
             a(href=`/topic/${item.topic.id}`) #{item.topic.title}
     else
-      include ../includes/no_content.pug
+      include ./includes/no_content.pug

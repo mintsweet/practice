@@ -115,7 +115,7 @@
     });
   };
 
-  // 创建话题表单校验赋值
+  // 创建话题JS
   Utils.createTopicJS = function() {
     var simplemde = new SimpleMDE({ element: $("#editor")[0] });
     var tab = $('.select-hidden');
@@ -135,6 +135,48 @@
       }
 
       $('.content-hidden').val(simplemde.value());
+    });
+  };
+
+  // 话题详情JS
+  Utils.detailTopicJS = function() {
+    $('#replyForm').submit(function() {
+      if (!content) {
+        globalMessage('error', '回复内容不能为空');
+        return false;
+      }
+    });
+
+    $('.star-action').click(function() {
+      $.getJSON(`${location.pathname}/star_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'star') {
+            $('.star-action .number').text(parseInt($('.star-action .number').text()) + 1);
+            $('.star-action').addClass('active');
+          } else {
+            $('.star-action .number').text(parseInt($('.star-action .number').text()) - 1);
+            $('.star-action').removeClass('active');
+          }
+        } else {
+          globalMessage('error', res.message);
+        }
+      });
+    });
+
+    $('.collect-action').click(function() {
+      $.getJSON(`${location.pathname}/collect_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'collect') {
+            $('.collect-action .number').text(parseInt($('.collect-action .number').text()) + 1);
+            $('.collect-action').addClass('active');
+          } else {
+            $('.collect-action .number').text(parseInt($('.collect-action .number').text()) - 1);
+            $('.collect-action').removeClass('active');
+          }
+        } else {
+          globalMessage('error', res.message);
+        }
+      });
     });
   };
 

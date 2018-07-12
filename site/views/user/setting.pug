@@ -6,7 +6,7 @@ append header
       a.active(href="/setting") 个人资料
       a(href="/update_pass") 修改密码
 block content
-  .layout-content
+  .layout-content.attach
     .setting-title 个人资料
     form.setting-form(method="post")
       .alert.alert-error(class=error ? '' : 'hidden') #{error}
@@ -29,3 +29,4 @@ block content
       .form-item
         button.btn(type="submit") 更新个人资料
   .layout-sider
+    include ./ranking.pug

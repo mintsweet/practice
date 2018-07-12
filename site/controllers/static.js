@@ -6,7 +6,7 @@ class Static {
     try {
       const response = await getStartDoc();
       if (response.status === 1) {
-        res.render('static/template', {
+        res.render('site/static', {
           title: '快速开始',
           text: response.data
         });
@@ -28,7 +28,7 @@ class Static {
     try {
       const response = await getApiDoc();
       if (response.status === 1) {
-        res.render('static/template', {
+        res.render('site/static', {
           title: 'API说明',
           text: response.data
         });
@@ -50,7 +50,7 @@ class Static {
     try {
       const response = await getAboutDoc();
       if (response.status === 1) {
-        res.render('static/template', {
+        res.render('site/static', {
           title: '关于',
           text: response.data
         });

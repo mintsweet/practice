@@ -40,7 +40,7 @@ router.get('/user/:uid/stars', User.renderUserStars);
 router.get('/user/:uid/collections', User.renderUserCollections);
 router.get('/user/:uid/replies', User.renderUserReplies);
 router.get('/user/:uid/follower', User.renderUserFollower);
-router.get('/user/:uid/following', User.renderUserFolloing);
+router.get('/user/:uid/following', User.renderUserFollowing);
 router.get('/setting', Auth.userRequired, User.renderSetting);
 router.post('/setting', Auth.userRequired, User.setting);
 router.get('/update_pass', Auth.userRequired, User.renderUpdatePass);

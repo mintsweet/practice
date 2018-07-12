@@ -6,7 +6,7 @@ append header
       a(href="/setting") 个人资料
       a.active(href="/update_pass") 修改密码
 block content
-  .layout-content
+  .layout-content.attach
     .setting-title 修改密码
     form#updatePassForm.setting-form(method="post")
       .alert.alert-error(class=error ? '' : 'hidden') #{error}

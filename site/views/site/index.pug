@@ -1,4 +1,4 @@
-extends ../layout
+extends ../layout.pug
 
 block content
   .layout-content.attach
@@ -8,19 +8,11 @@ block content
           a.active(href="?tab=" + item.url) #{item.name}
         else
           a(href="?tab=" + item.url) #{item.name}
-    include ../topic/list
+    include ../topic/list.pug
   aside.layout-sider
     .aside-block.no-title
       a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
-    .aside-block
-      .title
-        | 积分榜
-        a(href="/users/top100") 更多
-      ul.content.score-list
-        each user in top100
-          li
-            a.nickname(href=`/user/${user.id}`) #{user.nickname}
-            span.score #{user.score}
+    include ../user/ranking.pug
     include ../topic/no_reply.pug
     .aside-block
       .title 友情社区

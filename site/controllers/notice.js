@@ -6,7 +6,7 @@ class Notice {
     const response = await getUserNotice(req.app.locals.user.id);
 
     if (response.status === 1) {
-      return res.render('notice/template', {
+      return res.render('site/notice', {
         title: '用户消息',
         type: 'user',
         data: response.data
@@ -21,7 +21,7 @@ class Notice {
     const response = await getSystemNotice(req.app.locals.user.id);
 
     if (response.status === 1) {
-      return res.render('notice/template', {
+      return res.render('site/notice', {
         title: '系统消息',
         type: 'system',
         data: response.data

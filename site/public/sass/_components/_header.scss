@@ -84,7 +84,7 @@
         text-align: center;
         background: #a4d1aa;
         transition: opacity .3s;
-        z-index: 10;
+        z-index: $zIndex-4;
         transform: translateX(-50%);
         .item {
           line-height: 34px;

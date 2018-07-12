@@ -1,37 +1,27 @@
 const formidable = require('formidable');
 const {
-  getPicCaptcha, signup, signin, forgetPass,
-  signout, getUsersTop100, getUserInfoById,
+  signup, signin, forgetPass, signout,
   getUserStars, getUserCollections, getUserReplies,
   getUserBehaviors, getUserFollower, getUserFollowing,
   setting, updatePass, getCurrentUserInfo, followOrUn
 } = require('../http/api');
+const BaseComponent = require('../prototype/BaseComponent');
 
-class User {
+class User extends BaseComponent {
   constructor() {
+    super();
     this.renderSignup = this.renderSignup.bind(this);
     this.signup = this.signup.bind(this);
     this.renderSignin = this.renderSignin.bind(this);
     this.signin = this.signin.bind(this);
     this.renderForgetPass = this.renderForgetPass.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
-  }
-
-  async getPicCaptcha(req) {
-    try {
-      const response = await getPicCaptcha();
-      if (response.status === 1) {
-        req.app.locals.pic_token = {
-          token: response.data.token,
-          expired: Date.now() + 1000 * 60 * 10
-        };
-        return response.data.url;
-      } else {
-        return '';
-      }
-    } catch(err) {
-      return '';
-    }
+    this.renderUserInfo = this.renderUserInfo.bind(this);
+    this.renderUserStars = this.renderUserStars.bind(this);
+    this.renderUserCollections = this.renderUserCollections.bind(this);
+    this.renderUserReplies = this.renderUserReplies.bind(this);
+    this.renderUserFollower = this.renderUserFollower.bind(this);
+    this.renderUserFollowing = this.renderUserFollowing.bind(this);
   }
 
   // 注册页
@@ -200,221 +190,188 @@ class User {
 
   // 积分榜前一百
   async renderUserTop100(req, res) {
-    const response = await getUsersTop100();
+    const top100 = await this.getUsersTop100();
 
-    if (response.status === 1) {
-      return res.render('user/top100', {
-        title: '积分榜前一百',
-        top100: response.data
-      });
-    } else {
-      return res.redirect('/exception/500');
-    }
+    return res.render('user/top100', {
+      title: '积分榜前一百',
+      top100
+    });
   }
 
   // 个人信息页
   async renderUserInfo(req, res) {
     const { uid } = req.params;
 
-    let response;
-    let info;
-    let isFollow;
-    let behaviors;
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserBehaviors(uid);
 
-    response = await getUserInfoById(uid);
-
-    if (response.status === 1) {
-      info = response.data;
-      isFollow = response.isFollow || false;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        res.render('user/info', {
+          title: '动态 - 用户信息',
+          info,
+          data: response.data,
+          type: 'behavior'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
     }
-
-    response = await getUserBehaviors(uid);
-    if (response.status === 1) {
-      behaviors = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('user/info', {
-      title: '动态 - 用户信息',
-      info,
-      data: behaviors,
-      type: 'behavior',
-      isFollow
-    });
   }
 
   // 用户喜欢页
   async renderUserStars(req, res) {
     const { uid } = req.params;
 
-    let response;
-    let info;
-    let isFollow;
-    let behaviors;
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserStars(uid);
 
-    response = await getUserInfoById(uid);
-    if (response.status === 1) {
-      info = response.data;
-      isFollow = response.isFollow || false;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        return res.render('user/info', {
+          title: '喜欢 - 用户信息',
+          info,
+          data: response.data,
+          type: 'star'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
     }
-
-    response = await getUserStars(uid);
-    if (response.status === 1) {
-      behaviors = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('user/info', {
-      title: '喜欢 - 用户信息',
-      info,
-      data: behaviors,
-      type: 'star',
-      isFollow
-    });
   }
 
   // 用户收藏页
   async renderUserCollections(req, res) {
     const { uid } = req.params;
 
-    let response;
-    let info;
-    let isFollow;
-    let behaviors;
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserCollections(uid);
 
-    response = await getUserInfoById(uid);
-    if (response.status === 1) {
-      info = response.data;
-      isFollow = response.isFollow || false;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        return res.render('user/info', {
+          title: '收藏 - 用户信息',
+          info,
+          data: response.data,
+          type: 'collect'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
     }
-
-    response = await getUserCollections(uid);
-    if (response.status === 1) {
-      behaviors = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('user/info', {
-      title: '喜欢 - 用户信息',
-      info,
-      data: behaviors,
-      type: 'star',
-      isFollow
-    });
   }
 
   // 用户回复页
   async renderUserReplies(req, res) {
     const { uid } = req.params;
 
-    let response;
-    let info;
-    let isFollow;
-    let behaviors;
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserReplies(uid);
 
-    response = await getUserInfoById(uid);
-    if (response.status === 1) {
-      info = response.data;
-      isFollow = response.isFollow || false;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        return res.render('user/info', {
+          title: '回复 - 用户信息',
+          info,
+          data: response.data,
+          type: 'reply'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
     }
-
-    response = await getUserReplies(uid);
-    if (response.status === 1) {
-      behaviors = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('user/info', {
-      title: '回复 - 用户信息',
-      info,
-      data: behaviors,
-      type: 'reply',
-      isFollow
-    });
   }
 
   // 用户粉丝页
   async renderUserFollower(req, res) {
     const { uid } = req.params;
 
-    let response;
-    let info;
-    let isFollow;
-    let behaviors;
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserFollower(uid);
 
-    response = await getUserInfoById(uid);
-    if (response.status === 1) {
-      info = response.data;
-      isFollow = response.isFollow || false;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        return res.render('user/info', {
+          title: '粉丝 - 用户信息',
+          info,
+          data: response.data,
+          type: 'follower'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
     }
-
-    response = await getUserFollower(uid);
-    if (response.status === 1) {
-      behaviors = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('user/info', {
-      title: '粉丝 - 用户信息',
-      info,
-      data: behaviors,
-      type: 'follower',
-      isFollow
-    });
   }
 
   // 用户关注页
-  async renderUserFolloing(req, res) {
+  async renderUserFollowing(req, res) {
     const { uid } = req.params;
 
-    let response;
-    let info;
-    let isFollow;
-    let behaviors;
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserFollowing(uid);
 
-    response = await getUserInfoById(uid);
-    if (response.status === 1) {
-      info = response.data;
-      isFollow = response.isFollow || false;
-    } else {
-      return res.redirect('/exception/500');
+      if (response.status === 1) {
+        return res.render('user/info', {
+          title: '关注 - 用户信息',
+          info,
+          data: response.data,
+          type: 'following'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
     }
-
-    response = await getUserFollowing(uid);
-    if (response.status === 1) {
-      behaviors = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    return res.render('user/info', {
-      title: '关注 - 用户信息',
-      info,
-      data: behaviors,
-      type: 'following',
-      isFollow
-    });
   }
 
   // 更新个人设置页
-  renderSetting(req, res) {
+  async renderSetting(req, res) {
+    const top100 = await this.getUsersTop100();
     res.render('user/setting', {
-      title: '个人资料'
+      title: '个人资料',
+      top100: top100.slice(0, 10)
     });
   }
 
@@ -436,11 +393,9 @@ class User {
         if (userInfo.status === 1) {
           req.app.locals.user = userInfo.data;
         }
-        return res.render('user/setting', {
-          title: '个人资料'
-        });
+        res.redirect('/');
       } else {
-        return res.render('user/setting', {
+        res.render('user/setting', {
           title: '个人资料',
           error: response.message
         });
@@ -449,9 +404,12 @@ class User {
   }
 
   // 修改密码页
-  renderUpdatePass(req, res) {
+  async renderUpdatePass(req, res) {
+    const top100 = await this.getUsersTop100();
+
     res.render('user/update_pass', {
-      title: '修改密码'
+      title: '修改密码',
+      top100: top100.slice(0, 10)
     });
   }
 

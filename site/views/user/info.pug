@@ -22,7 +22,7 @@ block content
         a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
         a(href=`/user/${info.id}/stars`, class={active: type === 'star'}) 喜欢
         a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
-        span 更多
+        span(class={active: type === 'follower' || type === 'following' || type === 'collections' }) 更多
           .more
             a(href=`/user/${info.id}/follower`) 粉丝
             a(href=`/user/${info.id}/following`) 关注

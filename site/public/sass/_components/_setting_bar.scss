@@ -4,7 +4,7 @@
   height: $setting-bar-height;
   line-height: $setting-bar-height;
   background: $white;
-  border-top: 1px solid $gray;
+  border-top: 1px dashed $light-gray;
   a {
     padding: 0 10px;
     &.active {
