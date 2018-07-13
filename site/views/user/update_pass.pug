@@ -23,6 +23,10 @@ block content
       .form-item
         button.btn(type="submit") 保存修改
   .layout-sider
+    include ./ranking.pug
+  if message
+    include ../includes/global_message.pug
 append footer
   script.
     Utils.updatePassJS();
+    Utils.globalMessage('success', '修改成功');

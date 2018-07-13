@@ -19,7 +19,7 @@
     border-radius: $falot-action-radius;
     box-shadow: 1px 1px 6px rgba(0,0,0,.2);
     &.active {
-      background: $theme-color;
+      color: $theme-color;
     }
     .number {
       position: absolute;

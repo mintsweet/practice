@@ -56,11 +56,11 @@ block content
           .signature **这家伙很懒，莫有签名**
     include ./no_reply.pug
   .float-action
-    a.practice.star-action(href="javascript:;", class={ active: topic.isStar }) &#xe63b;
+    a.practice.star-action(href="javascript:;", class={ active: topic.star }) &#xe63b;
       span.number #{topic.star_count}
     a.practice(href="#reply") &#xe619;
       span.number #{topic.reply_count}
-    a.practice.collect-action(href="javascript:;", class={ active: topic.isCollect }) &#xe65f;
+    a.practice.collect-action(href="javascript:;", class={ active: topic.collect }) &#xe65f;
       span.number #{topic.collect_count}
   include ../includes/global_message.pug
 append footer

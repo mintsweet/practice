@@ -16,13 +16,13 @@
       border-radius: $global-message-radius;
       box-shadow: 0px 4px 12px rgba(0,0,0,.15);
       pointer-events: all;
-      .error {
+      &.error {
         background: $error;
       }
-      .warn {
+      &.warn {
         background: $warn;
       }
-      .success {
+      &.success {
         background: $success;
       }
     }

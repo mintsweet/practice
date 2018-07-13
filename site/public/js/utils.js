@@ -77,10 +77,10 @@
 
   // 全局消息提示
   Utils.globalMessage = function(type, message, duration = 2000) {
-    $('.message .message-notice').fadeIn();
-    $('.message .message-notice .content').addClass(type).text(message).fadeIn();
+    $('.global-message .message').fadeIn();
+    $('.global-message .message .content').addClass(type).text(message).fadeIn();
     setTimeout(function() {
-      $('.message .message-notice').fadeOut();
+      $('.global-message .message').fadeOut();
     }, duration);
   };
 
@@ -139,9 +139,11 @@
 
   // 话题详情JS
   Utils.detailTopicJS = function() {
+    const that = this;
+
     $('#replyForm').submit(function() {
       if (!content) {
-        globalMessage('error', '回复内容不能为空');
+        that.globalMessage('error', '回复内容不能为空');
         return false;
       }
     });
@@ -149,6 +151,7 @@
     $('.star-action').click(function() {
       $.getJSON(`${location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
+          console.log(res);
           if (res.action === 'star') {
             $('.star-action .number').text(parseInt($('.star-action .number').text()) + 1);
             $('.star-action').addClass('active');
@@ -157,7 +160,7 @@
             $('.star-action').removeClass('active');
           }
         } else {
-          globalMessage('error', res.message);
+          that.globalMessage('error', res.message);
         }
       });
     });

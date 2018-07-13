@@ -1,9 +1,12 @@
 .transform {
-  padding: 50px 0 15px 0;
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   text-align: center;
-  background: #fff;
-  box-sizing: border-box;
+  background: $global-body-bg;
+  z-index: $zIndex-5;
   i {
     font-size: 80px;
   }

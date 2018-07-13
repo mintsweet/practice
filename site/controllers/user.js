@@ -3,7 +3,7 @@ const {
   signup, signin, forgetPass, signout,
   getUserStars, getUserCollections, getUserReplies,
   getUserBehaviors, getUserFollower, getUserFollowing,
-  setting, updatePass, getCurrentUserInfo, followOrUn
+  setting, updatePass, followOrUn
 } = require('../http/api');
 const BaseComponent = require('../prototype/BaseComponent');
 
@@ -24,7 +24,9 @@ class User extends BaseComponent {
     this.renderUserFollower = this.renderUserFollower.bind(this);
     this.renderUserFollowing = this.renderUserFollowing.bind(this);
     this.renderSetting = this.renderSetting.bind(this);
+    this.setting = this.setting.bind(this);
     this.renderUpdatePass = this.renderUpdatePass.bind(this);
+    this.updatePass = this.updatePass.bind(this);
   }
 
   // 注册页
@@ -390,17 +392,20 @@ class User extends BaseComponent {
       }
 
       const response = await setting({ ...fields });
+      const top100 = await this.getUsersTop100();
 
       if (response.status === 1) {
-        const userInfo = await getCurrentUserInfo();
-        if (userInfo.status === 1) {
-          req.app.locals.user = userInfo.data;
-        }
-        res.redirect('/');
+        req.app.locals.user = response.data;
+        res.render('user/setting', {
+          type: 'success',
+          message: '更新个人资料成功',
+          url: '/setting'
+        });
       } else {
         res.render('user/setting', {
           title: '个人资料',
-          error: response.message
+          error: response.message,
+          top100
         });
       }
     });
@@ -428,15 +433,19 @@ class User extends BaseComponent {
       }
 
       const response = await updatePass({ ...fields });
+      const top100 = await this.getUsersTop100();
 
       if (response.status === 1) {
-        return res.render('user/update_pass', {
-          title: '修改密码'
+        res.render('site/transform', {
+          type: 'success',
+          message: '修改成功',
+          url: '/update_pass'
         });
       } else {
-        return res.render('user/update_pass', {
+        res.render('user/update_pass', {
           title: '修改密码',
-          error: response.message
+          error: response.message,
+          top100
         });
       }
     });

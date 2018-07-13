@@ -87,6 +87,7 @@
       position: absolute;
       right: 1px;
       top: 6px;
+      cursor: pointer;
     }
     .submit {
       @include size(100%, 40px);

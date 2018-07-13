@@ -28,7 +28,7 @@ block content
             a(href=`/user/${info.id}/follower`, class={active: type === 'follower'}) 粉丝
             a(href=`/user/${info.id}/collections`, class={active: type === 'collect'}) 收藏集
       ul.content
-        if type === 'reply'
+        if action === 'reply'
           each item in data
             li 
               span 回复了话题
@@ -40,7 +40,7 @@ block content
         else
           each item in data
             li 
-              case item.type
+              case item.action
                 when 'create'
                   span 发布了话题
                 when 'star'
