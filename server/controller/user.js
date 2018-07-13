@@ -253,6 +253,7 @@ class User extends BaseComponent {
         }
 
         const bcryptPassword = await this.encryption(newPassword);
+
         existUser.password = bcryptPassword;
         await existUser.save();
 
@@ -304,8 +305,7 @@ class User extends BaseComponent {
           });
         }
 
-        const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, { new: true }).lean();
-
+        const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, { new: true });
         req.session.user = doc;
 
         return res.send({
@@ -467,13 +467,13 @@ class User extends BaseComponent {
   async getUserBehaviors(req, res) {
     const { uid } = req.params;
     try {
-      const behaviors = await BehaviorModel.find({ author_id: uid });
+      const behaviors = await BehaviorModel.find({ author_id: uid, is_un: false });
 
       const result = await Promise.all(behaviors.map(item => {
         return new Promise(resolve => {
-          if (item.type === 'follow') {
+          if (item.action === 'follow') {
             resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
-          } else if (item.type === 'up') {
+          } else if (item.action === 'up') {
             resolve(ReplyModel.findById(item.target_id, 'id content create_at'));
           } else {
             resolve(TopicModel.findById(item.target_id, 'id title create_at'));
@@ -482,7 +482,7 @@ class User extends BaseComponent {
       }));
 
       const data = behaviors.map((item, i) => {
-        return { ...result[i].toObject(), type: item.type };
+        return { ...result[i].toObject(), action: item.action };
       });
 
       return res.send({

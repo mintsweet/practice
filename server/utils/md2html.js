@@ -1,5 +1,4 @@
 const hljs = require('highlight.js');
-const markdownItTocAndAnchor = require('markdown-it-toc-and-anchor').default;
 const md = require('markdown-it')({
   html: true,
   linkify: true,
@@ -11,11 +10,6 @@ const md = require('markdown-it')({
       return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`;
     }
   }
-}).use(markdownItTocAndAnchor, {
-  tocClassName: 'toc',
-  tocLastLevel: 3,
-  anchorLinkSymbol: '',
-  anchorClassName: 'anchor'
 });
 
 module.exports = text => {

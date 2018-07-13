@@ -359,12 +359,12 @@ class Topic extends BaseComponent {
       let collectBehavior;
 
       if (user && user.id) {
-        starBehavior = await BehaviorModel.findOne({ type: 'star', author_id: user.id, target_id: currentTopic.id });
-        collectBehavior = await BehaviorModel.findOne({ type: 'collect', author_id: user.id, target_id: currentTopic.id });
+        starBehavior = await BehaviorModel.findOne({ action: 'star', author_id: user.id, target_id: currentTopic.id });
+        collectBehavior = await BehaviorModel.findOne({ action: 'collect', author_id: user.id, target_id: currentTopic.id });
       }
 
-      const star = (starBehavior && !starBehavior.delete) || false;
-      const collect = (collectBehavior && !collectBehavior.delete) || false;
+      const star = (starBehavior && !starBehavior.is_un) || false;
+      const collect = (collectBehavior && !collectBehavior.is_un) || false;
 
       const replies = replyList.map((item, i) => {
         return {
@@ -376,9 +376,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        data: { ...currentTopic.toObject({ virtuals: true }), author, replies },
-        star,
-        collect
+        data: { ...currentTopic.toObject({ virtuals: true }), author, replies, star, collect }
       });
     } catch(err) {
       logger.error(err);
@@ -435,7 +433,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        action: behavior.actualType
+        action: behavior.actualAction
       });
     } catch(err) {
       logger.error(err);
@@ -492,7 +490,7 @@ class Topic extends BaseComponent {
 
       return res.send({
         status: 1,
-        action: behavior.actualType
+        action: behavior.actualAction
       });
     } catch(err) {
       logger.error(err);

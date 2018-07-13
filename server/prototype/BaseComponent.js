@@ -3,14 +3,14 @@ const NoticeModel = require('../models/notice');
 
 module.exports = class BaseComponent {
   // 创建或者改变一个行为
-  async generateBehavior(type, author_id, target_id) {
+  async generateBehavior(action, author_id, target_id) {
     let behavior;
-    behavior = await BehaviorModel.findOne({ type, author_id, target_id });
+    behavior = await BehaviorModel.findOne({ action, author_id, target_id });
     if (behavior) {
       behavior.is_un = !behavior.is_un;
       await behavior.save();
     } else {
-      behavior = await BehaviorModel.create({ type, author_id, target_id });
+      behavior = await BehaviorModel.create({ action, author_id, target_id });
     }
     return behavior;
   }

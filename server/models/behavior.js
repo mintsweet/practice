@@ -4,7 +4,7 @@ const { ObjectId } = Schema;
 const BaseModel = require('./base');
 
 /*
-* 根据类型区分行为 type
+* 根据类型区分行为 action
 * 1. create 创建了
 * 2. star 喜欢了
 * 3. collect 收藏了
@@ -13,7 +13,7 @@ const BaseModel = require('./base');
 */
 
 const BehaviorSchema = new Schema({
-  type: { type: String, required: true },
+  action: { type: String, required: true },
 
   author_id: { type: ObjectId, required: true }, // 发起者
   target_id: { type: ObjectId, required: true }, // 命中者
@@ -29,8 +29,8 @@ BehaviorSchema.plugin(BaseModel);
 BehaviorSchema.index({ type: 1, author_id: 1, target_id: 1 }, { unique: true });
 BehaviorSchema.index({ author_id: 1, create_at: -1 });
 
-BehaviorSchema.virtual('actualType').get(function() {
-  return this.is_un ? `un_${this.type}` : this.type;
+BehaviorSchema.virtual('actualAction').get(function() {
+  return this.is_un ? `un_${this.action}` : this.action;
 });
 
 const Behavior = mongoose.model('Behavior', BehaviorSchema);
