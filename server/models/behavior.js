@@ -9,7 +9,9 @@ const BaseModel = require('./base');
 * 2. star 喜欢了
 * 3. collect 收藏了
 * 4. follow 关注了
-* 5. up 点赞了
+* 5. reply 回复了
+* 6. reply2 回复了回复
+* 7. up 点赞了
 */
 
 const BehaviorSchema = new Schema({
@@ -26,7 +28,7 @@ const BehaviorSchema = new Schema({
 
 BehaviorSchema.plugin(BaseModel);
 
-BehaviorSchema.index({ type: 1, author_id: 1, target_id: 1 }, { unique: true });
+BehaviorSchema.index({ action: 1, author_id: 1, target_id: 1 }, { unique: true });
 BehaviorSchema.index({ author_id: 1, create_at: -1 });
 
 BehaviorSchema.virtual('actualAction').get(function() {

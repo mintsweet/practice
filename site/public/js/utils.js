@@ -167,6 +167,7 @@
 
     $('.collect-action').click(function() {
       $.getJSON(`${location.pathname}/collect_or_un`, function(res) {
+        console.log(res)
         if (res.status === 1) {
           if (res.action === 'collect') {
             $('.collect-action .number').text(parseInt($('.collect-action .number').text()) + 1);
@@ -176,7 +177,7 @@
             $('.collect-action').removeClass('active');
           }
         } else {
-          globalMessage('error', res.message);
+          that.globalMessage('error', res.message);
         }
       });
     });
@@ -269,6 +270,19 @@
         return false;
       } else if (newPass.val() !== confimPass.val()) {
         alert.text('两次密码不一致').slideDown();
+        return false;
+      }
+    });
+  };
+
+  // 更新个人资料JS
+  Utils.settingJS = function() {
+    var signature = $('#signature');
+    var alert = $('.alert');
+   
+    $('#signature').submit(function() {
+      if (signature.val().length > 100) {
+        alert.text('签名长度不能超过100个字符').slideDown();
         return false;
       }
     });

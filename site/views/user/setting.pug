@@ -8,8 +8,8 @@ append header
 block content
   .layout-content.attach
     .setting-title 个人资料
-    form.setting-form(method="post")
-      .alert.alert-error(class=error ? '' : 'hidden') #{error}
+    form#settingForm.form.setting-form(method="post")
+      .alert.alert-error(class={hidden: !error}) #{error}
       .form-item
         label(for="avatar") 头像
         .avatar
@@ -28,5 +28,11 @@ block content
         input(type="text", id="signature", name="signature", placeholder="请输入个人介绍", autocomplete="off", value=user.signature)
       .form-item
         button.btn(type="submit") 更新个人资料
+  if message
+    include ../includes/global_message.pug
   .layout-sider
     include ./ranking.pug
+append footer
+  script.
+    Utils.settingJS();
+    Utils.globalMessage('success', '更新个人资料成功');

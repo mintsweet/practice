@@ -211,6 +211,8 @@ class User extends BaseComponent {
       const info = await this.getUserInfo(uid);
       const response = await getUserBehaviors(uid);
 
+      console.log(response);
+
       if (response.status === 1) {
         res.render('user/info', {
           title: '动态 - 用户信息',
@@ -221,7 +223,7 @@ class User extends BaseComponent {
       } else {
         res.render('exception/error', {
           title: '错误',
-          error: response.data
+          error: response.message
         });
       }
     } catch(err) {
@@ -395,14 +397,13 @@ class User extends BaseComponent {
       const top100 = await this.getUsersTop100();
 
       if (response.status === 1) {
-        req.app.locals.user = response.data;
-        res.render('user/setting', {
+        res.render('user/transform', {
           type: 'success',
           message: '更新个人资料成功',
           url: '/setting'
         });
       } else {
-        res.render('user/setting', {
+        res.render('user/transform', {
           title: '个人资料',
           error: response.message,
           top100

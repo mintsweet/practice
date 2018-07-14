@@ -53,7 +53,7 @@ exports.getCurrentUserInfo = () => request('/info');
 // 更新个人信息
 exports.setting = info => request('/setting', info, 'PUT');
 // 修改密码
-exports.updatePass = content => request('/update_pass', content, 'PATCH');
+exports.updatePass = obj => request('/update_pass', obj, 'PATCH');
 // 获取星标用户列表
 exports.getUsersStar = () => request('/users/star');
 // 获取积分榜前一百

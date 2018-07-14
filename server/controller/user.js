@@ -17,6 +17,7 @@ class User extends BaseComponent {
     this.updatePass = this.updatePass.bind(this);
     this.getUserStars = this.getUserStars.bind(this);
     this.followOrUnFollow = this.followOrUnFollow.bind(this);
+    this.getUserBehaviors = this.getUserBehaviors.bind(this);
   }
 
   // 注册
@@ -463,6 +464,11 @@ class User extends BaseComponent {
     }
   }
 
+  // 正常化行为
+  async normalBehavior(author_id, action) {
+
+  }
+
   // 获取用户动态
   async getUserBehaviors(req, res) {
     const { uid } = req.params;
@@ -472,18 +478,40 @@ class User extends BaseComponent {
       const result = await Promise.all(behaviors.map(item => {
         return new Promise(resolve => {
           if (item.action === 'follow') {
-            resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
+            resolve((async () => {
+              const result = await UserModel.findById(item.target_id, 'id nickname create_at')
+              return result.toObject();
+            })());
+          } else if (item.action === 'reply') {
+            resolve((async () => {
+              const replies = await ReplyModel.find({ author_id: uid });
+              const topics = await Promise.all(replies.map(item => {
+                return new Promise(resolve => {
+                  resolve(TopicModel.findById(item.topic_id, 'id title'));
+                });
+              }));
+              const result = replies.map((item, i) => {
+                return { ...item.toObject(), topic: topics[i] };
+              });
+              return result;
+            })());
+          } else if (item.action === 'reply2') {
+            resolve();
           } else if (item.action === 'up') {
-            resolve(ReplyModel.findById(item.target_id, 'id content create_at'));
+            resolve();
           } else {
-            resolve(TopicModel.findById(item.target_id, 'id title create_at'));
+            resolve((async () => {
+              const result = await TopicModel.findById(item.target_id, 'id title create_at');
+              return result.toObject();
+            })());
           }
         });
       }));
 
       const data = behaviors.map((item, i) => {
-        return { ...result[i].toObject(), action: item.action };
       });
+
+      console.log(data);
 
       return res.send({
         status: 1,
@@ -503,7 +531,7 @@ class User extends BaseComponent {
   async getUserStars(req, res) {
     const { uid } = req.params;
     try {
-      const starBehaviors = await BehaviorModel.find({ type: 'star', author_id: uid, is_un: false });
+      const starBehaviors = await BehaviorModel.find({ action: 'star', author_id: uid, is_un: false });
       const result = await Promise.all(starBehaviors.map(item => {
         return new Promise(resolve => {
           resolve(TopicModel.findById(item.target_id, 'id title create_at'));
@@ -511,7 +539,7 @@ class User extends BaseComponent {
       }));
 
       const data = starBehaviors.map((item, i) => {
-        return { ...result[i].toObject(), type: 'star' };
+        return { ...result[i].toObject(), action: 'star' };
       });
 
       return res.send({
@@ -532,7 +560,7 @@ class User extends BaseComponent {
   async getUserCollections(req, res) {
     const { uid } = req.params;
     try {
-      const collectBehavior = await BehaviorModel.find({ type: 'collect', author_id: uid, is_un: false });
+      const collectBehavior = await BehaviorModel.find({ action: 'collect', author_id: uid, is_un: false });
       const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
       const result = await Promise.all(collectTopicIds.map(item => {
         return new Promise(resolve => {
@@ -540,9 +568,13 @@ class User extends BaseComponent {
         });
       }));
 
+      const data = collectBehavior.map((item, i) => {
+        return { ...result[i].toObject(), action: 'collect' };
+      });
+
       return res.send({
         status: 1,
-        data: result
+        data
       });
     } catch(err) {
       logger.error(err);
@@ -588,7 +620,7 @@ class User extends BaseComponent {
   async getUserFollower(req, res) {
     const { uid } = req.params;
     try {
-      const followerBehavior = await BehaviorModel.find({ type: 'follow', target_id: uid, is_un: false });
+      const followerBehavior = await BehaviorModel.find({ action: 'follow', target_id: uid, is_un: false });
       const result = await Promise.all(followerBehavior.map(item => {
         return new Promise(resolve => {
           resolve(UserModel.findById(item.author_id, '_id nickname avatar'));
@@ -613,7 +645,7 @@ class User extends BaseComponent {
   async getUserFollowing(req, res) {
     const { uid } = req.params;
     try {
-      const followingBehavior = await BehaviorModel.find({ type: 'follow', author_id: uid, is_un: false });
+      const followingBehavior = await BehaviorModel.find({ action: 'follow', author_id: uid, is_un: false });
       const result = await Promise.all(followingBehavior.map(item => {
         return new Promise(resolve => {
           resolve(UserModel.findById(item.target_id, '_id nickname avatar'));

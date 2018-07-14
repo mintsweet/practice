@@ -155,7 +155,7 @@ class Topic extends BaseComponent {
     if (response.status === 1) {
       return res.send({
         status: 1,
-        action: response.type
+        action: response.action
       });
     } else {
       return res.send({

@@ -21,18 +21,28 @@
     border-bottom: 1px dashed #f1f1f1;
     .nickname {
       font-weight: 600;
+      font-size: 15px;
       line-height: 1;
     }
     .content {
       line-height: 30px;
     }
     .action {
-      font-size: 12px;
-      color: #d1d1d1;
+      a.practice {
+        margin-right: 6px;
+        color: #d1d1d1;
+        font-size: 14px;
+        vertical-align: middle;
+      }
       time {
-        line-height: 20px;
+        color: #d1d1d1;
+        font-size: 12px;
         vertical-align: middle;
       }
     }
+  }
+  .no-reply {
+    text-align: center;
+    font-size: 18px;
   }
 }

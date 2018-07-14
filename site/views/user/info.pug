@@ -28,33 +28,32 @@ block content
             a(href=`/user/${info.id}/follower`, class={active: type === 'follower'}) 粉丝
             a(href=`/user/${info.id}/collections`, class={active: type === 'collect'}) 收藏集
       ul.content
-        if action === 'reply'
-          each item in data
-            li 
-              span 回复了话题
-              time #{item.create_at}
-              a.topic(href=`/topic/${item.topic.id}`) #{item.topic.title}
-              span.content 回复内容：#{item.content}
-          else
-            include ../includes/no_content.pug
+        each item in data
+          li
+            case item.action
+              when 'create'
+                span 发布了话题
+                time #{item.create_at}
+                a.topic(href=`/topic/${item.id}`) #{item.title}
+              when 'star'
+                span 喜欢了话题
+                time #{item.create_at}
+                a.topic(href=`/topic/${item.id}`) #{item.title}
+              when 'collect'
+                span 收藏了话题
+                time #{item.create_at}
+                a.topic(href=`/topic/${item.id}`) #{item.title}
+              when 'reply'
+                | #{JSON.stringify(item)}
+                span 回复了话题
+                //- time #{item.create_at}
+                //- a.topic(href=`/topic/${item.topic.id}`) #{item.topic.title}
+                //- span.content 回复内容：#{item.content}
+              when 'follow'
+                span 关注了用户
+                time #{item.create_at}
         else
-          each item in data
-            li 
-              case item.action
-                when 'create'
-                  span 发布了话题
-                when 'star'
-                  span 喜欢了话题
-                when 'collect'
-                  span 收藏了话题
-                when 'reply'
-                  span 回复了话题
-                when 'follow'
-                  span 关注了用户
-              time #{item.create_at}
-              a.topic(href=`/topic/${item.id}`) #{item.title}
-          else
-            include ../includes/no_content.pug
+          include ../includes/no_content.pug
   aside.layout-sider
     .user-stat
       .title 个人成就

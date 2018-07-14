@@ -9,7 +9,7 @@ block content
   .layout-content.attach
     .setting-title 修改密码
     form#updatePassForm.setting-form(method="post")
-      .alert.alert-error(class=error ? '' : 'hidden') #{error}
+      .alert.alert-error(class={hidden: !error}) #{error}
       .form-item
         label(for="oldPass") 旧密码
         input(type="password", id="oldPass", name="oldPass", placeholder="请输入旧密码")
