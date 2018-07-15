@@ -62,12 +62,12 @@ exports.getUsersTop100 = () => request('/users/top100');
 exports.getUserInfoById = uid => request(`/user/${uid}`);
 // 获取用户动态
 exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
+// 获取用户专栏列表
+exports.getUserCreates = uid => request(`/user/${uid}/creates`);
 // 获取用户喜欢列表
 exports.getUserStars = uid => request(`/user/${uid}/stars`);
 // 获取用户收藏列表
 exports.getUserCollections = uid => request(`/user/${uid}/collections`);
-// 获取用户回复列表
-exports.getUserReplies = uid => request(`/user/${uid}/replies`);
 // 获取用户粉丝列表
 exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 // 获取用户关注列表

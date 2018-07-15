@@ -4,7 +4,6 @@ const BaseComponent = require('../prototype/BaseComponent');
 const UserModel = require('../models/user');
 const BehaviorModel = require('../models/behavior');
 const TopicModel = require('../models/topic');
-const ReplyModel = require('../models/reply');
 const logger = require('../utils/logger');
 
 const SALT_WORK_FACTOR = 10;
@@ -464,11 +463,6 @@ class User extends BaseComponent {
     }
   }
 
-  // 正常化行为
-  async normalBehavior(author_id, action) {
-
-  }
-
   // 获取用户动态
   async getUserBehaviors(req, res) {
     const { uid } = req.params;
@@ -478,40 +472,46 @@ class User extends BaseComponent {
       const result = await Promise.all(behaviors.map(item => {
         return new Promise(resolve => {
           if (item.action === 'follow') {
-            resolve((async () => {
-              const result = await UserModel.findById(item.target_id, 'id nickname create_at')
-              return result.toObject();
-            })());
-          } else if (item.action === 'reply') {
-            resolve((async () => {
-              const replies = await ReplyModel.find({ author_id: uid });
-              const topics = await Promise.all(replies.map(item => {
-                return new Promise(resolve => {
-                  resolve(TopicModel.findById(item.topic_id, 'id title'));
-                });
-              }));
-              const result = replies.map((item, i) => {
-                return { ...item.toObject(), topic: topics[i] };
-              });
-              return result;
-            })());
-          } else if (item.action === 'reply2') {
-            resolve();
-          } else if (item.action === 'up') {
-            resolve();
+            resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
           } else {
-            resolve((async () => {
-              const result = await TopicModel.findById(item.target_id, 'id title create_at');
-              return result.toObject();
-            })());
+            resolve(TopicModel.findById(item.target_id, 'id title create_at'));
           }
         });
       }));
 
       const data = behaviors.map((item, i) => {
+        return { ...result[i].toObject(), action: item.action };
       });
 
-      console.log(data);
+      return res.send({
+        status: 1,
+        data
+      });
+    } catch(err) {
+      logger.error(err);
+      return res.send({
+        status: 0,
+        type: 'ERROR_SERVICE',
+        message: '服务器无响应，请稍后重试'
+      });
+    }
+  }
+
+  // 获取用户专栏的列表
+  async getUserCreates(req, res) {
+    const { uid } = req.params;
+
+    try {
+      const createBehavior = await BehaviorModel.find({ action: 'create', author_id: uid, is_un: false });
+      const result = await Promise.all(createBehavior.map(item => {
+        return new Promise(resolve => {
+          resolve(TopicModel.findById(item.target_id, 'id title create_at'));
+        });
+      }));
+
+      const data = createBehavior.map((item, i) => {
+        return { ...result[i].toObject(), action: 'create' };
+      });
 
       return res.send({
         status: 1,
@@ -564,7 +564,7 @@ class User extends BaseComponent {
       const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
       const result = await Promise.all(collectTopicIds.map(item => {
         return new Promise(resolve => {
-          resolve(TopicModel.findById(item));
+          resolve(TopicModel.findById(item.target_id, 'id title create_at'));
         });
       }));
 
@@ -575,36 +575,6 @@ class User extends BaseComponent {
       return res.send({
         status: 1,
         data
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
-  }
-
-  // 用户回复的列表
-  async getUserReplies(req, res) {
-    const { uid } = req.params;
-
-    try {
-      const replies = await ReplyModel.find({ author_id: uid });
-      const topics = await Promise.all(replies.map(item => {
-        return new Promise(resolve => {
-          resolve(TopicModel.findById(item.topic_id, 'id title'));
-        });
-      }));
-
-      const result = replies.map((item, i) => {
-        return { ...item.toObject(), topic: topics[i] };
-      });
-
-      return res.send({
-        status: 1,
-        data: result
       });
     } catch(err) {
       logger.error(err);

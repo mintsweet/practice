@@ -71,10 +71,8 @@ class Reply extends BaseComponent {
         await createUser.save();
 
         if (reply_id) {
-          await this.generateBehavior('reply2', id, reply_id);
           await this.sendReply2Notice(id, currentTopic.author_id, currentTopic.id, reply_id);
         } else {
-          await this.generateBehavior('reply', id, currentTopic.id);
           await this.sendReplyNotice(id, currentTopic.author_id, currentTopic.id);
         }
 
@@ -213,8 +211,6 @@ class Reply extends BaseComponent {
       let action;
 
       const upIndex = currentReply.ups.indexOf(id);
-
-      await this.generateBehavior('ups', id, currentReply.id);
 
       if (upIndex === -1) {
         currentReply.ups.push(id);

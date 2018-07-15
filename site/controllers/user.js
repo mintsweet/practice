@@ -1,8 +1,8 @@
 const formidable = require('formidable');
 const {
   signup, signin, forgetPass, signout,
-  getUserStars, getUserCollections, getUserReplies,
-  getUserBehaviors, getUserFollower, getUserFollowing,
+  getUserBehaviors, getUserCreates, getUserStars,
+  getUserCollections, getUserFollower, getUserFollowing,
   setting, updatePass, followOrUn
 } = require('../http/api');
 const BaseComponent = require('../prototype/BaseComponent');
@@ -18,9 +18,9 @@ class User extends BaseComponent {
     this.forgetPass = this.forgetPass.bind(this);
     this.renderUsersTop100 = this.renderUsersTop100.bind(this);
     this.renderUserInfo = this.renderUserInfo.bind(this);
+    this.renderUserCreates = this.renderUserCreates.bind(this);
     this.renderUserStars = this.renderUserStars.bind(this);
     this.renderUserCollections = this.renderUserCollections.bind(this);
-    this.renderUserReplies = this.renderUserReplies.bind(this);
     this.renderUserFollower = this.renderUserFollower.bind(this);
     this.renderUserFollowing = this.renderUserFollowing.bind(this);
     this.renderSetting = this.renderSetting.bind(this);
@@ -211,8 +211,6 @@ class User extends BaseComponent {
       const info = await this.getUserInfo(uid);
       const response = await getUserBehaviors(uid);
 
-      console.log(response);
-
       if (response.status === 1) {
         res.render('user/info', {
           title: '动态 - 用户信息',
@@ -224,6 +222,34 @@ class User extends BaseComponent {
         res.render('exception/error', {
           title: '错误',
           error: response.message
+        });
+      }
+    } catch(err) {
+      res.render('exception/500', {
+        title: 500
+      });
+    }
+  }
+
+  // 用户专栏页
+  async renderUserCreates(req, res) {
+    const { uid } = req.params;
+
+    try {
+      const info = await this.getUserInfo(uid);
+      const response = await getUserCreates(uid);
+
+      if (response.status === 1) {
+        return res.render('user/info', {
+          title: '专栏 - 用户信息',
+          info,
+          data: response.data,
+          type: 'create'
+        });
+      } else {
+        res.render('exception/error', {
+          title: '错误',
+          error: response.data
         });
       }
     } catch(err) {
@@ -275,34 +301,6 @@ class User extends BaseComponent {
           info,
           data: response.data,
           type: 'collect'
-        });
-      } else {
-        res.render('exception/error', {
-          title: '错误',
-          error: response.data
-        });
-      }
-    } catch(err) {
-      res.render('exception/500', {
-        title: 500
-      });
-    }
-  }
-
-  // 用户回复页
-  async renderUserReplies(req, res) {
-    const { uid } = req.params;
-
-    try {
-      const info = await this.getUserInfo(uid);
-      const response = await getUserReplies(uid);
-
-      if (response.status === 1) {
-        return res.render('user/info', {
-          title: '回复 - 用户信息',
-          info,
-          data: response.data,
-          type: 'reply'
         });
       } else {
         res.render('exception/error', {

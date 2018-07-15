@@ -20,8 +20,8 @@ block content
     .user-gener
       .title
         a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
+        a(href=`/user/${info.id}/creates`, class={active: type === 'create'}) 专栏
         a(href=`/user/${info.id}/stars`, class={active: type === 'star'}) 喜欢
-        a(href=`/user/${info.id}/replies`, class={active: type === 'reply'}) 回复
         span(class={active: type === 'following' || type === 'follower' || type === 'collect' }) 更多
           .more
             a(href=`/user/${info.id}/following`, class={active: type === 'following'}) 关注
@@ -43,12 +43,6 @@ block content
                 span 收藏了话题
                 time #{item.create_at}
                 a.topic(href=`/topic/${item.id}`) #{item.title}
-              when 'reply'
-                | #{JSON.stringify(item)}
-                span 回复了话题
-                //- time #{item.create_at}
-                //- a.topic(href=`/topic/${item.topic.id}`) #{item.topic.title}
-                //- span.content 回复内容：#{item.content}
               when 'follow'
                 span 关注了用户
                 time #{item.create_at}
