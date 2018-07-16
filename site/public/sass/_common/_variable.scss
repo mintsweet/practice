@@ -78,9 +78,9 @@ $back-top-radius: 50% !default;
 // --------------------
 // Button
 
-$btn-padding: 0 5px !default;
-$btn-min-height: 30px !default;
-$btn-border-radius: 0 !default;
+$btn-padding: 5px 15px !default;
+$btn-min-width: 40px !default;
+$btn-border-radius: 4px !default;
 
 // --------------------
 // Float Action
@@ -125,8 +125,8 @@ $header-has-shadow: true !default;
 // --------------------
 // No Content
 
-$no-content-img-width: 300px !default;
-$no-content-img-height: 300px !default;
+$no-content-img-width: 200px !default;
+$no-content-img-height: 200px !default;
 $no-content-font-size: 36px !default;
 
 // --------------------

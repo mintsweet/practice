@@ -114,6 +114,31 @@
     });
   };
 
+  // 用户详情JS
+  Utils.userInfoJS = function() {
+    var that = this;
+
+    $('.user-gener .title>span').hover(function() {
+      $('.user-gener .more').stop(true, false).fadeToggle();
+    });
+
+    $('.action.follow').click(function() {
+      $.getJSON(`${location.pathname}/follow_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'follow') {
+            $('.action.follow').text('取消关注');
+            that.globalMessage('success', '关注成功');
+          } else {
+            $('.action.follow').text('关注');
+            that.globalMessage('success', '取消关注');
+          }
+        } else {
+          that.globalMessage('error', res.message);
+        }
+      });
+    });
+  };
+
   // 创建话题JS
   Utils.createTopicJS = function() {
     var simplemde = new SimpleMDE({ element: $("#editor")[0] });
@@ -151,7 +176,6 @@
     $('.star-action').click(function() {
       $.getJSON(`${location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
-          console.log(res);
           if (res.action === 'star') {
             $('.star-action .number').text(parseInt($('.star-action .number').text()) + 1);
             $('.star-action').addClass('active');

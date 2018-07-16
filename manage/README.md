@@ -1,4 +1,4 @@
-# practice-manage
+# Manage
 
 > 此练习的manage端，技术栈 React + Antd
 

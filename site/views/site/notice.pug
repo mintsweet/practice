@@ -8,20 +8,39 @@ append header
 block content
   .layout-content
     each item in data
-      .notice-item
-        a(href=`/user/${item.author.id}`).avatar
-          img(src=item.author.avatar)
-        .detail
-          a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
-          .desc #{item.create_at}
-          .topic
-            case item.type
-              when 'star'
-                span 喜欢了你的话题：
-              when 'collect'
-                span 收藏了你的话题：
-              when 'reply'
-                span 回复了你的话题：
-            a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+      case item.type
+        when 'star'
+        when 'collect'
+        when 'reply'
+          .notice-item.topic
+            a.avatar(href=`/user/${item.author.id}`)
+              img(src=item.author.avatar)
+            .detail
+              a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
+              time #{item.create_at}
+              .content
+                span #{item.typeName}你的话题：
+                a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+        when 'reply2'
+        when 'up'
+          .notice-item.topic
+            a.avatar(href=`/user/${item.author.id}`)
+              img(src=item.author.avatar)
+            .detail
+              a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
+              time #{item.create_at}
+              .content
+                span #{item.typeName}你的话题：
+                a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+        when 'follow'
+          .notice-item.follow
+            span #{item.typeName}
+            .detail
+              a.avatar(href=`/user/${item.author.id}`)
+                img(src=item.author.avatar)
+              a.nickname(href=`/user/${item.author.id}`)
+                span #{item.author.nickname}
+              a.btn(href="javascript") 关注
     else
       include ../includes/no_content.pug
+  .layout-sider

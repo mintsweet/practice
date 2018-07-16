@@ -13,9 +13,9 @@ class Notice extends BaseComponent {
 
   // 转化消息格式
   async normalNotice(item) {
-    const author = await UserModel.findById(item.author_id, '_id nickname avatar');
-    const topic = await TopicModel.findById(item.topic_id, '_id title');
-    const reply = await ReplyModel.findById(item.reply_id, '_id content');
+    const author = await UserModel.findById(item.author_id, 'id nickname avatar');
+    const topic = await TopicModel.findById(item.topic_id, 'id title');
+    const reply = await ReplyModel.findById(item.reply_id, 'id content');
     return {
       author,
       topic,
@@ -37,7 +37,7 @@ class Notice extends BaseComponent {
 
       const result = await Promise.all(userNotices.map(item => (
         new Promise(resolve => {
-          resolve(this.normalNotice(item));
+          resolve(this.normalNotice(item.toObject()));
         })
       )));
 

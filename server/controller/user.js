@@ -442,7 +442,7 @@ class User extends BaseComponent {
 
       if (user.id) {
         const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: user.id, target_id: uid });
-        if (behavior && behavior.actualType.indexOf('un') < 0) {
+        if (behavior && behavior.actualAction.indexOf('un') < 0) {
           follow = true;
         } else {
           follow = false;
@@ -472,9 +472,9 @@ class User extends BaseComponent {
       const result = await Promise.all(behaviors.map(item => {
         return new Promise(resolve => {
           if (item.action === 'follow') {
-            resolve(UserModel.findById(item.target_id, 'id nickname create_at'));
+            resolve(UserModel.findById(item.target_id, 'id nickname signature avatar'));
           } else {
-            resolve(TopicModel.findById(item.target_id, 'id title create_at'));
+            resolve(TopicModel.findById(item.target_id, 'id title'));
           }
         });
       }));
@@ -505,7 +505,7 @@ class User extends BaseComponent {
       const createBehavior = await BehaviorModel.find({ action: 'create', author_id: uid, is_un: false });
       const result = await Promise.all(createBehavior.map(item => {
         return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title create_at'));
+          resolve(TopicModel.findById(item.target_id, 'id title'));
         });
       }));
 
@@ -534,7 +534,7 @@ class User extends BaseComponent {
       const starBehaviors = await BehaviorModel.find({ action: 'star', author_id: uid, is_un: false });
       const result = await Promise.all(starBehaviors.map(item => {
         return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title create_at'));
+          resolve(TopicModel.findById(item.target_id, 'id title'));
         });
       }));
 
@@ -564,7 +564,7 @@ class User extends BaseComponent {
       const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
       const result = await Promise.all(collectTopicIds.map(item => {
         return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title create_at'));
+          resolve(TopicModel.findById(item.target_id, 'id title'));
         });
       }));
 
@@ -593,7 +593,7 @@ class User extends BaseComponent {
       const followerBehavior = await BehaviorModel.find({ action: 'follow', target_id: uid, is_un: false });
       const result = await Promise.all(followerBehavior.map(item => {
         return new Promise(resolve => {
-          resolve(UserModel.findById(item.author_id, '_id nickname avatar'));
+          resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
         });
       }));
 
@@ -618,7 +618,7 @@ class User extends BaseComponent {
       const followingBehavior = await BehaviorModel.find({ action: 'follow', author_id: uid, is_un: false });
       const result = await Promise.all(followingBehavior.map(item => {
         return new Promise(resolve => {
-          resolve(UserModel.findById(item.target_id, '_id nickname avatar'));
+          resolve(UserModel.findById(item.target_id, 'id nickname avatar'));
         });
       }));
 
@@ -672,7 +672,7 @@ class User extends BaseComponent {
 
       return res.send({
         status: 1,
-        action: behavior.actualType
+        action: behavior.actualAction
       });
     } catch(err) {
       logger.error(err);

@@ -6,10 +6,38 @@ class Notice {
     const response = await getUserNotice(req.app.locals.user.id);
 
     if (response.status === 1) {
+      const data = response.data.map(item => {
+        let typeName = '';
+
+        switch (item.type) {
+          case 'star':
+            typeName = '喜欢了';
+            break;
+          case 'collect':
+            typeName = '收藏了';
+            break;
+          case 'follow':
+            typeName = '新的关注者';
+            break;
+          case 'reply':
+          case 'reply2':
+            typeName = '回复了';
+            break;
+          case 'up':
+            typeName = '点赞了';
+            break;
+          default:
+            typeName = '';
+            break;
+        }
+
+        return { ...item, typeName };
+      });
+
       return res.render('site/notice', {
         title: '用户消息',
         type: 'user',
-        data: response.data
+        data
       });
     } else {
       return res.redirect('/exception/500');

@@ -1,20 +1,15 @@
 .btn {
   display: inline-block;
   padding: $btn-padding;
-  min-height: $btn-min-height;
-  line-height: $btn-min-height;
+  min-width: $btn-min-width;
+  color: $theme-color;
+  border: 1px solid $theme-color;
   text-align: center;
-  color: $white;
-  border: none;
-  outline: none;
-  background: $theme-color;
   border-radius: $btn-border-radius;
   @include transition(background 0.6s);
-  cursor: pointer;
-  box-sizing: border-box;
   @include hover {
     color: $white;
-    background: darken($theme-color, 10%);
+    background: $theme-color;
   }
   &.disabled {
     background: $light-gray;
