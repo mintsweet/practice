@@ -50,6 +50,9 @@ router.get('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnfollowUs
 // 话题
 router.get('/topics/create', Auth.userRequired, Topic.renderCreate);
 router.post('/topics/create', Auth.userRequired, Topic.createTopic);
+router.get('/topic/:tid/delete', Auth.userRequired, Topic.deleteTopic);
+router.get('/topic/:tid/edit', Auth.userRequired, Topic.renderEdit);
+router.post('/topic/:tid/edit', Auth.userRequired, Topic.editTopic);
 router.get('/topics/search', Topic.renderSearch);
 router.get('/topic/:tid', Topic.renderDetail);
 router.get('/topic/:tid/star_or_un', Topic.starOrUnstarTopic);

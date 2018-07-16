@@ -1,7 +1,8 @@
 const formidable = require('formidable');
 const BaseComponent = require('../prototype/BaseComponent');
 const {
-  createTopic, getTopicDetail, starOrUnstarTopic,
+  createTopic, deleteTopic, editTopic,
+  getTopicDetail, starOrUnstarTopic,
   getTopicBySearch, getNoReplyTopic, collectOrUncollectTopic
 } = require('../http/api');
 
@@ -43,6 +44,78 @@ class Topic extends BaseComponent {
     });
   }
 
+  // 删除话题
+  async deleteTopic(req, res) {
+    const { tid } = req.params;
+    try {
+      const response = await deleteTopic(tid);
+      if (response.status === 1) {
+        res.render('/site/transform', {
+          title: '删除话题',
+          type: 'success',
+          message: '删除话题成功'
+        });
+      } else {
+        res.render('/exception/error', {
+          title: '错误页',
+          error: response.message
+        });
+      }
+    } catch(err) {
+      res.render('/exception/500', {
+        title: '500'
+      });
+    }
+  }
+
+  // 编辑话题页
+  async renderEdit(req, res) {
+    const { tid } = req.params;
+    const response = await getTopicDetail(tid);
+    try {
+      if (response.status === 1) {
+        res.render('topic/create', {
+          title: '编辑话题',
+          topic: response.data
+        });
+      } else {
+        res.render('/exception/error', {
+          title: '错误页',
+          error: response.message
+        });
+      }
+    } catch(err) {
+      res.render('/exception/500', {
+        title: '500'
+      });
+    }
+  }
+
+  // 编辑话题
+  editTopic(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        return res.redirect('/exception/500');
+      }
+
+      const response = await editTopic(fields);
+
+      if (response.status === 1) {
+        res.render('site/transform', {
+          title: '编辑话题成功',
+          type: 'success',
+          message: '编辑话题成功'
+        });
+      } else {
+        return res.render('topic/create', {
+          title: '发布话题',
+          error: response.message
+        });
+      }
+    });
+  }
+
   // 话题详情页
   async renderDetail(req, res) {
     const { tid } = req.params;
@@ -65,7 +138,7 @@ class Topic extends BaseComponent {
       }
     } catch(err) {
       res.render('/exception/500', {
-        title: '错误页'
+        title: '500'
       });
     }
   }

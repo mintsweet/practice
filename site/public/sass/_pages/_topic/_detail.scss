@@ -1,5 +1,5 @@
 .topic-detail {
-  margin-bottom: 150px;
+  margin-bottom: 100px;
   .author {
     margin-bottom: 50px;
     width: 400px;
@@ -39,5 +39,11 @@
     margin-bottom: 16px;
     font-weight: 600;
     line-height: 1.25;
+  }
+  .action {
+    margin-top: 30px;
+    a {
+      margin-right: 10px;
+    }
   }
 }

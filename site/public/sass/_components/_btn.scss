@@ -17,4 +17,20 @@
     color: $gray;
     cursor: no-drop;
   }
+  &.error {
+    color: $error;
+    border-color: $error;
+    @include hover {
+      color: $white;
+      background: $error;
+    }
+  }
+  &.warn {
+    color: $warn;
+    border-color: $warn;
+    @include hover {
+      color: $white;
+      background: $warn;
+    }
+  }
 }

@@ -5,6 +5,14 @@ const {
 } = require('../http/api');
 
 module.exports = class BaseComponent {
+  // 错误
+  renderError(res, err) {
+    res.render('exception/error', {
+      title: '错误',
+      error: err
+    });
+  }
+
   // 获取用户信息
   async getUserInfo(id) {
     try {
@@ -22,18 +30,15 @@ module.exports = class BaseComponent {
   // 获取图形验证码
   async getPicCaptcha(req) {
     try {
-      const response = await getPicCaptcha();
-      if (response.status === 1) {
-        req.app.locals.pic_token = {
-          token: response.data.token,
-          expired: Date.now() + 1000 * 60 * 10
-        };
-        return response.data.url;
-      } else {
-        return '';
-      }
+      const data = await getPicCaptcha();
+      req.app.locals.pic_token = {
+        token: data.token,
+        expired: Date.now() + 1000 * 60 * 10
+      };
+      return data.url;
     } catch(err) {
-      return '';
+      console.log('getPicCaptcha');
+      throw new Error(err.message);
     }
   }
 

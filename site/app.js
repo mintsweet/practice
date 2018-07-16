@@ -22,14 +22,14 @@ app.use('/static', express.static(path.join(__dirname, 'dist')));
 app.locals.config = config;
 
 // middleware
-app.use(Auth.getUserInfo);
+// app.use(Auth.getUserInfo);
 
 // routes
 app.use('/', routes);
 
 // error
-app.use(ErrorHandler.error404);
-app.use(ErrorHandler.error500);
+app.use(ErrorHandler.errorHandler);
+// app.use(ErrorHandler.error500);
 
 if (!module.parent) {
   app.listen(config.site_port, () => {

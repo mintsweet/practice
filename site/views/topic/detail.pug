@@ -13,6 +13,10 @@ block content
       h1.title #{topic.title}
       .markdown
         | !{topic.content}
+      if user && user.id === topic.author_id
+        .action
+          a.btn.warn(href=`/topic/${topic.id}/edit`) 编辑
+          a.btn.error(href=`/topic/${topic.id}/delete`) 删除
     .reply-title 评论
     .reply-create#reply
       if user

@@ -6,24 +6,26 @@ block content
   .topic-create
     .title 发布主题
     form#createTopic.form(method="post")
-      .alert.alert-error(class=error ? '' : 'hidden') #{error}
+      .alert.alert-error(class={hidden: !error}) #{error}
+      if topic
+        input(type="hidden", name="id", value=topic.id)
       .form-item
         label.label(for="tab")
         .control
-          input.select-hidden(type="hidden", name="tab")
+          input.select-hidden(type="hidden", name="tab", value=topic.tab ? topic.tab : '')
           .select
-            a.placeholder(href="javascript:;") 请选择类别
+            a.placeholder(href="javascript:;") #{topic.tabName ? topic.tabName : '请选择类别'}
             .options
               each item in config.tabs
                 .option(data-value=item.url) #{item.name}
       .form-item
         label.label(for="title") 标题：
         .control
-          input#title(type="text", name="title", autocomplete="off")
+          input#title(type="text", name="title", autocomplete="off", value=topic.title ? topic.title : '')
       .form-item
         label.label(for="content") 内容：
         .control
-          input.content-hidden(type="hidden", name="content")
+          input.content-hidden(type="hidden", name="content", value=topic.content ? topic.content : '')
           textarea#editor
       .form-item
         .control
