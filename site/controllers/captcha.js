@@ -1,25 +1,25 @@
-const { getPicCaptcha, getSmsCaptcha } = require('../http/api');
+const Base = require('./base');
+const { getSmsCaptcha } = require('../http/api');
 
-class Captcha {
+class Captcha extends Base {
+  constructor() {
+    super();
+    this.getPicCaptcha = this.getPicCaptcha.bind(this);
+  }
+
   async getPicCaptcha(req, res) {
-    const data = await getPicCaptcha();
-
-    req.app.locals.pic_token = {
-      token: data.token,
-      expired: Date.now() + 1000 * 60 * 5
-    };
-
+    const url = await this.getPicCaptchaUrl(req);
     return res.send({
       status: 1,
-      data: data.url
+      data: url
     });
   }
 
   async getSmsCaptcha(req, res) {
     const { piccaptcha, mobile } = req.query;
-    const { pic_token } = req.app.locals;
+    const pic_token = req.app.locals.pic_token || {};
 
-    if (pic_token && pic_token.token !== piccaptcha.toUpperCase()) {
+    if (pic_token.token !== piccaptcha.toUpperCase()) {
       return res.send({
         status: 0,
         message: '图形验证码不正确'

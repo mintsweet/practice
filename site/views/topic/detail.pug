@@ -24,7 +24,7 @@ block content
           img(src=user.avatar)
         form#replyForm.reply-form(action=`/topic/${topic.id}/reply`, method="post")
           textarea(name="content", rows="2", placeholder="说说你的看法...")
-          button.btn.reply-btn(type="submit") 评论
+          button.btn(type="submit") 评论
       else
         span 评论，请先
         a(href="/signin") 登录
@@ -40,6 +40,9 @@ block content
               a.practice(href="") &#xe72f;
               a.practice(href="") &#xe619; 
               time #{reply.create_at_ago}
+            if user && user.id === reply.author_id
+              a.action.delete-reply(href="javascript:;", data-id=reply.id) 删除
+              a.action.edit-reply(href="javascript:;") 编辑
       else
         .no-reply 暂无回复
   aside.layout-sider
@@ -69,4 +72,14 @@ block content
   include ../includes/global_message.pug
 append footer
   script.
-    Utils.detailTopicJS();
+    $('#replyForm').submit(function() {
+      if (!content) {
+        that.globalMessage('error', '回复内容不能为空');
+        return false;
+      }
+    });
+
+    Utils.starTopic();
+    Utils.collectTopic();
+    Utils.deleteReply();
+    Utils.editReply();

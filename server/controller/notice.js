@@ -21,7 +21,7 @@ class Notice extends BaseComponent {
       topic,
       reply,
       type: item.type,
-      has_read: item.has_read,
+      typeName: item.typeName,
       create_at: item.create_at
     };
   }
@@ -37,7 +37,7 @@ class Notice extends BaseComponent {
 
       const result = await Promise.all(userNotices.map(item => (
         new Promise(resolve => {
-          resolve(this.normalNotice(item.toObject()));
+          resolve(this.normalNotice(item.toObject({ virtuals: true })));
         })
       )));
 

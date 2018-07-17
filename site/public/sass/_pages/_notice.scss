@@ -37,6 +37,14 @@
     }
   }
   &.follow {
+    .title {
+      padding: 0 10px;
+      time {
+        float: right;
+        font-size: 12px;
+        color: $gray;
+      }
+    }
     .detail {
       display: flex;
       align-items: center;

@@ -34,5 +34,15 @@ block content
     include ./ranking.pug
 append footer
   script.
+    var signature = $('#signature');
+    var alert = $('.alert');
+   
+    $('#signature').submit(function() {
+      if (signature.val().length > 100) {
+        alert.text('签名长度不能超过100个字符').slideDown();
+        return false;
+      }
+    });
+
     Utils.settingJS();
     Utils.globalMessage('success', '更新个人资料成功');

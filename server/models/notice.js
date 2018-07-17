@@ -33,6 +33,34 @@ NoticeSchema.plugin(BaseModel);
 NoticeSchema.index({ target_id: 1, create_at: -1 });
 NoticeSchema.index({ author_id: 1, create_at: -1 });
 
+NoticeSchema.virtual('typeName').get(function() {
+  let typeName = '';
+
+  switch (this.type) {
+    case 'star':
+      typeName = '喜欢了';
+      break;
+    case 'collect':
+      typeName = '收藏了';
+      break;
+    case 'follow':
+      typeName = '新的关注者';
+      break;
+    case 'reply':
+    case 'reply2':
+      typeName = '回复了';
+      break;
+    case 'up':
+      typeName = '点赞了';
+      break;
+    default:
+      typeName = '';
+      break;
+  }
+
+  return typeName;
+});
+
 const Notice = mongoose.model('Notice', NoticeSchema);
 
 module.exports = Notice;

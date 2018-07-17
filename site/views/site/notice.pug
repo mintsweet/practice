@@ -34,7 +34,9 @@ block content
                 a(href=`/topic/${item.topic.id}`) #{item.topic.title}
         when 'follow'
           .notice-item.follow
-            span #{item.typeName}
+            .title
+              span #{item.typeName}
+              time #{item.create_at}
             .detail
               a.avatar(href=`/user/${item.author.id}`)
                 img(src=item.author.avatar)

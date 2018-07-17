@@ -5,14 +5,8 @@ const {
 } = require('../http/api');
 
 module.exports = class BaseComponent {
-  // 获取用户信息
-  async getUserInfo(id) {
-    const info = await getUserInfoById(id);
-    return info;
-  }
-
-  // 获取图形验证码
-  async getPicCaptcha(req) {
+  // 获取图形验证码的路径
+  async getPicCaptchaUrl(req) {
     const data = await getPicCaptcha();
 
     req.app.locals.pic_token = {
@@ -21,6 +15,12 @@ module.exports = class BaseComponent {
     };
 
     return data.url;
+  }
+
+  // 获取用户信息
+  async getUserInfo(id) {
+    const info = await getUserInfoById(id);
+    return info;
   }
 
   // 获取积分榜前一百

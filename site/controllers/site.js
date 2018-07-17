@@ -1,7 +1,7 @@
-const BaseComponent = require('../prototype/BaseComponent');
+const Base = require('./base');
 const { getTopicList } = require('../http/api');
 
-class Site extends BaseComponent {
+class Site extends Base {
   constructor() {
     super();
     this.renderIndex = this.renderIndex.bind(this);

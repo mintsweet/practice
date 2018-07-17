@@ -34,5 +34,18 @@ block content
           a(href="/forget_pass") 忘记密码
 append footer
   script.
-    Utils.signinJS();
+    var mobile = $('#mobile');
+    var piccaptcha = $('#piccaptcha');
+    var alert = $('.alert');
+    
+    $('#signinForm').submit(function() {
+      if (!mobile.val() || !(/^1[3,5,7,8,9]\d{9}$/.test(mobile.val()))) {
+        alert.text('请填写正确格式的手机号').slideDown();
+        return false;
+      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
+        alert.text('请填写正确格式的图形验证码').slideDown();
+        return false;
+      }
+    });
+
     Utils.updateCaptcha();

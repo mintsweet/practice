@@ -6,7 +6,6 @@ class Reply {
   async createReply(req, res) {
     const { tid } = req.params;
     const form = new formidable.IncomingForm();
-
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -14,26 +13,45 @@ class Reply {
 
       try {
         await createReply(tid, fields);
-        // return res.redirect(`/topic/${tid}`);
+
+        return res.render('site/transform', {
+          title: '创建回复成功',
+          type: 'success',
+          message: '创建回复成功',
+          url: `/topic/${tid}`
+        });
       } catch(err) {
-        // return res.redirect('/exception/500');
+        return res.render('site/transform', {
+          title: '创建回复失败',
+          type: 'error',
+          message: err.message,
+          url: `/topic/${tid}`
+        });
       }
     });
   }
 
   // 删除回复
   async deleteReply(req, res) {
-    const { tid } = req.params;
+    const { rid } = req.params;
+    try {
+      await deleteReply(rid);
 
-    await deleteReply(tid);
-    // return res.redirect(`/topic/${tid}`);
+      return res.send({
+        status: 1
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        message: err.message
+      });
+    }
   }
 
   // 编辑回复
   async editReply(req, res) {
     const { rid } = req.params;
     const form = new formidable.IncomingForm();
-
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -41,9 +59,12 @@ class Reply {
 
       try {
         await editReply(rid, fields);
-        // return res.redirect(`/topic/${tid}`);
+
+        return res.send({
+          status: 1
+        });
       } catch(err) {
-        // return res.redirect('/exception/500');
+        return res.redirect('/exception/500');
       }
     });
   }
@@ -51,9 +72,18 @@ class Reply {
   // 点赞回复
   async upReplyOrUn(req, res) {
     const { rid } = req.params;
+    try {
+      await upReply(rid);
 
-    await upReply(rid);
-    // return res.redirect(`/topic/${tid}`);
+      return res.send({
+        status: 1
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        messsage: err.message
+      });
+    }
   }
 }
 

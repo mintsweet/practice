@@ -97,6 +97,8 @@ class Reply extends BaseComponent {
 
     try {
       const currentReply = await ReplyModel.findById(rid);
+      const replyAuthor = await UserModel.findById(currentReply.author_id);
+      const replyTopic = await UserModel.findById(currentReply.topic_id);
 
       if (!currentReply) {
         return res.send({
@@ -114,7 +116,13 @@ class Reply extends BaseComponent {
         });
       }
 
-      await ReplyModel.findByIdAndRemove(rid);
+      replyTopic.reply_count -= 1;
+      replyAuthor.reply_count -= 1;
+
+      await replyTopic.save();
+      await replyAuthor.save();
+
+      await currentReply.remove();
 
       return res.send({
         status: 1

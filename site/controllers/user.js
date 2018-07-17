@@ -1,13 +1,13 @@
 const formidable = require('formidable');
+const Base = require('./base');
 const {
   signup, signin, forgetPass, signout,
   getUserBehaviors, getUserCreates, getUserStars,
   getUserCollections, getUserFollower, getUserFollowing,
   setting, updatePass, followOrUn
 } = require('../http/api');
-const BaseComponent = require('../prototype/BaseComponent');
 
-class User extends BaseComponent {
+class User extends Base {
   constructor() {
     super();
     this.renderSignup = this.renderSignup.bind(this);
@@ -31,7 +31,7 @@ class User extends BaseComponent {
 
   // 注册页
   async renderSignup(req, res) {
-    const url = await this.getPicCaptcha(req);
+    const url = await this.getPicCaptchaUrl(req);
 
     return res.render('user/signup', {
       title: '注册',
@@ -51,7 +51,7 @@ class User extends BaseComponent {
       }
 
       const sms_code = req.app.locals.sms_code || {};
-      const url = await this.getPicCaptcha(req);
+      const url = await this.getPicCaptchaUrl(req);
 
       if (!sms_code.mobile) {
         return res.render('user/signup', {
@@ -81,7 +81,7 @@ class User extends BaseComponent {
 
   // 登录页
   async renderSignin(req, res) {
-    const url = await this.getPicCaptcha(req);
+    const url = await this.getPicCaptchaUrl(req);
     res.render('user/signin', {
       title: '登录',
       picUrl: url
@@ -102,7 +102,7 @@ class User extends BaseComponent {
       const { mobile, password, piccaptcha } = fields;
       const pic_token = req.app.locals.pic_token || {};
 
-      const url = await this.getPicCaptcha(req);
+      const url = await this.getPicCaptchaUrl(req);
 
       if (piccaptcha.toUpperCase() !== pic_token.token) {
         return res.render('user/signin', {
@@ -138,7 +138,7 @@ class User extends BaseComponent {
 
   // 忘记密码页
   async renderForgetPass(req, res) {
-    const url = await this.getPicCaptcha(req);
+    const url = await this.getPicCaptchaUrl(req);
     res.render('user/forget_pass', {
       title: '忘记密码',
       picUrl: url
@@ -157,7 +157,7 @@ class User extends BaseComponent {
       }
 
       const sms_code = req.app.locals.sms_code || {};
-      const url = await this.getPicCaptcha(req);
+      const url = await this.getPicCaptchaUrl(req);
 
       if (!sms_code.mobile) {
         return res.render('user/forget_pass', {

@@ -43,7 +43,32 @@ block content
           a(href="/forget_pass") 忘记密码
 append footer
   script.
+    var nickname = $('#nickname');
+    var mobile = $('#mobile');
+    var password = $('#password');
+    var piccaptcha = $('#piccaptcha');
+    var smscaptcha = $('#smscaptcha');
+    var alert = $('.alert');
+
+    $('#signupForm').submit(function() {
+      if (!nickname.val() || nickname.val().length > 8 || nickname.val().length < 2) {
+        alert.text('请填写2-8位的昵称').slideDown();
+        return false;
+      } else if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
+        alert.text('请填写正确格式的手机号').slideDown();
+        return false;
+      } else if (!password.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password.val())) {
+        alert.text('请填写6-18位数字、字母和特殊字符任意两种组合').slideDown();
+        return false;
+      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
+        alert.text('请填写5位的图形验证码').slideDown();
+        return false;
+      } else if (!smscaptcha.val() || smscaptcha.val().length !== 6) {
+        alert.text('请填写6位的手机验证码').slideDown();
+        return false;
+      }
+    });
+
     Utils.getSMSCode();
     Utils.updateCaptcha();
-    Utils.signupJS();
     

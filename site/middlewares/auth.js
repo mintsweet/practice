@@ -7,7 +7,6 @@ class Auth {
         title: '403'
       });
     }
-
     next();
   }
 

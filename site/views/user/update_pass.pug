@@ -28,5 +28,23 @@ block content
     include ../includes/global_message.pug
 append footer
   script.
+    var oldPass = $('#oldPass');
+    var newPass = $('#newPass');
+    var confimPass = $('#confimPass');
+    var alert = $('.alert');
+
+    $('#updatePassForm').submit(function() {
+      if (!oldPass.val()) {
+        alert.text('旧密码不能为空').slideDown();
+        return false;
+      } else if (!newPass.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass.val())) {
+        alert.text('请填写6-18位数字、字母和特殊字符任意两种组合的密码').slideDown();
+        return false;
+      } else if (newPass.val() !== confimPass.val()) {
+        alert.text('两次密码不一致').slideDown();
+        return false;
+      }
+    });
+
     Utils.updatePassJS();
     Utils.globalMessage('success', '修改成功');

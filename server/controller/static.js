@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const md2html = require('../utils/md2html');
 
 class Static {
   getQuickStart(req, res) {
@@ -13,11 +12,9 @@ class Static {
         });
       }
 
-      const result = md2html(data);
-
       return res.send({
         status: 1,
-        data: result
+        data
       });
     });
   }
@@ -32,11 +29,9 @@ class Static {
         });
       }
 
-      const result = md2html(data);
-
       return res.send({
         status: 1,
-        data: result
+        data
       });
     });
   }
@@ -51,11 +46,9 @@ class Static {
         });
       }
 
-      const result = md2html(data);
-
       return res.send({
         status: 1,
-        data: result
+        data
       });
     });
   }

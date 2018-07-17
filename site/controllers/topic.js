@@ -1,12 +1,13 @@
 const formidable = require('formidable');
-const BaseComponent = require('../prototype/BaseComponent');
+const Base = require('./base');
+const md2html = require('../utils/md2html');
 const {
   createTopic, deleteTopic, editTopic,
   getTopicDetail, starOrUnstarTopic,
   getTopicBySearch, collectOrUncollectTopic
 } = require('../http/api');
 
-class Topic extends BaseComponent {
+class Topic extends Base {
   constructor() {
     super();
     this.renderDetail = this.renderDetail.bind(this);
@@ -104,7 +105,7 @@ class Topic extends BaseComponent {
 
     res.render('topic/detail', {
       title: '话题详情',
-      topic,
+      topic: { ...topic, content: md2html(topic.content) },
       noReplyTopic
     });
   }

@@ -119,7 +119,7 @@
   Utils.followOrUn = function() {
     var that = this;
     $('.action.follow').click(function() {
-      $.getJSON(`${location.pathname}/follow_or_un`, function(res) {
+      $.post(`${location.pathname}/follow_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'follow') {
             $('.action.follow').text('取消关注');
@@ -134,89 +134,10 @@
       });
     });
   };
-
-  // 注册JS
-  Utils.signupJS = function() {
-    var nickname = $('#nickname');
-    var mobile = $('#mobile');
-    var password = $('#password');
-    var piccaptcha = $('#piccaptcha');
-    var smscaptcha = $('#smscaptcha');
-    var alert = $('.alert');
-
-    $('#signupForm').submit(function() {
-      if (!nickname.val() || nickname.val().length > 8 || nickname.val().length < 2) {
-        alert.text('请填写2-8位的昵称').slideDown();
-        return false;
-      } else if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
-        alert.text('请填写正确格式的手机号').slideDown();
-        return false;
-      } else if (!password.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password.val())) {
-        alert.text('请填写6-18位数字、字母和特殊字符任意两种组合').slideDown();
-        return false;
-      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
-        alert.text('请填写5位的图形验证码').slideDown();
-        return false;
-      } else if (!smscaptcha.val() || smscaptcha.val().length !== 6) {
-        alert.text('请填写6位的手机验证码').slideDown();
-        return false;
-      }
-    });
-  };
-
-  // 登录JS
-  Utils.signinJS = function() {
-    var mobile = $('#mobile');
-    var piccaptcha = $('#piccaptcha');
-    var alert = $('.alert');
-    
-    $('#signinForm').submit(function() {
-      if (!mobile.val() || !(/^1[3,5,7,8,9]\d{9}$/.test(mobile.val()))) {
-        alert.text('请填写正确格式的手机号').slideDown();
-        return false;
-      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
-        alert.text('请填写正确格式的图形验证码').slideDown();
-        return false;
-      }
-    });
-  };
-
-  // 忘记密码JS
-  Utils.forgetPassJS = function() {
-    var mobile = $('#mobile');
-    var newPassword = $('#newPassword');
-    var piccaptcha = $('#piccaptcha');
-    var smscaptcha = $('#smscaptcha');
-    var alert = $('.alert');
-
-    $('#forgetForm').submit(function() {
-      if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
-        alert.text('请填写正确格式的手机号').slideDown();
-        return false;
-      } else if (!newPassword.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword.val())) {
-        alert.text('请填写正确格式的新密码').slideDown();
-        return false;
-      } else if (!piccaptcha.val() || piccaptcha.val().length !== 5) {
-        alert.text('请填写正确格式的图形验证码').slideDown();
-        return false;
-      } else if (!smscaptcha.val() || smscaptcha.val().length !== 6) {
-        alert.text('请填写正确格式的手机验证码').slideDown();
-        return false;
-      }
-    });
-  };
-
-  // 话题详情JS
-  Utils.detailTopicJS = function() {
+  
+  // 话题点赞
+  Utils.starTopic = function() {
     const that = this;
-
-    $('#replyForm').submit(function() {
-      if (!content) {
-        that.globalMessage('error', '回复内容不能为空');
-        return false;
-      }
-    });
-
     $('.star-action').click(function() {
       $.getJSON(`${location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
@@ -232,10 +153,13 @@
         }
       });
     });
+  };
 
+  // 话题收藏
+  Utils.collectTopic = function() {
+    const that = this;
     $('.collect-action').click(function() {
       $.getJSON(`${location.pathname}/collect_or_un`, function(res) {
-        console.log(res)
         if (res.status === 1) {
           if (res.action === 'collect') {
             $('.collect-action .number').text(parseInt($('.collect-action .number').text()) + 1);
@@ -249,40 +173,31 @@
         }
       });
     });
-  };
+  }
 
-  // 修改密码JS
-  Utils.updatePassJS = function() {
-    var oldPass = $('#oldPass');
-    var newPass = $('#newPass');
-    var confimPass = $('#confimPass');
-    var alert = $('.alert');
-
-    $('#updatePassForm').submit(function() {
-      if (!oldPass.val()) {
-        alert.text('旧密码不能为空').slideDown();
-        return false;
-      } else if (!newPass.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass.val())) {
-        alert.text('请填写6-18位数字、字母和特殊字符任意两种组合的密码').slideDown();
-        return false;
-      } else if (newPass.val() !== confimPass.val()) {
-        alert.text('两次密码不一致').slideDown();
-        return false;
-      }
+  // 回复删除
+  Utils.deleteReply = function() {
+    const that = this;
+    $('.action.delete-reply').click(function() {
+      const replyId = $(this).attr('data-id');
+      $.post(`/reply/${replyId}/delete`, function(res) {
+        if (res.status === 1) {
+          $(this).remove();
+        } else {
+          that.globalMessage('error', '删除回复失败')
+        }
+      });      
     });
   };
 
-  // 更新个人资料JS
-  Utils.settingJS = function() {
-    var signature = $('#signature');
-    var alert = $('.alert');
-   
-    $('#signature').submit(function() {
-      if (signature.val().length > 100) {
-        alert.text('签名长度不能超过100个字符').slideDown();
-        return false;
-      }
-    });
+  // 回复编辑
+  Utils.editReply = function() {
+
+  };
+
+  // 回复点赞
+  Utils.upReply = function() {
+
   };
 
   window.Utils = Utils;
