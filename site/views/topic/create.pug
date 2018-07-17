@@ -1,37 +1,52 @@
 extends ../layout.pug
 
 append head
-  link(rel="stylesheet", href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css")
+  link(rel="stylesheet", href="/static/lib/simplemde/simplemde.min.css")
 block content
   .topic-create
     .title 发布主题
     form#createTopic.form(method="post")
       .alert.alert-error(class={hidden: !error}) #{error}
-      if topic
-        input(type="hidden", name="id", value=topic.id)
       .form-item
         label.label(for="tab")
         .control
-          input.select-hidden(type="hidden", name="tab", value=topic.tab ? topic.tab : '')
+          input.select-hidden(type="hidden", name="tab")
           .select
-            a.placeholder(href="javascript:;") #{topic.tabName ? topic.tabName : '请选择类别'}
+            a.placeholder(href="javascript:;") 请选择类别
             .options
               each item in config.tabs
                 .option(data-value=item.url) #{item.name}
       .form-item
         label.label(for="title") 标题：
         .control
-          input#title(type="text", name="title", autocomplete="off", value=topic.title ? topic.title : '')
+          input#title(type="text", name="title", autocomplete="off")
       .form-item
         label.label(for="content") 内容：
         .control
-          input.content-hidden(type="hidden", name="content", value=topic.content ? topic.content : '')
-          textarea#editor
+          input.content-hidden(type="hidden", name="content")
+          textarea#editor #{action === 'edit' ? topic.content : ''}
       .form-item
         .control
           button.btn.submit(type="submit") 发布主题
 append footer
-  script(src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js")
+  script(src="/static/lib/simplemde/simplemde.min.js")
   script.
-    Utils.modalSelect();
-    Utils.createTopicJS();
+    var simplemde = new SimpleMDE({ element: $("#editor")[0] });
+    var tab = $('.select-hidden');
+    var title = $('#title');
+    var alert = $('.alert');
+
+    $('#createTopic').submit(function() {
+      if (!tab.val()) {
+        alert.text('请选择分类').slideDown();
+        return false;
+      } else if (!title.val()) {
+        alert.text('标题不能为空').slideDown();
+        return false;
+      } else if (!simplemde.value()) {
+        alert.text('内容不能为空').slideDown();
+        return false;
+      }
+
+      $('.content-hidden').val(simplemde.value());
+    });

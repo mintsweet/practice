@@ -16,7 +16,8 @@ class Topic extends BaseComponent {
   // 创建话题
   renderCreate(req, res) {
     return res.render('topic/create', {
-      title: '发布话题'
+      title: '发布话题',
+      action: 'create'
     });
   }
 
@@ -64,7 +65,8 @@ class Topic extends BaseComponent {
     const data = await getTopicDetail(tid);
     return res.render('topic/create', {
       title: '编辑话题',
-      topic: data
+      topic: data,
+      action: 'edit'
     });
   }
 

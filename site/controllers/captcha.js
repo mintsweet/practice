@@ -31,16 +31,21 @@ class Captcha {
       });
     }
 
-    await getSmsCaptcha({ mobile });
-
-    req.app.locals.sms_code = {
-      mobile,
-      expired: Date.now() + 1000 * 60 * 10
-    };
-
-    return res.send({
-      status: 1
-    });
+    try {
+      await getSmsCaptcha({ mobile });
+      req.app.locals.sms_code = {
+        mobile,
+        expired: Date.now() + 1000 * 60 * 10
+      };
+      return res.send({
+        status: 1
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        message: err.message
+      });
+    }
   }
 }
 

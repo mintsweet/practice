@@ -12,4 +12,5 @@ $(document).ready(function () {
 
   Utils.backTop();
   Utils.headerDropMenu();
+  Utils.modalSelect();
 });

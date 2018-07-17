@@ -4,7 +4,6 @@ const TopicModel = require('../models/topic');
 const UserModel = require('../models/user');
 const ReplyModel = require('../models/reply');
 const BehaviorModel = require('../models/behavior');
-const md2html = require('../utils/md2html');
 const logger = require('../utils/logger');
 
 class Topic extends BaseComponent {
@@ -49,7 +48,6 @@ class Topic extends BaseComponent {
 
       const _topic = {
         ...fields,
-        content: md2html(content),
         author_id: id,
       };
 
@@ -155,7 +153,7 @@ class Topic extends BaseComponent {
         const topicInfo = {
           tab: tab || currentTopic.tab,
           title: title || currentTopic.title,
-          content: md2html(content) || currentTopic.content
+          content: content || currentTopic.content
         };
 
         await TopicModel.findByIdAndUpdate(tid, topicInfo);

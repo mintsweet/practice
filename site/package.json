@@ -15,6 +15,7 @@
     "chalk": "^2.4.1",
     "express": "^4.16.3",
     "formidable": "^1.2.1",
+    "jstransformer-markdown-it": "^2.1.0",
     "pug": "^2.0.3",
     "request": "^2.85.0",
     "request-promise": "^4.2.2"

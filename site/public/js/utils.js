@@ -206,29 +206,6 @@
     });
   };
 
-  // 创建话题JS
-  Utils.createTopicJS = function() {
-    var simplemde = new SimpleMDE({ element: $("#editor")[0] });
-    var tab = $('.select-hidden');
-    var title = $('#title');
-    var alert = $('.alert');
-
-    $('#createTopic').submit(function() {
-      if (!tab.val()) {
-        alert.text('请选择分类').slideDown();
-        return false;
-      } else if (!title.val()) {
-        alert.text('标题不能为空').slideDown();
-        return false;
-      } else if (!simplemde.value()) {
-        alert.text('内容不能为空').slideDown();
-        return false;
-      }
-
-      $('.content-hidden').val(simplemde.value());
-    });
-  };
-
   // 话题详情JS
   Utils.detailTopicJS = function() {
     const that = this;

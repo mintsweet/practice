@@ -26,7 +26,7 @@ const request = async (url, data, method = 'GET') => {
 };
 
 /*
-* 静态 static
+* 静态
 */
 // 快速开始
 exports.getStartDoc = () => request('/static/start');
@@ -36,7 +36,7 @@ exports.getApiDoc = () => request('/static/api');
 exports.getAboutDoc = () => request('/static/about');
 
 /*
-* 验证码 captcha
+* 验证码
 */
 // 获取图形验证码
 exports.getPicCaptcha = () => request('/captcha/pic', { width: 100, height: 34 });
@@ -44,7 +44,7 @@ exports.getPicCaptcha = () => request('/captcha/pic', { width: 100, height: 34 }
 exports.getSmsCaptcha = mobile => request('/captcha/sms', mobile);
 
 /*
-* 用户 user
+* 用户
 */
 // 注册
 exports.signup = info => request('/signup', info, 'POST');
@@ -62,7 +62,7 @@ exports.setting = info => request('/setting', info, 'PUT');
 exports.updatePass = obj => request('/update_pass', obj, 'PATCH');
 // 获取星标用户列表
 exports.getUsersStar = () => request('/users/star');
-// 获取积分榜前一百
+// 获取积分榜前一百用户列表
 exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
 exports.getUserInfoById = uid => request(`/user/${uid}`);

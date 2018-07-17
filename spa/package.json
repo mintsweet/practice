@@ -1,9 +1,5 @@
 {
-  "name": "client-mobile",
+  "name": "spa",
   "version": "1.0.0",
-  "description": "mobile client base on vue",
-  "scripts": {
-    "start": "mints start -p 3003"
-  },
   "license": "MIT"
 }

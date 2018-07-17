@@ -47,18 +47,18 @@ router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
 router.post('/setting', Auth.userRequired, wrap(User.setting));
 router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
 router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
-router.get('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUn));
+router.post('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUn));
 
 // 话题
 router.get('/topics/create', Auth.userRequired, wrap(Topic.renderCreate));
 router.post('/topics/create', Auth.userRequired, wrap(Topic.createTopic));
-router.get('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
+router.post('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
 router.get('/topic/:tid/edit', Auth.userRequired, wrap(Topic.renderEdit));
 router.post('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic));
 router.get('/topics/search', wrap(Topic.renderSearch));
 router.get('/topic/:tid', wrap(Topic.renderDetail));
-router.get('/topic/:tid/star_or_un', wrap(Topic.starOrUnstarTopic));
-router.get('/topic/:tid/collect_or_un', wrap(Topic.collectOrUncollectTopic));
+router.post('/topic/:tid/star_or_un', wrap(Topic.starOrUnstarTopic));
+router.post('/topic/:tid/collect_or_un', wrap(Topic.collectOrUncollectTopic));
 
 // 回复
 router.post('/topic/:tid/reply', wrap(Reply.createReply));
