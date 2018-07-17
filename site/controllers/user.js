@@ -78,20 +78,12 @@ class User extends BaseComponent {
   }
 
   // 登录页
-  async renderSignin(req, res, next) {
-    try {
-      const url = await this.getPicCaptcha(req);
-      res.render('user/signin', {
-        title: '登录',
-        picUrl: url
-      });
-    } catch(err) {
-      console.log('renderSignin');
-      // throw new Error(err.message);
-      // return next;
-      // next(err.message);
-      // this.renderError(res, err.message);
-    }
+  async renderSignin(req, res) {
+    const url = await this.getPicCaptcha(req);
+    res.render('user/signin', {
+      title: '登录',
+      picUrl: url
+    });
   }
 
   // 登录

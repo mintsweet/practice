@@ -14,6 +14,8 @@ const router = express.Router();
 * 控制器中带 render 字段皆为页面渲染路由
 */
 
+const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
+
 // 首页
 router.get('/', Site.renderIndex);
 
@@ -29,8 +31,8 @@ router.get('/captcha/sms', Captcha.getSmsCaptcha);
 // 用户
 router.get('/signup', User.renderSignup);
 router.post('/signup', User.signup);
-router.get('/signin', User.renderSignin);
-router.post('/signin', User.signin);
+router.get('/signin', wrap(User.renderSignin));
+router.post('/signin', wrap(User.signin));
 router.get('/forget_pass', User.renderForgetPass);
 router.post('/forget_pass', User.forgetPass);
 router.get('/signout', User.signout);

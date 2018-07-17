@@ -16,16 +16,12 @@ const request = async (url, data, method = 'GET') => {
     query.body = data;
   }
 
-  try {
-    const res = await rq(query);
-    if (res.status === 1) {
-      return res.data;
-    } else {
-      throw new Error(res.message);
-    }
-  } catch(err) {
-    console.log('request');
-    throw new Error(err.message);
+  const res = await rq(query);
+
+  if (res.status === 1) {
+    return res.data;
+  } else {
+    throw new Error(res);
   }
 };
 

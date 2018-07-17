@@ -29,17 +29,14 @@ module.exports = class BaseComponent {
 
   // 获取图形验证码
   async getPicCaptcha(req) {
-    try {
-      const data = await getPicCaptcha();
-      req.app.locals.pic_token = {
-        token: data.token,
-        expired: Date.now() + 1000 * 60 * 10
-      };
-      return data.url;
-    } catch(err) {
-      console.log('getPicCaptcha');
-      throw new Error(err.message);
-    }
+    const data = await getPicCaptcha();
+
+    req.app.locals.pic_token = {
+      token: data.token,
+      expired: Date.now() + 1000 * 60 * 10
+    };
+
+    return data.url;
   }
 
   // 获取积分榜前一百
