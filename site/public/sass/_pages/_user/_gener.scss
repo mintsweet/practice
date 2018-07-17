@@ -2,7 +2,7 @@
   margin-top: 20px;
   background: #fff;
   border-radius: 4px;
-  .title {
+  .gener {
     display: flex;
     border-bottom: 1px solid #f1f1f1;
     &>a, &>span {
@@ -57,10 +57,12 @@
     }
   }
   .content {
-    li.behavior-item {
+    li {
       position: relative;
       padding: 20px 30px;
       border-bottom: 1px solid #f1f1f1;
+    }
+    li.behavior-item {
       &>span {
         display: block;
         font-size: 13px;color: #a1a1a1;
@@ -123,10 +125,25 @@
         }
       }
     }
+    li.topic-item {
+      .title {
+        display: block;
+        font-size: 20px;
+      }
+      .desc {
+        margin-top: 10px;
+        color: $dark-gray;
+        span {
+          display: inline-block;
+          min-width: 40px;
+        }
+        i {
+          margin-right: 4px;
+          vertical-align: middle;
+        }
+      }
+    }
     li.follow-item {
-      position: relative;
-      padding: 20px 30px;
-      border-bottom: 1px solid #f1f1f1;
       .avatar {
         display: inline-block;
         @include size(50px);

@@ -505,7 +505,7 @@ class User extends BaseComponent {
       const createBehavior = await BehaviorModel.find({ action: 'create', author_id: uid, is_un: false });
       const result = await Promise.all(createBehavior.map(item => {
         return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title'));
+          resolve(TopicModel.findById(item.target_id, 'id title star_count collect_count visit_count'));
         });
       }));
 
@@ -672,7 +672,7 @@ class User extends BaseComponent {
 
       return res.send({
         status: 1,
-        action: behavior.actualAction
+        data: behavior.actualAction
       });
     } catch(err) {
       logger.error(err);

@@ -6,6 +6,8 @@
   border: 1px solid $theme-color;
   text-align: center;
   border-radius: $btn-border-radius;
+  background: $white;
+  cursor: pointer;
   @include transition(background 0.6s);
   @include hover {
     color: $white;

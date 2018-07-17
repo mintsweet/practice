@@ -3,18 +3,19 @@ const BaseComponent = require('../prototype/BaseComponent');
 const {
   createTopic, deleteTopic, editTopic,
   getTopicDetail, starOrUnstarTopic,
-  getTopicBySearch, getNoReplyTopic, collectOrUncollectTopic
+  getTopicBySearch, collectOrUncollectTopic
 } = require('../http/api');
 
 class Topic extends BaseComponent {
   constructor() {
     super();
     this.renderDetail = this.renderDetail.bind(this);
+    this.renderSearch = this.renderSearch.bind(this);
   }
 
   // 创建话题
   renderCreate(req, res) {
-    res.render('topic/create', {
+    return res.render('topic/create', {
       title: '发布话题'
     });
   }
@@ -24,21 +25,21 @@ class Topic extends BaseComponent {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.redirect('/exception/500');
+        throw new Error(err);
       }
 
-      const response = await createTopic(fields);
+      try {
+        await createTopic(fields);
 
-      if (response.status === 1) {
-        res.render('site/transform', {
+        return res.render('site/transform', {
           title: '发布话题成功',
           type: 'success',
           message: '发布话题成功'
         });
-      } else {
+      } catch(err) {
         return res.render('topic/create', {
           title: '发布话题',
-          error: response.message
+          error: err.message
         });
       }
     });
@@ -47,48 +48,24 @@ class Topic extends BaseComponent {
   // 删除话题
   async deleteTopic(req, res) {
     const { tid } = req.params;
-    try {
-      const response = await deleteTopic(tid);
-      if (response.status === 1) {
-        res.render('/site/transform', {
-          title: '删除话题',
-          type: 'success',
-          message: '删除话题成功'
-        });
-      } else {
-        res.render('/exception/error', {
-          title: '错误页',
-          error: response.message
-        });
-      }
-    } catch(err) {
-      res.render('/exception/500', {
-        title: '500'
-      });
-    }
+    await deleteTopic(tid);
+
+    res.render('/site/transform', {
+      title: '删除话题',
+      type: 'success',
+      message: '删除话题成功'
+    });
   }
 
   // 编辑话题页
   async renderEdit(req, res) {
     const { tid } = req.params;
-    const response = await getTopicDetail(tid);
-    try {
-      if (response.status === 1) {
-        res.render('topic/create', {
-          title: '编辑话题',
-          topic: response.data
-        });
-      } else {
-        res.render('/exception/error', {
-          title: '错误页',
-          error: response.message
-        });
-      }
-    } catch(err) {
-      res.render('/exception/500', {
-        title: '500'
-      });
-    }
+
+    const data = await getTopicDetail(tid);
+    return res.render('topic/create', {
+      title: '编辑话题',
+      topic: data
+    });
   }
 
   // 编辑话题
@@ -96,21 +73,21 @@ class Topic extends BaseComponent {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.redirect('/exception/500');
+        throw new Error(err);
       }
 
-      const response = await editTopic(fields);
+      try {
+        await editTopic(fields);
 
-      if (response.status === 1) {
-        res.render('site/transform', {
+        return res.render('site/transform', {
           title: '编辑话题成功',
           type: 'success',
           message: '编辑话题成功'
         });
-      } else {
+      } catch(err) {
         return res.render('topic/create', {
           title: '发布话题',
-          error: response.message
+          error: err.message
         });
       }
     });
@@ -120,65 +97,29 @@ class Topic extends BaseComponent {
   async renderDetail(req, res) {
     const { tid } = req.params;
 
-    try {
-      const noReplyTopic = await this.getNoReplyTopic();
-      const response = await getTopicDetail(tid);
+    const noReplyTopic = await this.getNoReplyTopic();
+    const topic = await getTopicDetail(tid);
 
-      if (response.status === 1) {
-        res.render('topic/detail', {
-          title: '话题详情',
-          topic: response.data,
-          noReplyTopic
-        });
-      } else {
-        res.render('/exception/error', {
-          title: '错误页',
-          error: response.message
-        });
-      }
-    } catch(err) {
-      res.render('/exception/500', {
-        title: '500'
-      });
-    }
+    res.render('topic/detail', {
+      title: '话题详情',
+      topic,
+      noReplyTopic
+    });
   }
 
   // 搜索结果页
   async renderSearch(req, res) {
     const { q } = req.query;
 
-    let response;
-    let topics;
-    let currentPage;
-    let totalPage;
-    let total;
-    let noReplyTopic;
-
-    response = await getTopicBySearch({ title: q });
-
-    if (response.status === 1) {
-      topics = response.data.topics;
-      currentPage = response.data.currentPage;
-      totalPage = response.data.currentPage;
-      total = response.data.total;
-    } else {
-      return res.redirect('/exception/500');
-    }
-
-    response = await getNoReplyTopic();
-
-    if (response.status === 1) {
-      noReplyTopic = response.data;
-    } else {
-      return res.redirect('/exception/500');
-    }
+    const noReplyTopic = await this.getNoReplyTopic();
+    const data = await getTopicBySearch({ title: q });
 
     return res.render('topic/search', {
       title: '搜索结果',
-      topics,
-      currentPage,
-      totalPage,
-      total,
+      topics: data.topics,
+      currentPage: data.currentPage,
+      totalPage: data.totalPage,
+      total: data.total,
       q,
       noReplyTopic
     });
@@ -196,17 +137,17 @@ class Topic extends BaseComponent {
       });
     }
 
-    const response = await starOrUnstarTopic(tid);
+    try {
+      const action = await starOrUnstarTopic(tid);
 
-    if (response.status === 1) {
       return res.send({
         status: 1,
-        action: response.action
+        action
       });
-    } else {
+    } catch(err) {
       return res.send({
         status: 0,
-        message: response.message
+        message: err.message
       });
     }
   }
@@ -223,17 +164,17 @@ class Topic extends BaseComponent {
       });
     }
 
-    const response = await collectOrUncollectTopic(tid);
+    try {
+      const action = await collectOrUncollectTopic(tid);
 
-    if (response.status === 1) {
       return res.send({
         status: 1,
-        action: response.action
+        action
       });
-    } else {
+    } catch(err) {
       return res.send({
         status: 0,
-        message: response.message
+        message: err.message
       });
     }
   }

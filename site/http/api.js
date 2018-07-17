@@ -21,7 +21,7 @@ const request = async (url, data, method = 'GET') => {
   if (res.status === 1) {
     return res.data;
   } else {
-    throw new Error(res);
+    throw new Error(res.message);
   }
 };
 
@@ -109,11 +109,11 @@ exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, 
 // 创建回复
 exports.createReply = (tid, content) => request(`/topic/${tid}/reply`, content, 'POST');
 // 删除回复
-exports.deleteReply = rid => request(`/topic/${rid}/delete`, {}, 'DELETE');
+exports.deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');
 // 编辑回复
-exports.editReply = (rid, content) => request(`/topic/${rid}/edit`, content, 'PUT');
+exports.editReply = (rid, content) => request(`/reply/${rid}/edit`, content, 'PUT');
 // 回复点赞
-exports.upReply = rid => request(`/topic/${rid}/up`, {}, 'PATCH');
+exports.upReply = rid => request(`/reply/${rid}/up`, {}, 'PATCH');
 
 /*
 * 消息

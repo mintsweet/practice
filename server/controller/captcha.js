@@ -83,7 +83,7 @@ class Captcha extends BaseComponent {
 
     return res.send({
       status: 1,
-      code: process.env.NODE_ENV === 'production' ? '' : code
+      code: process.env.NODE_ENV === 'test' ? code : ''
     });
   }
 }

@@ -3,22 +3,28 @@ extends ../layout
 block content
   .user-top100
     .title 积分榜前一百用户
-    ul.list
-      li
-        span.rank #
-        span.nickname 昵称
-        span.score 积分
-        span.topics 话题数
-        span.follower 粉丝数
-      each item, index in top100
-        li
-          span.rank #{index + 1}
-          span.nickname
-            a.avatar(href=`/user/${item.id}`)
-              img(src=item.avatar)
-            a(href=`/user/${item.id}`) #{item.nickname}
-          span.score #{item.score}
-          span.topics #{item.topic_count}
-          span.follower #{item.follower_count}
+    table
+      thead
+        tr
+          th #
+          th 昵称
+          th 积分
+          th 话题数
+          th 获得喜欢数
+          th 获得收藏数
+          th 粉丝数
+      tbody
+        each item, index in top100
+          tr
+            td #{index + 1}
+            td
+              a.avatar(href=`/user/${item.id}`)
+                img(src=item.avatar)
+              a(href=`/user/${item.id}`) #{item.nickname}
+            td #{item.score}
+            td #{item.topic_count}
+            td #{item.star_count}
+            td #{item.collect_count}
+            td #{item.follower_count}
 
 

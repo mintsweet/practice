@@ -5,26 +5,10 @@ const {
 } = require('../http/api');
 
 module.exports = class BaseComponent {
-  // 错误
-  renderError(res, err) {
-    res.render('exception/error', {
-      title: '错误',
-      error: err
-    });
-  }
-
   // 获取用户信息
   async getUserInfo(id) {
-    try {
-      const response = await getUserInfoById(id);
-      if (response.status === 1) {
-        return response.data;
-      } else {
-        return {};
-      }
-    } catch(err) {
-      return {};
-    }
+    const info = await getUserInfoById(id);
+    return info;
   }
 
   // 获取图形验证码
@@ -41,43 +25,19 @@ module.exports = class BaseComponent {
 
   // 获取积分榜前一百
   async getUsersTop100() {
-    try {
-      const response = await getUsersTop100();
-      if (response.status === 1) {
-        return response.data;
-      } else {
-        return [];
-      }
-    } catch(err) {
-      return [];
-    }
+    const top100 = await getUsersTop100();
+    return top100;
   }
 
   // 获取无人回复的话题
   async getNoReplyTopic() {
-    try {
-      const response = await getNoReplyTopic();
-      if (response.status === 1) {
-        return response.data;
-      } else {
-        return [];
-      }
-    } catch(err) {
-      return [];
-    }
+    const noReplyTopic = await getNoReplyTopic();
+    return noReplyTopic;
   }
 
   // 获取星标用户列表
   async getUsersStar() {
-    try {
-      const response = await getUsersStar();
-      if (response.status === 1) {
-        return response.data;
-      } else {
-        return [];
-      }
-    } catch(err) {
-      return [];
-    }
+    const stars = await getUsersStar();
+    return stars;
   }
 };

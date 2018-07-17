@@ -18,7 +18,7 @@ block content
         else if user && info.follow
           a.action.follow(href="javascript:;") 取消关注
     .user-gener
-      .title
+      .gener
         a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
         a(href=`/user/${info.id}/creates`, class={active: type === 'create'}) 专栏
         a(href=`/user/${info.id}/stars`, class={active: type === 'star'}) 喜欢
@@ -36,6 +36,22 @@ block content
               a.nickname(href=`/user/${item.id}`)
                 span #{item.nickname}
               a.follow(href="javascript:;") 关注
+          else
+            include ../includes/no_content.pug
+        else if type === 'create'
+          each item in data
+            li.topic-item
+              a.title(href=`/topic/${item.id}`) #{item.title}
+              .desc
+                span
+                  i.practice &#xe63b;
+                  | #{item.star_count}
+                span
+                  i.practice &#xe65f;
+                  | #{item.collect_count}
+                span
+                  i.practice &#xe647;
+                  | #{item.visit_count}
           else
             include ../includes/no_content.pug
         else
@@ -100,4 +116,8 @@ block content
   include ../includes/global_message.pug
 append footer
   script.
-    Utils.userInfoJS();
+    Utils.followOrUn();
+    
+    $('.user-gener .gener>span').hover(function() {
+      $('.user-gener .more').stop(true, false).fadeToggle();
+    });

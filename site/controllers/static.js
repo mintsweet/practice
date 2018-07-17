@@ -3,68 +3,29 @@ const { getStartDoc, getApiDoc, getAboutDoc } = require('../http/api');
 class Static {
   // 快速开始
   async renderStartDoc(req, res) {
-    try {
-      const response = await getStartDoc();
-      if (response.status === 1) {
-        res.render('site/static', {
-          title: '快速开始',
-          text: response.data
-        });
-      } else {
-        res.render('exception/error', {
-          title: '快速开始',
-          error: response.message
-        });
-      }
-    } catch(err) {
-      res.render('exception/500', {
-        title: '500'
-      });
-    }
+    const text = await getStartDoc();
+    res.render('site/static', {
+      title: '快速开始',
+      text
+    });
   }
 
   // API说明
   async renderApiDoc(req, res) {
-    try {
-      const response = await getApiDoc();
-      if (response.status === 1) {
-        res.render('site/static', {
-          title: 'API说明',
-          text: response.data
-        });
-      } else {
-        res.render('exception/error', {
-          title: 'API说明',
-          error: response.message
-        });
-      }
-    } catch(err) {
-      res.render('exception/500', {
-        title: '500'
-      });
-    }
+    const text = await getApiDoc();
+    res.render('site/static', {
+      title: 'API说明',
+      text
+    });
   }
 
   // 关于
   async renderAboutDoc(req, res) {
-    try {
-      const response = await getAboutDoc();
-      if (response.status === 1) {
-        res.render('site/static', {
-          title: '关于',
-          text: response.data
-        });
-      } else {
-        res.render('exception/error', {
-          title: '关于',
-          error: response.message
-        });
-      }
-    } catch(err) {
-      res.render('exception/500', {
-        title: '500'
-      });
-    }
+    const text = await getAboutDoc();
+    res.render('site/static', {
+      title: '关于',
+      text
+    });
   }
 }
 
