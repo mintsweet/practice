@@ -8,11 +8,18 @@ class Captcha extends Base {
   }
 
   async getPicCaptcha(req, res) {
-    const url = await this.getPicCaptchaUrl(req);
-    return res.send({
-      status: 1,
-      data: url
-    });
+    try {
+      const url = await this.getPicCaptchaUrl(req);
+      return res.send({
+        status: 1,
+        data: url
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        message: err.message
+      });
+    }
   }
 
   async getSmsCaptcha(req, res) {
@@ -33,10 +40,12 @@ class Captcha extends Base {
 
     try {
       await getSmsCaptcha({ mobile });
+
       req.app.locals.sms_code = {
         mobile,
         expired: Date.now() + 1000 * 60 * 10
       };
+
       return res.send({
         status: 1
       });

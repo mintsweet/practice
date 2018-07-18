@@ -50,13 +50,22 @@ class Topic extends Base {
   // 删除话题
   async deleteTopic(req, res) {
     const { tid } = req.params;
-    await deleteTopic(tid);
 
-    res.render('/site/transform', {
-      title: '删除话题',
-      type: 'success',
-      message: '删除话题成功'
-    });
+    try {
+      await deleteTopic(tid);
+
+      res.render('/site/transform', {
+        title: '删除话题',
+        type: 'success',
+        message: '删除话题成功'
+      });
+    } catch(err) {
+      res.render('/site/transform', {
+        title: '删除话题失败',
+        type: 'error',
+        message: '删除话题失败'
+      });
+    }
   }
 
   // 编辑话题页
@@ -64,6 +73,7 @@ class Topic extends Base {
     const { tid } = req.params;
 
     const data = await getTopicDetail(tid);
+
     return res.render('topic/create', {
       title: '编辑话题',
       topic: data,
@@ -89,7 +99,7 @@ class Topic extends Base {
         });
       } catch(err) {
         return res.render('topic/create', {
-          title: '发布话题',
+          title: '编辑话题',
           error: err.message
         });
       }

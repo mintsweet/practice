@@ -44,10 +44,7 @@ class User extends Base {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.render('user/signup', {
-          title: '注册',
-          error: err
-        });
+        throw new Error(err);
       }
 
       const sms_code = req.app.locals.sms_code || {};
@@ -82,6 +79,7 @@ class User extends Base {
   // 登录页
   async renderSignin(req, res) {
     const url = await this.getPicCaptchaUrl(req);
+
     res.render('user/signin', {
       title: '登录',
       picUrl: url
@@ -93,10 +91,7 @@ class User extends Base {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.render('user/signin', {
-          title: '登录',
-          error: err
-        });
+        throw new Error(err);
       }
 
       const { mobile, password, piccaptcha } = fields;
@@ -139,6 +134,7 @@ class User extends Base {
   // 忘记密码页
   async renderForgetPass(req, res) {
     const url = await this.getPicCaptchaUrl(req);
+
     res.render('user/forget_pass', {
       title: '忘记密码',
       picUrl: url
@@ -150,10 +146,7 @@ class User extends Base {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.render('user/forget_pass', {
-          title: '忘记密码',
-          error: err
-        });
+        throw new Error(err);
       }
 
       const sms_code = req.app.locals.sms_code || {};
@@ -311,10 +304,7 @@ class User extends Base {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.render('user/setting', {
-          title: '个人资料',
-          error: err
-        });
+        throw new Error(err);
       }
 
       const top100 = await this.getUsersTop100();
@@ -328,7 +318,7 @@ class User extends Base {
           url: '/setting'
         });
       } catch(err) {
-        res.render('user/transform', {
+        res.render('user/setting', {
           title: '个人资料',
           error: err.message,
           top100
@@ -352,10 +342,7 @@ class User extends Base {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields) => {
       if (err) {
-        return res.render('user/update_pass', {
-          title: '修改密码',
-          error: err
-        });
+        throw new Error(err);
       }
 
       const top100 = await this.getUsersTop100();
@@ -381,6 +368,14 @@ class User extends Base {
   // 关注或者取消关注
   async followOrUn(req, res) {
     const { uid } = req.params;
+    const { user } = req.app.locals;
+
+    if (!user) {
+      return res.send({
+        status: 0,
+        message: '尚未登录'
+      });
+    }
 
     try {
       const action = await followOrUn(uid);

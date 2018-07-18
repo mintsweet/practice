@@ -47,7 +47,7 @@ router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
 router.post('/setting', Auth.userRequired, wrap(User.setting));
 router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
 router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
-router.post('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUn));
+router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
 
 // 话题
 router.get('/topics/create', Auth.userRequired, wrap(Topic.renderCreate));

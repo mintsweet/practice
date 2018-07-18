@@ -12,7 +12,7 @@ class Static {
         });
       }
 
-      return res.status(404).send({
+      return res.send({
         status: 1,
         data
       });
