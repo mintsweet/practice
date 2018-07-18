@@ -1,7 +1,7 @@
 .topic-create {
   flex: 1;
-  padding: 20px 30px;
-  background: #fff;
+  padding: $global-default-padding;
+  background: $white;
   border-radius: 4px;
   .title {
     font-size: 20px;

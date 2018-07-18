@@ -1,6 +1,6 @@
 .user-gener {
   margin-top: 20px;
-  background: #fff;
+  background: $white;
   border-radius: 4px;
   .gener {
     display: flex;
@@ -59,7 +59,7 @@
   .content {
     li {
       position: relative;
-      padding: 20px 30px;
+      padding: $global-default-padding;
       border-bottom: 1px solid #f1f1f1;
     }
     li.behavior-item {
@@ -87,6 +87,7 @@
         width: 100%;
         border: 1px solid #eee;
         background: #f1f1f1;
+        @include text-ellipsis;
         box-sizing: border-box;
       }
       .info {
@@ -128,6 +129,7 @@
     li.topic-item {
       .title {
         display: block;
+        width: 100%;
         font-size: 20px;
       }
       .desc {

@@ -41,7 +41,7 @@ block content
         else if type === 'create'
           each item in data
             li.topic-item
-              a.title(href=`/topic/${item.id}`) #{item.title}
+              a.topic(href=`/topic/${item.id}`) #{item.title}
               .desc
                 span
                   i.practice &#xe63b;
@@ -83,7 +83,7 @@ block content
           else
             include ../includes/no_content.pug
   aside.layout-sider
-    .user-stat
+    .aside-block.user-stat
       .title 个人成就
       .body
         .item

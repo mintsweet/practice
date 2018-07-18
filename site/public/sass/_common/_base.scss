@@ -26,7 +26,7 @@ a {
   display: flex;
   margin: 0 auto;
   width: $global-body-width;
-  .layout-content {
+  &>.layout-content {
     flex: 3;
     margin-right: 20px;
     overflow: hidden;
@@ -35,14 +35,14 @@ a {
       background: #fff;
     }
   }
-  .layout-full {
+  &>.layout-full {
     flex: 1;
     padding: $global-default-padding;
     background: #fff;
     border-radius: 4px;
     overflow: hidden;
   }
-  .layout-sider {
+  &>.layout-sider {
     flex: 1;
     overflow: hidden;
   }

@@ -1,15 +1,12 @@
 .user-top100 {
   flex: 1;
-  padding: 20px 30px;
-  background: #fff;
+  padding: $global-default-padding;
+  background: $white;
   border-radius: 4px;
   .title {
+    margin-bottom: 20px;
     font-size: 22px;
-    padding-bottom: 0.3em;
-    margin-top: 20px;
-    margin-bottom: 16px;
     font-weight: 600;
-    line-height: 1.25;
   }
   table {
     width: 100%;

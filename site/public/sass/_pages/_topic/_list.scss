@@ -3,8 +3,8 @@
   .topic {
     display: flex;
     margin-bottom: 10px;
-    height: $topic-list-height;
-    line-height: $topic-list-height;
+    height: 50px;
+    line-height: 50px;
     background: rgba($theme-color, 0.1);
     .avatar {
       flex: 0 0 30px;
