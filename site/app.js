@@ -23,11 +23,11 @@ app.locals.config = config;
 
 // middleware
 app.use(Auth.getUserInfo);
-app.use(ErrorHandler.handleError);
 
 // routes
 app.use('/', routes);
 app.use(ErrorHandler.handle404);
+app.use(ErrorHandler.handle500);
 
 if (!module.parent) {
   app.listen(config.site_port, () => {

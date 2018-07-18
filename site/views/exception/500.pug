@@ -3,8 +3,9 @@ extends ../layout
 block content
   .layout-full
     .exception
+      i.practice(class=`pra-error`)
       h1 500
-      h2 抱歉！服务器开了个小差
+      h2 抱歉！当前页面暂时无法访问
       p
-        strong 可能原因：
-        span 服务器状况不佳 -> 请稍后重试。
+        strong 服务系统崩溃
+        span #{error}

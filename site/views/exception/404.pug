@@ -3,11 +3,12 @@ extends ../layout
 block content
   .layout-full
     .exception
+      i.practice(class=`pra-error`)
       h1 404
       h2 抱歉！你访问的页面失联了
       p
         strong 可能原因：
-        span 网址有错误 > 请检查地址是否完整或存在多余字符。
-        span 网址已失效 > 可能页面已删除。
+        span 网址有错误 - 请检查地址是否完整或存在多余字符。
+        span 网址已失效 - 可能页面已删除。
       p
         a.btn(href="/") 去首页看看

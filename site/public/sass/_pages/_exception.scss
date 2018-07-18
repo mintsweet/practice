@@ -1,11 +1,14 @@
 .exception {
   text-align: center;
+  .pra-error {
+    font-size: 100px;
+    color: $error;
+  }
   h1 {
-    font-size: 120px;
-    line-height: 180px;
+    font-size: 40px;
   }
   h2 {
-    margin: 20px 0;
+    margin: 10px 0;
     font-size: 20px;
   }
   p {
@@ -20,9 +23,5 @@
     a {
       margin-top: 10px;
     }
-  }
-  .pra-error {
-    font-size: 80px;
-    color: $error;
   }
 }
