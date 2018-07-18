@@ -1,9 +1,13 @@
+/* eslint-disable no-unused-vars */ 
 class ErrorHandler {
-  /* eslint-disable no-unused-vars */ 
+  handle404(req, res, next) {
+    return res.redirect(301, '/exception/404');
+  }
+
   handleError(err, req, res, next) {
-    res.render('exception/error', {
-      title: err.message,
-      err
+    return res.render('exception/unkown', {
+      title: '未知的错误',
+      error: err.message
     });
   }
 }

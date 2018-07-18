@@ -98,7 +98,7 @@ class Reply extends BaseComponent {
     try {
       const currentReply = await ReplyModel.findById(rid);
       const replyAuthor = await UserModel.findById(currentReply.author_id);
-      const replyTopic = await UserModel.findById(currentReply.topic_id);
+      const replyTopic = await TopicModel.findById(currentReply.topic_id);
 
       if (!currentReply) {
         return res.send({
@@ -173,11 +173,15 @@ class Reply extends BaseComponent {
 
         const { content } = fields;
 
-        const _reply = {
-          content: content || currentReply.content
-        };
+        if (!content) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_CONTENT_INVALID',
+            message: '回复内容不能为空'
+          });
+        }
 
-        await ReplyModel.findByIdAndUpdate(rid, _reply);
+        await ReplyModel.findByIdAndUpdate(rid, { content });
         return res.send({
           status: 1
         });

@@ -27,6 +27,7 @@ app.use(ErrorHandler.handleError);
 
 // routes
 app.use('/', routes);
+app.use(ErrorHandler.handle404);
 
 if (!module.parent) {
   app.listen(config.site_port, () => {

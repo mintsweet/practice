@@ -1,6 +1,7 @@
 const express = require('express');
 const Auth = require('./middlewares/auth');
 const Site = require('./controllers/site');
+const Exception = require('./controllers/exception');
 const Static = require('./controllers/static');
 const Captcha = require('./controllers/captcha');
 const User = require('./controllers/user');
@@ -18,6 +19,11 @@ const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 
 // 首页
 router.get('/', wrap(Site.renderIndex));
+
+// 异常
+router.get('/exception/403', Exception.render403);
+router.get('/exception/404', Exception.render404);
+router.get('/exception/500', Exception.render500);
 
 // 静态
 router.get('/start', wrap(Static.renderStartDoc));

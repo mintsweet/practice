@@ -57,14 +57,24 @@ class Reply {
         throw new Error(err);
       }
 
-      try {
-        await editReply(rid, fields);
+      const { tid, content } = fields;
 
-        return res.send({
-          status: 1
+      try {
+        await editReply(rid, { content });
+
+        return res.render('site/transform', {
+          title: '编辑回复成功',
+          type: 'success',
+          message: '编辑回复成功',
+          url: `/topic/${tid}`
         });
       } catch(err) {
-        return res.redirect('/exception/500');
+        return res.render('site/transform', {
+          title: '编辑回复失败',
+          type: 'error',
+          message: '编辑回复失败',
+          url: `/topic/${tid}`
+        });
       }
     });
   }

@@ -103,7 +103,7 @@ class Topic extends Base {
     const noReplyTopic = await this.getNoReplyTopic();
     const topic = await getTopicDetail(tid);
 
-    res.render('topic/detail', {
+    return res.render('topic/detail', {
       title: '话题详情',
       topic: { ...topic, content: md2html(topic.content) },
       noReplyTopic

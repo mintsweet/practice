@@ -178,26 +178,32 @@
   // 回复删除
   Utils.deleteReply = function() {
     const that = this;
-    $('.action.delete-reply').click(function() {
+    $('.action.delete_reply').click(function() {
       const replyId = $(this).attr('data-id');
-      $.post(`/reply/${replyId}/delete`, function(res) {
+      $.post(`/reply/${replyId}/delete`, (res) => {
         if (res.status === 1) {
-          $(this).remove();
+          that.globalMessage('success', '删除回复成功');
+          console.log($(this).parents('li'));
+          $(this).parents('li').remove();
         } else {
-          that.globalMessage('error', '删除回复失败')
+          that.globalMessage('error', '删除回复失败');
         }
       });      
     });
   };
 
-  // 回复编辑
-  Utils.editReply = function() {
-
+  // 显示回复编辑
+  Utils.showEditReply = function() {
+    $('.action.edit_reply').click(function() {
+      $(this).parents('li').find('.edit').slideDown();
+    });
   };
 
   // 回复点赞
   Utils.upReply = function() {
-
+    $('.action.up_reply').click(function() {
+      console.log('up')
+    });
   };
 
   window.Utils = Utils;

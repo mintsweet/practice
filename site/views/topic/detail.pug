@@ -22,7 +22,7 @@ block content
       if user
         .avatar(for="reply")
           img(src=user.avatar)
-        form#replyForm.reply-form(action=`/topic/${topic.id}/reply`, method="post")
+        form.reply-form(action=`/topic/${topic.id}/reply`, method="post")
           textarea(name="content", rows="2", placeholder="说说你的看法...")
           button.btn(type="submit") 评论
       else
@@ -38,11 +38,15 @@ block content
             .content #{reply.content}
             .action
               a.practice(href="") &#xe72f;
-              a.practice(href="") &#xe619; 
+              a.practice.action.up_reply(href="javascript:;") &#xe619; 
               time #{reply.create_at_ago}
             if user && user.id === reply.author_id
-              a.action.delete-reply(href="javascript:;", data-id=reply.id) 删除
-              a.action.edit-reply(href="javascript:;") 编辑
+              a.action.delete_reply(href="javascript:;", data-id=reply.id) 删除
+              a.action.edit_reply(href="javascript:;") 编辑
+              form.edit.reply-form(action=`/reply/${reply.id}/edit`, method="post")
+                input(type="hidden", name="tid", value=topic.id)
+                textarea(name="content", rows="2") #{reply.content}
+                button.btn(type="submit") 保存
       else
         .no-reply 暂无回复
   aside.layout-sider
@@ -72,14 +76,8 @@ block content
   include ../includes/global_message.pug
 append footer
   script.
-    $('#replyForm').submit(function() {
-      if (!content) {
-        that.globalMessage('error', '回复内容不能为空');
-        return false;
-      }
-    });
-
     Utils.starTopic();
     Utils.collectTopic();
     Utils.deleteReply();
-    Utils.editReply();
+    Utils.showEditReply();
+    Utils.upReply();

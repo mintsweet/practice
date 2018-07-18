@@ -20,7 +20,7 @@ class Site extends Base {
       size: 10
     });
 
-    res.render('site/index', {
+    return res.render('site/index', {
       title: '首页',
       topics: data.topics,
       totalPage: data.totalPage,
