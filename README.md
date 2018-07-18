@@ -4,7 +4,7 @@ Practice 算是我呕心沥血之作了....
 
 ## 简介
 
-Practice 整个包涵盖了多种技术(Node、Express、Pug、MongoDB、React、Vue、Weapp、React-Native、Electron....)等等，由于计划较多又想做的完美，所以耗时我估计还是蛮多的。
+Practice 整个包涵盖了多种技术(Node、Koa、Express、Pug、MongoDB、React、Vue、Weapp、React-Native、Electron....)等等，由于计划较多又想做的完美，所以耗时我估计还是蛮多的。
 
 > 如果能**star**也是极好的..
 
@@ -16,8 +16,8 @@ Practice 整个包涵盖了多种技术(Node、Express、Pug、MongoDB、React�
 
   - [快速开始](server/controller/static/quick_start.md)
   - [API文档](API.md)
-  - [数据端(server)](server/README.md)
-  - [传统网站端(site)](site/README.md)
+  - [数据服务(server)](server/README.md)
+  - [传统模板网站(site)](site/README.md)
 
 ## 博客
 
