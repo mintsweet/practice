@@ -16,16 +16,17 @@ Practice 整个包涵盖了多种技术(Node、Koa、Express、Pug、MongoDB、R
 
   - [快速开始](server/controller/static/quick_start.md)
   - [API文档](API.md)
-  - [数据服务(server)](server/README.md)
+  - [API数据服务(server)](server/README.md)
   - [传统模板网站(site)](site/README.md)
+  - [后台管理系统(manage)](manage/README.md)
 
 ## 博客
 
   - [终极实战(一) - 搞个 Node 的数据服务](https://github.com/mintsweet/blog/issues/2)
   - [终极实战(二) - 用 Pug 模板输出传统网站](https://github.com/mintsweet/blog/issues/3)
-  - 终极实战(三) - 来一个 React 后台管理应用
-  - 终极实战(四) - 再用 Vue 写一次 SPA
-  - 终极实战(五) - 不如再写一个微信小程序
+  - 终极实战(三) - 来一个 React 后台管理系统
+  - 终极实战(四) - 不如再写一个微信小程序
+  - 终极实战(五) - 怎么能少了 Vue 的单页应用
   - 终极实战(六) - 拥抱 RN 开启原生 APP
   - 终极实战(七) - 桌面应用 Electron 的实现
 

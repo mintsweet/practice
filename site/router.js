@@ -10,11 +10,12 @@ const Reply = require('./controllers/reply');
 
 const router = express.Router();
 
+// 异常捕获
+const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
+
 /*
 * 控制器中带 render 字段皆为页面渲染路由
 */
-
-const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 
 // 首页
 router.get('/', wrap(Site.renderIndex));

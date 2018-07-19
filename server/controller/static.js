@@ -2,54 +2,30 @@ const fs = require('fs');
 const path = require('path');
 
 class Static {
-  getQuickStart(req, res) {
-    fs.readFile('./controller/static/quick_start.md', 'utf-8', (err, data) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_GET_FILE',
-          message: err
-        });
-      }
+  async getQuickStart(req, res) {
+    const data = await fs.readFile('./controller/static/quick_start.md', 'utf-8');
 
-      return res.send({
-        status: 1,
-        data
-      });
+    return res.send({
+      status: 1,
+      data
     });
   }
 
-  getApiDoc(req, res) {
-    fs.readFile(path.join(__dirname, '../../API.md'), 'utf-8', (err, data) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_GET_FILE',
-          message: err
-        });
-      }
+  async getApiDoc(req, res) {
+    const data = await fs.readFile(path.join(__dirname, '../../API.md'), 'utf-8');
 
-      return res.send({
-        status: 1,
-        data
-      });
+    return res.send({
+      status: 1,
+      data
     });
   }
 
-  getAbout(req, res) {
-    fs.readFile('./controller/static/about.md', 'utf-8', (err, data) => {
-      if (err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_GET_FILE',
-          message: err
-        });
-      }
+  async getAbout(req, res) {
+    const data = await fs.readFile('./controller/static/about.md', 'utf-8');
 
-      return res.send({
-        status: 1,
-        data
-      });
+    return res.send({
+      status: 1,
+      data
     });
   }
 }

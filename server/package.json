@@ -1,7 +1,5 @@
 {
   "name": "server",
-  "version": "1.2.0",
-  "description": "data servcie base on node",
   "scripts": {
     "start": "cross-env NODE_ENV=development node ./app.js",
     "lint": "eslint **/*.js",
