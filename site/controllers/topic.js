@@ -33,7 +33,7 @@ class Topic extends Base {
       try {
         await createTopic(fields);
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '发布话题成功',
           type: 'success',
           message: '发布话题成功'
@@ -54,13 +54,13 @@ class Topic extends Base {
     try {
       await deleteTopic(tid);
 
-      res.render('/site/transform', {
+      res.render('/transform/index', {
         title: '删除话题',
         type: 'success',
         message: '删除话题成功'
       });
     } catch(err) {
-      res.render('/site/transform', {
+      res.render('/transform/index', {
         title: '删除话题失败',
         type: 'error',
         message: '删除话题失败'
@@ -92,7 +92,7 @@ class Topic extends Base {
       try {
         await editTopic(fields);
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '编辑话题成功',
           type: 'success',
           message: '编辑话题成功'

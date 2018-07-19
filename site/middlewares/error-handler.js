@@ -7,6 +7,8 @@ class ErrorHandler {
   }
 
   handle500(err, req, res, next) {
+    console.error(err.message);
+
     return res.render('exception/500', {
       title: '500',
       error: err.message

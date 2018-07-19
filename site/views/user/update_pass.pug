@@ -23,9 +23,7 @@ block content
       .form-item
         button.btn(type="submit") 保存修改
   .layout-sider
-    include ./ranking.pug
-  if message
-    include ../includes/global_message.pug
+    include ../cards/user_ranking.pug
 append footer
   script.
     var oldPass = $('#oldPass');
@@ -45,6 +43,3 @@ append footer
         return false;
       }
     });
-
-    Utils.updatePassJS();
-    Utils.globalMessage('success', '修改成功');

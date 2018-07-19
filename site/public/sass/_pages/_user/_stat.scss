@@ -1,36 +1,26 @@
 .user-stat {
   background: $white;
-  .title {
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
+  li {
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
-  .body {
-    padding: 20px;
-    .item {
-      margin-bottom: 8px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    .practice {
-      display: inline-block;
-      width: 25px;
-      height: 25px;
-      line-height: 25px;
-      border-radius: 50%;
-      color: #16982B;
-      background: #daffe0;
-      text-align: center;
-    }
-    .content {
-      display: inline-block;
-      margin-left: 10px;
-      .count {
-        margin: 0 4px;
-        font-weight: 600;
-      }
+  .practice {
+    display: inline-block;
+    @include size(25px);
+    line-height: 25px;
+    border-radius: 50%;
+    color: $theme-color;
+    background: rgba($theme-color, 0.1);
+    text-align: center;
+  }
+  .gener {
+    display: inline-block;
+    margin-left: 10px;
+    .count {
+      margin: 0 4px;
+      font-weight: 600;
     }
   }
 }

@@ -1,16 +1,14 @@
-/* eslint-disable */
 $(document).ready(function () {
-  // 显示隐藏back top
-  $(window).scroll(function() {
-    var scrollTop = $(window).scrollTop();
-    if (scrollTop > 100) {
-      $('.back-top').fadeIn();
-    } else {
-      $('.back-top').fadeOut();
-    }
-  });
-
+  /* eslint-disable no-undef */
   Utils.backTop();
-  Utils.headerDropMenu();
   Utils.modalSelect();
+  Utils.headerDropMenu();
+  Utils.globalMessage();
+  Utils.getSMSCode();
+  Utils.renewCaptcha();
+  Utils.followOrUn();
+  Utils.starTopic();
+  Utils.collectTopic();
+  Utils.deleteReply();
+  Utils.upReply();
 });

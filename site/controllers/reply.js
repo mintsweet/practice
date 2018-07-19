@@ -14,14 +14,14 @@ class Reply {
       try {
         await createReply(tid, fields);
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '创建回复成功',
           type: 'success',
           message: '创建回复成功',
           url: `/topic/${tid}`
         });
       } catch(err) {
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '创建回复失败',
           type: 'error',
           message: err.message,
@@ -62,14 +62,14 @@ class Reply {
       try {
         await editReply(rid, { content });
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '编辑回复成功',
           type: 'success',
           message: '编辑回复成功',
           url: `/topic/${tid}`
         });
       } catch(err) {
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '编辑回复失败',
           type: 'error',
           message: '编辑回复失败',

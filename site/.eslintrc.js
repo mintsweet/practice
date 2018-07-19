@@ -3,7 +3,7 @@ const eslintConfig = {
     $: true,
     document: true,
     window: true,
-    alert: true
+    jQuery: true
   },
 
   env: {

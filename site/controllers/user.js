@@ -61,7 +61,7 @@ class User extends Base {
       try {
         await signup(fields);
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '注册成功',
           type: 'success',
           message: '注册成功'
@@ -116,7 +116,7 @@ class User extends Base {
       try {
         await signin({ mobile, password });
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '登录成功',
           type: 'success',
           message: '登录成功'
@@ -163,7 +163,7 @@ class User extends Base {
       try {
         await forgetPass(fields);
 
-        return res.render('site/transform', {
+        return res.render('transform/index', {
           title: '找回密码成功',
           type: 'success',
           message: '找回密码成功'
@@ -182,7 +182,7 @@ class User extends Base {
   async signout(req, res) {
     await signout();
 
-    return res.render('site/transform', {
+    return res.render('transform/index', {
       title: '退出成功',
       type: 'success',
       message: '退出成功'
@@ -350,7 +350,7 @@ class User extends Base {
       try {
         await updatePass({ ...fields });
 
-        res.render('site/transform', {
+        res.render('transform/index', {
           type: 'success',
           message: '修改成功',
           url: '/update_pass'

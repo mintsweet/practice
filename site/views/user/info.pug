@@ -83,27 +83,21 @@ block content
           else
             include ../includes/no_content.pug
   aside.layout-sider
-    .aside-block.user-stat
+    .aside-block
       .title 个人成就
-      .body
-        .item
+      ul.content.user-stat
+        li
           span.practice &#xe72f;
-          .content
-            | 获得喜欢
-            span.count #{info.star_count}
-            | 次
-        .item
+          .gener.
+            获得喜欢#[span.count #{info.star_count}]次
+        li
           span.practice &#xe65f;
-          .content
-            | 获得收藏
-            span.count #{info.collect_count}
-            | 次
-        .item
+          .gener.
+            获得收藏#[span.count #{info.collect_count}]次
+        li
           span.practice &#xe6a4;
-          .content
-            | 获得积分
-            span.count #{info.score}
-            | 分
+          .gener.
+            获得积分#[span.count #{info.score}]分
     .user-follow
       .item
         .title 关注了
@@ -116,8 +110,6 @@ block content
   include ../includes/global_message.pug
 append footer
   script.
-    Utils.followOrUn();
-    
     $('.user-gener .gener>span').hover(function() {
       $('.user-gener .more').stop(true, false).fadeToggle();
     });

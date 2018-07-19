@@ -10,13 +10,7 @@ block content
           a(href="?tab=" + item.url) #{item.name}
     include ../topic/list.pug
   aside.layout-sider
-    .aside-block.no-title
-      a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
-    include ../user/ranking.pug
-    include ../topic/no_reply.pug
-    .aside-block
-      .title 友情社区
-      ul.content
-        li
-          a(href="https://cnodejs.org/", target="_blank")
-            img(src="/static/img/cnode_logo_32.png")
+    include ../cards/view_source.pug
+    include ../cards/user_ranking.pug
+    include ../cards/no_reply_topic.pug
+    include ../cards/friendship_community.pug

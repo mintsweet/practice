@@ -65,7 +65,7 @@ block content
           .signature(title=topic.author.signature) **#{topic.author.signature}**
         else
           .signature **这家伙很懒，莫有签名**
-    include ./no_reply.pug
+    include ../cards/no_reply_topic.pug
   .float-action
     a.practice.star-action(href="javascript:;", class={ active: topic.star }) &#xe63b;
       span.number #{topic.star_count}
@@ -74,10 +74,3 @@ block content
     a.practice.collect-action(href="javascript:;", class={ active: topic.collect }) &#xe65f;
       span.number #{topic.collect_count}
   include ../includes/global_message.pug
-append footer
-  script.
-    Utils.starTopic();
-    Utils.collectTopic();
-    Utils.deleteReply();
-    Utils.showEditReply();
-    Utils.upReply();

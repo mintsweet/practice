@@ -1,23 +1,49 @@
-/* eslint-disable */
-(function(window, document, $, undefined) {
+(function(window, document, $) {
   var Utils = {};
 
-  // 信息页跳转
-  Utils.redirect = function() {
-    var time = $('#time');
-    var countTime = 3;
-    var url = time.attr('data-url');
-    var timer;
-
-    timer = window.setInterval(function() {
-      countTime --;
-      if (countTime === 0) {
-        location.href = url ? url : '/';
-        window.clearInterval(timer);
-        return false;
+  // 回到顶部
+  Utils.backTop = function() {
+    $(window).scroll(function() {
+      var scrollTop = $(window).scrollTop();
+      if (scrollTop > 100) {
+        $('.back-top').fadeIn();
+      } else {
+        $('.back-top').fadeOut();
       }
-      time.text(countTime);
-    }, 1000);
+    });
+
+    $('.back-top').click(function() {
+      $('html, body').animate({ scrollTop: 0 }, 500);
+      return false;
+    });
+  };
+
+  // 模态下拉框
+  Utils.modalSelect = function() {
+    $('.select').click(function() {
+      $('.select>.options').slideToggle();
+    });
+
+    $('.option').click(function() {
+      $('.select-hidden').val($(this).attr('data-value'));
+      $('.select>.placeholder').text($(this).text());
+    });
+  };
+
+  // 头部下拉菜单
+  Utils.headerDropMenu = function() {
+    $('.header .info').hover(function() {
+      $('.drop-menus').stop(true, false).slideToggle();
+    });
+  };
+
+  // 全局消息提示
+  Utils.globalMessage = function(type, message, duration = 2000) {
+    $('.global-message .message').fadeIn();
+    $('.global-message .message .content').addClass(type).text(message).fadeIn();
+    setTimeout(function() {
+      $('.global-message .message').fadeOut();
+    }, duration);
   };
 
   // 获取短信验证码
@@ -64,38 +90,10 @@
     });
   };
 
-  // 模拟下拉框
-  Utils.modalSelect = function() {
-    $('.select').click(function() {
-      $('.select>.options').slideToggle();
-    });
-
-    $('.option').click(function() {
-      $('.select-hidden').val($(this).attr('data-value'));
-      $('.select>.placeholder').text($(this).text());
-    });
-  };
-
-  // 全局消息提示
-  Utils.globalMessage = function(type, message, duration = 2000) {
-    $('.global-message .message').fadeIn();
-    $('.global-message .message .content').addClass(type).text(message).fadeIn();
-    setTimeout(function() {
-      $('.global-message .message').fadeOut();
-    }, duration);
-  };
-
-  // 回到顶部
-  Utils.backTop = function() {
-    $('.back-top').click(function() {
-      $('html, body').animate({ scrollTop: 0 }, 500);
-      return false;
-    });
-  };
-
   // 更新图形验证码
-  Utils.updateCaptcha = function() {
+  Utils.renewCaptcha = function() {
     var captcha = $('.captcha');
+    var alert = $('.alert');
     captcha.click(function() {
       $.getJSON('/captcha/pic', function(res) {
         if (res.status === 1) {
@@ -108,18 +106,11 @@
     });
   };
 
-  // 头部下拉菜单
-  Utils.headerDropMenu = function() {
-    $('.header .info').hover(function() {
-      $('.drop-menus').stop(true, false).slideToggle();
-    });
-  };
-
   // 关注取消关注
   Utils.followOrUn = function() {
     var that = this;
     $('.action.follow').click(function() {
-      $.post(`${location.pathname}/follow_or_un`, function(res) {
+      $.post(`${window.location.pathname}/follow_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'follow') {
             $('.action.follow').text('取消关注');
@@ -134,12 +125,12 @@
       });
     });
   };
-  
+
   // 话题点赞
   Utils.starTopic = function() {
     const that = this;
     $('.star-action').click(function() {
-      $.getJSON(`${location.pathname}/star_or_un`, function(res) {
+      $.getJSON(`${window.location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'star') {
             $('.star-action .number').text(parseInt($('.star-action .number').text()) + 1);
@@ -159,7 +150,7 @@
   Utils.collectTopic = function() {
     const that = this;
     $('.collect-action').click(function() {
-      $.getJSON(`${location.pathname}/collect_or_un`, function(res) {
+      $.getJSON(`${window.location.pathname}/collect_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'collect') {
             $('.collect-action .number').text(parseInt($('.collect-action .number').text()) + 1);
@@ -173,14 +164,14 @@
         }
       });
     });
-  }
+  };
 
   // 回复删除
   Utils.deleteReply = function() {
     const that = this;
     $('.action.delete_reply').click(function() {
       const replyId = $(this).attr('data-id');
-      $.post(`/reply/${replyId}/delete`, (res) => {
+      $.post(`/reply/${replyId}/delete`, res => {
         if (res.status === 1) {
           that.globalMessage('success', '删除回复成功');
           console.log($(this).parents('li'));
@@ -188,24 +179,16 @@
         } else {
           that.globalMessage('error', '删除回复失败');
         }
-      });      
-    });
-  };
-
-  // 显示回复编辑
-  Utils.showEditReply = function() {
-    $('.action.edit_reply').click(function() {
-      $(this).parents('li').find('.edit').slideDown();
+      });
     });
   };
 
   // 回复点赞
   Utils.upReply = function() {
     $('.action.up_reply').click(function() {
-      console.log('up')
+      console.log('up');
     });
   };
 
   window.Utils = Utils;
-
-})(window, document, jQuery);
+}(window, document, jQuery));
