@@ -25,34 +25,34 @@ router.get('/captcha/pic', Captcha.getPicCaptcha); // 获取图形验证码
 router.get('/captcha/sms', Captcha.getSmsCaptcha); // 获取短信验证码
 
 // 用户
-router.post('/signup', User.signup); // 注册
-router.post('/signin', User.signin); // 登录
+router.post('/signup', wrap(User.signup)); // 注册
+router.post('/signin', wrap(User.signin)); // 登录
 router.delete('/signout', User.signout); // 登出
-router.patch('/forget_pass', User.forgetPass); // 忘记密码
+router.patch('/forget_pass', wrap(User.forgetPass)); // 忘记密码
 router.get('/info', Auth.userRequired, User.getUserInfo); // 获取当前登录用户信息
-router.put('/setting', Auth.userRequired, User.updateUserInfo); // 更新个人信息
-router.patch('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
-router.get('/users/star', User.getStarList); // 获取星标用户列表
-router.get('/users/top100', User.getTop100); // 获取积分榜前一百用户列表
-router.get('/user/:uid', User.getInfoById); // 根据ID获取用户信息
-router.get('/user/:uid/behaviors', User.getUserBehaviors); // 获取用户动态
-router.get('/user/:uid/creates', User.getUserCreates); // 获取用户专栏列表
-router.get('/user/:uid/stars', User.getUserStars); // 获取用户喜欢列表
-router.get('/user/:uid/collections', User.getUserCollections); // 获取用户收藏列表
-router.get('/user/:uid/follower', User.getUserFollower); // 获取用户粉丝列表
-router.get('/user/:uid/following', User.getUserFollowing); // 获取用户关注列表
-router.patch('/user/:uid/follow_or_un', Auth.userRequired, User.followOrUnFollow); // 关注或者取消关注某个用户
+router.put('/setting', Auth.userRequired, wrap(User.updateUserInfo)); // 更新个人信息
+router.patch('/update_pass', Auth.userRequired, wrap(User.updatePass)); // 修改密码
+router.get('/users/star', wrap(User.getStarList)); // 获取星标用户列表
+router.get('/users/top100', wrap(User.getTop100)); // 获取积分榜前一百用户列表
+router.get('/user/:uid', wrap(User.getInfoById)); // 根据ID获取用户信息
+router.get('/user/:uid/behaviors', wrap(User.getUserBehaviors)); // 获取用户动态
+router.get('/user/:uid/creates', wrap(User.getUserCreates)); // 获取用户专栏列表
+router.get('/user/:uid/stars', wrap(User.getUserStars)); // 获取用户喜欢列表
+router.get('/user/:uid/collections', wrap(User.getUserCollections)); // 获取用户收藏列表
+router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 获取用户粉丝列表
+router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 获取用户关注列表
+router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
 
 // 话题
-router.post('/create', Auth.userRequired, Topic.createTopic); // 创建话题
-router.delete('/topic/:tid/delete', Auth.userRequired, Topic.deleteTopic); // 删除话题
-router.put('/topic/:tid/edit', Auth.userRequired, Topic.editTopic); // 编辑话题
-router.get('/topics/list', Topic.getTopicList); // 获取话题列表
-router.get('/topics/search', Topic.searchTopic); // 搜索话题列表
-router.get('/topics/no_reply', Topic.getNoReplyTopic); // 获取无人回复的话题
-router.get('/topic/:tid', Topic.getTopicById); // 根据ID获取话题详情
-router.patch('/topic/:tid/star_or_un', Auth.userRequired, Topic.starOrUnStar); // 喜欢或者取消喜欢话题
-router.patch('/topic/:tid/collect_or_un', Auth.userRequired, Topic.collectOrUnCollect); // 收藏或者取消收藏话题
+router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题
+router.delete('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic)); // 删除话题
+router.put('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic)); // 编辑话题
+router.get('/topics/list', wrap(Topic.getTopicList)); // 获取话题列表
+router.get('/topics/search', wrap(Topic.searchTopic)); // 搜索话题列表
+router.get('/topics/no_reply', wrap(Topic.getNoReplyTopic)); // 获取无人回复的话题
+router.get('/topic/:tid', wrap(Topic.getTopicById)); // 根据ID获取话题详情
+router.patch('/topic/:tid/star_or_un', Auth.userRequired, wrap(Topic.starOrUnStar)); // 喜欢或者取消喜欢话题
+router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectOrUnCollect)); // 收藏或者取消收藏话题
 
 // 回复
 router.post('/topic/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复

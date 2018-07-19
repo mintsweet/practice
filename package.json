@@ -2,10 +2,7 @@
   "private": true,
   "workspaces": [
     "server",
-    "site"
-  ],
-  "scripts": {
-    "start:server": "cd server && yarn start",
-    "start:site": "cd site && yarn start"
-  }
+    "site",
+    "manage"
+  ]
 }

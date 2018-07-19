@@ -4,7 +4,6 @@ const BaseComponent = require('../prototype/BaseComponent');
 const UserModel = require('../models/user');
 const BehaviorModel = require('../models/behavior');
 const TopicModel = require('../models/topic');
-const logger = require('../utils/logger');
 
 const SALT_WORK_FACTOR = 10;
 
@@ -22,14 +21,9 @@ class User extends BaseComponent {
   // 注册
   signup(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (error, fields) => {
-      if (error) {
-        logger.error(error.message);
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        throw new Error(err);
       }
 
       const sms_code = req.session.sms_code || {};
@@ -57,47 +51,38 @@ class User extends BaseComponent {
         });
       }
 
-      try {
-        let existUser;
+      let existUser;
 
-        existUser = await UserModel.findOne({ mobile });
-        if (existUser) {
-          return res.send({
-            status: 0,
-            type: 'MOBILE_HAS_BEEN_REGISTERED',
-            message: '手机号已经注册过了'
-          });
-        }
-
-        existUser = await UserModel.findOne({ nickname });
-        if (existUser) {
-          return res.send({
-            status: 0,
-            type: 'NICKNAME_HAS_BEEN_REGISTERED',
-            message: '昵称已经注册过了'
-          });
-        }
-
-        const bcryptPassword = await this.encryption(password);
-        const user = {
-          nickname,
-          mobile,
-          password: bcryptPassword
-        };
-
-        await UserModel.create(user);
-
-        return res.send({
-          status: 1
-        });
-      } catch(err) {
-        logger.error(err.message);
+      existUser = await UserModel.findOne({ mobile });
+      if (existUser) {
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE',
-          message: '服务器无响应，请稍后重试'
+          type: 'MOBILE_HAS_BEEN_REGISTERED',
+          message: '手机号已经注册过了'
         });
       }
+
+      existUser = await UserModel.findOne({ nickname });
+      if (existUser) {
+        return res.send({
+          status: 0,
+          type: 'NICKNAME_HAS_BEEN_REGISTERED',
+          message: '昵称已经注册过了'
+        });
+      }
+
+      const bcryptPassword = await this.encryption(password);
+      const user = {
+        nickname,
+        mobile,
+        password: bcryptPassword
+      };
+
+      await UserModel.create(user);
+
+      return res.send({
+        status: 1
+      });
     });
   }
 
@@ -110,14 +95,9 @@ class User extends BaseComponent {
   // 登录
   signin(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (error, fields) => {
-      if (error) {
-        logger.error(error.message);
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        throw new Error(err);
       }
 
       const { mobile, password, issms, smscaptcha } = fields;
@@ -130,68 +110,59 @@ class User extends BaseComponent {
         });
       }
 
-      try {
-        const existUser = await UserModel.findOne({ mobile });
+      const existUser = await UserModel.findOne({ mobile });
 
-        if (!existUser) {
-          return res.send({
-            status: 0,
-            type: 'ERROR_USER_IS_NOT_EXITS',
-            message: '尚未注册'
-          });
-        }
-
-        if (issms) {
-          const sms_code = req.session.sms_code || {};
-
-          if (sms_code.mobile !== mobile) {
-            return res.send({
-              status: 0,
-              type: 'ERROR_PARAMS_OF_SIGNIN',
-              message: '收取验证码的手机与登录手机不匹配'
-            });
-          } else if (sms_code.code !== smscaptcha) {
-            return res.send({
-              status: 0,
-              type: 'ERROR_PARAMS_OF_SIGNIN',
-              message: '短信验证码不正确'
-            });
-          } else if (Date.now() > sms_code.expired) {
-            return res.send({
-              status: 0,
-              type: 'ERROR_PARAMS_OF_SIGNIN',
-              message: '短信验证码已经失效了，请重新获取'
-            });
-          }
-
-          req.session.user = existUser;
-          return res.send({
-            status: 1,
-            data: existUser
-          });
-        } else {
-          const isMatch = await bcrypt.compare(password, existUser.password);
-
-          if (!isMatch) {
-            return res.send({
-              status: 0,
-              type: 'ERROR_PASS_IS_NOT_MATCH',
-              message: '用户密码错误'
-            });
-          }
-
-          req.session.user = existUser;
-          return res.send({
-            status: 1,
-            data: existUser
-          });
-        }
-      } catch(err) {
-        logger.error(err.message);
+      if (!existUser) {
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE',
-          message: '服务器无响应，请稍后重试'
+          type: 'ERROR_USER_IS_NOT_EXITS',
+          message: '尚未注册'
+        });
+      }
+
+      if (issms) {
+        const sms_code = req.session.sms_code || {};
+
+        if (sms_code.mobile !== mobile) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_PARAMS_OF_SIGNIN',
+            message: '收取验证码的手机与登录手机不匹配'
+          });
+        } else if (sms_code.code !== smscaptcha) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_PARAMS_OF_SIGNIN',
+            message: '短信验证码不正确'
+          });
+        } else if (Date.now() > sms_code.expired) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_PARAMS_OF_SIGNIN',
+            message: '短信验证码已经失效了，请重新获取'
+          });
+        }
+
+        req.session.user = existUser;
+        return res.send({
+          status: 1,
+          data: existUser
+        });
+      } else {
+        const isMatch = await bcrypt.compare(password, existUser.password);
+
+        if (!isMatch) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_PASS_IS_NOT_MATCH',
+            message: '用户密码错误'
+          });
+        }
+
+        req.session.user = existUser;
+        return res.send({
+          status: 1,
+          data: existUser
         });
       }
     });
@@ -208,14 +179,9 @@ class User extends BaseComponent {
   // 忘记密码
   forgetPass(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (error, fields) => {
-      if (error) {
-        logger.error(error.message);
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        throw new Error(err);
       }
 
       const sms_code = req.session.sms_code || {};
@@ -241,33 +207,25 @@ class User extends BaseComponent {
         });
       }
 
-      try {
-        const existUser = await UserModel.findOne({ mobile });
+      const existUser = await UserModel.findOne({ mobile });
 
-        if (!existUser) {
-          return res.send({
-            status: 0,
-            type: 'ERROR_USER_IS_NOT_EXITS',
-            message: '尚未注册'
-          });
-        }
-
-        const bcryptPassword = await this.encryption(newPassword);
-
-        existUser.password = bcryptPassword;
-        await existUser.save();
-
-        return res.send({
-          status: 1
-        });
-      } catch(err) {
-        logger.error(err.message);
+      if (!existUser) {
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE',
-          message: '服务器无响应，请稍后重试'
+          type: 'ERROR_USER_IS_NOT_EXITS',
+          message: '尚未注册'
         });
       }
+
+      const bcryptPassword = await this.encryption(newPassword);
+
+      existUser.password = bcryptPassword;
+
+      await existUser.save();
+
+      return res.send({
+        status: 1
+      });
     });
   }
 
@@ -282,57 +240,39 @@ class User extends BaseComponent {
   // 更新个人信息
   updateUserInfo(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (error, fields) => {
-      if (error) {
-        logger.error(error.message);
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        throw new Error(err);
       }
 
       const { id, nickname: currentNickname } = req.session.user;
       const { nickname } = fields;
 
-      try {
-        const existUser = await UserModel.findOne({ nickname });
-        if (existUser && nickname !== currentNickname) {
-          return res.send({
-            status: 0,
-            type: 'NICKNAME_HAS_BEEN_REGISTERED',
-            message: '昵称已经注册过了'
-          });
-        }
+      const existUser = await UserModel.findOne({ nickname });
 
-        const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, { new: true });
-        req.session.user = doc;
-
-        return res.send({
-          status: 1
-        });
-      } catch(err) {
-        logger.error(err.message);
+      if (existUser && nickname !== currentNickname) {
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE',
-          message: '服务器无响应，请稍后重试'
+          type: 'NICKNAME_HAS_BEEN_REGISTERED',
+          message: '昵称已经注册过了'
         });
       }
+
+      const doc = await UserModel.findByIdAndUpdate(id, { ...fields }, { new: true });
+      req.session.user = doc;
+
+      return res.send({
+        status: 1
+      });
     });
   }
 
   // 修改密码
   updatePass(req, res) {
     const form = new formidable.IncomingForm();
-    form.parse(req, async (error, fields) => {
-      if (error) {
-        logger.error(error.message);
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARMAS',
-          message: '参数解析失败'
-        });
+    form.parse(req, async (err, fields) => {
+      if (err) {
+        throw new Error(err);
       }
 
       const { id } = req.session.user;
@@ -352,31 +292,22 @@ class User extends BaseComponent {
         });
       }
 
-      try {
-        const existUser = await UserModel.findById(id);
-        const isMatch = await bcrypt.compare(oldPass, existUser.password);
+      const existUser = await UserModel.findById(id);
+      const isMatch = await bcrypt.compare(oldPass, existUser.password);
 
-        if (isMatch) {
-          const bcryptPassword = await this.encryption(newPass);
-          existUser.password = bcryptPassword;
-          await existUser.save();
+      if (isMatch) {
+        const bcryptPassword = await this.encryption(newPass);
+        existUser.password = bcryptPassword;
+        await existUser.save();
 
-          return res.send({
-            status: 1
-          });
-        } else {
-          return res.send({
-            status: 0,
-            type: 'ERROR_PASSWORD_IS_NOT_MATCH',
-            message: '旧密码错误'
-          });
-        }
-      } catch(err) {
-        logger.error(err.message);
+        return res.send({
+          status: 1
+        });
+      } else {
         return res.send({
           status: 0,
-          type: 'ERROR_SERVICE',
-          message: '服务器无响应，请稍后重试'
+          type: 'ERROR_PASSWORD_IS_NOT_MATCH',
+          message: '旧密码错误'
         });
       }
     });
@@ -384,256 +315,176 @@ class User extends BaseComponent {
 
   // 获取星标用户列表
   async getStarList(req, res) {
-    try {
-      const userList = await UserModel.find({ star: true }, 'id avatar nickname location signature star');
-      return res.send({
-        status: 1,
-        data: userList
-      });
-    } catch(err) {
-      logger.error(err.message);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    const userList = await UserModel.find({ star: true }, 'id avatar nickname location signature star');
+
+    return res.send({
+      status: 1,
+      data: userList
+    });
   }
 
   // 获取积分榜前一百用户
   async getTop100(req, res) {
-    try {
-      const userList = await UserModel.find({}, 'id nickname score avatar topic_count star_count collect_count follower_count', {
-        limit: 100,
-        sort: '-score'
-      });
+    const userList = await UserModel.find({}, 'id nickname score avatar topic_count star_count collect_count follower_count', {
+      limit: 100,
+      sort: '-score'
+    });
 
-      return res.send({
-        status: 1,
-        data: userList
-      });
-    } catch(err) {
-      logger.error(err.message);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data: userList
+    });
   }
 
   // 根据ID获取用户信息
   async getInfoById(req, res) {
     const { uid } = req.params;
 
-    try {
-      const currentUser = await UserModel.findById(uid);
+    const currentUser = await UserModel.findById(uid);
 
-      if (!currentUser) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_ID_IS_INVALID',
-          message: '无效的ID'
-        });
-      }
-
-      const user = req.session.user || {};
-      let follow = false;
-
-      if (user.id) {
-        const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: user.id, target_id: uid });
-        if (behavior && behavior.actualAction.indexOf('un') < 0) {
-          follow = true;
-        } else {
-          follow = false;
-        }
-      }
-
-      return res.send({
-        status: 1,
-        data: { ...currentUser.toObject({ virtuals: true }), follow }
-      });
-    } catch(err) {
-      logger.error(err.message);
+    if (!currentUser) {
       return res.send({
         status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
+        type: 'ERROR_ID_IS_INVALID',
+        message: '无效的ID'
       });
     }
+
+    const user = req.session.user || {};
+    let follow = false;
+
+    if (user.id) {
+      const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: user.id, target_id: uid });
+      if (behavior && behavior.actualAction.indexOf('un') < 0) {
+        follow = true;
+      } else {
+        follow = false;
+      }
+    }
+
+    return res.send({
+      status: 1,
+      data: { ...currentUser.toObject({ virtuals: true }), follow }
+    });
   }
 
   // 获取用户动态
   async getUserBehaviors(req, res) {
     const { uid } = req.params;
-    try {
-      const behaviors = await BehaviorModel.find({ author_id: uid, is_un: false });
+    const behaviors = await BehaviorModel.find({ author_id: uid, is_un: false });
 
-      const result = await Promise.all(behaviors.map(item => {
-        return new Promise(resolve => {
-          if (item.action === 'follow') {
-            resolve(UserModel.findById(item.target_id, 'id nickname signature avatar'));
-          } else {
-            resolve(TopicModel.findById(item.target_id, 'id title'));
-          }
-        });
-      }));
+    const result = await Promise.all(behaviors.map(item => {
+      return new Promise(resolve => {
+        if (item.action === 'follow') {
+          resolve(UserModel.findById(item.target_id, 'id nickname signature avatar'));
+        } else {
+          resolve(TopicModel.findById(item.target_id, 'id title'));
+        }
+      });
+    }));
 
-      const data = behaviors.map((item, i) => {
-        return { ...result[i].toObject(), action: item.action };
-      });
+    const data = behaviors.map((item, i) => {
+      return { ...result[i].toObject(), action: item.action };
+    });
 
-      return res.send({
-        status: 1,
-        data
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data
+    });
   }
 
   // 获取用户专栏的列表
   async getUserCreates(req, res) {
     const { uid } = req.params;
 
-    try {
-      const createBehavior = await BehaviorModel.find({ action: 'create', author_id: uid, is_un: false });
-      const result = await Promise.all(createBehavior.map(item => {
-        return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title star_count collect_count visit_count'));
-        });
-      }));
+    const createBehavior = await BehaviorModel.find({ action: 'create', author_id: uid, is_un: false });
+    const result = await Promise.all(createBehavior.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicModel.findById(item.target_id, 'id title star_count collect_count visit_count'));
+      });
+    }));
 
-      const data = createBehavior.map((item, i) => {
-        return { ...result[i].toObject(), action: 'create' };
-      });
+    const data = createBehavior.map((item, i) => {
+      return { ...result[i].toObject(), action: 'create' };
+    });
 
-      return res.send({
-        status: 1,
-        data
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data
+    });
   }
 
   // 获取用户喜欢列表
   async getUserStars(req, res) {
     const { uid } = req.params;
-    try {
-      const starBehaviors = await BehaviorModel.find({ action: 'star', author_id: uid, is_un: false });
-      const result = await Promise.all(starBehaviors.map(item => {
-        return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title'));
-        });
-      }));
+    const starBehaviors = await BehaviorModel.find({ action: 'star', author_id: uid, is_un: false });
+    const result = await Promise.all(starBehaviors.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicModel.findById(item.target_id, 'id title'));
+      });
+    }));
 
-      const data = starBehaviors.map((item, i) => {
-        return { ...result[i].toObject(), action: 'star' };
-      });
+    const data = starBehaviors.map((item, i) => {
+      return { ...result[i].toObject(), action: 'star' };
+    });
 
-      return res.send({
-        status: 1,
-        data
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data
+    });
   }
 
   // 获取用户收藏列表
   async getUserCollections(req, res) {
     const { uid } = req.params;
-    try {
-      const collectBehavior = await BehaviorModel.find({ action: 'collect', author_id: uid, is_un: false });
-      const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
-      const result = await Promise.all(collectTopicIds.map(item => {
-        return new Promise(resolve => {
-          resolve(TopicModel.findById(item.target_id, 'id title'));
-        });
-      }));
+    const collectBehavior = await BehaviorModel.find({ action: 'collect', author_id: uid, is_un: false });
+    const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
+    const result = await Promise.all(collectTopicIds.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicModel.findById(item.target_id, 'id title'));
+      });
+    }));
 
-      const data = collectBehavior.map((item, i) => {
-        return { ...result[i].toObject(), action: 'collect' };
-      });
+    const data = collectBehavior.map((item, i) => {
+      return { ...result[i].toObject(), action: 'collect' };
+    });
 
-      return res.send({
-        status: 1,
-        data
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data
+    });
   }
 
   // 获取用户粉丝列表
   async getUserFollower(req, res) {
     const { uid } = req.params;
-    try {
-      const followerBehavior = await BehaviorModel.find({ action: 'follow', target_id: uid, is_un: false });
-      const result = await Promise.all(followerBehavior.map(item => {
-        return new Promise(resolve => {
-          resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
-        });
-      }));
+    const followerBehavior = await BehaviorModel.find({ action: 'follow', target_id: uid, is_un: false });
+    const result = await Promise.all(followerBehavior.map(item => {
+      return new Promise(resolve => {
+        resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
+      });
+    }));
 
-      return res.send({
-        status: 1,
-        data: result
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data: result
+    });
   }
 
   // 获取用户关注的人列表
   async getUserFollowing(req, res) {
     const { uid } = req.params;
-    try {
-      const followingBehavior = await BehaviorModel.find({ action: 'follow', author_id: uid, is_un: false });
-      const result = await Promise.all(followingBehavior.map(item => {
-        return new Promise(resolve => {
-          resolve(UserModel.findById(item.target_id, 'id nickname avatar'));
-        });
-      }));
+    const followingBehavior = await BehaviorModel.find({ action: 'follow', author_id: uid, is_un: false });
+    const result = await Promise.all(followingBehavior.map(item => {
+      return new Promise(resolve => {
+        resolve(UserModel.findById(item.target_id, 'id nickname avatar'));
+      });
+    }));
 
-      return res.send({
-        status: 1,
-        data: result
-      });
-    } catch(err) {
-      logger.error(err);
-      return res.send({
-        status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
-      });
-    }
+    return res.send({
+      status: 1,
+      data: result
+    });
   }
 
   // 关注或者取消关注某个用户
@@ -641,47 +492,38 @@ class User extends BaseComponent {
     const { uid } = req.params;
     const { id } = req.session.user;
 
-    try {
-      const currentTarget = await UserModel.findById(uid);
-      const currentAuthor = await UserModel.findById(id);
+    const currentTarget = await UserModel.findById(uid);
+    const currentAuthor = await UserModel.findById(id);
 
-      if (!currentTarget) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_ID_IS_INVALID',
-          message: '无效的ID'
-        });
-      }
-
-      const behavior = await this.generateBehavior('follow', id, uid);
-
-      if (behavior.is_un) {
-        currentTarget.follower_count -= 1;
-        await currentTarget.save();
-        currentAuthor.following_count -= 1;
-        await currentAuthor.save();
-        req.session.user.following_count -= 1;
-      } else {
-        currentTarget.follower_count += 1;
-        await currentTarget.save();
-        currentAuthor.following_count += 1;
-        await currentAuthor.save();
-        req.session.user.following_count += 1;
-        await this.sendFollowNotice(id, uid);
-      }
-
-      return res.send({
-        status: 1,
-        data: behavior.actualAction
-      });
-    } catch(err) {
-      logger.error(err);
+    if (!currentTarget) {
       return res.send({
         status: 0,
-        type: 'ERROR_SERVICE',
-        message: '服务器无响应，请稍后重试'
+        type: 'ERROR_ID_IS_INVALID',
+        message: '无效的ID'
       });
     }
+
+    const behavior = await this.generateBehavior('follow', id, uid);
+
+    if (behavior.is_un) {
+      currentTarget.follower_count -= 1;
+      await currentTarget.save();
+      currentAuthor.following_count -= 1;
+      await currentAuthor.save();
+      req.session.user.following_count -= 1;
+    } else {
+      currentTarget.follower_count += 1;
+      await currentTarget.save();
+      currentAuthor.following_count += 1;
+      await currentAuthor.save();
+      req.session.user.following_count += 1;
+      await this.sendFollowNotice(id, uid);
+    }
+
+    return res.send({
+      status: 1,
+      data: behavior.actualAction
+    });
   }
 }
 
