@@ -15,7 +15,6 @@ class User extends BaseComponent {
     this.updatePass = this.updatePass.bind(this);
     this.getUserStars = this.getUserStars.bind(this);
     this.followOrUnFollow = this.followOrUnFollow.bind(this);
-    this.getUserBehaviors = this.getUserBehaviors.bind(this);
   }
 
   // 注册
@@ -438,8 +437,7 @@ class User extends BaseComponent {
   async getUserCollections(req, res) {
     const { uid } = req.params;
     const collectBehavior = await BehaviorModel.find({ action: 'collect', author_id: uid, is_un: false });
-    const collectTopicIds = collectBehavior.map(item => item.target_id.toString());
-    const result = await Promise.all(collectTopicIds.map(item => {
+    const result = await Promise.all(collectBehavior.map(item => {
       return new Promise(resolve => {
         resolve(TopicModel.findById(item.target_id, 'id title'));
       });

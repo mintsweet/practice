@@ -47,8 +47,8 @@ describe('test /api/topic/:tid', function() {
       res.body.status.should.equal(1);
       res.body.data.author.id.should.equal(mockUser.id);
       res.body.data.replies.length.should.equal(1);
-      res.body.star.should.equal(false);
-      res.body.collect.should.equal(false);
+      res.body.data.star.should.equal(false);
+      res.body.data.collect.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }
@@ -73,8 +73,8 @@ describe('test /api/topic/:tid', function() {
       res.body.status.should.equal(1);
       res.body.data.author.id.should.equal(mockUser.id);
       res.body.data.replies.length.should.equal(1);
-      res.body.star.should.equal(false);
-      res.body.collect.should.equal(false);
+      res.body.data.star.should.equal(false);
+      res.body.data.collect.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }

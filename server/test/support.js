@@ -63,9 +63,9 @@ exports.deleteNotice = function(target_id) {
   });
 };
 
-exports.createBehavior = function(type, author_id, target_id) {
+exports.createBehavior = function(action, author_id, target_id) {
   return BehaviorModel.create({
-    type,
+    action,
     author_id,
     target_id
   });

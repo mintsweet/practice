@@ -6,7 +6,7 @@ const readFile = util.promisify(fs.readFile);
 
 class Static {
   async getQuickStart(req, res) {
-    const data = await readFile('./controller/static/quick_.md', 'utf-8');
+    const data = await readFile('./controller/static/quick_start.md', 'utf-8');
     return res.send({
       status: 1,
       data

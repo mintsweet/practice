@@ -81,8 +81,6 @@ class Reply extends BaseComponent {
     const { id } = req.session.user;
 
     const currentReply = await ReplyModel.findById(rid);
-    const replyAuthor = await UserModel.findById(currentReply.author_id);
-    const replyTopic = await TopicModel.findById(currentReply.topic_id);
 
     if (!currentReply) {
       return res.send({
@@ -91,6 +89,9 @@ class Reply extends BaseComponent {
         message: '无效的ID'
       });
     }
+
+    const replyAuthor = await UserModel.findById(currentReply.author_id);
+    const replyTopic = await TopicModel.findById(currentReply.topic_id);
 
     if (!currentReply.author_id.equals(id)) {
       return res.send({

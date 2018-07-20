@@ -4,7 +4,7 @@ const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /api/topic/:tid/follow_or_un', function() {
+describe('test /api/user/:rid/follow_or_un', function() {
   let mockUser;
   let mockUser2;
 
@@ -76,7 +76,7 @@ describe('test /api/topic/:tid/follow_or_un', function() {
       res = await request.patch(`/api/user/${mockUser.id}/follow_or_un`);
 
       res.body.status.should.equal(1);
-      res.body.action.should.equal('follow');
+      res.body.data.should.equal('follow');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -99,7 +99,7 @@ describe('test /api/topic/:tid/follow_or_un', function() {
       res = await request.patch(`/api/user/${mockUser.id}/follow_or_un`);
 
       res.body.status.should.equal(1);
-      res.body.action.should.equal('un_follow');
+      res.body.data.should.equal('un_follow');
     } catch(err) {
       should.ifError(err.message);
     }

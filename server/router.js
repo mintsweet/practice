@@ -57,7 +57,7 @@ router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectO
 // 回复
 router.post('/topic/:tid/reply', Auth.userRequired, wrap(Reply.createReply)); // 创建回复
 router.delete('/reply/:rid/delete', Auth.userRequired, wrap(Reply.deleteReply)); // 删除回复
-router.put('/reply/:rid/edit', Auth.userRequired, wrap(Reply.deleteReply)); // 编辑回复
+router.put('/reply/:rid/edit', Auth.userRequired, wrap(Reply.editReply)); // 编辑回复
 router.patch('/reply/:rid/up', Auth.userRequired, wrap(Reply.upReply)); // 回复点赞
 
 // 消息

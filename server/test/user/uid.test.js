@@ -39,7 +39,7 @@ describe('test /api/users/:uid', function() {
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
-      res.body.follow.should.equal(false);
+      res.body.data.follow.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }
@@ -64,7 +64,7 @@ describe('test /api/users/:uid', function() {
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');
       res.body.data.id.should.equal(mockUser.id);
-      res.body.follow.should.equal(false);
+      res.body.data.follow.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }

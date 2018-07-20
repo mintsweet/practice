@@ -50,7 +50,6 @@ describe('test /api', function() {
 
     res.data.status.should.equal(0);
     res.data.type.should.equal('ERROR_SERVICE');
-    res.data.message.should.equal('服务器无响应，请稍后重试');
   });
 
   // 正确
