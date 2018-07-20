@@ -55,13 +55,13 @@ router.patch('/topic/:tid/star_or_un', Auth.userRequired, wrap(Topic.starOrUnSta
 router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectOrUnCollect)); // 收藏或者取消收藏话题
 
 // 回复
-router.post('/topic/:tid/reply', Auth.userRequired, Reply.createReply); // 创建回复
-router.delete('/reply/:rid/delete', Auth.userRequired, Reply.deleteReply); // 删除回复
-router.put('/reply/:rid/edit', Auth.userRequired, Reply.editReply); // 编辑回复
-router.patch('/reply/:rid/up', Auth.userRequired, Reply.upReply); // 回复点赞
+router.post('/topic/:tid/reply', Auth.userRequired, wrap(Reply.createReply)); // 创建回复
+router.delete('/reply/:rid/delete', Auth.userRequired, wrap(Reply.deleteReply)); // 删除回复
+router.put('/reply/:rid/edit', Auth.userRequired, wrap(Reply.deleteReply)); // 编辑回复
+router.patch('/reply/:rid/up', Auth.userRequired, wrap(Reply.upReply)); // 回复点赞
 
 // 消息
-router.get('/notice/user', Auth.userRequired, Notice.getUserNotice); // 获取用户消息
-router.get('/notice/system', Auth.userRequired, Notice.getSystemNotice); // 获取系统消息
+router.get('/notice/user', Auth.userRequired, wrap(Notice.getUserNotice)); // 获取用户消息
+router.get('/notice/system', Auth.userRequired, wrap(Notice.getSystemNotice)); // 获取系统消息
 
 module.exports = router;
