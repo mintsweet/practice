@@ -523,6 +523,10 @@ class User extends Base {
       data: behavior.actualAction
     });
   }
+
+  uploadAvatar(req, res) {
+    const { uid } = req.params;
+  }
 }
 
 module.exports = new User();

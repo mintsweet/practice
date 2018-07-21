@@ -1,5 +1,6 @@
 const BehaviorModel = require('../models/behavior');
 const NoticeModel = require('../models/notice');
+const qiniu = require('qiniu');
 
 module.exports = class Base {
   // 创建或者改变一个行为
@@ -58,5 +59,27 @@ module.exports = class Base {
   // 谁(author_id)点赞了你(target_id)的回复(reply_id)
   async sendUpsNotice(author_id, target_id, reply_id) {
     await NoticeModel.create({ type: 'ups', author_id, target_id, reply_id });
+  }
+
+  // 七牛图片上传
+  async uploadImg() {
+    const uploadToken = '';
+
+    const config = new qiniu.conf.Config();
+    // 空间对应机房
+    // 华东:qiniu.zone.Zone_z0
+    // 华北:qiniu.zone.Zone_z1
+    // 华南:qiniu.zone.Zone_z2
+    // 北美:qiniu.zone.Zone_na0
+    config.zone = qiniu.zone.Zone_z0;
+
+    const localFile = '';
+    const formUploader = new qiniu.form_up.FormUploader(config);
+    const putExtra = new qiniu.form_up.PutExtra();
+    const key = '';
+    // 文件上传
+    const url = await formUploader.putFile(uploadToken, key, localFile, putExtra);
+
+    return url;
   }
 };

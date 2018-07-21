@@ -18,6 +18,7 @@ const request = async (url, data, method = 'GET') => {
 
   const res = await rq(query);
 
+  // 此处完善为restful风格的API以后更新内容
   if (res.status === 1) {
     return res.data;
   } else {
@@ -29,7 +30,7 @@ const request = async (url, data, method = 'GET') => {
 * 静态
 */
 // 快速开始
-exports.getStartDoc = () => request('/static/start');
+exports.getQuickStartDoc = () => request('/static/quick_start');
 // API说明
 exports.getApiDoc = () => request('/static/api');
 // 关于

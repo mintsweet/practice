@@ -19,7 +19,7 @@
 
 ## 测试覆盖率
 
-![测试覆盖率](./screenshots/test_cover.jpg)
+![测试覆盖率](../screenshots/server_test_cover.jpg)
 
 ## 非法的域名
 
@@ -28,8 +28,7 @@
 
 ```javascript
 const ALLOW_ORIGIN = [
-  'localhost:3000',
-  'http://localhost:3001'
+  'localhost:3000'
 ];
 
 app.all('*', (req, res, next) => {

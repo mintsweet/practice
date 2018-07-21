@@ -1,10 +1,10 @@
-const { getStartDoc, getApiDoc, getAboutDoc } = require('../http/api');
+const { getQuickStartDoc, getApiDoc, getAboutDoc } = require('../http/api');
 const md2html = require('../utils/md2html');
 
 class Static {
   // 快速开始
   async renderStartDoc(req, res) {
-    const text = await getStartDoc();
+    const text = await getQuickStartDoc();
     return res.render('static/index', {
       title: '快速开始',
       text: md2html(text)

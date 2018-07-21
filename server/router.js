@@ -16,7 +16,7 @@ const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用 Mints - 薄荷糖社区 API接口' }));
 
 // 静态
-router.get('/static/start', wrap(Static.getQuickStart)); // 获取快速开始文档
+router.get('/static/quick_start', wrap(Static.getQuickStart)); // 获取快速开始文档
 router.get('/static/api', wrap(Static.getApiDoc)); // 获取API说明文档
 router.get('/static/about', wrap(Static.getAbout)); // 获取关于文档
 
@@ -42,6 +42,7 @@ router.get('/user/:uid/collections', wrap(User.getUserCollections)); // 获取�
 router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 获取用户粉丝列表
 router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 获取用户关注列表
 router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
+router.post('/user/:uid/upload', Auth.userRequired, wrap(User.uploadAvatar)); // 用户头像上传
 
 // 话题
 router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题
