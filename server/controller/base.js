@@ -1,7 +1,7 @@
 const BehaviorModel = require('../models/behavior');
 const NoticeModel = require('../models/notice');
 
-module.exports = class BaseComponent {
+module.exports = class Base {
   // 创建或者改变一个行为
   async generateBehavior(action, author_id, target_id) {
     let behavior;
@@ -13,11 +13,6 @@ module.exports = class BaseComponent {
       behavior = await BehaviorModel.create({ action, author_id, target_id });
     }
     return behavior;
-  }
-
-  // 系统发送了消息给你(target_id)
-  async sendSystemNotice(target_id, content) {
-    await NoticeModel.create({ type: 'system', target_id, content });
   }
 
   // 谁(author_id)喜欢了你(target_id)的话题(topic_id)

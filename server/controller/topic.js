@@ -1,11 +1,11 @@
 const formidable = require('formidable');
-const BaseComponent = require('../prototype/BaseComponent');
+const Base = require('./base');
 const TopicModel = require('../models/topic');
 const UserModel = require('../models/user');
 const ReplyModel = require('../models/reply');
 const BehaviorModel = require('../models/behavior');
 
-class Topic extends BaseComponent {
+class Topic extends Base {
   constructor() {
     super();
     this.createTopic = this.createTopic.bind(this);

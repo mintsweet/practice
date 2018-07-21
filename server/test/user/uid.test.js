@@ -1,5 +1,5 @@
 const app = require('../../app');
-const request = require('supertest')(app);
+const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();

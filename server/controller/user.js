@@ -1,13 +1,13 @@
 const formidable = require('formidable');
 const bcrypt = require('bcryptjs');
-const BaseComponent = require('../prototype/BaseComponent');
+const Base = require('./base');
 const UserModel = require('../models/user');
 const BehaviorModel = require('../models/behavior');
 const TopicModel = require('../models/topic');
 
 const SALT_WORK_FACTOR = 10;
 
-class User extends BaseComponent {
+class User extends Base {
   constructor() {
     super();
     this.signup = this.signup.bind(this);

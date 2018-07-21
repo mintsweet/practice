@@ -43,34 +43,32 @@ app.use(session({
 }));
 
 // cross and interceptor
-if (env !== 'test') {
-  const ALLOW_ORIGIN = [
-    'localhost:3000',
-    'http://localhost:3001'
-  ];
+const ALLOW_ORIGIN = [
+  'localhost:3000',
+  'localhost:3001'
+];
 
-  app.all('*', (req, res, next) => {
-    const reqOrigin = req.headers.origin || req.headers.host;
-    if (ALLOW_ORIGIN.includes(reqOrigin)) {
-      res.header('Access-Control-Allow-Origin', reqOrigin);
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-      res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-      res.header('Access-Control-Allow-Credentials', true);
-      res.header('X-Powered-By', '3.2.1');
-      if (req.method === 'OPTIONS') {
-        res.sendStatus(200);
-      } else {
-        next();
-      }
+app.all('*', (req, res, next) => {
+  const reqOrigin = req.headers.origin || req.headers.host;
+  if (ALLOW_ORIGIN.includes(reqOrigin) || env === 'test') {
+    res.header('Access-Control-Allow-Origin', reqOrigin);
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('X-Powered-By', '3.2.1');
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(200);
     } else {
-      res.send({
-        status: 0,
-        type: 'ILLEGAL DOMAIN NAME',
-        message: '非法的域名'
-      });
+      next();
     }
-  });
-}
+  } else {
+    res.send({
+      status: 0,
+      type: 'ILLEGAL DOMAIN NAME',
+      message: '非法的域名'
+    });
+  }
+});
 
 // router
 app.use('/api', router);

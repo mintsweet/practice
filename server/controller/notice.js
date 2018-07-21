@@ -1,10 +1,10 @@
-const BaseComponent = require('../prototype/BaseComponent');
+const Base = require('./base');
 const NoticeModel = require('../models/notice');
 const UserModel = require('../models/user');
 const TopicModel = require('../models/topic');
 const ReplyModel = require('../models/reply');
 
-class Notice extends BaseComponent {
+class Notice extends Base {
   constructor() {
     super();
     this.getUserNotice = this.getUserNotice.bind(this);
