@@ -1,5 +1,6 @@
 {
   "name": "site",
+  "version": "1.0.0",
   "scripts": {
     "start": "gulp",
     "gulp:task": "gulp",
