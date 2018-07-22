@@ -11,7 +11,8 @@ body {
 }
 
 img {
-  @include img-fluid;
+  max-width: 100%;
+  height: auto;
 }
 
 a {
@@ -32,13 +33,13 @@ a {
     overflow: hidden;
     &.attach {
       padding: $global-default-padding;
-      background: #fff;
+      background: $white;
     }
   }
   &>.layout-full {
     flex: 1;
     padding: $global-default-padding;
-    background: #fff;
+    background: $white;
     border-radius: 4px;
     overflow: hidden;
   }

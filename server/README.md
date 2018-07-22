@@ -19,7 +19,11 @@
 
 ## 测试覆盖率
 
-![测试覆盖率](../screenshots/server_test_cover.jpg)
+![测试覆盖率](./screenshots/test_cover.jpg)
+
+## 超级管理员
+
+在`models/data/root.js`文件中可修改初始化数据库时的超级管理员用户。
 
 ## 非法的域名
 

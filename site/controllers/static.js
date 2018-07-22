@@ -3,7 +3,7 @@ const md2html = require('../utils/md2html');
 
 class Static {
   // 快速开始
-  async renderStartDoc(req, res) {
+  async renderQuickStartDoc(req, res) {
     const text = await getQuickStartDoc();
     return res.render('static/index', {
       title: '快速开始',

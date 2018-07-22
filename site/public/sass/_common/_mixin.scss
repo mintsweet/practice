@@ -21,12 +21,6 @@
   border: 0;
 }
 
-// 图片最大化
-@mixin img-fluid {
-  max-width: 100%;
-  height: auto;
-}
-
 // 命中样式附加
 @mixin hover {
   &:hover { @content; }

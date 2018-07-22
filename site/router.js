@@ -21,7 +21,7 @@ const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 router.get('/', wrap(Site.renderIndex));
 
 // 静态
-router.get('/start', wrap(Static.renderStartDoc));
+router.get('/quick_start', wrap(Static.renderQuickStartDoc));
 router.get('/api', wrap(Static.renderApiDoc));
 router.get('/about', wrap(Static.renderAboutDoc));
 

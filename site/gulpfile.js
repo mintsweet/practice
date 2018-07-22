@@ -1,11 +1,9 @@
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
-const path = require('path');
 
 gulp.task('sass', () => {
   gulp.src('./public/sass/style.scss')
     .pipe($.sass({
-      includePaths: [path.join(__dirname, './public/sass/**/*.scss')],
       outputStyle: 'compressed'
     }).on('error', $.sass.logError))
     .pipe(gulp.dest('./dist/css/'));

@@ -22,7 +22,7 @@ const request = async (url, data, method = 'GET') => {
   if (res.status === 1) {
     return res.data;
   } else {
-    throw new Error(res);
+    throw new Error(res.message);
   }
 };
 
