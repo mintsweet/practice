@@ -12,3 +12,19 @@
   2. 启动 server 服务
   3. 执行 npm start 或者 yarn start
   4. 浏览器访问 http://localhost:3001
+
+## 项目截图
+
+![一](./screenshots/1.png)
+
+![二](./screenshots/2.png)
+
+![三](./screenshots/3.png)
+
+![四](./screenshots/4.png)
+
+![五](./screenshots/5.png)
+
+![六](./screenshots/6.png)
+
+![七](./screenshots/7.png)

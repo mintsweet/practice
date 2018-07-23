@@ -1,5 +1,6 @@
 .form {
   .select {
+    display: block;
     position: relative;
     padding: 0 10px;
     width: $input-min-width;
@@ -28,7 +29,7 @@
     .options {
       display: none;
       position: absolute;
-      top: $input-min-height;
+      top: $input-min-height - 2px;
       left: -1px;
       right: -1px;
       background: #fff;

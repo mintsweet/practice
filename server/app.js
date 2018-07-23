@@ -50,7 +50,6 @@ const ALLOW_ORIGIN = [
 
 app.all('*', (req, res, next) => {
   const reqOrigin = req.headers.origin || req.headers.host;
-  console.log(reqOrigin);
 
   if (ALLOW_ORIGIN.includes(reqOrigin) || env === 'test') {
     res.header('Access-Control-Allow-Origin', reqOrigin);

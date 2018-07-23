@@ -35,7 +35,7 @@ block content
                 img(src=item.avatar)
               a.nickname(href=`/user/${item.id}`)
                 span #{item.nickname}
-              a.follow(href="javascript:;") 关注
+              a.action.follow_user(href="javascript:;") 关注
           else
             include ../includes/no_content.pug
         else if type === 'create'
@@ -49,9 +49,7 @@ block content
                 span
                   i.practice &#xe65f;
                   | #{item.collect_count}
-                span
-                  i.practice &#xe647;
-                  | #{item.visit_count}
+                span 阅读数 #{item.visit_count}
           else
             include ../includes/no_content.pug
         else
@@ -79,7 +77,7 @@ block content
                     .detail
                       a.nickname(href=`/user/${item.id}`) #{item.nickname}
                       span.signature #{item.signature}
-                    a.follow(href="javascript:;") 关注
+                    a.action.follow_user(href="javascript:;") 关注
           else
             include ../includes/no_content.pug
   aside.layout-sider

@@ -42,7 +42,7 @@ router.get('/user/:uid/collections', wrap(User.getUserCollections)); // 获取�
 router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 获取用户粉丝列表
 router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 获取用户关注列表
 router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
-router.post('/avatar/upload', Auth.userRequired, wrap(User.uploadAvatar)); // 用户头像上传
+router.post('/upload/avatar', Auth.userRequired, wrap(User.uploadAvatar)); // 用户头像上传
 
 // 话题
 router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题
