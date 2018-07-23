@@ -15,6 +15,7 @@ class User extends Base {
     this.updatePass = this.updatePass.bind(this);
     this.getUserStars = this.getUserStars.bind(this);
     this.followOrUnFollow = this.followOrUnFollow.bind(this);
+    this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
   // 注册
@@ -353,8 +354,9 @@ class User extends Base {
     let follow = false;
 
     if (user.id) {
-      const behavior = await BehaviorModel.findOne({ type: 'follow', author_id: user.id, target_id: uid });
-      if (behavior && behavior.actualAction.indexOf('un') < 0) {
+      const behavior = await BehaviorModel.findOne({ action: 'follow', author_id: user.id, target_id: uid });
+
+      if (behavior && behavior.is_un === false) {
         follow = true;
       } else {
         follow = false;
@@ -525,7 +527,23 @@ class User extends Base {
   }
 
   uploadAvatar(req, res) {
-    const { uid } = req.params;
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        throw new Error(err);
+      }
+
+      const { file: { path } } = files;
+      const { id } = req.session.user;
+      const fileName = `avatar_${id}`;
+
+      const url = this.uploadImg(fileName, path);
+
+      return res.send({
+        status: 1,
+        data: url
+      });
+    });
   }
 }
 

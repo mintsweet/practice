@@ -15,10 +15,6 @@
       display: flex;
       flex-direction: row-reverse;
       padding: 20px 0;
-      .btn {
-        height: 36px;
-        line-height: 36px;
-      }
     }
     label {
       display: inline-block;
@@ -44,10 +40,6 @@
         width: 80px;
         height: 100%;
         vertical-align: middle;
-      }
-      .btn {
-        height: 24px;
-        line-height: 24px;
       }
       p {
         display: inline-block;

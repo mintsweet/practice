@@ -34,7 +34,7 @@ gulp.task('font', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch('./public/sass/**/*.scss', ['sass']);
+  gulp.watch('./public/sass/**/**.scss', ['sass']);
   gulp.watch('./public/js/**/*.js', ['js']);
   gulp.watch('./public/img/**/*', ['img']);
   gulp.watch('./public/lib/**/*', ['lib']);

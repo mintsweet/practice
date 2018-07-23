@@ -4,7 +4,7 @@ const {
   signup, signin, forgetPass, signout,
   getUserBehaviors, getUserCreates, getUserStars,
   getUserCollections, getUserFollower, getUserFollowing,
-  setting, updatePass, followOrUn
+  setting, updatePass, followOrUn, uploadAvatar
 } = require('../http/api');
 
 class User extends Base {
@@ -42,6 +42,7 @@ class User extends Base {
   // 注册
   signup(req, res) {
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -80,7 +81,7 @@ class User extends Base {
   async renderSignin(req, res) {
     const url = await this.getPicCaptchaUrl(req);
 
-    res.render('user/signin', {
+    return res.render('user/signin', {
       title: '登录',
       picUrl: url
     });
@@ -89,6 +90,7 @@ class User extends Base {
   // 登录
   signin(req, res) {
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -135,7 +137,7 @@ class User extends Base {
   async renderForgetPass(req, res) {
     const url = await this.getPicCaptchaUrl(req);
 
-    res.render('user/forget_pass', {
+    return res.render('user/forget_pass', {
       title: '忘记密码',
       picUrl: url
     });
@@ -144,6 +146,7 @@ class User extends Base {
   // 忘记密码
   async forgetPass(req, res) {
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -206,7 +209,7 @@ class User extends Base {
     const info = await this.getUserInfo(uid);
     const data = await getUserBehaviors(uid);
 
-    res.render('user/info', {
+    return res.render('user/info', {
       title: '动态 - 用户信息',
       info,
       data,
@@ -293,7 +296,7 @@ class User extends Base {
   async renderSetting(req, res) {
     const top100 = await this.getUsersTop100();
 
-    res.render('user/setting', {
+    return res.render('user/setting', {
       title: '个人资料',
       top100: top100.slice(0, 10)
     });
@@ -312,13 +315,13 @@ class User extends Base {
       try {
         await setting({ ...fields });
 
-        res.render('user/transform', {
+        return res.render('user/transform', {
           type: 'success',
           message: '更新个人资料成功',
           url: '/setting'
         });
       } catch(err) {
-        res.render('user/setting', {
+        return res.render('user/setting', {
           title: '个人资料',
           error: err.message,
           top100
@@ -331,7 +334,7 @@ class User extends Base {
   async renderUpdatePass(req, res) {
     const top100 = await this.getUsersTop100();
 
-    res.render('user/update_pass', {
+    return res.render('user/update_pass', {
       title: '修改密码',
       top100: top100.slice(0, 10)
     });
@@ -350,13 +353,13 @@ class User extends Base {
       try {
         await updatePass({ ...fields });
 
-        res.render('transform/index', {
+        return res.render('transform/index', {
           type: 'success',
           message: '修改成功',
           url: '/update_pass'
         });
       } catch(err) {
-        res.render('user/update_pass', {
+        return res.render('user/update_pass', {
           title: '修改密码',
           error: err.message,
           top100

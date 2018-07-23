@@ -38,7 +38,7 @@
   };
 
   // 全局消息提示
-  Utils.globalMessage = function(type, message, duration = 2000) {
+  Utils.globalMessage = function(type = 'error', message = '', duration = 2000) {
     $('.global-message .message').fadeIn();
     $('.global-message .message .content').addClass(type).text(message).fadeIn();
     setTimeout(function() {
@@ -108,19 +108,22 @@
 
   // 关注取消关注
   Utils.followOrUn = function() {
-    var that = this;
-    $('.action.follow').click(function() {
+    var utils = this;
+    $('.action.follow_user').click(function() {
+      const trigger = this;
       $.post(`${window.location.pathname}/follow_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'follow') {
-            $('.action.follow').text('取消关注');
-            that.globalMessage('success', '关注成功');
+            utils.globalMessage('success', '关注成功');
+
+            $(trigger).text('取消关注');
           } else {
-            $('.action.follow').text('关注');
-            that.globalMessage('success', '取消关注');
+            utils.globalMessage('success', '取消关注');
+
+            $(trigger).text('关注');
           }
         } else {
-          that.globalMessage('error', res.message);
+          utils.globalMessage('error', res.message);
         }
       });
     });
@@ -128,19 +131,24 @@
 
   // 话题点赞
   Utils.starTopic = function() {
-    const that = this;
-    $('.star-action').click(function() {
-      $.getJSON(`${window.location.pathname}/star_or_un`, function(res) {
+    const utils = this;
+    $('.action.star_topic').click(function() {
+      const trigger = this;
+      $.post(`${window.location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'star') {
-            $('.star-action .number').text(parseInt($('.star-action .number').text()) + 1);
-            $('.star-action').addClass('active');
+            utils.globalMessage('success', '喜欢了该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.star_topic .number').text()) + 1);
+            $(trigger).addClass('active');
           } else {
-            $('.star-action .number').text(parseInt($('.star-action .number').text()) - 1);
-            $('.star-action').removeClass('active');
+            utils.globalMessage('success', '取消喜欢该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.star_topic .number').text()) - 1);
+            $(trigger).removeClass('active');
           }
         } else {
-          that.globalMessage('error', res.message);
+          utils.globalMessage('error', res.message);
         }
       });
     });
@@ -148,19 +156,24 @@
 
   // 话题收藏
   Utils.collectTopic = function() {
-    const that = this;
-    $('.collect-action').click(function() {
-      $.getJSON(`${window.location.pathname}/collect_or_un`, function(res) {
+    const utils = this;
+    $('.action.collect_topic').click(function() {
+      const trigger = this;
+      $.post(`${window.location.pathname}/collect_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'collect') {
-            $('.collect-action .number').text(parseInt($('.collect-action .number').text()) + 1);
-            $('.collect-action').addClass('active');
+            utils.globalMessage('success', '收藏了该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.collect_topic .number').text()) + 1);
+            $(trigger).addClass('active');
           } else {
-            $('.collect-action .number').text(parseInt($('.collect-action .number').text()) - 1);
-            $('.collect-action').removeClass('active');
+            utils.globalMessage('success', '取消收藏该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.collect_topic .number').text()) - 1);
+            $(trigger).removeClass('active');
           }
         } else {
-          that.globalMessage('error', res.message);
+          utils.globalMessage('error', res.message);
         }
       });
     });

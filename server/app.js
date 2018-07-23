@@ -45,11 +45,13 @@ app.use(session({
 // cross and interceptor
 const ALLOW_ORIGIN = [
   'localhost:3000',
-  'localhost:3001'
+  'http://localhost:3001'
 ];
 
 app.all('*', (req, res, next) => {
   const reqOrigin = req.headers.origin || req.headers.host;
+  console.log(reqOrigin);
+
   if (ALLOW_ORIGIN.includes(reqOrigin) || env === 'test') {
     res.header('Access-Control-Allow-Origin', reqOrigin);
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');

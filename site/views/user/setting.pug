@@ -15,8 +15,9 @@ block content
         .avatar
           img(src=user.avatar)
           p
+            input.file(type="file", name="file")
             span 支持 jpg、png 格式大小 1M 以内的图片
-            button.btn 点击上传
+            a.btn.upload(href="javascript:;") 点击上传
       .form-item
         label(for="nickname") 昵称
         input(type="text", id="nickname", name="nickname", placeholder="请输入昵称", autocomplete="off", value=user.nickname)
@@ -40,4 +41,22 @@ append footer
         alert.text('签名长度不能超过100个字符').slideDown();
         return false;
       }
+    });
+
+    $('.upload').click(function() {
+      const file = $('.file').prop('files')[0];
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      $.ajax({
+        type: 'POST',
+        url: '/avatar/upload',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false
+      }).done(res => {
+        console.log(res);
+      });
     });

@@ -12,25 +12,3 @@
     }
   }
 }
-
-.aside-block {
-  margin-bottom: 10px;
-  background: #fff;
-  border-radius: 4px;
-  &.no-title {
-    padding: 10px 20px;
-  }
-  .title {
-    padding: 10px 20px;
-    border-bottom: 1px solid #eee;
-    a {
-      float: right;
-      margin-top: 2px;
-      color: $theme-color;
-      font-size: 12px;
-    }
-  }
-  .content {
-    padding: 10px 20px;
-  }
-}

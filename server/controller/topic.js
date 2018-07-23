@@ -356,7 +356,7 @@ class Topic extends Base {
 
     return res.send({
       status: 1,
-      action: behavior.actualAction
+      data: behavior.actualAction
     });
   }
 
@@ -404,7 +404,7 @@ class Topic extends Base {
 
     return res.send({
       status: 1,
-      action: behavior.actualAction
+      data: behavior.actualAction
     });
   }
 }

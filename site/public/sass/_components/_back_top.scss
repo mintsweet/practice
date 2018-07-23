@@ -14,6 +14,7 @@
   background: $theme-color;
   cursor: pointer;
   border-radius: $back-top-radius;
+  z-index: $zIndex-5;
   i {
     font-size: $back-top-horizontal / 2;
   }

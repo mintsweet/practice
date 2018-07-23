@@ -3,7 +3,6 @@ $(document).ready(function () {
   Utils.backTop();
   Utils.modalSelect();
   Utils.headerDropMenu();
-  Utils.globalMessage();
   Utils.getSMSCode();
   Utils.renewCaptcha();
   Utils.followOrUn();

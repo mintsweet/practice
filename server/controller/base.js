@@ -1,6 +1,7 @@
+const qiniu = require('qiniu');
 const BehaviorModel = require('../models/behavior');
 const NoticeModel = require('../models/notice');
-const qiniu = require('qiniu');
+const config = require('../../config.default');
 
 module.exports = class Base {
   // 创建或者改变一个行为
@@ -62,24 +63,36 @@ module.exports = class Base {
   }
 
   // 七牛图片上传
-  async uploadImg() {
-    const uploadToken = '';
+  async uploadImg(name, path) {
+    const mac = new qiniu.auth.digest.Mac(config.qiniu.ACCESS_KEY, config.qiniu.SECRET_KEY);
+    const putPolicy = new qiniu.rs.PutPolicy({
+      scope: `${config.qiniu.BUCKET_NAME}:${name}`
+    });
 
-    const config = new qiniu.conf.Config();
+    const uploadToken = putPolicy.uploadToken(mac);
+    const qiniuConfig = new qiniu.conf.Config();
     // 空间对应机房
     // 华东:qiniu.zone.Zone_z0
     // 华北:qiniu.zone.Zone_z1
     // 华南:qiniu.zone.Zone_z2
     // 北美:qiniu.zone.Zone_na0
-    config.zone = qiniu.zone.Zone_z0;
+    qiniuConfig.zone = qiniu.zone.Zone_z0;
 
-    const localFile = '';
-    const formUploader = new qiniu.form_up.FormUploader(config);
+    const formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
     const putExtra = new qiniu.form_up.PutExtra();
-    const key = '';
     // 文件上传
-    const url = await formUploader.putFile(uploadToken, key, localFile, putExtra);
-
-    return url;
+    return new Promise((resolve, reject) => {
+      formUploader.putFile(uploadToken, name, path, putExtra, function(err, body, res) {
+        if (err) {
+          return reject(err);
+        }
+        if (res.statusCode === 200) {
+          const url = `${config.qiniu.DONAME}/${body.key}}?date=${Date.now()}`;
+          return resolve(url);
+        } else {
+          return reject(err);
+        }
+      });
+    });
   }
 };

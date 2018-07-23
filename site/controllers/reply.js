@@ -6,6 +6,7 @@ class Reply {
   async createReply(req, res) {
     const { tid } = req.params;
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -34,6 +35,7 @@ class Reply {
   // 删除回复
   async deleteReply(req, res) {
     const { rid } = req.params;
+
     try {
       await deleteReply(rid);
 
@@ -52,6 +54,7 @@ class Reply {
   async editReply(req, res) {
     const { rid } = req.params;
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -82,6 +85,7 @@ class Reply {
   // 点赞回复
   async upReplyOrUn(req, res) {
     const { rid } = req.params;
+
     try {
       await upReply(rid);
 

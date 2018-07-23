@@ -25,6 +25,7 @@ class Topic extends Base {
   // 创建话题
   createTopic(req, res) {
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);
@@ -54,13 +55,13 @@ class Topic extends Base {
     try {
       await deleteTopic(tid);
 
-      res.render('/transform/index', {
+      return res.render('/transform/index', {
         title: '删除话题',
         type: 'success',
         message: '删除话题成功'
       });
     } catch(err) {
-      res.render('/transform/index', {
+      return res.render('/transform/index', {
         title: '删除话题失败',
         type: 'error',
         message: '删除话题失败'
@@ -84,6 +85,7 @@ class Topic extends Base {
   // 编辑话题
   editTopic(req, res) {
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (err, fields) => {
       if (err) {
         throw new Error(err);

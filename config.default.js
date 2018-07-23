@@ -10,6 +10,13 @@ const config = {
   log_dir: path.join(__dirname, './server/logs'),
   session_secret: 'practice_secret',
 
+  qiniu: {
+    ACCESS_KEY: '',
+    SECRET_KEY: '',
+    BUCKET_NAME: '',
+    DONAME: ''
+  },
+
   // Site
   name: 'Mints - 薄荷糖社区',
   description: '简洁、快乐的交流社区',

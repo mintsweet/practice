@@ -25,6 +25,21 @@
 
 在`models/data/root.js`文件中可修改初始化数据库时的超级管理员用户。
 
+## 图片上传相关
+
+关于图片上传功能依托于七牛云，使用者需首先申请七牛的开发者key，替换掉在`config.default.js`中的这一部分：
+
+```javascript
+qiniu: {
+  ACCESS_KEY: '',
+  SECRET_KEY: '',
+  BUCKET_NAME: '',
+  DONAME: ''
+},
+```
+
+分别对应你七牛云的`accessKey`、`secret_key`、`存储空间名称`和`存储空间域名`。
+
 ## 非法的域名
 
 本项目设置了跨域请求，客户端无需在设置跨域相关问题，同时设置了域名拦截功能，也就是制定的域名才能够请求。

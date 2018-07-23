@@ -17,7 +17,7 @@ class Site extends Base {
     const data = await getTopicList({
       tab: tab || 'all',
       page: page || 1,
-      size: 10
+      size: 20
     });
 
     return res.render('site/index', {

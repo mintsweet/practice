@@ -14,9 +14,9 @@ block content
         if user && info.id === user.id
           a.action(href=`/setting`) 编辑个人资料
         else if user && !info.follow
-          a.action.follow(href="javascript:;") 关注
+          a.action.follow_user(href="javascript:;") 关注
         else if user && info.follow
-          a.action.follow(href="javascript:;") 取消关注
+          a.action.follow_user(href="javascript:;") 取消关注
     .user-gener
       .gener
         a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
