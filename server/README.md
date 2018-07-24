@@ -1,6 +1,10 @@
 # Server
 
-> 基于 Express 和 Mongodb 构建的数据服务。
+> 基于 Koa 和 Mongodb 构建的数据服务。
+
+## 强调
+
+**本服务于`xxxx-xx-xx`用`Koa`重构了，观看`Express`的代码，请切换到`server-express`分支查看。**
 
 ## 简介
 

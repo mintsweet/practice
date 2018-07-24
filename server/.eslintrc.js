@@ -1,9 +1,10 @@
 const eslintConfig = {
   env: {
-    mocha: true
+    mocha: true,
+    node: true
   },
   
-  extends: 'mints'
+  extends: 'mints',
 };
 
 module.exports = eslintConfig;

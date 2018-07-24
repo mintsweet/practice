@@ -2,34 +2,19 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=development node ./app.js",
-    "lint": "eslint **/*.js",
-    "test": "cross-env NODE_ENV=test mocha",
-    "test:file": "cross-env NODE_ENV=test mocha",
-    "test:cover": "cross-env NODE_ENV=test nyc --reporter=html mocha"
+    "start": "cross-env NODE_ENV=development nodemon ./app.js",
+    "lint": "eslint **/**.js"
   },
-  "license": "MIT",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "connect-mongo": "^2.0.1",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "formidable": "^1.2.1",
-    "gd-bmp": "^1.2.4",
-    "log4js": "^2.5.3",
-    "moment": "^2.22.1",
-    "mongoose": "^5.0.12",
-    "qiniu": "^7.2.1"
+    "koa": "^2.5.2",
+    "koa-body": "^4.0.4",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^5.0.1",
-    "eslint-config-mints": "^0.3.0-rc.8",
-    "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "should": "^13.2.1",
-    "sinon": "^6.0.1",
-    "supertest": "^3.1.0"
+    "eslint": "^5.2.0",
+    "eslint-config-mints": "^1.0.0-alpha.1",
+    "nodemon": "^1.18.3"
   }
 }
