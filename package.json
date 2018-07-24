@@ -3,6 +3,7 @@
   "workspaces": [
     "server",
     "site",
-    "manage"
+    "manage",
+    "koa-temp-test"
   ]
 }
