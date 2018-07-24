@@ -187,7 +187,6 @@
       $.post(`/reply/${replyId}/delete`, res => {
         if (res.status === 1) {
           that.globalMessage('success', '删除回复成功');
-          console.log($(this).parents('li'));
           $(this).parents('li').remove();
         } else {
           that.globalMessage('error', '删除回复失败');
@@ -196,10 +195,43 @@
     });
   };
 
+  // 回复编辑
+  Utils.editReply = function() {
+    $('.action.edit_reply').click(function() {
+      $('.reply-form.reply_reply_form').slideUp();
+      $('.reply-form.edit_reply_form').slideUp();
+      $(this).siblings('.reply-form.edit_reply_form').slideDown();
+    });
+  };
+
   // 回复点赞
   Utils.upReply = function() {
+    const utils = this;
     $('.action.up_reply').click(function() {
-      console.log('up');
+      const rid = $(this).attr('data-id');
+      const trigger = this;
+      $.post(`/reply/${rid}/up`, res => {
+        if (res.status === 1) {
+          if (res.action === 'up') {
+            utils.globalMessage('success', '点赞成功');
+            $(trigger).children('span').text(parseInt($('.action.up_reply span').text() + 1));
+          } else {
+            utils.globalMessage('success', '取消点赞成功');
+            $(trigger).children('span').text(parseInt($('.action.up_reply span').text() - 1));
+          }
+        } else {
+          utils.globalMessage('error', res.messsage);
+        }
+      });
+    });
+  };
+
+  // 回复回复
+  Utils.replyReply = function() {
+    $('.action.reply_reply').click(function() {
+      $('.reply-form.edit_reply_form').slideUp();
+      $('.reply-form.reply_reply_form').slideUp();
+      $(this).siblings('.reply-form.reply_reply_form').slideDown();
     });
   };
 

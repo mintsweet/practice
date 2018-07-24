@@ -87,10 +87,11 @@ class Reply {
     const { rid } = req.params;
 
     try {
-      await upReply(rid);
+      const action = await upReply(rid);
 
       return res.send({
-        status: 1
+        status: 1,
+        action
       });
     } catch(err) {
       return res.send({

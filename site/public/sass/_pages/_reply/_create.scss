@@ -10,6 +10,9 @@
     margin-right: 10px;
     height: 40px;
   }
+  a {
+    color: $theme-color;
+  }
   .reply-form {
     flex: auto;
     textarea {

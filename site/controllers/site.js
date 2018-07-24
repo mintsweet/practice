@@ -26,7 +26,7 @@ class Site extends Base {
       totalPage: data.totalPage,
       currentPage: data.currentPage,
       currentTab: data.tab,
-      top100,
+      top100: top100.slice(0, 10),
       noReplyTopic
     });
   }

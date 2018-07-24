@@ -64,7 +64,7 @@ class Reply extends Base {
       await createUser.save();
 
       if (reply_id) {
-        await this.sendReply2Notice(id, currentTopic.author_id, currentTopic.id, reply_id);
+        await this.sendAtNotice(id, currentTopic.author_id, currentTopic.id, reply_id);
       } else {
         await this.sendReplyNotice(id, currentTopic.author_id, currentTopic.id);
       }
@@ -200,7 +200,7 @@ class Reply extends Base {
 
     return res.send({
       status: 1,
-      action
+      data: action
     });
   }
 }

@@ -9,5 +9,7 @@ $(document).ready(function () {
   Utils.starTopic();
   Utils.collectTopic();
   Utils.deleteReply();
+  Utils.editReply();
   Utils.upReply();
+  Utils.replyReply();
 });

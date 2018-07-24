@@ -10,7 +10,7 @@ const BaseModel = require('./base');
 * 3. collect 收藏话题
 * 4. follow 关注用户
 * 5. reply 回复话题
-* 6. reply2 回复评论
+* 6. @ AT了
 * 7. up 点赞回复
 */
 

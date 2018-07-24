@@ -37,16 +37,21 @@ block content
             a.nickname(href=`/user/${reply.author.id}`) #{reply.author.nickname}
             .content #{reply.content}
             .action
-              a.practice(href="") &#xe603; 2
-              a.practice.action.up_reply(href="javascript:;") &#xe619; 3
-              time #{reply.create_at_ago}
-            if user && user.id === reply.author_id
-              a.action.delete_reply(href="javascript:;", data-id=reply.id) 删除
-              a.action.edit_reply(href="javascript:;") 编辑
-              form.edit.reply-form(action=`/reply/${reply.id}/edit`, method="post")
+              a.practice.action.up_reply(href="javascript:;", title="点赞", data-id=reply.id) &#xe603;
+                span #{reply.ups.length}
+              a.practice.action.reply_reply(href="javascript:;", title="回复", data-id=reply.id) &#xe619;
+              if user && user.id === reply.author_id
+                a.practice.action.edit_reply(href="javascript:;", title="编辑") &#xe605;
+                a.practice.action.delete_reply(href="javascript:;", title="删除", data-id=reply.id) &#xe694;
+              form.reply-form.edit_reply_form(action=`/reply/${reply.id}/edit`, method="post")
                 input(type="hidden", name="tid", value=topic.id)
                 textarea(name="content", rows="2") #{reply.content}
                 button.btn(type="submit") 保存
+              form.reply-form.reply_reply_form(action=`/topic/${topic.id}/reply`, method="post")
+                input(type="hidden", name="reply_id", value=reply.id)
+                textarea(name="content", rows="2") @#{reply.author.nickname} 
+                button.btn(type="submit") 回复
+              time #{reply.create_at_ago}
       else
         .no-reply 暂无回复
   aside.layout-sider

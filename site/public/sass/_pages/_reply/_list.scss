@@ -25,16 +25,37 @@
       line-height: 30px;
     }
     .action {
+      position: relative;
       a.practice {
-        margin-right: 6px;
+        margin-right: 10px;
+        color: $gray;
+        font-size: 12px;
+        @include hover {
+          color: $theme-color;
+        }
+        span {
+          margin-left: 4px;
+        }
+      }
+      time {
+        position: absolute;
+        top: 0;
+        right: 0;
         color: $gray;
         font-size: 13px;
         vertical-align: middle;
       }
-      time {
-        color: $gray;
-        font-size: 13px;
-        vertical-align: middle;
+    }
+    .reply-form {
+      display: none;
+      textarea {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        width: 100%;
+        border-color: #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
       }
     }
   }
