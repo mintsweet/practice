@@ -21,7 +21,7 @@ module.exports = class Topic {
     // 更新用户信息
     await UserProxy.updateUser(author.id, { score, topic_count });
     // 创建行为
-    await BehaviorProxy.createBehavior('create', author.id, topic.id );
+    await BehaviorProxy.setAction('create', author.id, topic.id);
   }
 
   /**
@@ -62,4 +62,9 @@ module.exports = class Topic {
     topic.content = params.content || topic.content;
     await topic.save();
   }
-}
+
+  static async getTopicsByQuery(query, option) {
+    const topics = await TopicModel.find(query, option);
+    return topics;
+  }
+};

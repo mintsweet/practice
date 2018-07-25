@@ -35,29 +35,6 @@ module.exports = class User {
   }
 
   /**
-   * 查找星标用户
-   *
-   * @static
-   * @returns
-   */
-  static getUserStar() {
-    return UserModel.find({ star: true }, 'id avatar nickname location signature star');
-  }
-
-  /**
-   * 查找积分榜前一百用户
-   *
-   * @static
-   * @returns
-   */
-  static getUserTop100() {
-    return UserModel.find({}, 'id nickname score avatar topic_count star_count collect_count follower_count', {
-      limit: 100,
-      sort: '-score'
-    });
-  }
-
-  /**
    * 创建用户
    *
    * @static
@@ -80,5 +57,18 @@ module.exports = class User {
    */
   static updateUser(id, condition) {
     return UserModel.findByIdAndUpdate(id, condition);
+  }
+
+  /**
+   * 根据条件查询用户
+   *
+   * @static
+   * @param {*} query
+   * @param {*} option
+   * @returns
+   */
+  static async getUsersByQuery(query, option) {
+    const users = await UserModel.find(query, option);
+    return users;
   }
 };

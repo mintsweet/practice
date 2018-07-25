@@ -1,14 +1,11 @@
 const bcrypt = require('bcryptjs');
-const Base = require('./base');
 const UserProxy = require('../proxy/user');
 const BehaviorProxy = require('../proxy/behavior');
 const TopicProxy = require('../proxy/topic');
 
-const SALT_WORK_FACTOR = 10;
-
-class User extends Base {
+class User {
   constructor() {
-    super();
+    this.SALT_WORK_FACTOR = 10;
     this.signup = this.signup.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
@@ -71,7 +68,7 @@ class User extends Base {
   }
 
   async encryption(password) {
-    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+    const salt = await bcrypt.genSalt(this.SALT_WORK_FACTOR);
     const hash = await bcrypt.hash(password, salt);
     return hash;
   }
