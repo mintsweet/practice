@@ -56,7 +56,7 @@ UserSchema.pre('save', function(next) {
 const User = mongoose.model('User', UserSchema);
 
 // insert root data
-const userData = require('./data/root');
+const userData = require('../data/root');
 const bcrypt = require('bcryptjs');
 if (process.env.NODE_ENV !== 'test') {
   User.findOne((err, data) => {

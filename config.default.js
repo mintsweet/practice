@@ -6,8 +6,7 @@ const path = require('path');
 const config = {
   // Server
   server_port: 3000,
-  db: 'mongodb://localhost/practice',
-  log_dir: path.join(__dirname, './server/logs'),
+  mongodb: 'mongodb://localhost/practice',
   session_secret: 'practice_secret',
 
   qiniu: {

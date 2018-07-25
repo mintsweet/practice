@@ -1,11 +1,11 @@
 const express = require('express');
-const Auth = require('./middleware/auth');
-const Static = require('./controller/static');
-const Captcha = require('./controller/captcha');
-const User = require('./controller/user');
-const Notice = require('./controller/notice');
-const Topic = require('./controller/topic');
-const Reply = require('./controller/reply');
+const Auth = require('./middlewares/auth');
+const Static = require('./controllers/static');
+const Captcha = require('./controllers/captcha');
+const User = require('./controllers/user');
+const Notice = require('./controllers/notice');
+const Topic = require('./controllers/topic');
+const Reply = require('./controllers/reply');
 
 const router = express.Router();
 

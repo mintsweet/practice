@@ -1,9 +1,7 @@
-const Base = require('./base');
 const { BMP24 } = require('gd-bmp');
 
-class Captcha extends Base {
+class Captcha {
   constructor() {
-    super();
     this.getPicCaptcha = this.getPicCaptcha.bind(this);
   }
 
@@ -62,7 +60,6 @@ class Captcha extends Base {
     if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       return res.send({
         status: 0,
-        type: 'ERROR_MOBILE_IS_INVALID',
         message: '手机号格式不正确'
       });
     }
