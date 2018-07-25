@@ -69,4 +69,16 @@ module.exports = class User {
   static createUser(mobile, password, nickname) {
     return UserModel.create({ mobile, password, nickname });
   }
+
+  /**
+   * 根据ID更新用户信息
+   *
+   * @static
+   * @param {*} id
+   * @param {*} condition
+   * @returns
+   */
+  static updateUser(id, condition) {
+    return UserModel.findByIdAndUpdate(id, condition);
+  }
 };

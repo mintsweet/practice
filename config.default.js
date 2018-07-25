@@ -6,7 +6,8 @@ const path = require('path');
 const config = {
   // Server
   server_port: 3000,
-  mongodb: 'mongodb://localhost/practice',
+  mongodb: 'mongodb://localhost:27017/practice',
+  redis: '',
   session_secret: 'practice_secret',
 
   qiniu: {
