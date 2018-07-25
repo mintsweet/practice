@@ -4,7 +4,7 @@ const BaseModel = require('./base');
 
 const UserSchema = new Schema({
   // 登录信息
-  mobile: { unqie: true, type: String, required: true },
+  mobile: { unqie: true, type: Number, required: true },
   password: { type: String, required: true },
 
   // 用户信息

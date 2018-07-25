@@ -3,18 +3,34 @@
   "version": "1.0.0",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon ./app.js",
-    "lint": "eslint **/**.js"
+    "lint": "eslint **/**.js",
+    "test": "cross-env NODE_ENV=test mocha",
+    "test:file": "cross-env NODE_ENV=test mocha",
+    "test:cover": "cross-env NODE_ENV=test nyc --reporter=html mocha"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "gd-bmp": "^1.2.4",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "koa-logger": "^3.2.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "log4js": "^3.0.2",
+    "moment": "^2.22.2",
+    "mongoose": "^5.2.5",
+    "qiniu": "^7.2.1",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
     "eslint": "^5.2.0",
     "eslint-config-mints": "^1.0.0-alpha.1",
-    "nodemon": "^1.18.3"
-  }
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
+    "nyc": "^12.0.2",
+    "should": "^13.2.1",
+    "sino": "^0.0.3",
+    "supertest": "^3.1.0"
+  },
+  "license": "MIT"
 }

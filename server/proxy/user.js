@@ -12,9 +12,20 @@ class UserProxy {
   }
 
   /**
+   * 根据手机号查找用户
+   *
+   * @param {*} mobile
+   * @returns
+   * @memberof UserProxy
+   */
+  getUserByMobile(mobile) {
+    return UserModel.findOne({ mobile });
+  }
+
+  /**
    * 根据用户ID查找用户
    *
-   * @param {String} id
+   * @param {ObjectId} id
    * @returns
    * @memberof UserProxy
    */
@@ -22,8 +33,38 @@ class UserProxy {
     return UserModel.findById(id);
   }
 
-  getUserByMobile(mobile) {
-    return UserModel.findOne({ mobile });
+  /**
+   * 创建一个用户
+   *
+   * @param {Number} mobile
+   * @param {String} password
+   * @param {String} nickname
+   * @returns
+   * @memberof UserProxy
+   */
+  createUser(mobile, password, nickname) {
+    return UserModel.create({ mobile, password, nickname });
+  }
+
+  /**
+   * 根据ID删除用户
+   *
+   * @param {ObjectId} id
+   * @returns
+   * @memberof UserProxy
+   */
+  deleteUserById(id) {
+    return UserModel.findByIdAndRemove(id);
+  }
+
+  /**
+   * 根据手机号删除用户
+   *
+   * @param {Number} mobile
+   * @memberof UserProxy
+   */
+  deleteUserByMobile(mobile) {
+    return UserModel.findOneAndRemove({ mobile });
   }
 }
 
