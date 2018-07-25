@@ -8,4 +8,4 @@ module.exports = (err, req, res, next) => {
     type: 'ERROR_SERVICE',
     message: err.message
   });
-}
+};

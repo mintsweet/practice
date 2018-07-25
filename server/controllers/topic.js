@@ -1,5 +1,6 @@
 const formidable = require('formidable');
 const Base = require('./base');
+const TopicProxy = require('../proxy/topic');
 const TopicModel = require('../models/topic');
 const UserModel = require('../models/user');
 const ReplyModel = require('../models/reply');
@@ -14,49 +15,34 @@ class Topic extends Base {
   }
 
   // 创建话题
-  createTopic(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
+  async createTopic(req, res) {
+    const { id } = req.session.user;
+    const { tab, title, content } = req.body;
+
+    try {
+      if (!tab) {
+        throw new Error('话题所属标签不能为空');
+      } else if (!title) {
+        throw new Error('话题标题不能为空');
+      } else if (!content) {
+        throw new Error('话题内容不能为空');
       }
-
-      const { id } = req.session.user;
-      const { tab, title, content } = fields;
-
-      try {
-        if (!tab) {
-          throw new Error('话题所属标签不能为空');
-        } else if (!title) {
-          throw new Error('话题标题不能为空');
-        } else if (!content) {
-          throw new Error('话题内容不能为空');
-        }
-      } catch(err) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_PARAMS_OF_CREATE_TOPIC',
-          message: err.message
-        });
-      }
-
-      const _topic = {
-        ...fields,
-        author_id: id,
-      };
-
-      const topic = await TopicModel.create(_topic);
-
-      await this.generateBehavior('create', id, topic.id);
-
-      const currentUser = await UserModel.findById(id);
-      currentUser.score += 1;
-      currentUser.topic_count += 1;
-      await currentUser.save();
-
+    } catch(err) {
       return res.send({
-        status: 1
+        status: 0,
+        message: err.message
       });
+    }
+
+    const _topic = {
+      ...req.body,
+      author_id: id,
+    };
+
+    await TopicProxy.createTopic(_topic, id);
+
+    return res.send({
+      status: 1
     });
   }
 

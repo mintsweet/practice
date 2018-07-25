@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=development node ./app.js",
+    "start": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint **/*.js",
     "test": "cross-env NODE_ENV=test mocha",
     "test:file": "cross-env NODE_ENV=test mocha",
@@ -11,16 +11,16 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "connect-mongo": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "formidable": "^1.2.1",
     "gd-bmp": "^1.2.4",
     "log4js": "^2.5.3",
     "moment": "^2.22.1",
-    "mongoose": "^5.0.12",
+    "mongoose": "^5.2.5",
     "qiniu": "^7.2.1"
   },
   "devDependencies": {
@@ -28,6 +28,7 @@
     "eslint": "^5.0.1",
     "eslint-config-mints": "^1.0.0-alpha.1",
     "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
     "nyc": "^12.0.2",
     "should": "^13.2.1",
     "sinon": "^6.0.1",
