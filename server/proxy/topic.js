@@ -1,7 +1,6 @@
 const TopicModel = require('../models/topic');
-
 const UserProxy = require('./user');
-const BehaviorProxy = require('./behavior');
+const ActionProxy = require('./action');
 
 module.exports = class Topic {
   /**
@@ -11,9 +10,9 @@ module.exports = class Topic {
    * @param {*} id
    * @param {*} option
    */
-  static async getTopicById(id, option) {
-    const topic = await TopicModel.findById(id, option);
-    return topic;
+  static async getTopicById(id, select = null, option) {
+    const topic = await TopicModel.findById(id, select, option);
+    return topic.toObject({ virtuals: true });
   }
 
   /**
@@ -68,7 +67,7 @@ module.exports = class Topic {
     // 更新用户信息
     await UserProxy.updateUser(author.id, { score, topic_count });
     // 创建行为
-    await BehaviorProxy.setAction('create', author.id, topic.id);
+    await ActionProxy.setAction('create', author.id, topic.id);
   }
 
   /**
@@ -91,7 +90,7 @@ module.exports = class Topic {
     // 更新用户信息
     await UserProxy.updateUser(author.id, { score, topic_count });
     // 取反行为
-    await BehaviorProxy.negateBehavior('create', author.id, topic.id);
+    await ActionProxy.negateAction('create', author.id, topic.id);
   }
 
   /**

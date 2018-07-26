@@ -2,7 +2,7 @@ const express = require('express');
 const Aider = require('./controllers/aider');
 const Static = require('./controllers/static');
 const User = require('./controllers/user');
-// const Auth = require('./middlewares/auth');
+const Auth = require('./middlewares/auth');
 // const Notice = require('./controllers/notice');
 // const Topic = require('./controllers/topic');
 // const Reply = require('./controllers/reply');
@@ -24,22 +24,22 @@ router.get('/static/about', wrap(Static.getAbout)); // 关于文档
 
 // 用户
 router.post('/signup', wrap(User.signup)); // 注册
-// router.post('/signin', wrap(User.signin)); // 登录
-// router.delete('/signout', User.signout); // 登出
-// router.patch('/forget_pass', wrap(User.forgetPass)); // 忘记密码
-// router.get('/info', Auth.userRequired, User.getUserInfo); // 获取当前登录用户信息
-// router.put('/setting', Auth.userRequired, wrap(User.updateUserInfo)); // 更新个人信息
-// router.patch('/update_pass', Auth.userRequired, wrap(User.updatePass)); // 修改密码
-// router.get('/users/star', wrap(User.getStarList)); // 获取星标用户列表
-// router.get('/users/top100', wrap(User.getTop100)); // 获取积分榜前一百用户列表
-// router.get('/user/:uid', wrap(User.getInfoById)); // 根据ID获取用户信息
-// router.get('/user/:uid/behaviors', wrap(User.getUserBehaviors)); // 获取用户动态
-// router.get('/user/:uid/creates', wrap(User.getUserCreates)); // 获取用户专栏列表
-// router.get('/user/:uid/stars', wrap(User.getUserStars)); // 获取用户喜欢列表
-// router.get('/user/:uid/collections', wrap(User.getUserCollections)); // 获取用户收藏列表
-// router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 获取用户粉丝列表
-// router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 获取用户关注列表
-// router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
+router.post('/signin', wrap(User.signin)); // 登录
+router.delete('/signout', User.signout); // 登出
+router.patch('/forget_pass', wrap(User.forgetPass)); // 忘记密码
+router.get('/info', Auth.userRequired, User.getUserInfo); // 当前登录用户信息
+router.put('/setting', Auth.userRequired, wrap(User.updateUserInfo)); // 更新个人信息
+router.patch('/update_pass', Auth.userRequired, wrap(User.updatePass)); // 修改密码
+router.get('/users/star', wrap(User.getStarList)); // 星标用户列表
+router.get('/users/top100', wrap(User.getTop100)); // 积分榜前一百用户列表
+router.get('/user/:uid', wrap(User.getInfoById)); // 根据ID获取用户信息
+router.get('/user/:uid/action', wrap(User.getUserAction)); // 用户动态
+router.get('/user/:uid/create', wrap(User.getUserCreate)); // 用户专栏列表
+router.get('/user/:uid/like', wrap(User.getUserLike)); // 用户喜欢列表
+router.get('/user/:uid/collect', wrap(User.getUserCollect)); // 用户收藏列表
+router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 用户粉丝列表
+router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 用户关注列表
+router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
 
 // // 话题
 // router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题

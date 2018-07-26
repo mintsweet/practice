@@ -3,21 +3,21 @@ const request = require('supertest')(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/user/:uid/behaviors', function() {
+describe('test /v1/user/:uid/action', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
 
   before(async function() {
-    mockUser = await support.createUser('行为发起者', '18800000000');
-    mockUser2 = await support.createUser('行为无关者', '18800000001');
+    mockUser = await support.createUser(18800000000, '行为发起者');
+    mockUser2 = await support.createUser(18800000001, '行为无关者');
     mockTopic = await support.createTopic(mockUser.id);
-    await support.createBehavior('star', mockUser.id, mockTopic.id);
-    await support.createBehavior('follow', mockUser.id, mockUser2.id);
+    await support.createAction('like', mockUser.id, mockTopic.id);
+    await support.createAction('follow', mockUser.id, mockUser2.id);
   });
 
   after(async function() {
-    await support.deleteBehavior(mockUser.id);
+    await support.deleteAction(mockUser.id);
     await support.deleteTopic(mockUser.id);
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
@@ -29,7 +29,7 @@ describe('test /api/user/:uid/behaviors', function() {
   // 正确
   it('should / status 1', async function() {
     try {
-      const res = await request.get(`/api/user/${mockUser.id}/behaviors`);
+      const res = await request.get(`/v1/user/${mockUser.id}/action`);
 
       res.body.status.should.equal(1);
       res.body.data.should.be.Array();

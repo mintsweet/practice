@@ -4,7 +4,6 @@ class Auth {
     if (!req.session || !req.session.user || !req.session.user.id) {
       return res.send({
         status: 0,
-        type: 'ERROR_NOT_SIGNIN',
         message: '尚未登录'
       });
     }

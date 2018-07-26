@@ -1,8 +1,8 @@
 const ActionModel = require('../models/action');
 
-module.exports = class Behavior {
+module.exports = class Action {
   /**
-   * 创建一个行为
+   * 创建行为
    *
    * @static
    * @param {String} type
@@ -10,38 +10,51 @@ module.exports = class Behavior {
    * @param {ObjectId} target_id
    * @returns
    */
-  static createBehavior(type, author_id, target_id) {
+  static createAction(type, author_id, target_id) {
     return ActionModel.create({ type, author_id, target_id });
   }
 
   /**
-   * 行为取反
+   * 生成行为
    *
    * @static
    * @param {String} type
    * @param {ObjectId} author_id
    * @param {ObjectId} target_id
    */
-  static async negateBehavior(type, author_id, target_id) {
-    const behavior = await ActionModel.findOne({ type, author_id, target_id });
-    behavior.is_un = !behavior.is_un;
-    await behavior.save();
+  static async setAction(type, author_id, target_id) {
+    let action = await ActionModel.findOne({ type, author_id, target_id });
+    if (action) {
+      action.is_un = !action.is_un;
+      await action.save();
+    } else {
+      action = await this.createAction(type, author_id, target_id);
+    }
+    return action;
   }
 
   /**
-   * 生成一个行为
+   * 获取行为
    *
    * @static
-   * @param {*} type
-   * @param {*} author_id
-   * @param {*} target_id
+   * @param {String} type
+   * @param {ObjectId} author_id
+   * @param {ObjectId} target_id
    */
-  static async setAction(type, author_id, target_id) {
+  static async getAction(type, author_id, target_id) {
     const action = await ActionModel.findOne({ type, author_id, target_id });
-    if (action) {
-      await this.negateBehavior(type, author_id, target_id);
-    } else {
-      await this.createBehavior(type, author_id, target_id);
-    }
+    return action;
+  }
+
+  /**
+   * 根据条件查询行为
+   *
+   * @static
+   * @param {String} query
+   * @returns
+   */
+  static async getActionByQuery(query) {
+    const actions = await ActionModel.find(query);
+    return actions;
   }
 };

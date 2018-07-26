@@ -3,11 +3,11 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/update_pass', function() {
+describe('test /v1/update_pass', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser('已注册用户', '18800000000');
+    mockUser = await support.createUser(18800000000, '已注册用户');
   });
 
   after(async function() {
@@ -15,15 +15,14 @@ describe('test /api/update_pass', function() {
   });
 
   // 错误 - 尚未登录
-  it('should / status 0 when the user is not signin', async function() {
+  it('should / status 0 when the not signin', async function() {
     try {
-      const res = await request.patch('/api/update_pass').send({
+      const res = await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: 'a123456789'
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
     } catch(err) {
       should.ifError(err.message);
@@ -35,22 +34,19 @@ describe('test /api/update_pass', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.patch('/api/update_pass').send({
+      res = await request.patch('/v1/update_pass').send({
         oldPass: '',
         newPass: 'a123456789'
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_PARMAS_OF_UPDATE_PASS');
       res.body.message.should.equal('旧密码不能为空');
     } catch(err) {
       should.ifError(err.message);
@@ -62,22 +58,19 @@ describe('test /api/update_pass', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.patch('/api/update_pass').send({
+      res = await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: '123456789'
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_PARMAS_OF_UPDATE_PASS');
       res.body.message.should.equal('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
     } catch(err) {
       should.ifError(err.message);
@@ -89,22 +82,19 @@ describe('test /api/update_pass', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.patch('/api/update_pass').send({
+      res = await request.patch('/v1/update_pass').send({
         oldPass: '123456',
         newPass: 'a123456789'
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_PASSWORD_IS_NOT_MATCH');
       res.body.message.should.equal('旧密码错误');
     } catch(err) {
       should.ifError(err.message);
@@ -116,16 +106,14 @@ describe('test /api/update_pass', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.patch('/api/update_pass').send({
+      res = await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: 'a123456789'
       });

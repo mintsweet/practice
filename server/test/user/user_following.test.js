@@ -3,28 +3,28 @@ const request = require('supertest')(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/user/:uid/collections', function() {
+describe('test /v1/user/:uid/following', function() {
   let mockUser;
-  let mockTopic;
+  let mockUser2;
 
   before(async function() {
-    mockUser = await support.createUser('已经注册者', '18800000000');
-    mockTopic = await support.createTopic(mockUser.id);
-    await support.createBehavior('collect', mockUser.id, mockTopic.id);
+    mockUser = await support.createUser(18800000000, '被关注者');
+    mockUser2 = await support.createUser(18800000001, '关注者');
+    await support.createAction('follow', mockUser2.id, mockUser.id);
   });
 
   after(async function() {
-    await support.deleteBehavior(mockUser.id);
-    await support.deleteTopic(mockUser.id);
+    await support.deleteAction(mockUser2.id);
     await support.deleteUser(mockUser.mobile);
+    await support.deleteUser(mockUser2.mobile);
     mockUser = null;
-    mockTopic = null;
+    mockUser2 = null;
   });
 
   // 正确
   it('should / status 1', async function() {
     try {
-      const res = await request.get(`/api/user/${mockUser.id}/collections`);
+      const res = await request.get(`/v1/user/${mockUser2.id}/following`);
 
       res.body.status.should.equal(1);
       res.body.data.should.be.Array();

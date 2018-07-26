@@ -3,18 +3,18 @@ const request = require('supertest')(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/user/:uid/creates', function() {
+describe('test /v1/user/:uid/collect', function() {
   let mockUser;
   let mockTopic;
 
   before(async function() {
-    mockUser = await support.createUser('回复者', '18800000000');
+    mockUser = await support.createUser(18800000000, '已经注册者');
     mockTopic = await support.createTopic(mockUser.id);
-    await support.createBehavior('create', mockUser.id, mockTopic.id);
+    await support.createAction('collect', mockUser.id, mockTopic.id);
   });
 
   after(async function() {
-    await support.deleteBehavior(mockUser.id);
+    await support.deleteAction(mockUser.id);
     await support.deleteTopic(mockUser.id);
     await support.deleteUser(mockUser.mobile);
     mockUser = null;
@@ -24,7 +24,7 @@ describe('test /api/user/:uid/creates', function() {
   // 正确
   it('should / status 1', async function() {
     try {
-      const res = await request.get(`/api/user/${mockUser.id}/creates`);
+      const res = await request.get(`/v1/user/${mockUser.id}/collect`);
 
       res.body.status.should.equal(1);
       res.body.data.should.be.Array();
