@@ -8,8 +8,9 @@ module.exports = class User {
    * @param {ObjectId} id
    * @returns
    */
-  static getUserById(id, select = null, option) {
-    return UserModel.findById(id, select, option);
+  static async getUserById(id, select = null, option) {
+    const user = await UserModel.findById(id, select, option);
+    return user;
   }
 
   /**
@@ -19,8 +20,9 @@ module.exports = class User {
    * @param {Number} mobile
    * @returns
    */
-  static getUserByMobile(mobile) {
-    return UserModel.findOne({ mobile });
+  static async getUserByMobile(mobile, select = null, option) {
+    const user = await UserModel.findOne({ mobile }, select, option);
+    return user;
   }
 
   /**
@@ -30,33 +32,9 @@ module.exports = class User {
    * @param {String} nickname
    * @returns
    */
-  static getUserByNickname(nickname) {
-    return UserModel.findOne({ nickname });
-  }
-
-  /**
-   * 创建用户
-   *
-   * @static
-   * @param {Number} mobile
-   * @param {String} password
-   * @param {String} nickname
-   * @returns
-   */
-  static createUser(mobile, password, nickname) {
-    return UserModel.create({ mobile, password, nickname });
-  }
-
-  /**
-   * 根据ID更新用户信息
-   *
-   * @static
-   * @param {*} id
-   * @param {*} condition
-   * @returns
-   */
-  static updateUser(id, condition) {
-    return UserModel.findByIdAndUpdate(id, condition);
+  static async getUserByNickname(nickname, select = null, option) {
+    const user = await UserModel.findOne({ nickname }, select, option);
+    return user;
   }
 
   /**
@@ -70,5 +48,41 @@ module.exports = class User {
   static async getUsersByQuery(query, option) {
     const users = await UserModel.find(query, option);
     return users;
+  }
+
+  /**
+   * 创建用户
+   *
+   * @static
+   * @param {Number} mobile
+   * @param {String} password
+   * @param {String} nickname
+   * @returns
+   */
+  static async createUser(mobile, password, nickname) {
+    const user = await UserModel.create({ mobile, password, nickname });
+    return user;
+  }
+
+  /**
+   * 根据ID更新用户信息
+   *
+   * @static
+   * @param {ObjectId} id
+   * @param {Object} update
+   * @returns
+   */
+  static async updateUserById(id, update) {
+    return UserModel.findByIdAndUpdate(id, update);
+  }
+
+  /**
+   * 根据mobile移除用户
+   *
+   * @static
+   * @param {ObjectId} id
+   */
+  static async removeUserByMobile(mobile) {
+    await UserModel.findOneAndRemove(mobile);
   }
 };

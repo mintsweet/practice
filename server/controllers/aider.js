@@ -2,22 +2,23 @@ const { BMP24 } = require('gd-bmp');
 const qiniu = require('qiniu');
 const config = require('../../config.default');
 
-class Captcha {
+class Aider {
   constructor() {
-    this.getPicCaptcha = this.getPicCaptcha.bind(this);
+    this.getCaptcha = this.getCaptcha.bind(this);
   }
 
-  rand (min, max) {
+  _rand (min, max) {
     return Math.random() * (max - min + 1) + min | 0;
   }
 
-  getPicCaptcha(req, res) {
+  getCaptcha(req, res) {
     const width = req.query.width || 100;
     const height = req.query.height || 40;
     const textColor = req.query.textColor || 'a1a1a1';
     const bgColor = req.query.bgColor || 'ffffff';
 
     const img = new BMP24(width, height, `0x${textColor}`);
+
     let token = '';
 
     // 设置背景
@@ -33,30 +34,20 @@ class Captcha {
     let x = 10, y = 2;
 
     for (let i = 0; i < token.length; i++) {
-      y = 2 + this.rand(-4, 4);
-
+      y = 2 + this._rand(-4, 4);
       img.drawChar(token[i], x, y, BMP24.font12x24, '0xa1a1a1');
-
-      x += 12 + this.rand(4, 8);
+      x += 12 + this._rand(4, 8);
     }
 
     const url = `data:image/bmp;base64,${img.getFileData().toString('base64')}`;
 
-    req.session.pic_token = {
-      token,
-      time: Date.now()
-    };
-
     return res.send({
       status: 1,
-      data: {
-        token,
-        url
-      }
+      data: { token, url }
     });
   }
 
-  async getSmsCaptcha(req, res) {
+  getSmsCode(req, res) {
     const { mobile, expired } = req.query;
 
     if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
@@ -72,25 +63,24 @@ class Captcha {
       code += Math.floor(Math.random() * 10);
     }
 
-    req.session.sms_code = {
-      mobile,
-      code: code.toString(),
-      expired: Date.now() + Number(expired || (1000 * 60 * 10))
-    };
+    req.session.sms_code = { mobile, code, expired: expired || 1000 * 60 * 5 };
 
     process.env.NODE_ENV === 'development' && console.warn(code);
 
-    return res.send({
-      status: 1,
-      code: process.env.NODE_ENV === 'test' ? code : ''
-    });
+    if (process.env.NODE_ENV === 'production') {
+      return res.send({
+        status: 1
+      });
+    } else {
+      return res.send({
+        status: 1,
+        code
+      });
+    }
   }
 
-  uploadPic(req, res) {
-    const { file: { path } } = req.body;
-    const { id } = req.session.user;
-    const name = `avatar_${id}`;
-
+  uploadImg(req, res) {
+    const { name, file: { path } } = req.body;
     const mac = new qiniu.auth.digest.Mac(config.qiniu.ACCESS_KEY, config.qiniu.SECRET_KEY);
     const putPolicy = new qiniu.rs.PutPolicy({
       scope: `${config.qiniu.BUCKET_NAME}:${name}`
@@ -109,9 +99,8 @@ class Captcha {
     const putExtra = new qiniu.form_up.PutExtra();
     // 文件上传
     formUploader.putFile(uploadToken, name, path, putExtra, function(err, body, info) {
-      if (err) {
-        throw new Error(err);
-      }
+      if (err) throw new Error(err);
+
       if (info.statusCode === 200) {
         const url = `${config.qiniu.DONAME}/${body.key}}?date=${Date.now()}`;
         return res.send({
@@ -125,4 +114,4 @@ class Captcha {
   }
 }
 
-module.exports = new Captcha();
+module.exports = new Aider();

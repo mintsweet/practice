@@ -1,4 +1,4 @@
-const ActionModel = require('../models/type');
+const ActionModel = require('../models/action');
 
 module.exports = class Behavior {
   /**
