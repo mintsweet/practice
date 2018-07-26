@@ -3,11 +3,11 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/signout', function() {
+describe('test /v1/signout', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser('已注册用户', '18800000000');
+    mockUser = await support.createUser(18800000000, '已注册用户');
   });
 
   after(async function() {
@@ -19,16 +19,14 @@ describe('test /api/signout', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.delete('/api/signout');
+      res = await request.delete('/v1/signout');
       res.body.status.should.equal(1);
     } catch(err) {
       should.ifError(err.message);

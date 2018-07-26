@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const UserProxy = require('../proxy/user');
-const BehaviorProxy = require('../proxy/behavior');
+const ActionProxy = require('../proxy/action');
 const TopicProxy = require('../proxy/topic');
+const NoticeProxy = require('../proxy/notice');
 
 class User {
   constructor() {
@@ -9,9 +10,6 @@ class User {
     this.signup = this.signup.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
-    this.getUserStars = this.getUserStars.bind(this);
-    this.followOrUnFollow = this.followOrUnFollow.bind(this);
-    this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
   // 注册
@@ -21,12 +19,12 @@ class User {
 
     try {
       if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
-        throw new Error('请输入正确的手机号');
+        throw new Error('手机号格式错误');
       } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
-        throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+        throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6至18位之间');
       } else if (!nickname || nickname.length > 8 || nickname.length < 2) {
-        throw new Error('请输入2-8位的昵称');
-      } else if (sms_code.mobile !== mobile) {
+        throw new Error('请输入2至8位的昵称');
+      } else if (Number(sms_code.mobile) !== mobile) {
         throw new Error('收取验证码的手机与登录手机不匹配');
       } else if (sms_code.code !== smscaptcha) {
         throw new Error('短信验证码不正确');
@@ -46,7 +44,7 @@ class User {
     if (existUser) {
       return res.send({
         status: 0,
-        message: '手机号已经注册过了'
+        message: '手机号已经存在'
       });
     }
 
@@ -54,11 +52,11 @@ class User {
     if (existUser) {
       return res.send({
         status: 0,
-        message: '昵称已经注册过了'
+        message: '昵称已经存在'
       });
     }
 
-    const bcryptPassword = await this.encryption(password);
+    const bcryptPassword = await this._encryption(password);
 
     await UserProxy.createUser(mobile, bcryptPassword, nickname);
 
@@ -67,7 +65,7 @@ class User {
     });
   }
 
-  async encryption(password) {
+  async _encryption(password) {
     const salt = await bcrypt.genSalt(this.SALT_WORK_FACTOR);
     const hash = await bcrypt.hash(password, salt);
     return hash;
@@ -80,7 +78,7 @@ class User {
     if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
       return res.send({
         status: 0,
-        message: '请输入正确的手机号'
+        message: '手机号格式不正确'
       });
     }
 
@@ -95,7 +93,7 @@ class User {
     if (issms) {
       const sms_code = req.session.sms_code || {};
 
-      if (sms_code.mobile !== mobile) {
+      if (Number(sms_code.mobile) !== mobile) {
         return res.send({
           status: 0,
           message: '收取验证码的手机与登录手机不匹配'
@@ -131,8 +129,7 @@ class User {
       req.session.user = existUser;
 
       return res.send({
-        status: 1,
-        data: existUser
+        status: 1
       });
     }
   }
@@ -140,22 +137,22 @@ class User {
   // 登出
   signout(req, res) {
     req.session.user = null;
-    res.send({
+    return res.send({
       status: 1
     });
   }
 
   // 忘记密码
   async forgetPass(req, res) {
+    const { mobile, newPass, smscaptcha } = req.body;
     const sms_code = req.session.sms_code || {};
-    const { mobile, newPassword, smscaptcha } = req.body;
 
     try {
       if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
         throw new Error('请输入正确的手机号');
-      } else if (!newPassword || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPassword)) {
+      } else if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
         throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
-      } else if (mobile !== sms_code.mobile) {
+      } else if (Number(sms_code.mobile) !== mobile) {
         throw new Error('提交手机号与获取验证码手机号不对应');
       } else if (sms_code.code !== smscaptcha) {
         throw new Error('验证码错误');
@@ -177,11 +174,9 @@ class User {
       });
     }
 
-    const bcryptPassword = await this.encryption(newPassword);
+    const bcryptPassword = await this._encryption(newPass);
 
-    existUser.password = bcryptPassword;
-
-    await existUser.save();
+    await UserProxy.updateUserById(existUser.id, { password: bcryptPassword });
 
     return res.send({
       status: 1
@@ -209,7 +204,7 @@ class User {
       });
     }
 
-    const doc = await UserProxy.getUserByIdAndUpdate(id, { ...req.body }, { new: true });
+    const doc = await UserProxy.updateUserById(id, { ...req.body }, { new: true });
 
     req.session.user = doc;
 
@@ -240,9 +235,8 @@ class User {
     const isMatch = await bcrypt.compare(oldPass, existUser.password);
 
     if (isMatch) {
-      const bcryptPassword = await this.encryption(newPass);
-      existUser.password = bcryptPassword;
-      await existUser.save();
+      const bcryptPassword = await this._encryption(newPass);
+      await UserProxy.updateUserById(id, { password: bcryptPassword });
 
       return res.send({
         status: 1
@@ -257,7 +251,11 @@ class User {
 
   // 获取星标用户列表
   async getStarList(req, res) {
-    const userList = await UserProxy.getUserStar();
+    const query = {
+      star: true
+    };
+
+    const userList = await UserProxy.getUsersByQuery(query);
 
     return res.send({
       status: 1,
@@ -267,7 +265,11 @@ class User {
 
   // 获取积分榜前一百用户
   async getTop100(req, res) {
-    const userList = await UserProxy.getUserTop100();
+    const option = {
+      sort: '-scroe',
+      limit: 100
+    };
+    const userList = await UserProxy.getUsersByQuery({}, '', option);
 
     return res.send({
       status: 1,
@@ -292,9 +294,8 @@ class User {
     let follow = false;
 
     if (user.id) {
-      const behavior = await BehaviorProxy.getBehaviorByQueryOne({ action: 'follow', author_id: user.id, target_id: uid });
-
-      if (behavior && behavior.is_un === false) {
+      const action = await ActionProxy.getAction('follow', user.id, uid);
+      if (action && action.is_un === false) {
         follow = true;
       } else {
         follow = false;
@@ -308,22 +309,22 @@ class User {
   }
 
   // 获取用户动态
-  async getUserBehaviors(req, res) {
+  async getUserAction(req, res) {
     const { uid } = req.params;
-    const behaviors = await BehaviorProxy.getBehaviorByQuery({ author_id: uid, is_un: false });
 
-    const result = await Promise.all(behaviors.map(item => {
+    const actions = await ActionProxy.getActionByQuery({ author_id: uid, is_un: false });
+    const result = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
-        if (item.action === 'follow') {
-          resolve(UserProxy.getUserById(item.target_id, 'id nickname signature avatar'));
+        if (item.type === 'follow') {
+          resolve(this.getUserById(item.target_id, 'id nickname signature avatar'));
         } else {
           resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
         }
       });
     }));
 
-    const data = behaviors.map((item, i) => {
-      return { ...result[i].toObject(), action: item.action };
+    const data = actions.map((item, i) => {
+      return { ...result[i], type: item.type };
     });
 
     return res.send({
@@ -333,19 +334,15 @@ class User {
   }
 
   // 获取用户专栏的列表
-  async getUserCreates(req, res) {
+  async getUserCreate(req, res) {
     const { uid } = req.params;
 
-    const createBehavior = await BehaviorProxy.getBehaviorByQuery({ action: 'create', author_id: uid, is_un: false });
-    const result = await Promise.all(createBehavior.map(item => {
+    const actions = await ActionProxy.getActionByQuery({ type: 'create', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
         resolve(TopicProxy.getTopicById(item.target_id, 'id title star_count collect_count visit_count'));
       });
     }));
-
-    const data = createBehavior.map((item, i) => {
-      return { ...result[i].toObject(), action: 'create' };
-    });
 
     return res.send({
       status: 1,
@@ -354,18 +351,15 @@ class User {
   }
 
   // 获取用户喜欢列表
-  async getUserStars(req, res) {
+  async getUserLike(req, res) {
     const { uid } = req.params;
-    const starBehaviors = await BehaviorProxy.getBehaviorByQuery({ action: 'star', author_id: uid, is_un: false });
-    const result = await Promise.all(starBehaviors.map(item => {
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'like', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
         resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
       });
     }));
-
-    const data = starBehaviors.map((item, i) => {
-      return { ...result[i].toObject(), action: 'star' };
-    });
 
     return res.send({
       status: 1,
@@ -374,18 +368,15 @@ class User {
   }
 
   // 获取用户收藏列表
-  async getUserCollections(req, res) {
+  async getUserCollect(req, res) {
     const { uid } = req.params;
-    const collectBehavior = await BehaviorProxy.getBehaviorByQuery({ action: 'collect', author_id: uid, is_un: false });
-    const result = await Promise.all(collectBehavior.map(item => {
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'collect', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
         resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
       });
     }));
-
-    const data = collectBehavior.map((item, i) => {
-      return { ...result[i].toObject(), action: 'collect' };
-    });
 
     return res.send({
       status: 1,
@@ -396,8 +387,9 @@ class User {
   // 获取用户粉丝列表
   async getUserFollower(req, res) {
     const { uid } = req.params;
-    const followerBehavior = await BehaviorProxy.getBehaviorByQuery({ action: 'follow', target_id: uid, is_un: false });
-    const result = await Promise.all(followerBehavior.map(item => {
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'follow', target_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
         resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
       });
@@ -405,15 +397,16 @@ class User {
 
     return res.send({
       status: 1,
-      data: result
+      data
     });
   }
 
   // 获取用户关注的人列表
   async getUserFollowing(req, res) {
     const { uid } = req.params;
-    const followingBehavior = await BehaviorProxy.getBehaviorByQuery({ action: 'follow', author_id: uid, is_un: false });
-    const result = await Promise.all(followingBehavior.map(item => {
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'follow', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
         resolve(UserProxy.getUserById(item.target_id, 'id nickname avatar'));
       });
@@ -421,7 +414,7 @@ class User {
 
     return res.send({
       status: 1,
-      data: result
+      data
     });
   }
 
@@ -430,50 +423,27 @@ class User {
     const { uid } = req.params;
     const { id } = req.session.user;
 
-    const currentTarget = await UserProxy.getUserById(uid);
-    const currentAuthor = await UserProxy.getUserById(id);
+    const action = await ActionProxy.setAction('follow', id, uid);
+    const targetUser = await UserProxy.getUserById(uid);
+    const authorUser = await UserProxy.getUserById(id);
 
-    if (!currentTarget) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
-      });
-    }
-
-    const behavior = await this.generateBehavior('follow', id, uid);
-
-    if (behavior.is_un) {
-      currentTarget.follower_count -= 1;
-      await currentTarget.save();
-      currentAuthor.following_count -= 1;
-      await currentAuthor.save();
-      req.session.user.following_count -= 1;
+    if (action.is_un) {
+      targetUser.follower_count -= 1;
+      await targetUser.save();
+      authorUser.following_count -= 1;
+      await authorUser.save();
     } else {
-      currentTarget.follower_count += 1;
-      await currentTarget.save();
-      currentAuthor.following_count += 1;
-      await currentAuthor.save();
-      req.session.user.following_count += 1;
-      await this.sendFollowNotice(id, uid);
+      targetUser.follower_count += 1;
+      await targetUser.save();
+      authorUser.following_count += 1;
+      await authorUser.save();
+      await NoticeProxy.createFollowNotice(id, uid);
     }
 
-    return res.send({
-      status: 1,
-      data: behavior.actualAction
-    });
-  }
-
-  uploadAvatar(req, res) {
-    const { file: { path } } = req.body;
-    const { id } = req.session.user;
-    const fileName = `avatar_${id}`;
-
-    const url = this.uploadImg(fileName, path);
 
     return res.send({
       status: 1,
-      data: url
+      data: action.toObject({ virtuals: true }).actualType
     });
   }
 }

@@ -8,8 +8,9 @@ module.exports = class User {
    * @param {ObjectId} id
    * @returns
    */
-  static getUserById(id, select = null, option) {
-    return UserModel.findById(id, select, option);
+  static async getUserById(id, select, option) {
+    const user = await UserModel.findById(id, select, option);
+    return user;
   }
 
   /**
@@ -19,8 +20,9 @@ module.exports = class User {
    * @param {Number} mobile
    * @returns
    */
-  static getUserByMobile(mobile) {
-    return UserModel.findOne({ mobile });
+  static async getUserByMobile(mobile, select, option) {
+    const user = await UserModel.findOne({ mobile }, select, option);
+    return user;
   }
 
   /**
@@ -30,8 +32,22 @@ module.exports = class User {
    * @param {String} nickname
    * @returns
    */
-  static getUserByNickname(nickname) {
-    return UserModel.findOne({ nickname });
+  static async getUserByNickname(nickname, select = null, option) {
+    const user = await UserModel.findOne({ nickname }, select, option);
+    return user;
+  }
+
+  /**
+   * 根据条件查询用户
+   *
+   * @static
+   * @param {*} query
+   * @param {*} option
+   * @returns
+   */
+  static async getUsersByQuery(query, select = null, option) {
+    const users = await UserModel.find(query, select, option);
+    return users;
   }
 
   /**
@@ -43,32 +59,31 @@ module.exports = class User {
    * @param {String} nickname
    * @returns
    */
-  static createUser(mobile, password, nickname) {
-    return UserModel.create({ mobile, password, nickname });
+  static async createUser(mobile, password, nickname) {
+    const user = await UserModel.create({ mobile, password, nickname });
+    return user;
   }
 
   /**
    * 根据ID更新用户信息
    *
    * @static
-   * @param {*} id
-   * @param {*} condition
+   * @param {ObjectId} id
+   * @param {Object} update
    * @returns
    */
-  static updateUser(id, condition) {
-    return UserModel.findByIdAndUpdate(id, condition);
+  static async updateUserById(id, update, option) {
+    const user = await UserModel.findByIdAndUpdate(id, update, option);
+    return user;
   }
 
   /**
-   * 根据条件查询用户
+   * 根据mobile移除用户
    *
    * @static
-   * @param {*} query
-   * @param {*} option
-   * @returns
+   * @param {ObjectId} id
    */
-  static async getUsersByQuery(query, option) {
-    const users = await UserModel.find(query, option);
-    return users;
+  static async removeUserByMobile(mobile) {
+    await UserModel.findOneAndRemove(mobile);
   }
 };

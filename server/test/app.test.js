@@ -2,7 +2,7 @@ const app = require('../app');
 const request = require('supertest')(app);
 const should = require('should');
 
-describe('test /api', function() {
+describe('test /v1', function() {
   it('should / status 0 when the 404', async function() {
     try {
       const res = await request.get('/not_found');
@@ -16,10 +16,9 @@ describe('test /api', function() {
 
   it('should / status 1', async function() {
     try {
-      const res = await request.get('/api');
+      const res = await request.get('/v1');
 
       res.body.status.should.equal(1);
-      res.body.data.should.equal('欢迎使用 Mints - 薄荷糖社区 API接口');
     } catch(err) {
       should.ifError(err.message);
     }

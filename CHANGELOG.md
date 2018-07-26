@@ -7,6 +7,19 @@
 
 ---
 
+## v1.2.0
+
+`2018-xx-xx`
+
+### server
+
+  - 改用`redis`为`session`存储库
+  - 移除`controllers`中所有的数据库操作到`proxy`中
+  - 更改模型`behavior`为`action`
+  - 更改控制器`captcha`为`aider`
+  - 由于移除`formidable`的原因，暂时去除头像上传 API
+  - 移除`controllers`中公共处理部分`base`
+
 ## v1.1.0
 
 `2018-07-24`

@@ -1,23 +1,20 @@
 const bcrypt = require('bcryptjs');
 const UserModel = require('../models/user');
 const TopicModel = require('../models/topic');
+const ActionModel = require('../models/action');
 const ReplyModel = require('../models/reply');
 const NoticeModel = require('../models/notice');
-const BehaviorModel = require('../models/behavior');
 
-exports.createUser = function(nickname, mobile, other) {
+exports.createUser = function(mobile, nickname) {
   return UserModel.create({
-    nickname,
     mobile,
     password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10)),
-    ...other
+    nickname
   });
 };
 
 exports.deleteUser = function(mobile) {
-  return UserModel.findOneAndRemove({
-    mobile
-  });
+  return UserModel.findOneAndRemove({ mobile });
 };
 
 exports.createTopic = function(author_id) {
@@ -31,6 +28,20 @@ exports.createTopic = function(author_id) {
 
 exports.deleteTopic = function(author_id) {
   return TopicModel.remove({
+    author_id
+  });
+};
+
+exports.createAction = function(type, author_id, target_id) {
+  return ActionModel.create({
+    type,
+    author_id,
+    target_id
+  });
+};
+
+exports.deleteAction = function(author_id) {
+  return ActionModel.remove({
     author_id
   });
 };
@@ -60,19 +71,5 @@ exports.createNotice = function(type, target_id, other) {
 exports.deleteNotice = function(target_id) {
   return NoticeModel.remove({
     target_id
-  });
-};
-
-exports.createBehavior = function(action, author_id, target_id) {
-  return BehaviorModel.create({
-    action,
-    author_id,
-    target_id
-  });
-};
-
-exports.deleteBehavior = function(author_id) {
-  return BehaviorModel.remove({
-    author_id
   });
 };

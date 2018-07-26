@@ -3,11 +3,11 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/info', function() {
+describe('test /v1/info', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser('已注册用户', '18800000000');
+    mockUser = await support.createUser(18800000000, '已注册用户');
   });
 
   after(async function() {
@@ -16,12 +16,11 @@ describe('test /api/info', function() {
   });
 
   // 错误 - 尚未登录
-  it('should / status 0 when user is not signin', async function() {
+  it('should / status 0 when the not signin', async function() {
     try {
-      const res = await request.get('/api/info');
+      const res = await request.get('/v1/info');
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
     } catch(err) {
       should.ifError(err.message);
@@ -33,16 +32,14 @@ describe('test /api/info', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.get('/api/info');
+      res = await request.get('/v1/info');
 
       res.body.status.should.equal(1);
       res.body.data.should.have.property('id');

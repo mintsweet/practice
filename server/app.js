@@ -17,6 +17,7 @@ const app = module.exports = new Express();
 // middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // cookie and session
 app.use(cookieParser(config.session_secret));
