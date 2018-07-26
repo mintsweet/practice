@@ -1,12 +1,11 @@
 const util = require('util');
 const fs = require('fs');
-const path = require('path');
 
 const readFile = util.promisify(fs.readFile);
 
 class Static {
   async getQuickStart(req, res) {
-    const data = await readFile('./controller/static/quick_start.md', 'utf-8');
+    const data = await readFile('./doc/quick_start.md', 'utf-8');
     return res.send({
       status: 1,
       data
@@ -14,7 +13,7 @@ class Static {
   }
 
   async getApiDoc(req, res) {
-    const data = await readFile(path.join(__dirname, '../../API.md'), 'utf-8');
+    const data = await readFile('../API.md', 'utf-8');
     return res.send({
       status: 1,
       data
@@ -22,7 +21,7 @@ class Static {
   }
 
   async getAbout(req, res) {
-    const data = await readFile('./controller/static/about.md', 'utf-8');
+    const data = await readFile('./doc/about.md', 'utf-8');
     return res.send({
       status: 1,
       data

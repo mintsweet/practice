@@ -1,9 +1,9 @@
-const Base = require('./base');
 const { BMP24 } = require('gd-bmp');
+const qiniu = require('qiniu');
+const config = require('../../config.default');
 
-class Captcha extends Base {
+class Captcha {
   constructor() {
-    super();
     this.getPicCaptcha = this.getPicCaptcha.bind(this);
   }
 
@@ -62,7 +62,6 @@ class Captcha extends Base {
     if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       return res.send({
         status: 0,
-        type: 'ERROR_MOBILE_IS_INVALID',
         message: '手机号格式不正确'
       });
     }
@@ -84,6 +83,44 @@ class Captcha extends Base {
     return res.send({
       status: 1,
       code: process.env.NODE_ENV === 'test' ? code : ''
+    });
+  }
+
+  uploadPic(req, res) {
+    const { file: { path } } = req.body;
+    const { id } = req.session.user;
+    const name = `avatar_${id}`;
+
+    const mac = new qiniu.auth.digest.Mac(config.qiniu.ACCESS_KEY, config.qiniu.SECRET_KEY);
+    const putPolicy = new qiniu.rs.PutPolicy({
+      scope: `${config.qiniu.BUCKET_NAME}:${name}`
+    });
+
+    const uploadToken = putPolicy.uploadToken(mac);
+    const qiniuConfig = new qiniu.conf.Config();
+    // 空间对应机房
+    // 华东:qiniu.zone.Zone_z0
+    // 华北:qiniu.zone.Zone_z1
+    // 华南:qiniu.zone.Zone_z2
+    // 北美:qiniu.zone.Zone_na0
+    qiniuConfig.zone = qiniu.zone.Zone_z0;
+
+    const formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
+    const putExtra = new qiniu.form_up.PutExtra();
+    // 文件上传
+    formUploader.putFile(uploadToken, name, path, putExtra, function(err, body, info) {
+      if (err) {
+        throw new Error(err);
+      }
+      if (info.statusCode === 200) {
+        const url = `${config.qiniu.DONAME}/${body.key}}?date=${Date.now()}`;
+        return res.send({
+          status: 1,
+          data: url
+        });
+      } else {
+        throw new Error(info.error);
+      }
     });
   }
 }

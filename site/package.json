@@ -24,7 +24,7 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.0.1",
-    "eslint-config-mints": "^0.3.0-rc.8",
+    "eslint-config-mints": "^1.0.0-alpha.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
     "gulp-clean": "^0.4.0",

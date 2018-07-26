@@ -24,7 +24,6 @@ describe('test /api/notice/user', function() {
     await support.deleteUser(mockUser2.mobile);
   });
 
-  // 错误 - 尚未登录
   it('should / status 0 when the not signin', async function() {
     try {
       const res = await request.get('/api/notice/user');
@@ -36,7 +35,6 @@ describe('test /api/notice/user', function() {
     }
   });
 
-  // 正确
   it('should / status 1', async function() {
     try {
       let res;

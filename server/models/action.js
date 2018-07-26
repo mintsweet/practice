@@ -4,15 +4,15 @@ const { ObjectId } = Schema;
 const BaseModel = require('./base');
 
 /*
-* 根据类型区分行为 action
+* 根据类型区分行为 type
 * 1. create 创建了
 * 2. star 喜欢了
 * 3. collect 收藏了
 * 4. follow 关注了
 */
 
-const BehaviorSchema = new Schema({
-  action: { type: String, required: true },
+const ActionSchema = new Schema({
+  type: { type: String, required: true },
 
   author_id: { type: ObjectId, required: true }, // 发起者
   target_id: { type: ObjectId, required: true }, // 命中者
@@ -23,15 +23,15 @@ const BehaviorSchema = new Schema({
   update_at: { type: Date, default: Date.now }
 });
 
-BehaviorSchema.plugin(BaseModel);
+ActionSchema.plugin(BaseModel);
 
-BehaviorSchema.index({ action: 1, author_id: 1, target_id: 1 }, { unique: true });
-BehaviorSchema.index({ author_id: 1, create_at: -1 });
+ActionSchema.index({ type: 1, author_id: 1, target_id: 1 }, { unique: true });
+ActionSchema.index({ author_id: 1, create_at: -1 });
 
-BehaviorSchema.virtual('actualAction').get(function() {
-  return this.is_un ? `un_${this.action}` : this.action;
+ActionSchema.virtual('actualType').get(function() {
+  return this.is_un ? `un_${this.type}` : this.type;
 });
 
-const Behavior = mongoose.model('Behavior', BehaviorSchema);
+const Action = mongoose.model('Action', ActionSchema);
 
-module.exports = Behavior;
+module.exports = Action;
