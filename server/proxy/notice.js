@@ -2,6 +2,19 @@ const NoticeModel = require('../models/notice');
 
 module.exports = class Notice {
   /**
+   * 根据条件查询提醒
+   *
+   * @static
+   * @param {Object} query
+   * @param {String} select
+   * @param {Object} option
+   */
+  static async getNoticeByQuery(query, select, option) {
+    const notices = await NoticeModel.find(query, select, option);
+    return notices;
+  }
+
+  /**
    * 创建一个点赞的提醒
    *
    * @static
@@ -9,8 +22,8 @@ module.exports = class Notice {
    * @param {ObjectId} author_id
    * @param {ObjectId} topic_id
    */
-  static async createStarNotice(target_id, author_id, topic_id) {
-    await NoticeModel.findOneAndUpdate({ type: 'star', author_id, target_id, topic_id }, { create_at: Date.now() }, { upsert: true });
+  static async createLikeNotice(author_id, target_id, topic_id) {
+    await NoticeModel.findOneAndUpdate({ type: 'like', author_id, target_id, topic_id }, { create_at: Date.now() }, { upsert: true });
   }
 
   /**

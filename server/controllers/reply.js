@@ -1,77 +1,44 @@
-const formidable = require('formidable');
-const Base = require('./base');
-const ReplyModel = require('../models/reply');
-const TopicModel = require('../models/topic');
-const UserModel = require('../models/user');
+const ReplyProxy = require('../proxy/reply');
+const TopicProxy = require('../proxy/topic');
+const NoticeProxy = require('../proxy/notice');
 
-class Reply extends Base {
+class Reply {
   constructor() {
-    super();
     this.createReply = this.createReply.bind(this);
     this.upReply = this.upReply.bind(this);
   }
 
   // 创建回复
-  createReply(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+  async createReply(req, res) {
+    const { content, reply_id } = req.body;
+    const { tid } = req.params;
+    const { id } = req.session.user;
 
-      const { tid } = req.params;
-      const { id } = req.session.user;
-
-      const currentTopic = await TopicModel.findById(tid);
-
-      if (!currentTopic) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_NOT_FIND_TOPIC',
-          message: '未找到话题'
-        });
-      }
-
-      const { content, reply_id } = fields;
-
-      if (!content) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_NO_CONTENT_OF_REPLY',
-          message: '回复内容不能为空'
-        });
-      }
-
-      // 保存回复
-      const reply = new ReplyModel();
-      reply.content = content;
-      reply.topic_id = tid;
-      reply.author_id = id;
-      if (reply_id) {
-        reply.reply_id = reply_id;
-      }
-      await reply.save();
-
-      // 修改话题
-      currentTopic.last_reply = id;
-      currentTopic.last_reply_at = new Date();
-      currentTopic.reply_count += 1;
-      await currentTopic.save();
-
-      // 修改用户
-      const createUser = await UserModel.findById(id);
-      createUser.reply_count += 1;
-      await createUser.save();
-
-      if (reply_id) {
-        await this.sendAtNotice(id, currentTopic.author_id, currentTopic.id, reply_id);
-      } else {
-        await this.sendReplyNotice(id, currentTopic.author_id, currentTopic.id);
-      }
-
+    if (!content) {
       return res.send({
-        status: 1
+        status: 0,
+        type: 'ERROR_NO_CONTENT_OF_REPLY',
+        message: '回复内容不能为空'
       });
+    }
+
+    const topic = await TopicProxy.getTopicById(tid);
+
+    // 创建回复
+    const reply = await ReplyProxy.createReply(content, id, tid, reply_id);
+
+    // 修改最后一次回复
+    await TopicProxy.updateTopicLastReply(tid, reply.id);
+
+    // 发送提醒
+    if (reply_id) {
+      await NoticeProxy.createAtNotice(id, topic.author_id, topic.id, reply.id);
+    } else {
+      await NoticeProxy.createReplyNotice(id, topic.author_id, topic.id);
+    }
+
+    return res.send({
+      status: 1
     });
   }
 
@@ -80,34 +47,21 @@ class Reply extends Base {
     const { rid } = req.params;
     const { id } = req.session.user;
 
-    const currentReply = await ReplyModel.findById(rid);
+    const reply = await ReplyProxy.getReplyById(rid);
 
-    if (!currentReply) {
+    if (!reply.author_id.equals(id)) {
       return res.send({
         status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
-      });
-    }
-
-    const replyAuthor = await UserModel.findById(currentReply.author_id);
-    const replyTopic = await TopicModel.findById(currentReply.topic_id);
-
-    if (!currentReply.author_id.equals(id)) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_IS_NOT_AUTHOR',
         message: '不能删除别人的回复'
       });
     }
 
-    replyTopic.reply_count -= 1;
-    replyAuthor.reply_count -= 1;
+    const topic = await TopicProxy.getTopicById(reply.topic_id);
 
-    await replyTopic.save();
-    await replyAuthor.save();
+    topic.reply_count -= 1;
+    await topic.save();
 
-    await currentReply.remove();
+    await ReplyProxy.deleteReplyById(rid);
 
     return res.send({
       status: 1
@@ -115,48 +69,32 @@ class Reply extends Base {
   }
 
   // 编辑回复
-  editReply(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+  async editReply(req, res) {
+    const { rid } = req.params;
+    const { id } = req.session.user;
 
-      const { rid } = req.params;
-      const { id } = req.session.user;
+    const reply = await ReplyProxy.getReplyById(rid);
 
-      const currentReply = await ReplyModel.findById(rid);
-
-      if (!currentReply) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_ID_IS_INVALID',
-          message: '无效的ID'
-        });
-      }
-
-      if (!currentReply.author_id.equals(id)) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_IS_NOT_AUTHOR',
-          message: '不能编辑别人的评论'
-        });
-      }
-
-      const { content } = fields;
-
-      if (!content) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_CONTENT_INVALID',
-          message: '回复内容不能为空'
-        });
-      }
-
-      await ReplyModel.findByIdAndUpdate(rid, { content });
+    if (!reply.author_id.equals(id)) {
       return res.send({
-        status: 1
+        status: 0,
+        message: '不能编辑别人的评论'
       });
+    }
+
+    const { content } = req.body;
+
+    if (!content) {
+      return res.send({
+        status: 0,
+        message: '回复内容不能为空'
+      });
+    }
+
+    await ReplyProxy.updateReplyById(rid, { content });
+
+    return res.send({
+      status: 1
     });
   }
 
@@ -165,38 +103,29 @@ class Reply extends Base {
     const { rid } = req.params;
     const { id } = req.session.user;
 
-    const currentReply = await ReplyModel.findById(rid);
+    const reply = await ReplyProxy.getReplyById(rid);
 
-    if (!currentReply) {
+    if (reply.author_id.equals(id)) {
       return res.send({
         status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
-      });
-    }
-
-    if (currentReply.author_id.equals(id)) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_YOURSELF_NOT_DO_IT',
         message: '不能给自己点赞哟'
       });
     }
 
     let action;
 
-    const upIndex = currentReply.ups.indexOf(id);
+    const upIndex = reply.ups.indexOf(id);
 
     if (upIndex === -1) {
-      currentReply.ups.push(id);
+      reply.ups.push(id);
       action = 'up';
-      await this.sendUpsNotice(id, currentReply.author_id, currentReply.id);
+      await NoticeProxy.createUpReplyNotice(id, reply.author_id, reply.id);
     } else {
-      currentReply.ups.splice(upIndex, 1);
+      reply.ups.splice(upIndex, 1);
       action = 'down';
     }
 
-    await currentReply.save();
+    await reply.save();
 
     return res.send({
       status: 1,

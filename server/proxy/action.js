@@ -34,7 +34,7 @@ module.exports = class Action {
   }
 
   /**
-   * 获取行为
+   * 查询一个行为
    *
    * @static
    * @param {String} type

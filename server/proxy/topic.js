@@ -1,6 +1,7 @@
 const TopicModel = require('../models/topic');
 const UserProxy = require('./user');
 const ActionProxy = require('./action');
+const ReplyProxy = require('./reply');
 
 module.exports = class Topic {
   /**
@@ -16,7 +17,7 @@ module.exports = class Topic {
   }
 
   /**
-   * 根据条件查找话题(带作者和最后回复者)
+   * 根据条件查找话题
    *
    * @static
    * @param {Object} query
@@ -25,29 +26,7 @@ module.exports = class Topic {
    */
   static async getTopicsByQuery(query, select = null, option) {
     const topics = await TopicModel.find(query, select, option);
-
-    const promiseAuthor = await Promise.all(topics.map(item => {
-      return new Promise(resolve => {
-        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
-      });
-    }));
-
-    const promiseLastReply = await Promise.all(topics.map(item => {
-      return new Promise(resolve => {
-        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
-      });
-    }));
-
-    const result = topics.map((item, i) => {
-      return {
-        ...item.toObject({ virtuals: true }),
-        author: promiseAuthor[i],
-        last_reply_author: promiseLastReply[i],
-        last_reply_at_ago: item.last_reply_at_ago()
-      };
-    });
-
-    return result;
+    return topics;
   }
 
   /**
@@ -119,5 +98,106 @@ module.exports = class Topic {
   static async countTopic(query) {
     const count = TopicModel.count(query);
     return count;
+  }
+
+  /**
+   * 获取话题列表
+   *
+   * @static
+   * @param {*} query
+   * @param {*} [select=null]
+   * @param {*} option
+   */
+  static async getTopicList(query, select = null, option) {
+    const topics = this.getTopicsByQuery(query, select, option);
+    const promiseAuthor = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    const promiseLastReply = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+      });
+    }));
+
+    const result = topics.map((item, i) => {
+      return {
+        ...item.toObject({ virtuals: true }),
+        author: promiseAuthor[i],
+        last_reply_author: promiseLastReply[i],
+        last_reply_at_ago: item.last_reply_at_ago()
+      };
+    });
+
+    return result;
+  }
+
+  /**
+   * 获取话题详情
+   *
+   * @static
+   * @param {ObjectId} tid
+   * @param {ObjectId} uid
+   * @returns
+   */
+  static async getTopicDetail(tid, uid) {
+    const topic = this.getTopicById(tid);
+
+    // 访问计数
+    topic.visit_count += 1;
+    await topic.save();
+
+    // 作者
+    const author = await UserProxy.findById(topic.author_id, 'id nickname avatar location signature score');
+    // 回复
+    let replies = await ReplyProxy.getReplyByQuery({ topic_id: topic.id });
+    const reuslt = await Promise.all(replies.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.findById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    replies = replies.map((item, i) => ({
+      ...item.toObject({ virtuals: true }),
+      author: reuslt[i],
+      create_at_ago: item.create_at_ago()
+    }));
+
+    // 状态
+    let like;
+    let collect;
+
+    if (uid) {
+      like = await ActionProxy.getAction({ action: 'like', author_id: uid, target_id: topic.id });
+      collect = await ActionProxy.findOne({ action: 'collect', author_id: uid, target_id: topic.id });
+    }
+
+    like = (like && !like.is_un) || false;
+    collect = (collect && !collect.is_un) || false;
+
+    return {
+      topic,
+      author,
+      replies,
+      like,
+      collect
+    };
+  }
+
+  /**
+   * 更新最后一次回复
+   *
+   * @static
+   * @param {ObjectId} tid
+   * @param {ObjectId} reply_id
+   */
+  static async updateTopicLastReply(tid, reply_id) {
+    const topic = await this.getTopicById(tid);
+    topic.last_reply = reply_id;
+    topic.last_reply_at = new Date();
+    topic.reply_count += 1;
+    await topic.save();
   }
 };

@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs');
 const UserProxy = require('../proxy/user');
+const ActionProxy = require('../proxy/action');
+const TopicProxy = require('../proxy/topic');
+const NoticeProxy = require('../proxy/notice');
 
 class User {
   constructor() {
@@ -248,7 +251,11 @@ class User {
 
   // 获取星标用户列表
   async getStarList(req, res) {
-    const userList = await UserProxy.getUsersByQuery({ star: true });
+    const query = {
+      star: true
+    };
+
+    const userList = await UserProxy.getUsersByQuery(query);
 
     return res.send({
       status: 1,
@@ -258,7 +265,11 @@ class User {
 
   // 获取积分榜前一百用户
   async getTop100(req, res) {
-    const userList = await UserProxy.getUsersByQuery({}, '', { sort: '-scroe', limit: 100 });
+    const option = {
+      sort: '-scroe',
+      limit: 100
+    };
+    const userList = await UserProxy.getUsersByQuery({}, '', option);
 
     return res.send({
       status: 1,
@@ -283,7 +294,12 @@ class User {
     let follow = false;
 
     if (user.id) {
-      follow = await UserProxy.userIsFollow('follow', user.id, uid);
+      const action = await ActionProxy.getAction('follow', user.id, uid);
+      if (action && action.is_un === false) {
+        follow = true;
+      } else {
+        follow = false;
+      }
     }
 
     return res.send({
@@ -295,7 +311,21 @@ class User {
   // 获取用户动态
   async getUserAction(req, res) {
     const { uid } = req.params;
-    const data = await UserProxy.getUserActions(uid);
+
+    const actions = await ActionProxy.getActionByQuery({ author_id: uid, is_un: false });
+    const result = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        if (item.type === 'follow') {
+          resolve(this.getUserById(item.target_id, 'id nickname signature avatar'));
+        } else {
+          resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
+        }
+      });
+    }));
+
+    const data = actions.map((item, i) => {
+      return { ...result[i], type: item.type };
+    });
 
     return res.send({
       status: 1,
@@ -306,7 +336,13 @@ class User {
   // 获取用户专栏的列表
   async getUserCreate(req, res) {
     const { uid } = req.params;
-    const data = await UserProxy.getUserCreates(uid);
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'create', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicProxy.getTopicById(item.target_id, 'id title star_count collect_count visit_count'));
+      });
+    }));
 
     return res.send({
       status: 1,
@@ -317,7 +353,13 @@ class User {
   // 获取用户喜欢列表
   async getUserLike(req, res) {
     const { uid } = req.params;
-    const data = await UserProxy.getUserLikes(uid);
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'like', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
+      });
+    }));
 
     return res.send({
       status: 1,
@@ -328,7 +370,13 @@ class User {
   // 获取用户收藏列表
   async getUserCollect(req, res) {
     const { uid } = req.params;
-    const data = await UserProxy.getUserCollects(uid);
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'collect', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
+      });
+    }));
 
     return res.send({
       status: 1,
@@ -339,7 +387,13 @@ class User {
   // 获取用户粉丝列表
   async getUserFollower(req, res) {
     const { uid } = req.params;
-    const data = await UserProxy.getUserFollower(uid);
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'follow', target_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
 
     return res.send({
       status: 1,
@@ -350,7 +404,13 @@ class User {
   // 获取用户关注的人列表
   async getUserFollowing(req, res) {
     const { uid } = req.params;
-    const data = await UserProxy.getUserFollowing(uid);
+
+    const actions = await ActionProxy.getActionByQuery({ type: 'follow', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.target_id, 'id nickname avatar'));
+      });
+    }));
 
     return res.send({
       status: 1,
@@ -363,11 +423,27 @@ class User {
     const { uid } = req.params;
     const { id } = req.session.user;
 
-    const actionType = await UserProxy.updateFollowOrUn(id, uid);
+    const action = await ActionProxy.setAction('follow', id, uid);
+    const targetUser = await UserProxy.getUserById(uid);
+    const authorUser = await UserProxy.getUserById(id);
+
+    if (action.is_un) {
+      targetUser.follower_count -= 1;
+      await targetUser.save();
+      authorUser.following_count -= 1;
+      await authorUser.save();
+    } else {
+      targetUser.follower_count += 1;
+      await targetUser.save();
+      authorUser.following_count += 1;
+      await authorUser.save();
+      await NoticeProxy.createFollowNotice(id, uid);
+    }
+
 
     return res.send({
       status: 1,
-      data: actionType
+      data: action.toObject({ virtuals: true }).actualType
     });
   }
 }

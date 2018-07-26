@@ -1,8 +1,8 @@
 const Base = require('./base');
-const NoticeModel = require('../models/notice');
-const UserModel = require('../models/user');
-const TopicModel = require('../models/topic');
-const ReplyModel = require('../models/reply');
+const NoticeProxy = require('../proxy/notice');
+const UserProxy = require('../proxy/user');
+const TopicProxy = require('../proxy/topic');
+const ReplyProxy = require('../proxy/reply');
 
 class Notice extends Base {
   constructor() {
@@ -12,9 +12,9 @@ class Notice extends Base {
 
   // 转化消息格式
   async normalNotice(item) {
-    const author = await UserModel.findById(item.author_id, 'id nickname avatar');
-    const topic = await TopicModel.findById(item.topic_id, 'id title');
-    const reply = await ReplyModel.findById(item.reply_id, 'id content');
+    const author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+    const topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
+    const reply = await ReplyProxy.getReplyById(item.reply_id, 'id content');
     return {
       author,
       topic,
@@ -29,11 +29,17 @@ class Notice extends Base {
   async getUserNotice(req, res) {
     const { id } = req.session.user;
 
-    const userNotices = await NoticeModel.find({ target_id: id }, '', {
-      nor: [{ type: 'system' }]
-    });
+    const query = {
+      target_id: id
+    };
 
-    const result = await Promise.all(userNotices.map(item => (
+    const option = {
+      nor: [{ type: 'system' }]
+    };
+
+    const notice = await NoticeProxy.getNoticeByQuery(query, '', option);
+
+    const data = await Promise.all(notice.map(item => (
       new Promise(resolve => {
         resolve(this.normalNotice(item.toObject({ virtuals: true })));
       })
@@ -41,7 +47,7 @@ class Notice extends Base {
 
     return res.send({
       status: 1,
-      data: result
+      data
     });
   }
 
@@ -49,11 +55,16 @@ class Notice extends Base {
   async getSystemNotice(req, res) {
     const { id } = req.session.user;
 
-    const systemNotices = await NoticeModel.find({ target_id: id, type: 'system' });
+    const query = {
+      target_id: id,
+      type: 'system'
+    };
+
+    const notices = await NoticeProxy.getNoticeByQuery(query);
 
     return res.send({
       status: 1,
-      data: systemNotices
+      data: notices
     });
   }
 }

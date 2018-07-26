@@ -3,8 +3,8 @@ const Aider = require('./controllers/aider');
 const Static = require('./controllers/static');
 const User = require('./controllers/user');
 const Auth = require('./middlewares/auth');
+const Topic = require('./controllers/topic');
 // const Notice = require('./controllers/notice');
-// const Topic = require('./controllers/topic');
 // const Reply = require('./controllers/reply');
 
 const router = express.Router();
@@ -41,16 +41,16 @@ router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 用户粉丝�
 router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 用户关注列表
 router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
 
-// // 话题
-// router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题
-// router.delete('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic)); // 删除话题
-// router.put('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic)); // 编辑话题
-// router.get('/topics/list', wrap(Topic.getTopicList)); // 获取话题列表
-// router.get('/topics/search', wrap(Topic.searchTopic)); // 搜索话题列表
-// router.get('/topics/no_reply', wrap(Topic.getNoReplyTopic)); // 获取无人回复的话题
-// router.get('/topic/:tid', wrap(Topic.getTopicById)); // 根据ID获取话题详情
-// router.patch('/topic/:tid/star_or_un', Auth.userRequired, wrap(Topic.starOrUnStar)); // 喜欢或者取消喜欢话题
-// router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectOrUnCollect)); // 收藏或者取消收藏话题
+// 话题
+router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题
+router.delete('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic)); // 删除话题
+router.put('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic)); // 编辑话题
+router.get('/topics/list', wrap(Topic.getTopicList)); // 获取话题列表
+router.get('/topics/search', wrap(Topic.searchTopic)); // 搜索话题列表
+router.get('/topics/no_reply', wrap(Topic.getNoReplyTopic)); // 获取无人回复的话题
+router.get('/topic/:tid', wrap(Topic.getTopicById)); // 根据ID获取话题详情
+router.patch('/topic/:tid/star_or_un', Auth.userRequired, wrap(Topic.starOrUnStar)); // 喜欢或者取消喜欢话题
+router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectOrUnCollect)); // 收藏或者取消收藏话题
 
 // // 回复
 // router.post('/topic/:tid/reply', Auth.userRequired, wrap(Reply.createReply)); // 创建回复

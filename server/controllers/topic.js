@@ -1,18 +1,9 @@
-const formidable = require('formidable');
-const Base = require('./base');
 const TopicProxy = require('../proxy/topic');
-// const TopicModel = require('../models/topic');
-// const UserModel = require('../models/user');
-// const ReplyModel = require('../models/reply');
-// const BehaviorModel = require('../models/behavior');
+const UserProxy = require('../proxy/user');
+const ActionProxy = require('../proxy/action');
+const NoticeProxy = require('../proxy/notice');
 
-class Topic extends Base {
-  constructor() {
-    super();
-    this.starOrUnStar = this.starOrUnStar.bind(this);
-    this.collectOrUnCollect = this.collectOrUnCollect.bind(this);
-  }
-
+class Topic {
   // 创建话题
   async createTopic(req, res) {
     const { id } = req.session.user;
@@ -124,7 +115,7 @@ class Topic extends Base {
     };
 
     const count = await TopicProxy.countTopic(query);
-    const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', options);
+    const topics = await TopicProxy.getTopicList(query, '-lock -delete', options);
 
     return res.send({
       status: 1,
@@ -158,7 +149,7 @@ class Topic extends Base {
     };
 
     const count = await TopicProxy.countTopic(query);
-    const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', options);
+    const topics = await TopicProxy.getTopicList(query, '-lock -delete', options);
 
     return res.send({
       status: 1,
@@ -196,52 +187,13 @@ class Topic extends Base {
   // 获取话题详情
   async getTopicById(req, res) {
     const { tid } = req.params;
-    const { user } = req.session;
+    const { id } = req.session.user;
 
-    let currentTopic = await TopicModel.findById(tid);
-
-    if (!currentTopic) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
-      });
-    }
-
-    currentTopic.visit_count += 1;
-    currentTopic = await currentTopic.save();
-
-    const author = await UserModel.findById(currentTopic.author_id, 'id nickname avatar location signature score');
-    const replyList = await ReplyModel.find({ topic_id: currentTopic.id });
-
-    const promises = await Promise.all(replyList.map(item => {
-      return new Promise(resolve => {
-        resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
-      });
-    }));
-
-    let starBehavior;
-    let collectBehavior;
-
-    if (user && user.id) {
-      starBehavior = await BehaviorModel.findOne({ action: 'star', author_id: user.id, target_id: currentTopic.id });
-      collectBehavior = await BehaviorModel.findOne({ action: 'collect', author_id: user.id, target_id: currentTopic.id });
-    }
-
-    const star = (starBehavior && !starBehavior.is_un) || false;
-    const collect = (collectBehavior && !collectBehavior.is_un) || false;
-
-    const replies = replyList.map((item, i) => {
-      return {
-        ...item.toObject({ virtuals: true }),
-        author: promises[i],
-        create_at_ago: item.create_at_ago()
-      };
-    });
+    const data = await TopicProxy.getTopicDetail(tid, id);
 
     return res.send({
       status: 1,
-      data: { ...currentTopic.toObject({ virtuals: true }), author, replies, star, collect }
+      data
     });
   }
 
@@ -250,46 +202,36 @@ class Topic extends Base {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const currentTopic = await TopicModel.findById(tid);
+    const topic = await this.getTopicById(tid);
+    const author = await UserProxy.getUserById(topic.author_id);
 
-    if (!currentTopic) {
+    if (topic.author_id.equals(id)) {
       return res.send({
         status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
-      });
-    }
-
-    const currentAuhtor = await UserModel.findById(currentTopic.author_id);
-
-    if (currentTopic.author_id.equals(id)) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_NOT_STAR_YOURS',
         message: '不能喜欢自己的话题哟'
       });
     }
 
-    const behavior = await this.generateBehavior('star', id, tid);
+    const action = await ActionProxy.setAction('like', id, topic.id);
 
-    if (behavior.is_un) {
-      currentTopic.star_count -= 1;
-      await currentTopic.save();
-      currentAuhtor.star_count -= 1;
-      currentAuhtor.score -= 10;
-      await currentAuhtor.save();
+    if (action.is_un) {
+      topic.star_count -= 1;
+      await topic.save();
+      author.star_count -= 1;
+      author.score -= 10;
+      await author.save();
     } else {
-      currentTopic.star_count += 1;
-      currentTopic.save();
-      currentAuhtor.star_count += 1;
-      currentAuhtor.score += 10;
-      await currentAuhtor.save();
-      await this.sendStarNotice(id, currentTopic.author_id, currentTopic.id);
+      topic.star_count += 1;
+      topic.save();
+      author.star_count += 1;
+      author.score += 10;
+      await author.save();
+      await NoticeProxy.createLikeNotice(id, topic.author_id, topic.id);
     }
 
     return res.send({
       status: 1,
-      data: behavior.actualAction
+      data: action.toObject({ virtuals: true }).actualType
     });
   }
 
@@ -298,46 +240,36 @@ class Topic extends Base {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const currentTopic = await TopicModel.findById(tid);
+    const topic = await this.getTopicById(tid);
+    const author = await UserProxy.getUserById(topic.author_id);
 
-    if (!currentTopic) {
+    if (topic.author_id.equals(id)) {
       return res.send({
         status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
-      });
-    }
-
-    const currentAuthor = await UserModel.findById(currentTopic.author_id);
-
-    if (currentTopic.author_id.equals(id)) {
-      return res.send({
-        status: 0,
-        type: 'ERROR_NOT_COLLECT_YOURS',
         message: '不能收藏自己的话题哟'
       });
     }
 
-    const behavior = await this.generateBehavior('collect', id, tid);
+    const action = await ActionProxy.setAction('collect', id, tid);
 
-    if (behavior.is_un) {
-      currentTopic.collect_count -= 1;
-      currentTopic.save();
-      currentAuthor.collect_count -= 1;
-      currentAuthor.score -= 3;
-      currentAuthor.save();
+    if (action.is_un) {
+      topic.collect_count -= 1;
+      topic.save();
+      author.collect_count -= 1;
+      author.score -= 3;
+      author.save();
     } else {
-      currentTopic.collect_count += 1;
-      currentTopic.save();
-      currentAuthor.collect_count += 1;
-      currentAuthor.score += 3;
-      await currentAuthor.save();
-      await this.sendCollectNotice(id, currentTopic.author_id, currentTopic.id);
+      topic.collect_count += 1;
+      topic.save();
+      author.collect_count += 1;
+      author.score += 3;
+      await author.save();
+      await NoticeProxy.createCollectNotice(id, topic.author_id, topic.id);
     }
 
     return res.send({
       status: 1,
-      data: behavior.actualAction
+      data: action.toObject({ virtuals: true }).actualType
     });
   }
 }
