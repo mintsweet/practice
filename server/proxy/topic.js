@@ -5,6 +5,53 @@ const BehaviorProxy = require('./behavior');
 
 module.exports = class Topic {
   /**
+   * 根据ID查找话题
+   *
+   * @static
+   * @param {*} id
+   * @param {*} option
+   */
+  static async getTopicById(id, option) {
+    const topic = await TopicModel.findById(id, option);
+    return topic;
+  }
+
+  /**
+   * 根据条件查找话题(带作者和最后回复者)
+   *
+   * @static
+   * @param {Object} query
+   * @param {String} option
+   * @returns
+   */
+  static async getTopicsByQuery(query, select = null, option) {
+    const topics = await TopicModel.find(query, select, option);
+
+    const promiseAuthor = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    const promiseLastReply = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+      });
+    }));
+
+    const result = topics.map((item, i) => {
+      return {
+        ...item.toObject({ virtuals: true }),
+        author: promiseAuthor[i],
+        last_reply_author: promiseLastReply[i],
+        last_reply_at_ago: item.last_reply_at_ago()
+      };
+    });
+
+    return result;
+  }
+
+  /**
    * 创建一篇话题
    *
    * @static
@@ -63,8 +110,15 @@ module.exports = class Topic {
     await topic.save();
   }
 
-  static async getTopicsByQuery(query, option) {
-    const topics = await TopicModel.find(query, option);
-    return topics;
+  /**
+   * 根据条件统计话题数量
+   *
+   * @static
+   * @param {Object} query
+   * @returns
+   */
+  static async countTopic(query) {
+    const count = TopicModel.count(query);
+    return count;
   }
 };

@@ -56,7 +56,6 @@ UserSchema.pre('save', function(next) {
 const User = mongoose.model('User', UserSchema);
 
 // insert root data
-const userData = require('../data/root');
 const bcrypt = require('bcryptjs');
 if (process.env.NODE_ENV !== 'test') {
   User.findOne((err, data) => {
@@ -65,8 +64,13 @@ if (process.env.NODE_ENV !== 'test') {
     }
     if (!data) {
       User.create({
-        ...userData,
-        password: bcrypt.hashSync(userData.password, bcrypt.genSaltSync(10))
+        mobile: 18888888888,
+        nickname: '青湛',
+        location: '四川，成都',
+        signature: '清明深湛，清澈透亮',
+        star: true,
+        role: 101,
+        password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
       });
     }
   });

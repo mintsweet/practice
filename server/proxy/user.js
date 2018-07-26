@@ -8,8 +8,8 @@ module.exports = class User {
    * @param {ObjectId} id
    * @returns
    */
-  static getUserById(id, option) {
-    return UserModel.findById(id, option);
+  static getUserById(id, select = null, option) {
+    return UserModel.findById(id, select, option);
   }
 
   /**

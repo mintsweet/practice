@@ -1,15 +1,14 @@
 const formidable = require('formidable');
 const Base = require('./base');
 const TopicProxy = require('../proxy/topic');
-const TopicModel = require('../models/topic');
-const UserModel = require('../models/user');
-const ReplyModel = require('../models/reply');
-const BehaviorModel = require('../models/behavior');
+// const TopicModel = require('../models/topic');
+// const UserModel = require('../models/user');
+// const ReplyModel = require('../models/reply');
+// const BehaviorModel = require('../models/behavior');
 
 class Topic extends Base {
   constructor() {
     super();
-    this.createTopic = this.createTopic.bind(this);
     this.starOrUnStar = this.starOrUnStar.bind(this);
     this.collectOrUnCollect = this.collectOrUnCollect.bind(this);
   }
@@ -34,12 +33,7 @@ class Topic extends Base {
       });
     }
 
-    const _topic = {
-      ...req.body,
-      author_id: id,
-    };
-
-    await TopicProxy.createTopic(_topic, id);
+    await TopicProxy.createTopic({ ...req.body, author_id: id });
 
     return res.send({
       status: 1
@@ -51,7 +45,35 @@ class Topic extends Base {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const currentTopic = await TopicModel.findById(tid);
+    const currentTopic = await TopicProxy.getTopicById(tid);
+
+    if (!currentTopic) {
+      return res.send({
+        status: 0,
+        message: '无效的ID'
+      });
+    }
+
+    if (!currentTopic.author_id.equals(id)) {
+      return res.send({
+        status: 0,
+        message: '不能删除别人的话题'
+      });
+    }
+
+    await TopicProxy.deleteTopic(currentTopic.id);
+
+    return res.send({
+      status: 1
+    });
+  }
+
+  // 编辑话题
+  async editTopic(req, res) {
+    const { tid } = req.params;
+    const { id } = req.session.user;
+
+    const currentTopic = await TopicProxy.getTopicById(tid);
 
     if (!currentTopic) {
       return res.send({
@@ -65,58 +87,14 @@ class Topic extends Base {
       return res.send({
         status: 0,
         type: 'ERROR_IS_NOT_AUTHOR',
-        message: '不能删除别人的话题'
+        message: '不能编辑别人的话题'
       });
     }
 
-    await TopicModel.findByIdAndUpdate(tid, { delete: true });
+    await TopicProxy.updateTopic({ ...req.body, tid });
+
     return res.send({
       status: 1
-    });
-  }
-
-  // 编辑话题
-  editTopic(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
-
-      const { tid } = req.params;
-      const { id } = req.session.user;
-
-      const currentTopic = await TopicModel.findById(tid);
-
-      if (!currentTopic) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_ID_IS_INVALID',
-          message: '无效的ID'
-        });
-      }
-
-      if (!currentTopic.author_id.equals(id)) {
-        return res.send({
-          status: 0,
-          type: 'ERROR_IS_NOT_AUTHOR',
-          message: '不能编辑别人的话题'
-        });
-      }
-
-      const { tab, title, content } = fields;
-
-      const topicInfo = {
-        tab: tab || currentTopic.tab,
-        title: title || currentTopic.title,
-        content: content || currentTopic.content
-      };
-
-      await TopicModel.findByIdAndUpdate(tid, topicInfo);
-
-      return res.send({
-        status: 1
-      });
     });
   }
 
@@ -145,37 +123,16 @@ class Topic extends Base {
       sort: '-top -last_reply_at'
     };
 
-    const topicCount = await TopicModel.count(query);
-    const topicList = await TopicModel.find(query, '-lock -delete', options);
-
-    const promiseAuthor = await Promise.all(topicList.map(item => {
-      return new Promise(resolve => {
-        resolve(UserModel.findById(item.author_id, 'id nickname avatar'));
-      });
-    }));
-
-    const promiseLastReply = await Promise.all(topicList.map(item => {
-      return new Promise(resolve => {
-        resolve(UserModel.findById(item.last_reply, 'id nickname avatar'));
-      });
-    }));
-
-    const result = topicList.map((item, i) => {
-      return {
-        ...item.toObject({ virtuals: true }),
-        author: promiseAuthor[i],
-        last_reply_author: promiseLastReply[i],
-        last_reply_at_ago: item.last_reply_at_ago()
-      };
-    });
+    const count = await TopicProxy.countTopic(query);
+    const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', options);
 
     return res.send({
       status: 1,
       data: {
-        topics: result,
+        topics,
         currentPage: page,
-        total: topicCount,
-        totalPage: Math.ceil(topicCount / size),
+        total: count,
+        totalPage: Math.ceil(count / size),
         tab,
         size
       },
@@ -200,26 +157,16 @@ class Topic extends Base {
       sort: '-top -last_reply_at'
     };
 
-    const topicCount = await TopicModel.count(query);
-    const topicList = await TopicModel.find(query, '-lock -delete', options);
-
-    const promises = await Promise.all(topicList.map(item => {
-      return new Promise(resolve => {
-        resolve(UserModel.findById(item.author_id, 'nickname avatar'));
-      });
-    }));
-
-    const result = topicList.map((item, i) => {
-      return { ...item.toObject({ virtuals: true }), author: promises[i] };
-    });
+    const count = await TopicProxy.countTopic(query);
+    const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', options);
 
     return res.send({
       status: 1,
       data: {
-        topics: result,
+        topics,
         currentPage: page,
-        total: topicCount,
-        totalPage: Math.ceil(topicCount / size),
+        total: count,
+        totalPage: Math.ceil(count / size),
         size
       },
     });
@@ -235,10 +182,10 @@ class Topic extends Base {
 
     const options = {
       limit: 10,
-      sort: '-top -last_reply_at'
+      sort: '-top -good'
     };
 
-    const topicList = await TopicModel.find(query, 'id title', options);
+    const topicList = await TopicProxy.getTopicsByQuery(query, 'id title', options);
 
     return res.send({
       status: 1,
