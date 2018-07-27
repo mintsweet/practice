@@ -5,11 +5,11 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   // 登录信息
-  mobile: { unqie: true, type: Number, required: true },
+  mobile: { type: Number, required: true },
   password: { type: String, required: true },
 
   // 用户信息
-  nickname: { unqie: true, type: String, required: true },
+  nickname: { type: String, required: true },
   avatar: { type: String, default: 'http://image.yujunren.com/avatar.jpg' },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },

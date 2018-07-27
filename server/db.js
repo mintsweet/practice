@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const redis = require('redis');
 const { promisify } = require('util');
-const logger = require('./util/logger');
+const logger = require('./utils/logger');
 const config = require('../config.default');
 
 // connect mongodb

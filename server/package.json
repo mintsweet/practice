@@ -11,8 +11,10 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "gd-bmp": "^1.2.4",
+    "jsonwebtoken": "^8.3.0",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
+    "koa-jwt": "^3.3.2",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "log4js": "^3.0.2",

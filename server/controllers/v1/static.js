@@ -5,7 +5,7 @@ const readFile = util.promisify(fs.readFile);
 
 class Static {
   async getQuickStart(ctx) {
-    const data = await readFile('./models/data/quick_start.md', 'utf-8');
+    const data = await readFile('./docs/quick_start.md', 'utf-8');
     ctx.body = data;
   }
 
@@ -15,7 +15,7 @@ class Static {
   }
 
   async getAbout(ctx) {
-    const data = await readFile('./models/data/about.md', 'utf-8');
+    const data = await readFile('./docs/about.md', 'utf-8');
     ctx.body = data;
   }
 }

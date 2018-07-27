@@ -1,11 +1,14 @@
 const bcrypt = require('bcryptjs');
-const UserProxy = require('../proxy/user');
+const UserModel = require('../models/user');
 
 exports.createUser = function(mobile, nickname) {
-  const password = bcrypt.hashSync('a123456', bcrypt.genSaltSync(10));
-  return UserProxy.createUser(mobile, password, nickname);
+  return UserModel.create({
+    mobile,
+    password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10)),
+    nickname
+  });
 };
 
 exports.deleteUser = function(mobile) {
-  return UserProxy.deleteUserByMobile(mobile);
+  return UserModel.findOneAndRemove({ mobile });
 };

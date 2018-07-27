@@ -1,9 +1,10 @@
 const Koa = require('koa');
 const koaBody = require('koa-body');
 const koaLogger = require('koa-logger');
+const koaJwt = require('koa-jwt');
 const router = require('./router');
 const config = require('../config.default');
-const logger = require('./util/logger');
+const logger = require('./utils/logger');
 const ErrorHandler = require('./middlewares/error-handler');
 
 // connect db
@@ -12,9 +13,12 @@ require('./db');
 const app = module.exports = new Koa();
 
 // middleware
-app.use(koaBody());
-if (process.env.NODE_ENV === 'development') app.use(koaLogger());
-app.use(ErrorHandler.handleError);
+app
+  .use(koaBody())
+  .use(koaLogger())
+  .use(koaJwt({ secret: config.secret }).unless({ path: [/signin/] }))
+  .use(ErrorHandler.handleAuth)
+  .use(ErrorHandler.handleError);
 
 // router
 app.use(router.v1);
@@ -27,8 +31,6 @@ app.use(ctx => {
 });
 
 // error handle
-app.on('error', function(err) {
-  logger.error(err);
-});
+app.on('error', err => logger.error(err));
 
-if (!module.parent) app.listen(config.server_port, () => logger.info('Mints api service started successfully.'));
+if (!module.parent) app.listen(config.server_port);

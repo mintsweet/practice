@@ -6,7 +6,8 @@ describe('test /app.test', function() {
   // 404
   it('should / 404', async function() {
     try {
-      const res = await request.get('/something');
+      const res = await request.get('/not_found');
+
       res.status.should.equal(404);
       res.text.should.equal('请求的API地址不正确或者不存在');
     } catch(err) {
@@ -18,6 +19,7 @@ describe('test /app.test', function() {
   it('should / v1 200', async function() {
     try {
       const res = await request.get('/v1');
+
       res.status.should.equal(200);
       res.text.should.equal('Version_1 API');
     } catch(err) {
@@ -29,6 +31,7 @@ describe('test /app.test', function() {
   it('should / v2 200', async function() {
     try {
       const res = await request.get('/v2');
+
       res.status.should.equal(200);
       res.text.should.equal('Version_2 API');
     } catch(err) {

@@ -3,9 +3,9 @@ const request = require('supertest')(app);
 const should = require('should');
 const support = require('../../support');
 
-describe('test /v1/user/signup', function() {
+describe('test /v1/signup', function() {
   before(async function() {
-    await support.createUser(18800000000, '已经注册的用户');
+    await support.createUser(18800000000, '已注册用户');
   });
 
   after(async function() {
@@ -13,7 +13,7 @@ describe('test /v1/user/signup', function() {
     await support.deleteUser(18800000001);
   });
 
-  it('should / 400 when the mobile is invalid', async function() {
+  it('should / status 400 when the mobile is invalid', async function() {
     try {
       const res = await request.post('/v1/signup').send({
         nickname: '小明',
@@ -29,7 +29,7 @@ describe('test /v1/user/signup', function() {
     }
   });
 
-  it('should / 400 when the password is invalid', async function() {
+  it('should / status 400 when the password is invalid', async function() {
     try {
       const res = await request.post('/v1/signup').send({
         nickname: '小明',
@@ -45,7 +45,7 @@ describe('test /v1/user/signup', function() {
     }
   });
 
-  it('should / 400 when the nickname is invalid', async function() {
+  it('should / status 400 when the nickname is invalid', async function() {
     try {
       const res = await request.post('/v1/signup').send({
         nickname: '小',
@@ -61,7 +61,7 @@ describe('test /v1/user/signup', function() {
     }
   });
 
-  it('should / 400 when the sms is not exist or expired', async function() {
+  it('should / status 400 when the sms is not exist or expired', async function() {
     try {
       const res = await request.post('/v1/signup').send({
         nickname: '小明',
@@ -77,11 +77,11 @@ describe('test /v1/user/signup', function() {
     }
   });
 
-  it('should / 400 when the sms is wrong', async function() {
+  it('should / status 400 when the sms is wrong', async function() {
     try {
       let res;
 
-      res = await request.get('/v1/captcha/sms').query({
+      res = await request.get('/v1/aider/sms_code').query({
         mobile: 18800000001
       });
 
@@ -101,11 +101,11 @@ describe('test /v1/user/signup', function() {
     }
   });
 
-  it('should / 400 when the mobile is registered', async function() {
+  it('should / status 409 when the mobile is registered', async function() {
     try {
       let res;
 
-      res = await request.get('/v1/captcha/sms').query({
+      res = await request.get('/v1/aider/sms_code').query({
         mobile: 18800000000
       });
 
@@ -118,44 +118,42 @@ describe('test /v1/user/signup', function() {
         smscaptcha: res.text
       });
 
-      res.status.should.equal(400);
+      res.status.should.equal(409);
       res.error.text.should.equal('手机号已经注册过了');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  it('should / 400 when the nickname is registered', async function() {
+  it('should / status 409 when the nickname is registered', async function() {
     try {
       let res;
 
-      res = await request.get('/v1/captcha/sms').query({
+      res = await request.get('/v1/aider/sms_code').query({
         mobile: 18800000001,
       });
 
       res.text.length.should.equal(6);
 
       res = await request.post('/v1/signup').send({
-        nickname: '已经注册的用户',
+        nickname: '已注册用户',
         password: 'a123456',
         mobile: 18800000001,
         smscaptcha: res.text
       });
 
-      // console.log(res);
-
-      res.status.should.equal(400);
+      res.status.should.equal(409);
       res.error.text.should.equal('昵称已经注册过了');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  it('should / 200', async function() {
+  it('should / status 200', async function() {
     try {
       let res;
 
-      res = await request.get('/v1/captcha/sms').query({
+      res = await request.get('/v1/aider/sms_code').query({
         mobile: 18800000001,
       });
 

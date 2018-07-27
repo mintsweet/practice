@@ -8,6 +8,7 @@ const config = {
   server_port: 3000,
   mongodb: 'mongodb://localhost:27017/practice',
   redis: '',
+  secret: 'practice', // 必改
 
   qiniu: {
     ACCESS_KEY: '',
