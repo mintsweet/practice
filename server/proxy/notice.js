@@ -9,9 +9,8 @@ module.exports = class Notice {
    * @param {String} select
    * @param {Object} option
    */
-  static async getNoticeByQuery(query, select, option) {
-    const notices = await NoticeModel.find(query, select, option);
-    return notices;
+  static getNoticeByQuery(query, select, option) {
+    return NoticeModel.find(query, select, option);
   }
 
   /**
@@ -22,8 +21,8 @@ module.exports = class Notice {
    * @param {ObjectId} author_id
    * @param {ObjectId} topic_id
    */
-  static async createLikeNotice(author_id, target_id, topic_id) {
-    await NoticeModel.findOneAndUpdate({ type: 'like', author_id, target_id, topic_id }, { create_at: Date.now() }, { upsert: true });
+  static createLikeNotice(author_id, target_id, topic_id) {
+    return NoticeModel.findOneAndUpdate({ type: 'like', author_id, target_id, topic_id }, { create_at: Date.now() }, { upsert: true });
   }
 
   /**
@@ -34,8 +33,8 @@ module.exports = class Notice {
    * @param {ObjectId} author_id
    * @param {ObjectId} topic_id
    */
-  static async createCollectNotice(author_id, target_id, topic_id) {
-    await NoticeModel.findOneAndUpdate({ type: 'collect', author_id, target_id, topic_id }, { create_at: Date.now() }, { upsert: true });
+  static createCollectNotice(author_id, target_id, topic_id) {
+    return NoticeModel.findOneAndUpdate({ type: 'collect', author_id, target_id, topic_id }, { create_at: Date.now() }, { upsert: true });
   }
 
   /**
@@ -46,8 +45,8 @@ module.exports = class Notice {
    * @param {ObjectId} target_id
    * @param {ObjectId} topic_id
    */
-  static async createReplyNotice(author_id, target_id, topic_id) {
-    await NoticeModel.create({ type: 'reply', author_id, target_id, topic_id });
+  static createReplyNotice(author_id, target_id, topic_id) {
+    return NoticeModel.create({ type: 'reply', author_id, target_id, topic_id });
   }
 
   /**
@@ -59,8 +58,8 @@ module.exports = class Notice {
    * @param {ObjectId} topic_id
    * @param {ObjectId} reply_id
    */
-  static async createAtNotice(author_id, target_id, topic_id, reply_id) {
-    await NoticeModel.create({ type: 'at', author_id, target_id, topic_id, reply_id });
+  static createAtNotice(author_id, target_id, topic_id, reply_id) {
+    return NoticeModel.create({ type: 'at', author_id, target_id, topic_id, reply_id });
   }
 
   /**
@@ -70,8 +69,8 @@ module.exports = class Notice {
    * @param {ObjectId} author_id
    * @param {ObjectId} target_id
    */
-  static async createFollowNotice(author_id, target_id) {
-    await NoticeModel.findOneAndUpdate({ type: 'follow', author_id, target_id }, { create_at: Date.now() }, { upsert: true });
+  static createFollowNotice(author_id, target_id) {
+    return NoticeModel.findOneAndUpdate({ type: 'follow', author_id, target_id }, { create_at: Date.now() }, { upsert: true });
   }
 
   /**
@@ -82,7 +81,7 @@ module.exports = class Notice {
    * @param {ObjectId} target_id
    * @param {ObjectId} reply_id
    */
-  static async createUpReplyNotice(author_id, target_id, reply_id) {
-    await NoticeModel.findOneAndUpdate({ type: 'up', author_id, target_id, reply_id }, { create_at: Date.now() }, { upsert: true });
+  static createUpReplyNotice(author_id, target_id, reply_id) {
+    return NoticeModel.findOneAndUpdate({ type: 'up', author_id, target_id, reply_id }, { create_at: Date.now() }, { upsert: true });
   }
 };

@@ -3,24 +3,25 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/topics/no_reply', function() {
+describe('test /v1/topics/no_reply', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser('话题创建者', '18800000000');
+    mockUser = await support.createUser(18800000000, '话题创建者');
     await support.createTopic(mockUser.id);
     await support.createTopic(mockUser.id);
   });
 
   after(async function() {
-    await support.deleteUser(mockUser.mobile);
     await support.deleteTopic(mockUser.id);
+    await support.deleteUser(mockUser.mobile);
+    mockUser = null;
   });
 
-  // 正确 - 默认
-  it('should / status 1 when the query is default', async function() {
+  // 正确
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/topics/no_reply');
+      const res = await request.get('/v1/topics/no_reply');
 
       res.body.status.should.equal(1);
       res.body.data.length.should.equal(2);

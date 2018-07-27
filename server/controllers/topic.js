@@ -2,6 +2,7 @@ const TopicProxy = require('../proxy/topic');
 const UserProxy = require('../proxy/user');
 const ActionProxy = require('../proxy/action');
 const NoticeProxy = require('../proxy/notice');
+const ReplyProxy = require('../proxy/reply');
 
 class Topic {
   // 创建话题
@@ -36,23 +37,36 @@ class Topic {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const currentTopic = await TopicProxy.getTopicById(tid);
+    const topic = await TopicProxy.getTopicById(tid);
 
-    if (!currentTopic) {
+    if (!topic) {
       return res.send({
         status: 0,
-        message: '无效的ID'
+        message: '话题不存在'
       });
     }
 
-    if (!currentTopic.author_id.equals(id)) {
+    if (!topic.author_id.equals(id)) {
       return res.send({
         status: 0,
         message: '不能删除别人的话题'
       });
     }
 
-    await TopicProxy.deleteTopic(currentTopic.id);
+    // 改变为删除状态
+    topic.delete = true;
+    await topic.save();
+
+    const author = await UserProxy.getUserById(topic.author_id);
+
+    // 积分减去
+    author.score -= 1;
+    // 话题数量减少
+    author.topic_count -= 1;
+    // 更新用户信息
+    await author.save();
+    // 更新行为
+    await ActionProxy.setAction('create', author.id, topic.id);
 
     return res.send({
       status: 1
@@ -64,25 +78,29 @@ class Topic {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const currentTopic = await TopicProxy.getTopicById(tid);
+    const topic = await TopicProxy.getTopicById(tid);
 
-    if (!currentTopic) {
+    if (!topic) {
       return res.send({
         status: 0,
-        type: 'ERROR_ID_IS_INVALID',
-        message: '无效的ID'
+        message: '话题不存在'
       });
     }
 
-    if (!currentTopic.author_id.equals(id)) {
+    if (!topic.author_id.equals(id)) {
       return res.send({
         status: 0,
-        type: 'ERROR_IS_NOT_AUTHOR',
         message: '不能编辑别人的话题'
       });
     }
 
-    await TopicProxy.updateTopic({ ...req.body, tid });
+    const { tab, title, content } = req.body;
+
+    // 更新内容
+    topic.tab = tab || topic.tab;
+    topic.title = title || topic.title;
+    topic.content = content || topic.content;
+    await topic.save();
 
     return res.send({
       status: 1
@@ -108,19 +126,40 @@ class Topic {
       query.tab = tab;
     }
 
-    const options = {
+    const option = {
       skip: (page - 1) * size,
       limit: size,
       sort: '-top -last_reply_at'
     };
 
     const count = await TopicProxy.countTopic(query);
-    const topics = await TopicProxy.getTopicList(query, '-lock -delete', options);
+    const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', option);
+
+    const promiseAuthor = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    const promiseLastReply = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+      });
+    }));
+
+    const list = topics.map((item, i) => {
+      return {
+        ...item.toObject({ virtuals: true }),
+        author: promiseAuthor[i],
+        last_reply_author: promiseLastReply[i],
+        last_reply_at_ago: item.last_reply_at_ago()
+      };
+    });
 
     return res.send({
       status: 1,
       data: {
-        topics,
+        topics: list,
         currentPage: page,
         total: count,
         totalPage: Math.ceil(count / size),
@@ -142,19 +181,40 @@ class Topic {
       delete: false
     };
 
-    const options = {
+    const option = {
       skip: (page - 1) * size,
       limit: size,
       sort: '-top -last_reply_at'
     };
 
     const count = await TopicProxy.countTopic(query);
-    const topics = await TopicProxy.getTopicList(query, '-lock -delete', options);
+    const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', option);
+
+    const promiseAuthor = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    const promiseLastReply = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+      });
+    }));
+
+    const list = topics.map((item, i) => {
+      return {
+        ...item.toObject({ virtuals: true }),
+        author: promiseAuthor[i],
+        last_reply_author: promiseLastReply[i],
+        last_reply_at_ago: item.last_reply_at_ago()
+      };
+    });
 
     return res.send({
       status: 1,
       data: {
-        topics,
+        topics: list,
         currentPage: page,
         total: count,
         totalPage: Math.ceil(count / size),
@@ -187,9 +247,57 @@ class Topic {
   // 获取话题详情
   async getTopicById(req, res) {
     const { tid } = req.params;
-    const { id } = req.session.user;
 
-    const data = await TopicProxy.getTopicDetail(tid, id);
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (!topic) {
+      return res.send({
+        status: 0,
+        message: '话题不存在'
+      });
+    }
+
+    // 访问计数
+    topic.visit_count += 1;
+    await topic.save();
+
+    // 作者
+    const author = await UserProxy.getUserById(topic.author_id, 'id nickname avatar location signature score');
+    // 回复
+    let replies = await ReplyProxy.getReplyByQuery({ topic_id: topic.id });
+    const reuslt = await Promise.all(replies.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    replies = replies.map((item, i) => ({
+      ...item.toObject(),
+      author: reuslt[i],
+      create_at_ago: item.create_at_ago()
+    }));
+
+    // 状态
+    let like;
+    let collect;
+
+    const { user } = req.session;
+
+    if (user) {
+      like = await ActionProxy.getAction('like', user.id, topic.id);
+      collect = await ActionProxy.getAction('collect', user.id, topic.id);
+    }
+
+    like = (like && !like.is_un) || false;
+    collect = (collect && !collect.is_un) || false;
+
+    const data = {
+      topic,
+      author,
+      replies,
+      like,
+      collect
+    };
 
     return res.send({
       status: 1,
@@ -198,12 +306,18 @@ class Topic {
   }
 
   // 喜欢或者取消喜欢话题
-  async starOrUnStar(req, res) {
+  async likeOrUnLike(req, res) {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const topic = await this.getTopicById(tid);
-    const author = await UserProxy.getUserById(topic.author_id);
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (!topic) {
+      return res.send({
+        status: 0,
+        message: '话题不存在'
+      });
+    }
 
     if (topic.author_id.equals(id)) {
       return res.send({
@@ -212,6 +326,7 @@ class Topic {
       });
     }
 
+    const author = await UserProxy.getUserById(topic.author_id);
     const action = await ActionProxy.setAction('like', id, topic.id);
 
     if (action.is_un) {
@@ -240,8 +355,14 @@ class Topic {
     const { tid } = req.params;
     const { id } = req.session.user;
 
-    const topic = await this.getTopicById(tid);
-    const author = await UserProxy.getUserById(topic.author_id);
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (!topic) {
+      return res.send({
+        status: 0,
+        message: '话题不存在'
+      });
+    }
 
     if (topic.author_id.equals(id)) {
       return res.send({
@@ -250,6 +371,7 @@ class Topic {
       });
     }
 
+    const author = await UserProxy.getUserById(topic.author_id);
     const action = await ActionProxy.setAction('collect', id, tid);
 
     if (action.is_un) {

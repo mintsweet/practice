@@ -20,8 +20,7 @@
     "gd-bmp": "^1.2.4",
     "log4js": "^2.5.3",
     "moment": "^2.22.1",
-    "mongoose": "^5.2.5",
-    "qiniu": "^7.2.1"
+    "mongoose": "^5.2.5"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

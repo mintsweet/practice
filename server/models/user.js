@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Plugin = require('./plugin');
+
 const { Schema } = mongoose;
-const BaseModel = require('./base');
 
 const UserSchema = new Schema({
   // 登录信息
@@ -38,7 +39,7 @@ const UserSchema = new Schema({
   delete: { type: Boolean, default: false }
 });
 
-UserSchema.plugin(BaseModel);
+UserSchema.plugin(Plugin);
 
 UserSchema.index({ mobile: 1 }, { unique: true });
 UserSchema.index({ score: -1 });
@@ -56,23 +57,20 @@ const User = mongoose.model('User', UserSchema);
 
 // insert root data
 const bcrypt = require('bcryptjs');
-if (process.env.NODE_ENV !== 'test') {
-  User.findOne((err, data) => {
-    if (err) {
-      console.error(err);
-    }
-    if (!data) {
-      User.create({
-        mobile: 18888888888,
-        nickname: '青湛',
-        location: '四川，成都',
-        signature: '清明深湛，清澈透亮',
-        star: true,
-        role: 101,
-        password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
-      });
-    }
-  });
-}
+User.findOne((err, data) => {
+  if (err) throw new Error(err);
+
+  if (!data) {
+    User.create({
+      mobile: 18888888888,
+      nickname: '青湛',
+      location: '四川，成都',
+      signature: '清明深湛，清澈透亮',
+      star: true,
+      role: 101,
+      password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
+    });
+  }
+});
 
 module.exports = User;

@@ -42,19 +42,19 @@ module.exports = class Action {
    * @param {ObjectId} target_id
    */
   static async getAction(type, author_id, target_id) {
-    const action = await ActionModel.findOne({ type, author_id, target_id });
-    return action;
+    return ActionModel.findOne({ type, author_id, target_id });
   }
 
   /**
-   * 根据条件查询行为
+   * 根据条件查询一些行为
    *
    * @static
-   * @param {String} query
+   * @param {Object} query
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getActionByQuery(query) {
-    const actions = await ActionModel.find(query);
-    return actions;
+  static async getActionByQuery(query, select, option) {
+    return ActionModel.find(query, select, option);
   }
 };

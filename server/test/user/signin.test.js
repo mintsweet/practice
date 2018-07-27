@@ -18,7 +18,7 @@ describe('test /v1/signin', function() {
     await support.deleteUser(mockUser.mobile);
   });
 
-  // 错误 - 手机号不正确
+  // 错误 - 手机号格式错误
   it('should / status 0 when the mobile is invalid', async function() {
     try {
       const res = await request.post('/v1/signin').send({
@@ -27,7 +27,7 @@ describe('test /v1/signin', function() {
       });
 
       res.body.status.should.equal(0);
-      res.body.message.should.equal('手机号格式不正确');
+      res.body.message.should.equal('手机号格式错误');
     } catch(err) {
       should.ifError(err.message);
     }

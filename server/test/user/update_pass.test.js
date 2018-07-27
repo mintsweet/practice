@@ -30,7 +30,7 @@ describe('test /v1/update_pass', function() {
   });
 
   // 错误 - 旧密码不能为空
-  it('should / status 0 when the oldPass is not empty', async function() {
+  it('should / status 0 when the oldPass is invalid', async function() {
     try {
       let res;
 

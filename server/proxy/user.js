@@ -6,11 +6,12 @@ module.exports = class User {
    *
    * @static
    * @param {ObjectId} id
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getUserById(id, select, option) {
-    const user = await UserModel.findById(id, select, option);
-    return user;
+  static getUserById(id, select, option) {
+    return UserModel.findById(id, select, option);
   }
 
   /**
@@ -18,11 +19,12 @@ module.exports = class User {
    *
    * @static
    * @param {Number} mobile
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getUserByMobile(mobile, select, option) {
-    const user = await UserModel.findOne({ mobile }, select, option);
-    return user;
+  static getUserByMobile(mobile, select, option) {
+    return UserModel.findOne({ mobile }, select, option);
   }
 
   /**
@@ -30,24 +32,25 @@ module.exports = class User {
    *
    * @static
    * @param {String} nickname
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getUserByNickname(nickname, select = null, option) {
-    const user = await UserModel.findOne({ nickname }, select, option);
-    return user;
+  static getUserByNickname(nickname, select, option) {
+    return UserModel.findOne({ nickname }, select, option);
   }
 
   /**
    * 根据条件查询用户
    *
    * @static
-   * @param {*} query
-   * @param {*} option
+   * @param {Object} query
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getUsersByQuery(query, select = null, option) {
-    const users = await UserModel.find(query, select, option);
-    return users;
+  static getUsersByQuery(query, select, option) {
+    return UserModel.find(query, select, option);
   }
 
   /**
@@ -59,9 +62,8 @@ module.exports = class User {
    * @param {String} nickname
    * @returns
    */
-  static async createUser(mobile, password, nickname) {
-    const user = await UserModel.create({ mobile, password, nickname });
-    return user;
+  static createUser(mobile, password, nickname) {
+    return UserModel.create({ mobile, password, nickname });
   }
 
   /**
@@ -70,20 +72,10 @@ module.exports = class User {
    * @static
    * @param {ObjectId} id
    * @param {Object} update
+   * @param {Object} option
    * @returns
    */
-  static async updateUserById(id, update, option) {
-    const user = await UserModel.findByIdAndUpdate(id, update, option);
-    return user;
-  }
-
-  /**
-   * 根据mobile移除用户
-   *
-   * @static
-   * @param {ObjectId} id
-   */
-  static async removeUserByMobile(mobile) {
-    await UserModel.findOneAndRemove(mobile);
+  static updateUserById(id, update, option) {
+    return UserModel.findByIdAndUpdate(id, update, option);
   }
 };

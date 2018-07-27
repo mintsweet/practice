@@ -3,11 +3,11 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/topics/list', function() {
+describe('test /v1/topics/list', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser('话题创建者', '18800000000');
+    mockUser = await support.createUser(18800000000, '话题创建者');
     await support.createTopic(mockUser.id);
     await support.createTopic(mockUser.id);
   });
@@ -19,9 +19,9 @@ describe('test /api/topics/list', function() {
   });
 
   // 正确 - 默认
-  it('should / status 1 when the query is default', async function() {
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/topics/list');
+      const res = await request.get('/v1/topics/list');
 
       res.body.status.should.equal(1);
       res.body.data.topics.length.should.equal(2);
@@ -36,9 +36,9 @@ describe('test /api/topics/list', function() {
   });
 
   // 正确 - 精华话题
-  it('should / status 1 when the query tab is good', async function() {
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/topics/list').query({
+      const res = await request.get('/v1/topics/list').query({
         tab: 'good'
       });
 
@@ -55,9 +55,9 @@ describe('test /api/topics/list', function() {
   });
 
   // 正确 - 带参数限制
-  it('should / status 1 when the has query', async function() {
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/topics/list').query({
+      const res = await request.get('/v1/topics/list').query({
         tab: 'ask',
         page: 2,
         size: 1

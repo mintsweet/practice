@@ -4,8 +4,8 @@ const Static = require('./controllers/static');
 const User = require('./controllers/user');
 const Auth = require('./middlewares/auth');
 const Topic = require('./controllers/topic');
-// const Notice = require('./controllers/notice');
-// const Reply = require('./controllers/reply');
+const Notice = require('./controllers/notice');
+const Reply = require('./controllers/reply');
 
 const router = express.Router();
 
@@ -14,8 +14,9 @@ const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 
 // 辅助
 router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用 Mints API！' })); // 入口
-router.get('/aider/captcha', Aider.getCaptcha); // 图形验证码
-router.get('/aider/sms_code', wrap(Aider.getSmsCode)); // 短信验证码
+router.get('/error_test', wrap(() => { throw new Error('随便出了错'); })); // 错误测试
+router.get('/aider/captcha', wrap(Aider.getCaptcha)); // 图形验证码
+router.get('/aider/sms_code', Aider.getSmsCode); // 短信验证码
 
 // 静态
 router.get('/static/quick_start', wrap(Static.getQuickStart)); // 快速开始文档
@@ -49,17 +50,17 @@ router.get('/topics/list', wrap(Topic.getTopicList)); // 获取话题列表
 router.get('/topics/search', wrap(Topic.searchTopic)); // 搜索话题列表
 router.get('/topics/no_reply', wrap(Topic.getNoReplyTopic)); // 获取无人回复的话题
 router.get('/topic/:tid', wrap(Topic.getTopicById)); // 根据ID获取话题详情
-router.patch('/topic/:tid/star_or_un', Auth.userRequired, wrap(Topic.starOrUnStar)); // 喜欢或者取消喜欢话题
+router.patch('/topic/:tid/like_or_un', Auth.userRequired, wrap(Topic.likeOrUnLike)); // 喜欢或者取消喜欢话题
 router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectOrUnCollect)); // 收藏或者取消收藏话题
 
 // // 回复
-// router.post('/topic/:tid/reply', Auth.userRequired, wrap(Reply.createReply)); // 创建回复
-// router.delete('/reply/:rid/delete', Auth.userRequired, wrap(Reply.deleteReply)); // 删除回复
-// router.put('/reply/:rid/edit', Auth.userRequired, wrap(Reply.editReply)); // 编辑回复
-// router.patch('/reply/:rid/up', Auth.userRequired, wrap(Reply.upReply)); // 回复点赞
+router.post('/topic/:tid/reply', Auth.userRequired, wrap(Reply.createReply)); // 创建回复
+router.delete('/reply/:rid/delete', Auth.userRequired, wrap(Reply.deleteReply)); // 删除回复
+router.put('/reply/:rid/edit', Auth.userRequired, wrap(Reply.editReply)); // 编辑回复
+router.patch('/reply/:rid/up', Auth.userRequired, wrap(Reply.upReply)); // 回复点赞
 
 // // 消息
-// router.get('/notice/user', Auth.userRequired, wrap(Notice.getUserNotice)); // 获取用户消息
-// router.get('/notice/system', Auth.userRequired, wrap(Notice.getSystemNotice)); // 获取系统消息
+router.get('/notice/user', Auth.userRequired, wrap(Notice.getUserNotice)); // 获取用户消息
+router.get('/notice/system', Auth.userRequired, wrap(Notice.getSystemNotice)); // 获取系统消息
 
 module.exports = router;

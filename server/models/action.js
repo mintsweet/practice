@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const Plugin = require('./plugin');
+
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
-const BaseModel = require('./base');
 
 /*
 * 根据类型区分行为 type
@@ -23,7 +24,7 @@ const ActionSchema = new Schema({
   update_at: { type: Date, default: Date.now }
 });
 
-ActionSchema.plugin(BaseModel);
+ActionSchema.plugin(Plugin);
 
 ActionSchema.index({ type: 1, author_id: 1, target_id: 1 }, { unique: true });
 ActionSchema.index({ author_id: 1, create_at: -1 });

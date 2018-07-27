@@ -4,17 +4,17 @@ const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /api/reply/:rid/edit', function() {
+describe('test /v1/reply/:rid/edit', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
   let mockReply;
 
   before(async function() {
-    mockUser = await support.createUser('回复发起者', '18800000000');
-    mockUser2 = await support.createUser('回复无关者', '18800000001');
+    mockUser = await support.createUser(18800000000, '话题创建者');
+    mockUser2 = await support.createUser(18800000001, '回复者');
     mockTopic = await support.createTopic(mockUser.id);
-    mockReply = await support.createReply(mockUser.id, mockTopic.id);
+    mockReply = await support.createReply(mockUser2.id, mockTopic.id);
   });
 
   after(async function() {
@@ -31,65 +31,81 @@ describe('test /api/reply/:rid/edit', function() {
   // 错误 - 尚未登录
   it('should / status 0 when the not signin', async function() {
     try {
-      const res = await request.put(`/api/reply/${mockReply.id}/edit`).send({
+      const res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
         content: '# 这是一段回复修改内容'
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误 - 无效的ID
-  it('should / status 0 when the id is invalid', async function() {
+  // 错误 - 回复不存在
+  it('should / status 0 when the reply does not exist', async function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.put(`/api/reply/${tempId}/edit`).send({
+      res = await request.put(`/v1/reply/${tempId}/edit`).send({
         content: '# 这是一段回复修改内容'
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_ID_IS_INVALID');
-      res.body.message.should.equal('无效的ID');
+      res.body.message.should.equal('回复不存在');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
   // 错误 - 不能编辑别人的评论
-  it('should / status 0 when the not yours', async function() {
+  it('should / status 0 when the reply not yours', async function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
+        mobile: mockUser.mobile,
+        password: 'a123456'
+      });
+
+      res.body.status.should.equal(1);
+
+      res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
+        content: '# 这是一段回复修改内容'
+      });
+
+      res.body.status.should.equal(0);
+      res.body.message.should.equal('不能编辑别人的评论');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // 错误 - 回复内容不能为空
+  it('should / status 0 when the content is invalid', async function() {
+    try {
+      let res;
+
+      res = await request.post('/v1/signin').send({
         mobile: mockUser2.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser2.id);
 
-      res = await request.put(`/api/reply/${mockReply.id}/edit`).send({
-        content: '# 这是一段回复修改内容'
+      res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
+        content: ''
       });
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_IS_NOT_AUTHOR');
-      res.body.message.should.equal('不能编辑别人的评论');
+      res.body.message.should.equal('回复内容不能为空');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -100,16 +116,14 @@ describe('test /api/reply/:rid/edit', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
-        mobile: mockUser.mobile,
+      res = await request.post('/v1/signin').send({
+        mobile: mockUser2.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.put(`/api/reply/${mockReply.id}/edit`).send({
+      res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
         content: '# 这是一段回复修改内容'
       });
 

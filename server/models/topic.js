@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../../config.default');
-const BaseModel = require('./base');
+const Plugin = require('./plugin');
+
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
 
@@ -37,7 +38,7 @@ const TopicSchema = new Schema({
   delete: { type: Boolean, default: false }
 });
 
-TopicSchema.plugin(BaseModel);
+TopicSchema.plugin(Plugin);
 
 TopicSchema.index({ create_at: -1 });
 TopicSchema.index({ top: -1, last_reply_at: -1 });

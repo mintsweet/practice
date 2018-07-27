@@ -4,21 +4,20 @@ const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /api/reply/:rid/delete', function() {
+describe('test /v1/reply/:rid/delete', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
   let mockReply;
 
   before(async function() {
-    mockUser = await support.createUser('回复发起者', '18800000000');
-    mockUser2 = await support.createUser('回复无关者', '18800000001');
+    mockUser = await support.createUser(18800000000, '话题创建者');
+    mockUser2 = await support.createUser(18800000001, '回复者');
     mockTopic = await support.createTopic(mockUser.id);
-    mockReply = await support.createReply(mockUser.id, mockTopic.id);
+    mockReply = await support.createReply(mockUser2.id, mockTopic.id);
   });
 
   after(async function() {
-    await support.deleteReply(mockTopic.id);
     await support.deleteTopic(mockUser.id);
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
@@ -31,10 +30,9 @@ describe('test /api/reply/:rid/delete', function() {
   // 错误 - 尚未登录
   it('should / status 0 when the not signin', async function() {
     try {
-      const res = await request.delete(`/api/reply/${mockReply.id}/delete`);
+      const res = await request.delete(`/v1/reply/${mockReply.id}/delete`);
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_NOT_SIGNIN');
       res.body.message.should.equal('尚未登录');
     } catch(err) {
       should.ifError(err.message);
@@ -42,47 +40,41 @@ describe('test /api/reply/:rid/delete', function() {
   });
 
   // 错误 - 无效的ID
-  it('should / status 0 when the id is invalid', async function() {
+  it('should / status 0 when the reply does not exist', async function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
+      res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.delete(`/api/reply/${tempId}/delete`);
+      res = await request.delete(`/v1/reply/${tempId}/delete`);
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_ID_IS_INVALID');
-      res.body.message.should.equal('无效的ID');
+      res.body.message.should.equal('回复不存在');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
   // 错误 - 不能删除别人的回复
-  it('should / status 0 when the not signin', async function() {
+  it('should / status 0 when the reply not yours', async function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
-        mobile: mockUser2.mobile,
+      res = await request.post('/v1/signin').send({
+        mobile: mockUser.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser2.id);
 
-      res = await request.delete(`/api/reply/${mockReply.id}/delete`);
+      res = await request.delete(`/v1/reply/${mockReply.id}/delete`);
 
       res.body.status.should.equal(0);
-      res.body.type.should.equal('ERROR_IS_NOT_AUTHOR');
       res.body.message.should.equal('不能删除别人的回复');
     } catch(err) {
       should.ifError(err.message);
@@ -94,16 +86,14 @@ describe('test /api/reply/:rid/delete', function() {
     try {
       let res;
 
-      res = await request.post('/api/signin').send({
-        mobile: mockUser.mobile,
+      res = await request.post('/v1/signin').send({
+        mobile: mockUser2.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
 
-      res = await request.delete(`/api/reply/${mockReply.id}/delete`);
+      res = await request.delete(`/v1/reply/${mockReply.id}/delete`);
 
       res.body.status.should.equal(1);
     } catch(err) {

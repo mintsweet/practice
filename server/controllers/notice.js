@@ -1,28 +1,56 @@
-const Base = require('./base');
 const NoticeProxy = require('../proxy/notice');
 const UserProxy = require('../proxy/user');
 const TopicProxy = require('../proxy/topic');
 const ReplyProxy = require('../proxy/reply');
 
-class Notice extends Base {
+class Notice {
   constructor() {
-    super();
     this.getUserNotice = this.getUserNotice.bind(this);
+    this.getSystemNotice = this.getSystemNotice.bind(this);
   }
 
   // 转化消息格式
   async normalNotice(item) {
-    const author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
-    const topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
-    const reply = await ReplyProxy.getReplyById(item.reply_id, 'id content');
-    return {
-      author,
-      topic,
-      reply,
-      type: item.type,
-      typeName: item.typeName,
-      create_at: item.create_at
-    };
+    const data = {};
+
+    switch (item.type) {
+      case 'like':
+        data.author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+        data.topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
+        data.typeName = '喜欢了';
+        break;
+      case 'collect':
+        data.author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+        data.topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
+        data.typeName = '收藏了';
+        break;
+      case 'follow':
+        data.author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+        data.typeName = '新的关注者';
+        break;
+      case 'reply':
+        data.author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+        data.topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
+        data.typeName = '回复了';
+        break;
+      case 'at':
+        data.author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+        data.topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
+        data.reply = await ReplyProxy.getReplyById(item.reply_id, 'id content');
+        data.typeName = '@了';
+        break;
+      case 'up':
+        data.author = await UserProxy.getUserById(item.author_id, 'id nickname avatar');
+        data.topic = await TopicProxy.getTopicById(item.topic_id, 'id title');
+        data.reply = await ReplyProxy.getReplyById(item.reply_id, 'id content');
+        data.typeName = '点赞了';
+        break;
+      default:
+        data.typeName = '系统消息';
+        break;
+    }
+
+    return data;
   }
 
   // 获取用户消息
@@ -37,13 +65,13 @@ class Notice extends Base {
       nor: [{ type: 'system' }]
     };
 
-    const notice = await NoticeProxy.getNoticeByQuery(query, '', option);
+    const notices = await NoticeProxy.getNoticeByQuery(query, '', option);
 
-    const data = await Promise.all(notice.map(item => (
-      new Promise(resolve => {
-        resolve(this.normalNotice(item.toObject({ virtuals: true })));
-      })
-    )));
+    const data = await Promise.all(notices.map(item => {
+      return new Promise(resolve => {
+        resolve(this.normalNotice(item.toObject()));
+      });
+    }));
 
     return res.send({
       status: 1,
@@ -62,9 +90,13 @@ class Notice extends Base {
 
     const notices = await NoticeProxy.getNoticeByQuery(query);
 
+    const data = notices.map(item => {
+      return this.normalNotice(item.toObject());
+    });
+
     return res.send({
       status: 1,
-      data: notices
+      data
     });
   }
 }

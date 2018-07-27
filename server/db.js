@@ -7,11 +7,4 @@ const dbpath = process.env.NODE_ENV === 'test' ? 'mongodb://localhost:27017/prac
 mongoose.connect(dbpath, { useNewUrlParser: true });
 const db = mongoose.connection;
 
-db.on('error', err => {
-  if (err) {
-    logger.error(`MongoDB Connection Error: ${err}`);
-    process.exit(1);
-  } else {
-    logger.info('MongoDB Connection Success!');
-  }
-});
+db.on('error', () => logger.error('MongoDB Connection Error'));

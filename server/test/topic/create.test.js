@@ -18,7 +18,7 @@ describe('test /v1/create', function() {
   });
 
   // 错误 - 尚未登录
-  it('should / status 0 when the not signin in yet', async function() {
+  it('should / status 0 when the not signin', async function() {
     try {
       const res = await request.post('/v1/create').send({
         tab: 'ask',
@@ -34,7 +34,7 @@ describe('test /v1/create', function() {
   });
 
   // 错误 - 话题所属标签不能为空
-  it('should / status 0 when the tab is empty', async function() {
+  it('should / status 0 when the tab is invalid', async function() {
     try {
       let res;
 
@@ -58,7 +58,7 @@ describe('test /v1/create', function() {
   });
 
   // 错误 - 话题标题不能为空
-  it('should / status 0 when the title is empty', async function() {
+  it('should / status 0 when the title is invalid', async function() {
     try {
       let res;
 
@@ -82,7 +82,7 @@ describe('test /v1/create', function() {
   });
 
   // 错误 - 话题内容不能为空
-  it('should / status 0 when the content is empty', async function() {
+  it('should / status 0 when the content is invalid', async function() {
     try {
       let res;
 
@@ -122,8 +122,6 @@ describe('test /v1/create', function() {
         title: '测试标题',
         content: '# 哈哈哈哈哈测试内容'
       });
-
-      console.log(res.body);
 
       res.body.status.should.equal(1);
     } catch(err) {

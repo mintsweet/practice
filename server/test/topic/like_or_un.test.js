@@ -4,35 +4,32 @@ const should = require('should');
 const support = require('../support');
 const tempId = require('mongoose').Types.ObjectId();
 
-describe('test /v1/reply/:rid/up', function() {
+describe('test /v1/topic/:tid/like_or_un', function() {
   let mockUser;
   let mockUser2;
   let mockTopic;
-  let mockReply;
 
   before(async function() {
     mockUser = await support.createUser(18800000000, '话题创建者');
-    mockUser2 = await support.createUser(18800000001, '回复者');
+    mockUser2 = await support.createUser(18800000001, '点赞者');
     mockTopic = await support.createTopic(mockUser.id);
-    mockReply = await support.createReply(mockUser2.id, mockTopic.id);
   });
 
   after(async function() {
-    await support.deleteNotice(mockUser2.id);
-    await support.deleteReply(mockTopic.id);
+    await support.deleteNotice(mockUser.id);
+    await support.deleteAction(mockUser2.id);
     await support.deleteTopic(mockUser.id);
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
     mockUser = null;
     mockUser2 = null;
     mockTopic = null;
-    mockReply = null;
   });
 
   // 错误 - 尚未登录
   it('should / status 0 when the not signin', async function() {
     try {
-      const res = await request.patch(`/v1/reply/${mockReply.id}/up`);
+      const res = await request.patch(`/v1/topic/${mockTopic.id}/like_or_un`);
 
       res.body.status.should.equal(0);
       res.body.message.should.equal('尚未登录');
@@ -41,8 +38,8 @@ describe('test /v1/reply/:rid/up', function() {
     }
   });
 
-  // 错误 - 回复不存在
-  it('should / status 0 when the reply does not exist', async function() {
+  // 错误 - 话题不存在
+  it('should / status 0 when the topic does not exist', async function() {
     try {
       let res;
 
@@ -53,17 +50,38 @@ describe('test /v1/reply/:rid/up', function() {
 
       res.body.status.should.equal(1);
 
-      res = await request.patch(`/v1/reply/${tempId}/up`);
+      res = await request.patch(`/v1/topic/${tempId}/like_or_un`);
 
       res.body.status.should.equal(0);
-      res.body.message.should.equal('回复不存在');
+      res.body.message.should.equal('话题不存在');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误 - 不能给自己点赞
-  it('should / status 0 when the reply is yours', async function() {
+  // 错误 - 不能收藏自己的话题哟
+  it('should / status 0 when the topic is yours', async function() {
+    try {
+      let res;
+
+      res = await request.post('/v1/signin').send({
+        mobile: mockUser.mobile,
+        password: 'a123456'
+      });
+
+      res.body.status.should.equal(1);
+
+      res = await request.patch(`/v1/topic/${mockTopic.id}/like_or_un`);
+
+      res.body.status.should.equal(0);
+      res.body.message.should.equal('不能喜欢自己的话题哟');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // 正确 - 喜欢
+  it('should / status 1', async function() {
     try {
       let res;
 
@@ -74,52 +92,31 @@ describe('test /v1/reply/:rid/up', function() {
 
       res.body.status.should.equal(1);
 
-      res = await request.patch(`/v1/reply/${mockReply.id}/up`);
+      res = await request.patch(`/v1/topic/${mockTopic.id}/like_or_un`);
 
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('不能给自己点赞哟');
+      res.body.status.should.equal(1);
+      res.body.data.should.equal('like');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 正确 - 点赞
+  // 正确 - 取消喜欢
   it('should / status 1', async function() {
     try {
       let res;
 
       res = await request.post('/v1/signin').send({
-        mobile: mockUser.mobile,
+        mobile: mockUser2.mobile,
         password: 'a123456'
       });
 
       res.body.status.should.equal(1);
 
-      res = await request.patch(`/v1/reply/${mockReply.id}/up`);
+      res = await request.patch(`/v1/topic/${mockTopic.id}/like_or_un`);
 
       res.body.status.should.equal(1);
-      res.body.data.should.equal('up');
-    } catch(err) {
-      should.ifError(err.message);
-    }
-  });
-
-  // 正确 - 取消点赞
-  it('should / status 1', async function() {
-    try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
-        mobile: mockUser.mobile,
-        password: 'a123456'
-      });
-
-      res.body.status.should.equal(1);
-
-      res = await request.patch(`/v1/reply/${mockReply.id}/up`);
-
-      res.body.status.should.equal(1);
-      res.body.data.should.equal('down');
+      res.body.data.should.equal('un_like');
     } catch(err) {
       should.ifError(err.message);
     }

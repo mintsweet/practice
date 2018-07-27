@@ -1,6 +1,4 @@
 const { BMP24 } = require('gd-bmp');
-const qiniu = require('qiniu');
-const config = require('../../config.default');
 
 class Aider {
   constructor() {
@@ -14,16 +12,17 @@ class Aider {
   getCaptcha(req, res) {
     const width = req.query.width || 100;
     const height = req.query.height || 40;
-    const textColor = req.query.textColor || 'a1a1a1';
     const bgColor = req.query.bgColor || 'ffffff';
+    const textColor = req.query.textColor || 'a1a1a1';
 
+    // 设置画布
     const img = new BMP24(width, height, `0x${textColor}`);
+    // 设置背景
+    img.fillRect(0, 0, width, height, `0x${bgColor}`);
 
     let token = '';
 
-    // 设置背景
-    img.fillRect(0, 0, width, height, `0x${bgColor}`);
-    // 随机字符列表
+    // 随机字符列表 去除 0 和 o 防止混淆
     const p = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
     // 组成token
     for (let i = 0; i < 5; i++) {
@@ -35,6 +34,7 @@ class Aider {
 
     for (let i = 0; i < token.length; i++) {
       y = 2 + this._rand(-4, 4);
+      // 画字符
       img.drawChar(token[i], x, y, BMP24.font12x24, '0xa1a1a1');
       x += 12 + this._rand(4, 8);
     }
@@ -50,7 +50,7 @@ class Aider {
   getSmsCode(req, res) {
     const { mobile, expired } = req.query;
 
-    if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
+    if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
       return res.send({
         status: 0,
         message: '手机号格式不正确'
@@ -65,8 +65,6 @@ class Aider {
 
     req.session.sms_code = { mobile, code, expired: expired || 1000 * 60 * 5 };
 
-    process.env.NODE_ENV === 'development' && console.warn(code);
-
     if (process.env.NODE_ENV === 'production') {
       return res.send({
         status: 1
@@ -77,40 +75,6 @@ class Aider {
         code
       });
     }
-  }
-
-  uploadImg(req, res) {
-    const { name, file: { path } } = req.body;
-    const mac = new qiniu.auth.digest.Mac(config.qiniu.ACCESS_KEY, config.qiniu.SECRET_KEY);
-    const putPolicy = new qiniu.rs.PutPolicy({
-      scope: `${config.qiniu.BUCKET_NAME}:${name}`
-    });
-
-    const uploadToken = putPolicy.uploadToken(mac);
-    const qiniuConfig = new qiniu.conf.Config();
-    // 空间对应机房
-    // 华东:qiniu.zone.Zone_z0
-    // 华北:qiniu.zone.Zone_z1
-    // 华南:qiniu.zone.Zone_z2
-    // 北美:qiniu.zone.Zone_na0
-    qiniuConfig.zone = qiniu.zone.Zone_z0;
-
-    const formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
-    const putExtra = new qiniu.form_up.PutExtra();
-    // 文件上传
-    formUploader.putFile(uploadToken, name, path, putExtra, function(err, body, info) {
-      if (err) throw new Error(err);
-
-      if (info.statusCode === 200) {
-        const url = `${config.qiniu.DONAME}/${body.key}}?date=${Date.now()}`;
-        return res.send({
-          status: 1,
-          data: url
-        });
-      } else {
-        throw new Error(info.error);
-      }
-    });
   }
 }
 

@@ -3,12 +3,12 @@ const request = require('supertest').agent(app);
 const should = require('should');
 const support = require('../support');
 
-describe('test /api/topics/search', function() {
+describe('test /v1/topics/search', function() {
   let mockUser;
   let mockTopic;
 
   before(async function() {
-    mockUser = await support.createUser('话题创建者', '18800000000');
+    mockUser = await support.createUser(18800000000, '话题创建者');
     mockTopic = await support.createTopic(mockUser.id);
     await support.createTopic(mockUser.id);
   });
@@ -21,9 +21,9 @@ describe('test /api/topics/search', function() {
   });
 
   // 正确 - 默认
-  it('should / status 1 when the query is default', async function() {
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/topics/search').query({
+      const res = await request.get('/v1/topics/search').query({
         title: mockTopic.title
       });
 
@@ -39,9 +39,9 @@ describe('test /api/topics/search', function() {
   });
 
   // 正确 - 带参数限制
-  it('should / status 1 when the has query', async function() {
+  it('should / status 1', async function() {
     try {
-      const res = await request.get('/api/topics/search').query({
+      const res = await request.get('/v1/topics/search').query({
         title: mockTopic.title,
         page: 2,
         size: 1

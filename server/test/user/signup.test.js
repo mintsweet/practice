@@ -61,6 +61,7 @@ describe('test /v1/signup', function() {
         mobile: 18800000001,
         smscaptcha: 666666
       });
+
       res.body.status.should.equal(0);
       res.body.message.should.equal('请输入2至8位的昵称');
     } catch(err) {
@@ -111,6 +112,7 @@ describe('test /v1/signup', function() {
         mobile: 18800000001,
         smscaptcha: 666666
       });
+
       res.body.status.should.equal(0);
       res.body.message.should.equal('短信验证码不正确');
     } catch(err) {

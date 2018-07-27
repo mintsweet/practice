@@ -18,7 +18,7 @@ describe('test /v1/forget_pass', function() {
     await support.deleteUser(mockUser.mobile);
   });
 
-  // 错误 - 手机号格式不正确
+  // 错误 - 手机号格式错误
   it('shuold / status 0 when the mobile is invalid', async function() {
     try {
       const res = await request.patch('/v1/forget_pass').send({
@@ -28,7 +28,7 @@ describe('test /v1/forget_pass', function() {
       });
 
       res.body.status.should.equal(0);
-      res.body.message.should.equal('请输入正确的手机号');
+      res.body.message.should.equal('手机号格式错误');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -51,7 +51,7 @@ describe('test /v1/forget_pass', function() {
   });
 
   // 错误 - 提交手机号与获取验证码手机号不对应
-  it('should / status 0 when the smscaptcha and mobile is not match', async function() {
+  it('should / status 0 when the mobile is not match', async function() {
     try {
       let res;
 
@@ -75,7 +75,7 @@ describe('test /v1/forget_pass', function() {
   });
 
   // 错误 - 验证码错误
-  it('should / status 0 when the smscaptcha is wrong', async function() {
+  it('should / status 0 when the sms code is wrong', async function() {
     try {
       let res;
 
@@ -99,7 +99,7 @@ describe('test /v1/forget_pass', function() {
   });
 
   // 错误 - 验证码失效
-  it('should / status 0 when the smscaptcha is expired', async function() {
+  it('should / status 0 when the sms code is expired', async function() {
     try {
       let res;
 

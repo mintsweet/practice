@@ -10,19 +10,26 @@ class Reply {
 
   // 创建回复
   async createReply(req, res) {
-    const { content, reply_id } = req.body;
     const { tid } = req.params;
     const { id } = req.session.user;
+
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (!topic) {
+      return res.send({
+        status: 0,
+        message: '话题不存在'
+      });
+    }
+
+    const { content, reply_id } = req.body;
 
     if (!content) {
       return res.send({
         status: 0,
-        type: 'ERROR_NO_CONTENT_OF_REPLY',
         message: '回复内容不能为空'
       });
     }
-
-    const topic = await TopicProxy.getTopicById(tid);
 
     // 创建回复
     const reply = await ReplyProxy.createReply(content, id, tid, reply_id);
@@ -49,6 +56,13 @@ class Reply {
 
     const reply = await ReplyProxy.getReplyById(rid);
 
+    if (!reply) {
+      return res.send({
+        status: 0,
+        message: '回复不存在'
+      });
+    }
+
     if (!reply.author_id.equals(id)) {
       return res.send({
         status: 0,
@@ -56,11 +70,13 @@ class Reply {
       });
     }
 
+    // 修改话题回复数
     const topic = await TopicProxy.getTopicById(reply.topic_id);
 
     topic.reply_count -= 1;
     await topic.save();
 
+    // 删除回复
     await ReplyProxy.deleteReplyById(rid);
 
     return res.send({
@@ -74,6 +90,13 @@ class Reply {
     const { id } = req.session.user;
 
     const reply = await ReplyProxy.getReplyById(rid);
+
+    if (!reply) {
+      return res.send({
+        status: 0,
+        message: '回复不存在'
+      });
+    }
 
     if (!reply.author_id.equals(id)) {
       return res.send({
@@ -105,6 +128,13 @@ class Reply {
 
     const reply = await ReplyProxy.getReplyById(rid);
 
+    if (!reply) {
+      return res.send({
+        status: 0,
+        message: '回复不存在'
+      });
+    }
+
     if (reply.author_id.equals(id)) {
       return res.send({
         status: 0,
@@ -119,6 +149,7 @@ class Reply {
     if (upIndex === -1) {
       reply.ups.push(id);
       action = 'up';
+      // 发送提醒
       await NoticeProxy.createUpReplyNotice(id, reply.author_id, reply.id);
     } else {
       reply.ups.splice(upIndex, 1);

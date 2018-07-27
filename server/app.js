@@ -4,7 +4,6 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
-const logger = require('./utils/logger');
 const config = require('../config.default');
 const router = require('./router');
 const handleError = require('./middlewares/error-handler');
@@ -43,4 +42,4 @@ app.use((req, res) => {
 // error handle
 app.use(handleError);
 
-if (!module.parent) app.listen(config.server_port, () => logger.info('Mints api service started successfully.'));
+if (!module.parent) app.listen(config.server_port);

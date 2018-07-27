@@ -9,7 +9,7 @@
 
 ## v1.2.0
 
-`2018-xx-xx`
+`2018-07-27`
 
 ### server
 
@@ -17,8 +17,9 @@
   - 移除`controllers`中所有的数据库操作到`proxy`中
   - 更改模型`behavior`为`action`
   - 更改控制器`captcha`为`aider`
-  - 由于移除`formidable`的原因，暂时去除头像上传 API
+  - 由于移除`formidable`的原因，去除头像上传 API，此API与`Koa`版本中添加
   - 移除`controllers`中公共处理部分`base`
+  - 修改部分 API 请求地址，详见 API 文档
 
 ## v1.1.0
 

@@ -10,7 +10,7 @@ describe('test /v1/users/top100', function() {
 
       res.body.status.should.equal(1);
       res.body.data.should.be.an.Array();
-      res.body.data.length.should.equal(0);
+      res.body.data.length.should.equal(1);
     } catch(err) {
       should.ifError(err.message);
     }

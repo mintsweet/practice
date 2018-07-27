@@ -5,12 +5,13 @@ module.exports = class Reply {
    * 根据ID查找一条回复
    *
    * @static
-   * @param {ObjectId} rid
+   * @param {ObjectId} id
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getReplyById(rid) {
-    const reply = await ReplyModel.findById(rid);
-    return reply;
+  static getReplyById(id, select, option) {
+    return ReplyModel.findById(id, select, option);
   }
 
   /**
@@ -18,11 +19,12 @@ module.exports = class Reply {
    *
    * @static
    * @param {Object} query
+   * @param {String} select
+   * @param {Object} option
    * @returns
    */
-  static async getReplyByQuery(query) {
-    const replys = await ReplyModel.find(query);
-    return replys;
+  static getReplyByQuery(query, select, option) {
+    return ReplyModel.find(query, select, option);
   }
 
   /**
@@ -34,7 +36,7 @@ module.exports = class Reply {
    * @param {ObjectId} topic_id
    * @param {ObjectId} reply_id
    */
-  static async createReply(content, author_id, topic_id, reply_id) {
+  static createReply(content, author_id, topic_id, reply_id) {
     const _reply = {
       content,
       author_id,
@@ -45,8 +47,7 @@ module.exports = class Reply {
       _reply.reply_id = reply_id;
     }
 
-    const reply = await ReplyModel.create(_reply);
-    return reply;
+    return ReplyModel.create(_reply);
   }
 
   /**
@@ -55,8 +56,8 @@ module.exports = class Reply {
    * @static
    * @param {ObjectId} rid
    */
-  static async deleteReplyById(rid) {
-    await ReplyModel.findByIdAndRemove(rid);
+  static deleteReplyById(rid) {
+    return ReplyModel.findByIdAndRemove(rid);
   }
 
   /**
@@ -66,7 +67,7 @@ module.exports = class Reply {
    * @param {ObjectId} rid
    * @param {Object} update
    */
-  static async updateReplyById(rid, update) {
-    await ReplyModel.findByIdAndUpdate(rid, update);
+  static updateReplyById(rid, update) {
+    return ReplyModel.findByIdAndUpdate(rid, update);
   }
 };

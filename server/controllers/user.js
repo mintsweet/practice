@@ -78,7 +78,7 @@ class User {
     if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
       return res.send({
         status: 0,
-        message: '手机号格式不正确'
+        message: '手机号格式错误'
       });
     }
 
@@ -93,20 +93,18 @@ class User {
     if (issms) {
       const sms_code = req.session.sms_code || {};
 
-      if (Number(sms_code.mobile) !== mobile) {
+      try {
+        if (Number(sms_code.mobile) !== mobile) {
+          throw new Error('收取验证码的手机与登录手机不匹配');
+        } else if (sms_code.code !== smscaptcha) {
+          throw new Error('短信验证码不正确');
+        } else if (Date.now() > sms_code.expired) {
+          throw new Error('短信验证码已经失效了，请重新获取');
+        }
+      } catch(err) {
         return res.send({
           status: 0,
-          message: '收取验证码的手机与登录手机不匹配'
-        });
-      } else if (sms_code.code !== smscaptcha) {
-        return res.send({
-          status: 0,
-          message: '短信验证码不正确'
-        });
-      } else if (Date.now() > sms_code.expired) {
-        return res.send({
-          status: 0,
-          message: '短信验证码已经失效了，请重新获取'
+          message: err.message
         });
       }
 
@@ -148,8 +146,8 @@ class User {
     const sms_code = req.session.sms_code || {};
 
     try {
-      if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
-        throw new Error('请输入正确的手机号');
+      if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+        throw new Error('手机号格式错误');
       } else if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
         throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
       } else if (Number(sms_code.mobile) !== mobile) {
@@ -269,6 +267,7 @@ class User {
       sort: '-scroe',
       limit: 100
     };
+
     const userList = await UserProxy.getUsersByQuery({}, '', option);
 
     return res.send({
@@ -291,6 +290,7 @@ class User {
     }
 
     const user = req.session.user || {};
+
     let follow = false;
 
     if (user.id) {
@@ -316,7 +316,7 @@ class User {
     const result = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
         if (item.type === 'follow') {
-          resolve(this.getUserById(item.target_id, 'id nickname signature avatar'));
+          resolve(UserProxy.getUserById(item.target_id, 'id nickname signature avatar'));
         } else {
           resolve(TopicProxy.getTopicById(item.target_id, 'id title'));
         }
@@ -324,7 +324,7 @@ class User {
     }));
 
     const data = actions.map((item, i) => {
-      return { ...result[i], type: item.type };
+      return { ...result[i].toObject({ virtuals: true }), type: item.type };
     });
 
     return res.send({

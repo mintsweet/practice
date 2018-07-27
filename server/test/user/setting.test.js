@@ -8,7 +8,7 @@ describe('test /v1/setting', function() {
   let mockUser2;
 
   before(async function() {
-    mockUser = await support.createUser(18800000000, '已注册用户', );
+    mockUser = await support.createUser(18800000000, '已注册用户');
     mockUser2 = await support.createUser(18800000001, '已注册用户二');
   });
 
