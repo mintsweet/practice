@@ -2,7 +2,6 @@ const Router = require('koa-router');
 const StaticV1 = require('./controller/v1/static');
 const CaptchaV1 = require('./controller/v1/captcha');
 const UserV1 = require('./controller/v1/user');
-const UserV2 = require('./controller/v2/user');
 
 const routerV1 = new Router({
   prefix: '/v1'
@@ -27,7 +26,6 @@ routerV2
   .get('/', ctx => {
     ctx.body = 'Version_2 API';
   })
-  .get('/user/new_count', UserV2.getNewUserCount);
 
 module.exports = {
   v1: routerV1.routes(),

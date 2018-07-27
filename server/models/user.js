@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Plugin = require('./plugin');
+
 const { Schema } = mongoose;
-const BaseModel = require('./base');
 
 const UserSchema = new Schema({
   // 登录信息
@@ -25,7 +26,6 @@ const UserSchema = new Schema({
   topic_count: { type: Number, default: 0 }, // 累计发布话题数
   star_count: { type: Number, default: 0 }, // 累计话题被喜欢数
   collect_count: { type: Number, default: 0 }, // 累计话题被收藏数
-  reply_count: { type: Number, default: 0 }, // 累计回复数
   follower_count: { type: Number, default: 0 }, // 累计粉丝数
   following_count: { type: Number, default: 0 }, // 累计关注数
 
@@ -39,7 +39,7 @@ const UserSchema = new Schema({
   delete: { type: Boolean, default: false }
 });
 
-UserSchema.plugin(BaseModel);
+UserSchema.plugin(Plugin);
 
 UserSchema.index({ mobile: 1 }, { unique: true });
 UserSchema.index({ score: -1 });
@@ -56,20 +56,21 @@ UserSchema.pre('save', function(next) {
 const User = mongoose.model('User', UserSchema);
 
 // insert root data
-const userData = require('./data/root');
 const bcrypt = require('bcryptjs');
-if (process.env.NODE_ENV !== 'test') {
-  User.findOne((err, data) => {
-    if (err) {
-      console.error(err);
-    }
-    if (!data) {
-      User.create({
-        ...userData,
-        password: bcrypt.hashSync(userData.password, bcrypt.genSaltSync(10))
-      });
-    }
-  });
-}
+User.findOne((err, data) => {
+  if (err) throw new Error(err);
+
+  if (!data) {
+    User.create({
+      mobile: 18888888888,
+      nickname: '青湛',
+      location: '四川，成都',
+      signature: '清明深湛，清澈透亮',
+      star: true,
+      role: 101,
+      password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
+    });
+  }
+});
 
 module.exports = User;

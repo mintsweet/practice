@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const Plugin = require('./plugin');
+
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
-const BaseModel = require('./base');
 
 const ReplySchema = new Schema({
   content: { type: String, required: true },
@@ -16,7 +17,7 @@ const ReplySchema = new Schema({
   ups: { type: Array, default: [] }
 });
 
-ReplySchema.plugin(BaseModel);
+ReplySchema.plugin(Plugin);
 
 ReplySchema.index({ topic_id: 1, author_id: 1 });
 ReplySchema.index({ author_id: 1, create_at: -1 });

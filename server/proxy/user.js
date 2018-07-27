@@ -1,71 +1,81 @@
 const UserModel = require('../models/user');
 
-class UserProxy {
+module.exports = class User {
   /**
-   * 根据用户昵称查找用户
+   * 根据ID查找用户
    *
-   * @param {String} nickname
-   * @memberof UserProxy
+   * @static
+   * @param {ObjectId} id
+   * @param {String} select
+   * @param {Object} option
+   * @returns
    */
-  getUserByNickName(nickname) {
-    return UserModel.findOne({ nickname });
+  static getUserById(id, select, option) {
+    return UserModel.findById(id, select, option);
   }
 
   /**
    * 根据手机号查找用户
    *
-   * @param {*} mobile
+   * @static
+   * @param {Number} mobile
+   * @param {String} select
+   * @param {Object} option
    * @returns
-   * @memberof UserProxy
    */
-  getUserByMobile(mobile) {
-    return UserModel.findOne({ mobile });
+  static getUserByMobile(mobile, select, option) {
+    return UserModel.findOne({ mobile }, select, option);
   }
 
   /**
-   * 根据用户ID查找用户
+   * 根据昵称查找用户
    *
-   * @param {ObjectId} id
+   * @static
+   * @param {String} nickname
+   * @param {String} select
+   * @param {Object} option
    * @returns
-   * @memberof UserProxy
    */
-  getUserById(id) {
-    return UserModel.findById(id);
+  static getUserByNickname(nickname, select, option) {
+    return UserModel.findOne({ nickname }, select, option);
   }
 
   /**
-   * 创建一个用户
+   * 根据条件查询用户
    *
+   * @static
+   * @param {Object} query
+   * @param {String} select
+   * @param {Object} option
+   * @returns
+   */
+  static getUsersByQuery(query, select, option) {
+    return UserModel.find(query, select, option);
+  }
+
+  /**
+   * 创建用户
+   *
+   * @static
    * @param {Number} mobile
    * @param {String} password
    * @param {String} nickname
    * @returns
-   * @memberof UserProxy
    */
-  createUser(mobile, password, nickname) {
+  static createUser(mobile, password, nickname) {
     return UserModel.create({ mobile, password, nickname });
   }
 
   /**
-   * 根据ID删除用户
+   * 根据ID更新用户信息
    *
+   * @static
    * @param {ObjectId} id
+   * @param {Object} update
+   * @param {Object} option
    * @returns
-   * @memberof UserProxy
    */
-  deleteUserById(id) {
-    return UserModel.findByIdAndRemove(id);
+  static updateUserById(id, update, option) {
+    return UserModel.findByIdAndUpdate(id, update, option);
   }
-
-  /**
-   * 根据手机号删除用户
-   *
-   * @param {Number} mobile
-   * @memberof UserProxy
-   */
-  deleteUserByMobile(mobile) {
-    return UserModel.findOneAndRemove({ mobile });
-  }
-}
-
-module.exports = new UserProxy();
+};
