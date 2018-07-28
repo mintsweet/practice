@@ -1,9 +1,10 @@
 const Router = require('koa-router');
+const Auth = require('./middlewares/auth');
 const AiderV1 = require('./controllers/v1/aider');
 const StaticV1 = require('./controllers/v1/static');
 const UserV1 = require('./controllers/v1/user');
+const TopicV1 = require('./controllers/v1/topic');
 const UserV2 = require('./controllers/v2/user');
-const Auth = require('./middlewares/auth');
 
 const routerV1 = new Router({
   prefix: '/v1'
@@ -31,7 +32,16 @@ routerV1
   .get('/user/:uid/collect', UserV1.getUserCollect) // 获取用户收藏列表
   .get('/user/:uid/follower', UserV1.getUserFollower) // 获取用户粉丝列表
   .get('/user/:uid/following', UserV1.getUserFollowing) // 获取用户关注列表
-  .patch('/user/:uid/follow_or_un', Auth.userRequired, UserV1.followOrUn); // 关注或者取消关注用户
+  .patch('/user/:uid/follow_or_un', Auth.userRequired, UserV1.followOrUn) // 关注或者取消关注用户
+  .post('/create', Auth.userRequired, TopicV1.createTopic) // 创建话题
+  .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic) // 删除话题
+  .put('/topic/:tid/edit', Auth.userRequired, TopicV1.editTopic) // 编辑话题
+  .get('/topics/list', TopicV1.getTopicList) // 获取话题列表
+  .get('/topics/search', TopicV1.searchTopic) // 搜索话题列表
+  .get('/topics/no_reply', TopicV1.getNoReplyTopic) // 获取无人回复的话题
+  .get('/topic/:tid', TopicV1.getTopicById) // 根据ID获取话题详情
+  .patch('/topic/:tid/like_or_un', Auth.userRequired, TopicV1.likeOrUnLike) // 喜欢或者取消喜欢话题
+  .patch('/topic/:tid/collect_or_un', Auth.userRequired, TopicV1.collectOrUnCollect); // 收藏或者取消收藏话题
 
 const routerV2 = new Router({
   prefix: '/v2'
