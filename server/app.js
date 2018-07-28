@@ -16,13 +16,13 @@ const app = module.exports = new Koa();
 app
   .use(koaBody())
   .use(koaLogger())
-  .use(koaJwt({ secret: config.secret }).unless({ path: [/signin/] }))
-  .use(ErrorHandler.handleAuth)
-  .use(ErrorHandler.handleError);
+  .use(koaJwt({ secret: config.secret, passthrough: true }))
+  .use(ErrorHandler.handleError); // 统一的异常处理
 
 // router
-app.use(router.v1);
-app.use(router.v2);
+app
+  .use(router.v1)
+  .use(router.v2);
 
 // 404
 app.use(ctx => {
@@ -31,6 +31,6 @@ app.use(ctx => {
 });
 
 // error handle
-app.on('error', err => logger.error(err));
+app.on('error', err => logger.error(err)); // 记录服务器错误
 
 if (!module.parent) app.listen(config.server_port);

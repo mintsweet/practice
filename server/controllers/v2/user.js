@@ -1,8 +1,17 @@
 const UserProxy = require('../../proxy/user');
 
 class User {
-  getCountNewToday(ctx) {
-    ctx.body = '我是管理员';
+  // 统计用户总数
+  async countUser(ctx) {
+    const count = await UserProxy.countUserByQuery();
+    ctx.body = count;
+  }
+
+  // 统计今日新增用户数量
+  async countNewToday(ctx) {
+    const query = {};
+    const count = await UserProxy.countUserByQuery(query);
+    ctx.body = count;
   }
 }
 

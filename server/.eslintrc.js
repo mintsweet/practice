@@ -1,7 +1,6 @@
 const eslintConfig = {
   env: {
-    mocha: true,
-    node: true
+    mocha: true
   },
   
   extends: 'mints',
