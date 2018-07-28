@@ -5,6 +5,7 @@ const StaticV1 = require('./controllers/v1/static');
 const UserV1 = require('./controllers/v1/user');
 const TopicV1 = require('./controllers/v1/topic');
 const ReplyV1 = require('./controllers/v1/reply');
+const NoticeV1 = require('./controllers/v1/notice');
 const UserV2 = require('./controllers/v2/user');
 
 const routerV1 = new Router({
@@ -46,7 +47,9 @@ routerV1
   .post('/topic/:tid/reply', Auth.userRequired, ReplyV1.createReply) // 创建回复
   .delete('/reply/:rid/delete', Auth.userRequired, ReplyV1.deleteReply) // 删除回复
   .put('/reply/:rid/edit', Auth.userRequired, ReplyV1.editReply) // 编辑回复
-  .patch('/reply/:rid/up', Auth.userRequired, ReplyV1.upReply); // 回复点赞
+  .patch('/reply/:rid/up', Auth.userRequired, ReplyV1.upReply) // 回复点赞
+  .get('/notice/user', Auth.userRequired, NoticeV1.getUserNotice) // 获取用户消息
+  .get('/notice/system', Auth.userRequired, NoticeV1.getSystemNotice); // 获取系统消息
 
 const routerV2 = new Router({
   prefix: '/v2'
