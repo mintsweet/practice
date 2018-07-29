@@ -1,6 +1,6 @@
-const ReplyProxy = require('../proxy/reply');
-const TopicProxy = require('../proxy/topic');
-const NoticeProxy = require('../proxy/notice');
+const ReplyProxy = require('../../proxy/reply');
+const TopicProxy = require('../../proxy/topic');
+const NoticeProxy = require('../../proxy/notice');
 
 class Reply {
   constructor() {
@@ -11,7 +11,7 @@ class Reply {
   // 创建回复
   async createReply(ctx) {
     const { id } = ctx.state.user;
-    const { tid } = ctx.request.params;
+    const { tid } = ctx.params;
 
     const topic = await TopicProxy.getTopicById(tid);
 
@@ -44,7 +44,7 @@ class Reply {
   // 删除评论
   async deleteReply(ctx) {
     const { id } = ctx.state.user;
-    const { rid } = ctx.request.params;
+    const { rid } = ctx.params;
 
     const reply = await ReplyProxy.getReplyById(rid);
 
@@ -71,7 +71,7 @@ class Reply {
   // 编辑回复
   async editReply(ctx) {
     const { id } = ctx.state.user;
-    const { rid } = ctx.request.params;
+    const { rid } = ctx.params;
 
     const reply = await ReplyProxy.getReplyById(rid);
 
@@ -98,7 +98,7 @@ class Reply {
   // 回复点赞
   async upReply(ctx) {
     const { id } = ctx.state.user;
-    const { rid } = ctx.request.params;
+    const { rid } = ctx.params;
 
     const reply = await ReplyProxy.getReplyById(rid);
 

@@ -1,8 +1,8 @@
-const TopicProxy = require('../proxy/topic');
-const UserProxy = require('../proxy/user');
-const ActionProxy = require('../proxy/action');
-const NoticeProxy = require('../proxy/notice');
-const ReplyProxy = require('../proxy/reply');
+const TopicProxy = require('../../proxy/topic');
+const UserProxy = require('../../proxy/user');
+const ActionProxy = require('../../proxy/action');
+const NoticeProxy = require('../../proxy/notice');
+const ReplyProxy = require('../../proxy/reply');
 
 class Topic {
   // 创建话题
@@ -30,7 +30,7 @@ class Topic {
   // 删除话题
   async deleteTopic(ctx) {
     const { id } = ctx.state.user;
-    const { tid } = ctx.request.params;
+    const { tid } = ctx.params;
 
     const topic = await TopicProxy.getTopicById(tid);
 
@@ -63,7 +63,7 @@ class Topic {
   // 编辑话题
   async editTopic(ctx) {
     const { id } = ctx.state.user;
-    const { tid } = ctx.request.params;
+    const { tid } = ctx.params;
 
     const topic = await TopicProxy.getTopicById(tid);
 
@@ -88,9 +88,9 @@ class Topic {
 
   // 获取列表
   async getTopicList(ctx) {
-    const tab = ctx.request.query.tab || 'all';
-    const page = parseInt(ctx.request.query.page) || 1;
-    const size = parseInt(ctx.request.query.size) || 10;
+    const tab = ctx.query.tab || 'all';
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
 
     let query = {
       lock: false,
@@ -147,9 +147,9 @@ class Topic {
 
   // 搜索话题
   async searchTopic(ctx) {
-    const title = ctx.request.query.title || '';
-    const page = parseInt(ctx.request.body.query.page) || 1;
-    const size = parseInt(ctx.request.size) || 10;
+    const title = ctx.query.title || '';
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
 
     const query = {
       title: { $regex: title },
@@ -216,7 +216,7 @@ class Topic {
 
   // 获取话题详情
   async getTopicById(ctx) {
-    const { tid } = ctx.request.params;
+    const { tid } = ctx.params;
 
     const topic = await TopicProxy.getTopicById(tid);
 
@@ -270,7 +270,7 @@ class Topic {
   // 喜欢或者取消喜欢话题
   async likeOrUnLike(ctx) {
     const { id } = ctx.state.user;
-    const { tid } = ctx.request.params;
+    const { tid } = ctx.params;
 
     const topic = await TopicProxy.getTopicById(tid);
 
@@ -306,7 +306,7 @@ class Topic {
   // 收藏或者取消收藏话题
   async collectOrUnCollect(ctx) {
     const { id } = ctx.state.user;
-    const { tid } = ctx.request.params;
+    const { tid } = ctx.params;
 
     const topic = await TopicProxy.getTopicById(tid);
 

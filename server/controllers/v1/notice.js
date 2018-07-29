@@ -1,7 +1,7 @@
-const NoticeProxy = require('../proxy/notice');
-const UserProxy = require('../proxy/user');
-const TopicProxy = require('../proxy/topic');
-const ReplyProxy = require('../proxy/reply');
+const NoticeProxy = require('../../proxy/notice');
+const UserProxy = require('../../proxy/user');
+const TopicProxy = require('../../proxy/topic');
+const ReplyProxy = require('../../proxy/reply');
 
 class Notice {
   constructor() {

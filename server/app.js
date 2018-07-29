@@ -1,6 +1,5 @@
 const Koa = require('koa');
 const koaBody = require('koa-body');
-const koaLogger = require('koa-logger');
 const koaJwt = require('koa-jwt');
 const router = require('./router');
 const config = require('../config.default');
@@ -15,7 +14,6 @@ const app = module.exports = new Koa();
 // middleware
 app
   .use(koaBody())
-  .use(koaLogger())
   .use(koaJwt({ secret: config.secret, passthrough: true }))
   .use(ErrorHandler.handleError); // 统一的异常处理
 

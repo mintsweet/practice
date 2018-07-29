@@ -12,6 +12,7 @@ const SALT_WORK_FACTOR = 10;
 class User {
   constructor() {
     this.signup = this.signup.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
   }
 
   // 注册
@@ -201,7 +202,7 @@ class User {
 
   // 根据ID获取用户信息
   async getInfoById(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const user = await UserProxy.getUserById(uid);
 
@@ -227,7 +228,7 @@ class User {
 
   // 获取用户动态
   async getUserAction(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const actions = await ActionProxy.getActionByQuery({ author_id: uid, is_un: false });
     const result = await Promise.all(actions.map(item => {
@@ -249,7 +250,7 @@ class User {
 
   // 获取用户专栏的列表
   async getUserCreate(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const actions = await ActionProxy.getActionByQuery({ type: 'create', author_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
@@ -263,7 +264,7 @@ class User {
 
   // 获取用户喜欢列表
   async getUserLike(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const actions = await ActionProxy.getActionByQuery({ type: 'like', author_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
@@ -277,7 +278,7 @@ class User {
 
   // 获取用户收藏列表
   async getUserCollect(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const actions = await ActionProxy.getActionByQuery({ type: 'collect', author_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
@@ -291,7 +292,7 @@ class User {
 
   // 获取用户粉丝列表
   async getUserFollower(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const actions = await ActionProxy.getActionByQuery({ type: 'follow', target_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
@@ -305,7 +306,7 @@ class User {
 
   // 获取用户关注的人列表
   async getUserFollowing(ctx) {
-    const { uid } = ctx.request.params;
+    const { uid } = ctx.params;
 
     const actions = await ActionProxy.getActionByQuery({ type: 'follow', author_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
@@ -318,8 +319,8 @@ class User {
   }
 
   // 关注或者取消关注某个用户
-  async followOrUnFollow(ctx) {
-    const { uid } = ctx.request.params;
+  async followOrUn(ctx) {
+    const { uid } = ctx.params;
     const { id } = ctx.state.user;
 
     const action = await ActionProxy.setAction('follow', id, uid);
