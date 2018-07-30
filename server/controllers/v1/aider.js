@@ -59,7 +59,7 @@ class Aider {
       code += Math.floor(Math.random() * 10);
     }
 
-    await setRedis(mobile, code, 'EX', expired);
+    await setRedis(mobile, code, 'PX', expired);
 
     if (process.env.NODE_ENV === 'production') {
       ctx.body = '';

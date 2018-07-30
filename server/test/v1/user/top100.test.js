@@ -3,7 +3,7 @@ const request = require('supertest')(app);
 const should = require('should');
 
 describe('test /v1/users/top100', function() {
-  it('should / status 1', async function() {
+  it('should / status 200', async function() {
     try {
       const res = await request.get('/v1/users/top100').expect(200);
 

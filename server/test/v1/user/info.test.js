@@ -16,7 +16,9 @@ describe('test /v1/info', function() {
 
   it('should / status 401 when the not signin', async function() {
     try {
-      await request.get('/v1/info').expect(401);
+      const res = await request.get('/v1/info').expect(401);
+
+      res.text.should.equal('需要用户权限');
     } catch(err) {
       should.ifError(err.message);
     }

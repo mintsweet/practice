@@ -10,8 +10,8 @@ describe('test /v1/topic/:tid/delete', function() {
   let mockTopic;
 
   before(async function() {
-    mockUser = await support.createUser(18800000000, '话题创建者');
-    mockUser2 = await support.createUser(18800000001, '话题无关者');
+    mockUser = await support.createUser('18800000000', '话题创建者');
+    mockUser2 = await support.createUser('18800000001', '话题无关者');
     mockTopic = await support.createTopic(mockUser.id);
   });
 
@@ -20,17 +20,13 @@ describe('test /v1/topic/:tid/delete', function() {
     await support.deleteTopic(mockUser.id);
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
-    mockTopic = null;
-    mockUser = null;
-    mockUser2 = null;
   });
 
   it('should / status 401 when the not signin', async function() {
     try {
-      const res = await request.delete(`/v1/topic/${mockTopic.id}/delete`);
+      const res = await request.delete(`/v1/topic/${mockTopic.id}/delete`).expect(401);
 
-      res.status.should.equal(401);
-      res.error.text.should.equal('需要用户登录权限');
+      res.text.should.equal('需要用户权限');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -38,19 +34,14 @@ describe('test /v1/topic/:tid/delete', function() {
 
   it('should / status 410 when the topic does not exist', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
+      }).expect(200);
 
-      res.status.should.equal(200);
+      res = await request.delete(`/v1/topic/${tempId}/delete`).set('Authorization', res.text).expect(410);
 
-      res = await request.delete(`/v1/topic/${tempId}/delete`).set('Authorization', res.text);
-
-      res.status.should.equal(410);
-      res.error.text.should.equal('话题不存在');
+      res.text.should.equal('话题不存在');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -58,19 +49,14 @@ describe('test /v1/topic/:tid/delete', function() {
 
   it('should / status 403 when the topic not yours', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser2.mobile,
         password: 'a123456'
-      });
+      }).expect(200);
 
-      res.status.should.equal(200);
+      res = await request.delete(`/v1/topic/${mockTopic.id}/delete`).set('Authorization', res.text).expect(403);
 
-      res = await request.delete(`/v1/topic/${mockTopic.id}/delete`).set('Authorization', res.text);
-
-      res.status.should.equal(403);
-      res.error.text.should.equal('不能删除别人的话题');
+      res.text.should.equal('不能删除别人的话题');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -78,18 +64,12 @@ describe('test /v1/topic/:tid/delete', function() {
 
   it('should / status 200', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      const res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
+      }).expect(200);
 
-      res.status.should.equal(200);
-
-      res = await request.delete(`/v1/topic/${mockTopic.id}/delete`).set('Authorization', res.text);
-
-      res.status.should.equal(200);
+      await request.delete(`/v1/topic/${mockTopic.id}/delete`).set('Authorization', res.text).expect(200);
     } catch(err) {
       should.ifError(err.message);
     }

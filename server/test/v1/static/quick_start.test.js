@@ -5,9 +5,8 @@ const should = require('should');
 describe('test /v1/static/qucik_start', function() {
   it('should / status 200', async function() {
     try {
-      const res = await request.get('/v1/static/quick_start');
+      const res = await request.get('/v1/static/quick_start').expect(200);
 
-      res.status.should.equal(200);
       res.text.should.containEql('# 快速开始');
     } catch(err) {
       should.ifError(err.message);

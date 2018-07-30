@@ -22,20 +22,15 @@ describe('test /v1/reply/:rid/edit', function() {
     await support.deleteTopic(mockUser.id);
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
-    mockUser = null;
-    mockUser2 = null;
-    mockTopic = null;
-    mockReply = null;
   });
 
   it('should / status 401 when the not signin', async function() {
     try {
       const res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
         content: '# 这是一段回复修改内容'
-      });
+      }).expect(401);
 
-      res.status.should.equal(401);
-      res.error.text.should.equal('需要用户登录权限');
+      res.text.should.equal('需要用户权限');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -43,21 +38,16 @@ describe('test /v1/reply/:rid/edit', function() {
 
   it('should / status 410 when the reply does not exist', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
-
-      res.status.should.equal(200);
+      }).expect(200);
 
       res = await request.put(`/v1/reply/${tempId}/edit`).send({
         content: '# 这是一段回复修改内容'
-      }).set('Authorization', res.text);
+      }).set('Authorization', res.text).expect(410);
 
-      res.status.should.equal(410);
-      res.error.text.should.equal('回复不存在');
+      res.text.should.equal('回复不存在');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -65,21 +55,16 @@ describe('test /v1/reply/:rid/edit', function() {
 
   it('should / status 403 when the reply not yours', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
-
-      res.status.should.equal(200);
+      }).expect(200);
 
       res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
         content: '# 这是一段回复修改内容'
-      }).set('Authorization', res.text);
+      }).set('Authorization', res.text).expect(403);
 
-      res.status.should.equal(403);
-      res.error.text.should.equal('不能编辑别人的评论');
+      res.text.should.equal('不能编辑别人的评论');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -87,21 +72,16 @@ describe('test /v1/reply/:rid/edit', function() {
 
   it('should / status 400 when the content is invalid', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser2.mobile,
         password: 'a123456'
-      });
-
-      res.status.should.equal(200);
+      }).expect(200);
 
       res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
         content: ''
-      }).set('Authorization', res.text);
+      }).set('Authorization', res.text).expect(400);
 
-      res.status.should.equal(400);
-      res.error.text.should.equal('回复内容不能为空');
+      res.text.should.equal('回复内容不能为空');
     } catch(err) {
       should.ifError(err.message);
     }
@@ -109,20 +89,14 @@ describe('test /v1/reply/:rid/edit', function() {
 
   it('should / status 200', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      const res = await request.post('/v1/signin').send({
         mobile: mockUser2.mobile,
         password: 'a123456'
-      });
+      }).expect(200);
 
-      res.status.should.equal(200);
-
-      res = await request.put(`/v1/reply/${mockReply.id}/edit`).send({
+      await request.put(`/v1/reply/${mockReply.id}/edit`).send({
         content: '# 这是一段回复修改内容'
-      }).set('Authorization', res.text);
-
-      res.status.should.equal(200);
+      }).set('Authorization', res.text).expect(200);
     } catch(err) {
       should.ifError(err.message);
     }

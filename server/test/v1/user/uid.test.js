@@ -14,6 +14,7 @@ describe('test /v1/users/:uid', function() {
   });
 
   after(async function() {
+    await support.deleteAction(mockUser2.id);
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
   });
@@ -40,7 +41,7 @@ describe('test /v1/users/:uid', function() {
     }
   });
 
-  it('should / status 200 when the signin', async function() {
+  it('should / status 200 when the signin and un_follow', async function() {
     try {
       let res = await request.post('/v1/signin').send({
         mobile: mockUser2.mobile,
@@ -52,6 +53,25 @@ describe('test /v1/users/:uid', function() {
       res.body.should.have.property('id');
       res.body.id.should.equal(mockUser.id);
       res.body.follow.should.equal(false);
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  it('should / status 200 when the signin and follow', async function() {
+    try {
+      await support.createAction('follow', mockUser2.id, mockUser.id);
+
+      let res = await request.post('/v1/signin').send({
+        mobile: mockUser2.mobile,
+        password: 'a123456'
+      });
+
+      res = await request.get(`/v1/user/${mockUser.id}`).set('Authorization', res.text).expect(200);
+
+      res.body.should.have.property('id');
+      res.body.id.should.equal(mockUser.id);
+      res.body.follow.should.equal(true);
     } catch(err) {
       should.ifError(err.message);
     }

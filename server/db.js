@@ -10,17 +10,18 @@ mongoose.connect(dbpath, { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.on('error', err => {
-  if (err) {
-    logger.error(`MongoDB Connection Error: ${err}`);
-    process.exit(1);
-  } else {
-    logger.info('MongoDB Connection Success!');
-  }
+  logger.error(`MongoDB Connection error: ${err}`);
+  process.exit(1);
 });
 
+db.once('open', function() {
+  logger.info('MongoDB connection success!');
+});
 
 // connect redis
-const client = redis.createClient();
+const client = redis.createClient({
+  db: 1
+});
 
 client.on('connect', () => {
   logger.info('Redis Connection Success!');

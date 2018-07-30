@@ -19,11 +19,13 @@ describe('test /v1/setting', function() {
 
   it('should / status 401 when user is not signin', async function() {
     try {
-      await request.put('/v1/setting').send({
+      const res = await request.put('/v1/setting').send({
         nickname: '青湛',
         location: '四川，成都',
         signature: '我是光'
       }).expect(401);
+
+      res.text.should.equal('需要用户权限');
     } catch(err) {
       should.ifError(err.message);
     }

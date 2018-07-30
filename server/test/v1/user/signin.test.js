@@ -66,15 +66,10 @@ describe('test /v1/signin', function() {
 
   it('should / status 400 when the sms code is not exist', async function() {
     try {
-      await request.get('/v1/aider/sms_code').query({
-        mobile: '18800000001',
-        exipred: 100
-      }).expect(200);
-
       const res = await request.post('/v1/signin').send({
-        issms: true,
         mobile: '18800000000',
-        sms: 123456
+        sms: '123456',
+        issms: true,
       }).expect(400);
 
       res.text.should.equal('尚未获取短信验证码或者已经失效');
@@ -83,17 +78,17 @@ describe('test /v1/signin', function() {
     }
   });
 
-  it('should / status 400 when the sms is invalid', async function() {
+  it('should / status 400 when the sms code is wrong', async function() {
     try {
-      await request.get('/v1/aider/sms_code').query({
+      let res = await request.get('/v1/aider/sms_code').query({
         mobile: '18800000000',
-        exipred: 100
+        expired: 100
       }).expect(200);
 
-      const res = await request.post('/v1/signin').send({
-        issms: true,
+      res = await request.post('/v1/signin').send({
         mobile: '18800000000',
-        sms: 123456
+        issms: true,
+        sms: '666666'
       }).expect(400);
 
       res.text.should.equal('短信验证码不正确');
@@ -106,7 +101,7 @@ describe('test /v1/signin', function() {
     try {
       const res = await request.get('/v1/aider/sms_code').query({
         mobile: '18800000000',
-        exipred: 100
+        expired: 100
       }).expect(200);
 
       await request.post('/v1/signin').send({

@@ -5,9 +5,8 @@ const should = require('should');
 describe('test /v1/static/about', function() {
   it('should / status 200', async function() {
     try {
-      const res = await request.get('/v1/static/about');
+      const res = await request.get('/v1/static/about').expect(200);
 
-      res.status.should.equal(200);
       res.text.should.containEql('# 关于');
     } catch(err) {
       should.ifError(err.message);

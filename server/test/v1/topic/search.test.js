@@ -8,7 +8,7 @@ describe('test /v1/topics/search', function() {
   let mockTopic;
 
   before(async function() {
-    mockUser = await support.createUser(18800000000, '话题创建者');
+    mockUser = await support.createUser('18800000000', '话题创建者');
     mockTopic = await support.createTopic(mockUser.id);
     await support.createTopic(mockUser.id);
   });
@@ -16,17 +16,14 @@ describe('test /v1/topics/search', function() {
   after(async function() {
     await support.deleteUser(mockUser.mobile);
     await support.deleteTopic(mockUser.id);
-    mockUser = null;
-    mockTopic = null;
   });
 
   it('should / status 200 when the query is default', async function() {
     try {
       const res = await request.get('/v1/topics/search').query({
         title: mockTopic.title
-      });
+      }).expect(200);
 
-      res.status.should.equal(200);
       res.body.topics.length.should.equal(2);
       res.body.currentPage.should.equal(1);
       res.body.total.should.equal(2);
@@ -43,9 +40,8 @@ describe('test /v1/topics/search', function() {
         title: mockTopic.title,
         page: 2,
         size: 1
-      });
+      }).expect(200);
 
-      res.status.should.equal(200);
       res.body.topics.length.should.equal(1);
       res.body.currentPage.should.equal(2);
       res.body.total.should.equal(2);

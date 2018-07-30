@@ -36,7 +36,6 @@ describe('test /v1/forget_pass', function() {
         sms: 123456
       }).expect(400);
 
-      res.status.should.equal(400);
       res.text.should.equal('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
     } catch(err) {
       should.ifError(err.message);
@@ -45,11 +44,6 @@ describe('test /v1/forget_pass', function() {
 
   it('should / status 400 when the sms_code is not exist', async function() {
     try {
-      await request.get('/v1/aider/sms_code').query({
-        mobile: '18800000001',
-        expired: 100
-      }).expect(200);
-
       const res = await request.patch('/v1/forget_pass').send({
         mobile: '18800000000',
         newPass: 'a123456789',
@@ -64,12 +58,12 @@ describe('test /v1/forget_pass', function() {
 
   it('should / status 400 when the sms code is wrong', async function() {
     try {
-      await request.get('/v1/aider/sms_code').query({
+      let res = await request.get('/v1/aider/sms_code').query({
         mobile: '18800000000',
         expired: 100
       }).expect(200);
 
-      const res = await request.patch('/v1/forget_pass').send({
+      res = await request.patch('/v1/forget_pass').send({
         mobile: '18800000000',
         newPass: 'a123456789',
         sms: 123456

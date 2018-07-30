@@ -59,15 +59,4 @@ module.exports = class Reply {
   static deleteReplyById(rid) {
     return ReplyModel.findByIdAndRemove(rid);
   }
-
-  /**
-   * 根据ID更新一条回复
-   *
-   * @static
-   * @param {ObjectId} rid
-   * @param {Object} update
-   */
-  static updateReplyById(rid, update) {
-    return ReplyModel.findByIdAndUpdate(rid, update);
-  }
 };

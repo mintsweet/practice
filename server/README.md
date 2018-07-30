@@ -29,6 +29,10 @@
 
 [使劲戳API文档](../API.md)
 
+## 测试覆盖率
+
+![测试覆盖率](./screenshot/test_cover.jpg)
+
 ## 图片上传相关
 
 关于图片上传功能依托于七牛云，使用者需首先申请七牛的开发者key，替换掉在`config.default.js`中的这一部分：

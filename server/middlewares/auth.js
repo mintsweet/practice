@@ -2,7 +2,7 @@ module.exports = class Auth {
   // 用户基础权限
   static async userRequired(ctx, next) {
     const { user } = ctx.state;
-    if (!user || !user.id) ctx.throw(401, '需要用户登录权限');
+    if (!user || !user.id) ctx.throw(401, '需要用户权限');
     await next();
   }
 

@@ -21,7 +21,9 @@ describe('test /v1/user/:rid/follow_or_un', function() {
 
   it('should / status 401 when the not signin', async function() {
     try {
-      await request.patch(`/v1/user/${mockUser2.id}/follow_or_un`).expect(401);
+      const res = await request.patch(`/v1/user/${mockUser2.id}/follow_or_un`).expect(401);
+
+      res.text.should.equal('需要用户权限');
     } catch(err) {
       should.ifError(err.message);
     }

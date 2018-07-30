@@ -16,10 +16,12 @@ describe('test /v1/update_pass', function() {
 
   it('should / status 401 when the not signin', async function() {
     try {
-      await request.patch('/v1/update_pass').send({
+      const res = await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: 'a123456789'
       }).expect(401);
+
+      res.text.should.equal('需要用户权限');
     } catch(err) {
       should.ifError(err.message);
     }

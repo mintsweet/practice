@@ -3,8 +3,7 @@ const request = require('supertest')(app);
 const should = require('should');
 
 describe('test /app.test', function() {
-  // 404
-  it('should / 404', async function() {
+  it('should / status 404', async function() {
     try {
       const res = await request.get('/not_found');
 
@@ -15,8 +14,7 @@ describe('test /app.test', function() {
     }
   });
 
-  // v1
-  it('should / v1 200', async function() {
+  it('should / status 200 when the v1', async function() {
     try {
       const res = await request.get('/v1');
 
@@ -27,8 +25,7 @@ describe('test /app.test', function() {
     }
   });
 
-  // v2
-  it('should / v2 200', async function() {
+  it('should / status 200 when the v2', async function() {
     try {
       const res = await request.get('/v2');
 
