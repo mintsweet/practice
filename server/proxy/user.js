@@ -54,6 +54,16 @@ module.exports = class User {
   }
 
   /**
+   * 根据条件统计用户数量
+   *
+   * @static
+   * @param {Object} query
+   */
+  static countUserByQuery(query) {
+    return UserModel.countDocuments(query);
+  }
+
+  /**
    * 创建用户
    *
    * @static

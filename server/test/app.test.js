@@ -1,38 +1,39 @@
-const app = require('../app');
+const app = require('../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
 
-describe('test /v1', function() {
+describe('test /app.test', function() {
   // 404
-  it('should / status 0 when the 404', async function() {
+  it('should / 404', async function() {
     try {
-      const res = await request.get('/v1/not_found');
+      const res = await request.get('/not_found');
 
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('找不到请求资源');
+      res.status.should.equal(404);
+      res.text.should.equal('请求的API地址不正确或者不存在');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误测试
-  it('should / status 0 when the something wrong', async function() {
-    try {
-      const res = await request.get('/v1/error_test');
-
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('随便出了错');
-    } catch(err) {
-      should.ifError(err.message);
-    }
-  });
-
-  // 正确
-  it('should / status 1', async function() {
+  // v1
+  it('should / v1 200', async function() {
     try {
       const res = await request.get('/v1');
 
-      res.body.status.should.equal(1);
+      res.status.should.equal(200);
+      res.text.should.equal('Version_1 API');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  // v2
+  it('should / v2 200', async function() {
+    try {
+      const res = await request.get('/v2');
+
+      res.status.should.equal(200);
+      res.text.should.equal('Version_2 API');
     } catch(err) {
       should.ifError(err.message);
     }

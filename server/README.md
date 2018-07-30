@@ -1,6 +1,6 @@
 # Server
 
-> 基于 Express 和 Mongodb 构建的数据服务。
+> 基于 Koa 和 Mongodb 构建的数据服务。
 
 ## 简介
 
@@ -29,10 +29,17 @@
 
 [使劲戳API文档](../API.md)
 
-## 测试覆盖率
+## 图片上传相关
 
-![测试覆盖率](./screenshots/test_cover.jpg)
+关于图片上传功能依托于七牛云，使用者需首先申请七牛的开发者key，替换掉在`config.default.js`中的这一部分：
 
-## 超级管理员
+```javascript
+qiniu: {
+  ACCESS_KEY: '',
+  SECRET_KEY: '',
+  BUCKET_NAME: '',
+  DONAME: ''
+},
+```
 
-在`models/data/root.js`文件中可修改初始化数据库时的超级管理员用户。
+分别对应你七牛云的`accessKey`、`secret_key`、`存储空间名称`和`存储空间域名`。

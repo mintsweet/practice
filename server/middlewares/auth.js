@@ -1,14 +1,15 @@
-class Auth {
-  // auth user
-  userRequired(req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.send({
-        status: 0,
-        message: '尚未登录'
-      });
-    }
-    next();
+module.exports = class Auth {
+  // 用户基础权限
+  static async userRequired(ctx, next) {
+    const { user } = ctx.state;
+    if (!user || !user.id) ctx.throw(401, '需要用户登录权限');
+    await next();
   }
-}
 
-module.exports = new Auth();
+  // 管理员权限
+  static async adminRequired(ctx, next) {
+    const { user } = ctx.state;
+    if (!user || !user.id || user.role < 1) ctx.throw(401, '需要管理员权限');
+    await next();
+  }
+};

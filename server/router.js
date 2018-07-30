@@ -1,66 +1,66 @@
-const express = require('express');
-const Aider = require('./controllers/aider');
-const Static = require('./controllers/static');
-const User = require('./controllers/user');
+const Router = require('koa-router');
 const Auth = require('./middlewares/auth');
-const Topic = require('./controllers/topic');
-const Notice = require('./controllers/notice');
-const Reply = require('./controllers/reply');
+const AiderV1 = require('./controllers/v1/aider');
+const StaticV1 = require('./controllers/v1/static');
+const UserV1 = require('./controllers/v1/user');
+const TopicV1 = require('./controllers/v1/topic');
+const ReplyV1 = require('./controllers/v1/reply');
+const NoticeV1 = require('./controllers/v1/notice');
+const UserV2 = require('./controllers/v2/user');
 
-const router = express.Router();
+const routerV1 = new Router({
+  prefix: '/v1'
+});
 
-// 异常捕获
-const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
+routerV1
+  .get('/', ctx => { ctx.body = 'Version_1 API'; }) // V1入口测试
+  .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
+  .get('/aider/sms_code', AiderV1.getSmscode) // 获取短信验证码
+  .get('/static/quick_start', StaticV1.getQuickStart) // 获取快速开始文档
+  .get('/static/api_doc', StaticV1.getApiDoc) // 获取API说明文档
+  .get('/static/about', StaticV1.getAbout) // 获取关于文档
+  .post('/signup', UserV1.signup) // 注册
+  .post('/signin', UserV1.signin) // 登录
+  .patch('/forget_pass', UserV1.forgetPass) // 忘记密码
+  .get('/info', Auth.userRequired, UserV1.getUserInfo) // 获取当前用户信息
+  .put('/setting', Auth.userRequired, UserV1.updateSetting) // 更新个人信息
+  .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
+  .get('/users/star', UserV1.getStar) // 获取星标用户列表
+  .get('/users/top100', UserV1.getTop100) // 获取积分榜前一百用户列表
+  .get('/user/:uid', UserV1.getInfoById) // 根据ID获取用户信息
+  .get('/user/:uid/action', UserV1.getUserAction) // 获取用户动态
+  .get('/user/:uid/create', UserV1.getUserCreate) // 获取用户专栏列表
+  .get('/user/:uid/like', UserV1.getUserLike) // 获取用户喜欢列表
+  .get('/user/:uid/collect', UserV1.getUserCollect) // 获取用户收藏列表
+  .get('/user/:uid/follower', UserV1.getUserFollower) // 获取用户粉丝列表
+  .get('/user/:uid/following', UserV1.getUserFollowing) // 获取用户关注列表
+  .patch('/user/:uid/follow_or_un', Auth.userRequired, UserV1.followOrUn) // 关注或者取消关注用户
+  .post('/create', Auth.userRequired, TopicV1.createTopic) // 创建话题
+  .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic) // 删除话题
+  .put('/topic/:tid/edit', Auth.userRequired, TopicV1.editTopic) // 编辑话题
+  .get('/topics/list', TopicV1.getTopicList) // 获取话题列表
+  .get('/topics/search', TopicV1.searchTopic) // 搜索话题列表
+  .get('/topics/no_reply', TopicV1.getNoReplyTopic) // 获取无人回复的话题
+  .get('/topic/:tid', TopicV1.getTopicById) // 根据ID获取话题详情
+  .patch('/topic/:tid/like_or_un', Auth.userRequired, TopicV1.likeOrUnLike) // 喜欢或者取消喜欢话题
+  .patch('/topic/:tid/collect_or_un', Auth.userRequired, TopicV1.collectOrUnCollect) // 收藏或者取消收藏话题
+  .post('/topic/:tid/reply', Auth.userRequired, ReplyV1.createReply) // 创建回复
+  .delete('/reply/:rid/delete', Auth.userRequired, ReplyV1.deleteReply) // 删除回复
+  .put('/reply/:rid/edit', Auth.userRequired, ReplyV1.editReply) // 编辑回复
+  .patch('/reply/:rid/up', Auth.userRequired, ReplyV1.upReply) // 回复点赞
+  .get('/notice/user', Auth.userRequired, NoticeV1.getUserNotice) // 获取用户消息
+  .get('/notice/system', Auth.userRequired, NoticeV1.getSystemNotice); // 获取系统消息
 
-// 辅助
-router.get('/', (req, res) => res.send({ status: 1, data: '欢迎使用 Mints API！' })); // 入口
-router.get('/error_test', wrap(() => { throw new Error('随便出了错'); })); // 错误测试
-router.get('/aider/captcha', wrap(Aider.getCaptcha)); // 图形验证码
-router.get('/aider/sms_code', Aider.getSmsCode); // 短信验证码
+const routerV2 = new Router({
+  prefix: '/v2'
+});
 
-// 静态
-router.get('/static/quick_start', wrap(Static.getQuickStart)); // 快速开始文档
-router.get('/static/api_doc', wrap(Static.getApiDoc)); // API说明文档
-router.get('/static/about', wrap(Static.getAbout)); // 关于文档
+routerV2
+  .get('/', ctx => { ctx.body = 'Version_2 API'; }) // V2入口测试
+  .get('/user/count', Auth.adminRequired, UserV2.countUser) // 统计用户总数
+  .get('/user/count_new_today', Auth.adminRequired, UserV2.countNewToday); // 统计今日新增用户
 
-// 用户
-router.post('/signup', wrap(User.signup)); // 注册
-router.post('/signin', wrap(User.signin)); // 登录
-router.delete('/signout', User.signout); // 登出
-router.patch('/forget_pass', wrap(User.forgetPass)); // 忘记密码
-router.get('/info', Auth.userRequired, User.getUserInfo); // 当前登录用户信息
-router.put('/setting', Auth.userRequired, wrap(User.updateUserInfo)); // 更新个人信息
-router.patch('/update_pass', Auth.userRequired, wrap(User.updatePass)); // 修改密码
-router.get('/users/star', wrap(User.getStarList)); // 星标用户列表
-router.get('/users/top100', wrap(User.getTop100)); // 积分榜前一百用户列表
-router.get('/user/:uid', wrap(User.getInfoById)); // 根据ID获取用户信息
-router.get('/user/:uid/action', wrap(User.getUserAction)); // 用户动态
-router.get('/user/:uid/create', wrap(User.getUserCreate)); // 用户专栏列表
-router.get('/user/:uid/like', wrap(User.getUserLike)); // 用户喜欢列表
-router.get('/user/:uid/collect', wrap(User.getUserCollect)); // 用户收藏列表
-router.get('/user/:uid/follower', wrap(User.getUserFollower)); // 用户粉丝列表
-router.get('/user/:uid/following', wrap(User.getUserFollowing)); // 用户关注列表
-router.patch('/user/:uid/follow_or_un', Auth.userRequired, wrap(User.followOrUnFollow)); // 关注或者取消关注某个用户
-
-// 话题
-router.post('/create', Auth.userRequired, wrap(Topic.createTopic)); // 创建话题
-router.delete('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic)); // 删除话题
-router.put('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic)); // 编辑话题
-router.get('/topics/list', wrap(Topic.getTopicList)); // 获取话题列表
-router.get('/topics/search', wrap(Topic.searchTopic)); // 搜索话题列表
-router.get('/topics/no_reply', wrap(Topic.getNoReplyTopic)); // 获取无人回复的话题
-router.get('/topic/:tid', wrap(Topic.getTopicById)); // 根据ID获取话题详情
-router.patch('/topic/:tid/like_or_un', Auth.userRequired, wrap(Topic.likeOrUnLike)); // 喜欢或者取消喜欢话题
-router.patch('/topic/:tid/collect_or_un', Auth.userRequired, wrap(Topic.collectOrUnCollect)); // 收藏或者取消收藏话题
-
-// // 回复
-router.post('/topic/:tid/reply', Auth.userRequired, wrap(Reply.createReply)); // 创建回复
-router.delete('/reply/:rid/delete', Auth.userRequired, wrap(Reply.deleteReply)); // 删除回复
-router.put('/reply/:rid/edit', Auth.userRequired, wrap(Reply.editReply)); // 编辑回复
-router.patch('/reply/:rid/up', Auth.userRequired, wrap(Reply.upReply)); // 回复点赞
-
-// // 消息
-router.get('/notice/user', Auth.userRequired, wrap(Notice.getUserNotice)); // 获取用户消息
-router.get('/notice/system', Auth.userRequired, wrap(Notice.getSystemNotice)); // 获取系统消息
-
-module.exports = router;
+module.exports = {
+  v1: routerV1.routes(),
+  v2: routerV2.routes()
+};

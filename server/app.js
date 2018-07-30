@@ -1,45 +1,34 @@
-const Express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
-const config = require('../config.default');
+const Koa = require('koa');
+const koaBody = require('koa-body');
+const koaJwt = require('koa-jwt');
 const router = require('./router');
-const handleError = require('./middlewares/error-handler');
+const config = require('../config.default');
+const logger = require('./utils/logger');
+const ErrorHandler = require('./middlewares/error-handler');
 
 // connect db
 require('./db');
 
-const app = module.exports = new Express();
+const app = module.exports = new Koa();
 
 // middleware
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-// cookie and session
-app.use(cookieParser(config.session_secret));
-app.use(session({
-  store: new RedisStore(),
-  name: 'practice',
-  secret: config.session_secret,
-  resave: true,
-  saveUninitialized: false
-}));
+app
+  .use(koaBody())
+  .use(koaJwt({ secret: config.secret, passthrough: true }))
+  .use(ErrorHandler.handleError); // 统一的异常处理
 
 // router
-app.use('/v1', router);
+app
+  .use(router.v1)
+  .use(router.v2);
 
 // 404
-app.use((req, res) => {
-  return res.send({
-    status: 0,
-    message: '找不到请求资源'
-  });
+app.use(ctx => {
+  ctx.status = 404;
+  ctx.body = '请求的API地址不正确或者不存在';
 });
 
 // error handle
-app.use(handleError);
+app.on('error', err => logger.error(err)); // 记录服务器错误
 
 if (!module.parent) app.listen(config.server_port);
