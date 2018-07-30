@@ -13,11 +13,12 @@ class User {
   constructor() {
     this.signup = this.signup.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
+    this.updatePass = this.updatePass.bind(this);
   }
 
   // 注册
   async signup(ctx) {
-    const { mobile, password, nickname, smscaptcha } = ctx.request.body;
+    const { mobile, password, nickname, sms } = ctx.request.body;
     const code = await getRedis(mobile);
 
     try {
@@ -29,7 +30,7 @@ class User {
         throw new Error('昵称必须在2至8位之间');
       } else if (!code) {
         throw new Error('尚未获取短信验证码或者已经失效');
-      } else if (code !== smscaptcha) {
+      } else if (code !== sms) {
         throw new Error('短信验证码不正确');
       }
     } catch(err) {
@@ -63,7 +64,7 @@ class User {
 
   // 登录
   async signin(ctx) {
-    const { mobile, password, issms, smscaptcha } = ctx.request.body;
+    const { mobile, password, issms, sms } = ctx.request.body;
 
     // 校验手机号
     if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
@@ -83,7 +84,7 @@ class User {
       try {
         if (!code) {
           throw new Error('尚未获取短信验证码或者已经失效');
-        } else if (code !== smscaptcha) {
+        } else if (code !== sms) {
           throw new Error('短信验证码不正确');
         }
       } catch(err) {
@@ -103,7 +104,7 @@ class User {
 
   // 忘记密码
   async forgetPass(ctx) {
-    const { mobile, newPass, smscaptcha } = ctx.request.body;
+    const { mobile, newPass, sms } = ctx.request.body;
     const code = await getRedis(mobile);
 
     try {
@@ -113,7 +114,7 @@ class User {
         throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
       } else if (!code) {
         throw new Error('尚未获取短信验证码或者已经失效');
-      } else if (code !== smscaptcha) {
+      } else if (code !== sms) {
         throw new Error('短信验证码不正确');
       }
     } catch(err) {

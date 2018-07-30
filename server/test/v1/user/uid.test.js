@@ -1,7 +1,7 @@
-const app = require('../../app');
-const request = require('supertest').agent(app);
+const app = require('../../../app').listen();
+const request = require('supertest')(app);
 const should = require('should');
-const support = require('../support');
+const support = require('../../support');
 const tempId = require('mongoose').Types.ObjectId();
 
 describe('test /v1/users/:uid', function() {
@@ -9,8 +9,8 @@ describe('test /v1/users/:uid', function() {
   let mockUser2;
 
   before(async function() {
-    mockUser = await support.createUser(18800000000, '已注册用户');
-    mockUser2 = await support.createUser(18800000001, '访问用户');
+    mockUser = await support.createUser('18800000000', '已注册用户');
+    mockUser2 = await support.createUser('18800000001', '访问用户');
   });
 
   after(async function() {
@@ -18,50 +18,40 @@ describe('test /v1/users/:uid', function() {
     await support.deleteUser(mockUser2.mobile);
   });
 
-  // 错误 - 无效的ID
-  it('should / status 0 when the uid is invalid', async function() {
+  it('should / status 410 when the user is not exist', async function() {
     try {
-      const res = await request.get(`/v1/user/${tempId}`);
+      const res = await request.get(`/v1/user/${tempId}`).expect(410);
 
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('无效的ID');
+      res.text.should.equal('用户不存在');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 正确 - 未登录
-  it('should / status 1', async function() {
+  it('should / status 200 when the not signin', async function() {
     try {
-      const res = await request.get(`/v1/user/${mockUser.id}`);
+      const res = await request.get(`/v1/user/${mockUser.id}`).expect(200);
 
-      res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
-      res.body.data.follow.should.equal(false);
+      res.body.should.have.property('id');
+      res.body.id.should.equal(mockUser.id);
+      res.body.follow.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 正确 - 已登录
-  it('should / status 1', async function() {
+  it('should / status 200 when the signin', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser2.mobile,
         password: 'a123456'
       });
 
-      res.body.status.should.equal(1);
+      res = await request.get(`/v1/user/${mockUser.id}`).set('Authorization', res.text).expect(200);
 
-      res = await request.get(`/v1/user/${mockUser.id}`);
-
-      res.body.status.should.equal(1);
-      res.body.data.should.have.property('id');
-      res.body.data.id.should.equal(mockUser.id);
-      res.body.data.follow.should.equal(false);
+      res.body.should.have.property('id');
+      res.body.id.should.equal(mockUser.id);
+      res.body.follow.should.equal(false);
     } catch(err) {
       should.ifError(err.message);
     }

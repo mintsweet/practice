@@ -8,15 +8,13 @@ describe('test /v1/setting', function() {
   let mockUser2;
 
   before(async function() {
-    mockUser = await support.createUser(18800000000, '已注册用户');
-    mockUser2 = await support.createUser(18800000001, '已注册用户二');
+    mockUser = await support.createUser('18800000000', '已注册用户');
+    mockUser2 = await support.createUser('18800000001', '已注册用户二');
   });
 
   after(async function() {
     await support.deleteUser(mockUser.mobile);
     await support.deleteUser(mockUser2.mobile);
-    mockUser = null;
-    mockUser2 = null;
   });
 
   it('should / status 401 when user is not signin', async function() {
@@ -33,9 +31,7 @@ describe('test /v1/setting', function() {
 
   it('should / status 409 when nickname is registered', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
       }).expect(200);
@@ -46,7 +42,7 @@ describe('test /v1/setting', function() {
         signature: '我是光'
       }).set('Authorization', res.text).expect(409);
 
-      res.error.text.should.equal('昵称已经注册过了');
+      res.text.should.equal('昵称已经注册过了');
     } catch(err) {
       should.ifError(err.message);
     }

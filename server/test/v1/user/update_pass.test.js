@@ -1,124 +1,95 @@
-const app = require('../../app');
-const request = require('supertest').agent(app);
+const app = require('../../../app').listen();
+const request = require('supertest')(app);
 const should = require('should');
-const support = require('../support');
+const support = require('../../support');
 
 describe('test /v1/update_pass', function() {
   let mockUser;
 
   before(async function() {
-    mockUser = await support.createUser(18800000000, '已注册用户');
+    mockUser = await support.createUser('18800000000', '已注册用户');
   });
 
   after(async function() {
     await support.deleteUser(mockUser.mobile);
   });
 
-  // 错误 - 尚未登录
-  it('should / status 0 when the not signin', async function() {
+  it('should / status 401 when the not signin', async function() {
     try {
-      const res = await request.patch('/v1/update_pass').send({
+      await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: 'a123456789'
-      });
-
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('尚未登录');
+      }).expect(401);
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误 - 旧密码不能为空
-  it('should / status 0 when the oldPass is invalid', async function() {
+  it('should / status 400 when the oldPass is invalid', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
-
-      res.body.status.should.equal(1);
+      }).expect(200);
 
       res = await request.patch('/v1/update_pass').send({
         oldPass: '',
         newPass: 'a123456789'
-      });
+      }).set('Authorization', res.text).expect(400);
 
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('旧密码不能为空');
+      res.text.should.equal('旧密码不能为空');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误 - 新密码不能通过校验
-  it('should / status 0 when the newPass is invalid', async function() {
+  it('should / status 400 when the newPass is invalid', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
-
-      res.body.status.should.equal(1);
+      }).expect(200);
 
       res = await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: '123456789'
-      });
+      }).set('Authorization', res.text).expect(400);
 
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+      res.text.should.equal('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 错误 - 旧密码错误
-  it('should / status 0 when the oldPass is not match', async function() {
+  it('should / status 400 when the oldPass is wrong', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      let res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
-
-      res.body.status.should.equal(1);
+      }).expect(200);
 
       res = await request.patch('/v1/update_pass').send({
         oldPass: '123456',
         newPass: 'a123456789'
-      });
+      }).set('Authorization', res.text).expect(400);
 
-      res.body.status.should.equal(0);
-      res.body.message.should.equal('旧密码错误');
+      res.text.should.equal('旧密码错误');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  // 正确
-  it('should / status 1', async function() {
+  it('should / status 200', async function() {
     try {
-      let res;
-
-      res = await request.post('/v1/signin').send({
+      const res = await request.post('/v1/signin').send({
         mobile: mockUser.mobile,
         password: 'a123456'
-      });
+      }).expect(200);
 
-      res.body.status.should.equal(1);
-
-      res = await request.patch('/v1/update_pass').send({
+      await request.patch('/v1/update_pass').send({
         oldPass: 'a123456',
         newPass: 'a123456789'
-      });
-
-      res.body.status.should.equal(1);
+      }).set('Authorization', res.text).expect(200);
     } catch(err) {
       should.ifError(err.message);
     }

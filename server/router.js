@@ -57,8 +57,7 @@ const routerV2 = new Router({
 
 routerV2
   .get('/', ctx => { ctx.body = 'Version_2 API'; }) // V2入口测试
-  .get('/user/count', Auth.adminRequired, UserV2.countUser) // 统计用户总数
-  .get('/user/count_new_today', Auth.adminRequired, UserV2.countNewToday); // 统计今日新增用户
+  .get('/user/total', Auth.adminRequired, UserV2.countUserTotal); // 统计用户总数
 
 module.exports = {
   v1: routerV1.routes(),

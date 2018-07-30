@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   // 登录信息
-  mobile: { type: Number, required: true },
+  mobile: { type: String, required: true },
   password: { type: String, required: true },
 
   // 用户信息
@@ -62,7 +62,7 @@ User.findOne((err, data) => {
 
   if (!data) {
     User.create({
-      mobile: 18888888888,
+      mobile: '18888888888',
       nickname: '青湛',
       location: '四川，成都',
       signature: '清明深湛，清澈透亮',
