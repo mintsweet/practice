@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers, compose } from 'redux';
 import { user } from './user.reducer';
 
 const store = createStore(combineReducers({ user }), compose(

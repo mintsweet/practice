@@ -32,7 +32,7 @@ const copyright = (
 export default class UserLayout extends PureComponent {
   render() {
     return (
-      <DocumentTitle title="登录 - Mints(薄荷糖社区)后台管理系统">
+      <DocumentTitle title="登录 - Mints(后台管理系统)">
         <div className={styles.container}>
           <div className={styles.content}>
             <div className={styles.header}>

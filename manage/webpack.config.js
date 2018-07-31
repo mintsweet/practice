@@ -13,7 +13,8 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   devServer: {
-    port: 3002
+    port: 3002,
+    noInfo: true
   },
   module: {
     rules: [
@@ -59,7 +60,7 @@ module.exports = {
             options: {
               javascriptEnabled: true,
               modifyVars: {
-                '@primary-color': '#16982B'
+                '@primary-color': '#52c41a'
               }
             }
           }

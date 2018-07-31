@@ -1,0 +1,33 @@
+.sider {
+  position: relative;
+  min-height: 100vh;
+  box-shadow: 1px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  .logo {
+    position: relative;
+    padding-left: 15px;
+    height: 64px;
+    line-height: 64px;
+    transition: all 0.3s;
+    background: #fff;
+    border-bottom: 1px solid #f1f1f1;
+    overflow: hidden;
+    img {
+      display: inline-block;
+      height: 50px;
+      vertical-align: middle;
+    }
+    h1 {
+      display: inline-block;
+      margin: 0;
+      font-size: 18px;
+      color: #002140;
+      vertical-align: middle;
+      font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      font-weight: 600;
+    }
+  }
+  .menu {
+    border-right: none;
+  }
+}

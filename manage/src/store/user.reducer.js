@@ -2,7 +2,7 @@ const SUCCESS = 'USER_SUCCESS';
 const ERROR = 'USER_ERROR';
 
 const INIT = {
-  user: {};
+  user: {},
   error: ''
 };
 
@@ -14,6 +14,8 @@ export function user(state = {}, action) {
       return { ...state, user: payload, error: '' };
     case ERROR:
       return { ...state, user: {}, error: payload };
+    default:
+      return state;
   }
 }
 

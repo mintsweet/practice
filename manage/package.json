@@ -2,11 +2,13 @@
   "name": "manage",
   "version": "1.0.0",
   "scripts": {
-    "start": "webpack-dev-server --info=false"
+    "start": "webpack-dev-server"
   },
   "license": "MIT",
   "dependencies": {
     "antd": "^3.7.3",
+    "classnames": "^2.2.6",
+    "rc-drawer": "^1.6.2",
     "react": "^16.4.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.4.1",

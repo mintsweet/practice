@@ -1,4 +1,8 @@
 /* global style */
+div {
+  user-select: none;
+}
+
 body {
   margin: 0;
 }
