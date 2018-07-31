@@ -10,11 +10,20 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
     extensions: ['.js', '.jsx']
   },
   devServer: {
     port: 3002,
-    noInfo: true
+    noInfo: true,
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        pathRewrite: {"^/api" : "/"}
+      }
+    },
   },
   module: {
     rules: [
@@ -29,7 +38,11 @@ module.exports = {
                 libraryName: 'antd',
                 style: true
               }],
-              'transform-decorators-legacy'
+              'transform-decorators-legacy',
+              ['transform-runtime', {
+                'polyfill': false,
+                'regenerator': true
+              }]
             ]
           }
         },

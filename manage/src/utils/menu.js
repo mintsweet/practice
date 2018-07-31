@@ -1,5 +1,3 @@
-import isUrl from './isUrl';
-
 const menuData = [
   {
     name: 'Dashboard',
@@ -34,11 +32,13 @@ const menuData = [
   }
 ];
 
+const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+
 function formatter(data, parentPath = '/') {
   return data.map(item => {
     let { path } = item;
 
-    if (!isUrl(path)) {
+    if (!reg.test(path)) {
       path = parentPath + item.path;
     }
     

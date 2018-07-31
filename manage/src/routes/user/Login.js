@@ -1,106 +1,252 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox } from 'antd';
+import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert } from 'antd';
+import { signinFunc } from '@/store/user.reducer';
 import styles from './Login.scss';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
+@connect(
+  ({ user }) => ({
+    user: user.user,
+    error: user.error
+  }),
+  { signinFunc }
+)
 @Form.create()
 export default class Login extends Component {
   state = {
     count: 0,
-    autoLogin: true
+    autoLogin: true,
+    type: 'acc',
+    mobile: {
+      value: ''
+    },
+    password: {
+      value: ''
+    },
+    sms: {
+      value: ''
+    }
   };
 
-  handleSubmit = () => {
-    console.log('submit');
-    return false;
+  // 校验手机号
+  validateMobile = mobile => {
+    if (/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+      return {
+        validateStatus: 'success',
+        errorMsg: null
+      };
+    }
+    return {
+      validateStatus: 'error',
+      errorMsg: '请输入正确格式的手机号'
+    };
   }
 
+  // 监听手机号
+  handleMobileChange = e => {
+    const value = e.target.value;
+    this.setState({
+      mobile: {
+        value,
+        ...this.validateMobile(value)
+      }
+    });
+  }
+
+  // 校验密码
+  validatePass = password => {
+    if (/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
+      return {
+        validateStatus: 'success',
+        errorMsg: null
+      };
+    }
+    return {
+      validateStatus: 'error',
+      errorMsg: '请输入正确格式的密码'
+    };
+  }
+
+  // 监听密码
+  handlePasswordChange = e => {
+    const value = e.target.value;
+    this.setState({
+      password: {
+        value,
+        ...this.validatePass(value)
+      }
+    });
+  }
+
+  // 校验验证码
+  validateSMS = sms => {
+    if (/^\d{6}$/.test(sms)) {
+      return {
+        validateStatus: 'success',
+        errorMsg: null
+      };
+    }
+    return {
+      validateStatus: 'error',
+      errorMsg: '请输入正确格式验证码'
+    };
+  }
+
+  // 监听验证码
+  handleSMSChange = e => {
+    const value = e.target.value;
+    this.setState({
+      sms: {
+        value,
+        ...this.validateSMS(value)
+      }
+    });
+  }
+
+  // 切换登录方式
+  handleChangeTab = key => {
+    this.setState({
+      type: key
+    });
+  }
+
+  // 修改自动登录
   changeAutoLogin = e => {
     this.setState({
-      autoLogin: e.target.checked,
+      autoLogin: e.target.checked
     });
   };
 
+  // 获取短信验证码
   onGetCaptcha = () => {
     let count = 59;
     this.setState({ count });
-    const { onGetCaptcha } = this.props;
-    if (onGetCaptcha) {
-      onGetCaptcha();
-    }
     this.interval = setInterval(() => {
       count -= 1;
       this.setState({ count });
       if (count === 0) {
         clearInterval(this.interval);
       }
-    }, 1000);b
+    }, 1000);
+  };
+
+  // 提交
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { type, mobile, password, sms } = this.state;
+    
+    const mobileStatus = this.validateMobile(mobile.value);
+    const passwordStatus = this.validatePass(password.value);
+    const smsStatus = this.validateSMS(sms.value);
+    
+    if (mobileStatus.errorMsg) {
+      return this.setState({
+        mobile: {
+          ...mobile
+        }
+      });
+    } else if (passwordStatus.errorMsg && type === 'acc') {
+      return this.setState({
+        password: {
+          ...this.validatePass(password.value)
+        }
+      });
+    } else if (smsStatus.errorMsg && type ==='msg') {
+      return this.setState({
+        sms: {
+          ...this.validateSMS(sms.value)
+        }
+      });
+    }
+    
+    this.props.signinFunc({
+      type,
+      mobile: mobile.value,
+      password: password.value,
+      sms: sms.value
+    });
+  }
+
+  // 错误信息
+  renderMessage = content => {
+    return <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />;
   };
 
   render() {
-    const { count, autoLogin } = this.state;
-    const { form } = this.props;
-    const { getFieldDecorator } = form;
+    const { count, autoLogin, mobile, password, sms, type } = this.state;
+    const { user, error } = this.props;
+
+    if (user) return 1;
 
     return (
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
-          <Tabs className={styles.tabs} defaultActiveKey="acc">
+          <Tabs className={styles.tabs} defaultActiveKey="acc" onChange={this.handleChangeTab}>
             <TabPane tab="账号密码登录" key="acc">
-              <FormItem>
-                {getFieldDecorator('mobile', {
-
-                })(
-                  <Input
-                    size="large"
-                    prefix={<Icon type="mobile" className={styles.prefixIcon} />}
-                    placeholder="请输入手机号"
-                    autoComplete="off"
-                  />
-                )}
+              {error && type === 'acc' && this.renderMessage(error)}
+              <FormItem
+                hasFeedback
+                validateStatus={mobile.validateStatus}
+                help={mobile.errorMsg}
+              >
+                <Input
+                  size="large"
+                  prefix={<Icon type="user" className={styles.prefixIcon} />}
+                  placeholder="请输入账号"
+                  autoComplete="off"
+                  value={mobile.value}
+                  onChange={this.handleMobileChange}
+                />
               </FormItem>
-              <FormItem>
-                {getFieldDecorator('password', {
-
-                })(
-                  <Input
-                    type="password"
-                    size="large"
-                    prefix={<Icon type="lock" className={styles.prefixIcon} />}
-                    placeholder="请输入密码"
-                  />
-                )}
+              <FormItem
+                hasFeedback
+                validateStatus={password.validateStatus}
+                help={password.errorMsg}
+              >
+                <Input
+                  type="password"
+                  size="large"
+                  prefix={<Icon type="lock" className={styles.prefixIcon} />}
+                  placeholder="请输入密码"
+                  value={password.value}
+                  onChange={this.handlePasswordChange}
+                />
               </FormItem>
             </TabPane>
             <TabPane tab="手机快捷登录" key="sms">
-              <FormItem>
-                {getFieldDecorator('mobile', {
-
-                })(
-                  <Input
-                    size="large"
-                    prefix={<Icon type="mobile" className={styles.prefixIcon} />}
-                    placeholder="请输入手机号"
-                    autoComplete="off"
-                  />
-                )}
+              {error && type === 'sms' && this.renderMessage(error)}
+              <FormItem
+                hasFeedback
+                validateStatus={mobile.validateStatus}
+                help={mobile.errorMsg}
+              >
+                <Input
+                  size="large"
+                  prefix={<Icon type="mobile" className={styles.prefixIcon} />}
+                  placeholder="请输入手机号"
+                  autoComplete="off"
+                  value={mobile.value}
+                  onChange={this.handleMobileChange}
+                />
               </FormItem>
-              <FormItem>
+              <FormItem
+                validateStatus={sms.validateStatus}
+              >
                 <Row gutter={8}>
                   <Col span={16}>
-                    {getFieldDecorator('sms', {
-
-                    })(
-                      <Input
-                        size="large"
-                        prefix={<Icon type="mail" className={styles.prefixIcon} />}
-                        placeholder="请输入验证码"
-                        autoComplete="off"
-                      />
-                    )}
+                    <Input
+                      size="large"
+                      prefix={<Icon type="mail" className={styles.prefixIcon} />}
+                      placeholder="请输入验证码"
+                      autoComplete="off"
+                      value={sms.value}
+                      onChange={this.handleSMSChange}
+                      help={sms.errorMsg}
+                    />
                   </Col>
                   <Col span={8}>
                     <Button
