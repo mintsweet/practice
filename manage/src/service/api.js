@@ -6,7 +6,7 @@ axios.interceptors.response.use((res) => {
   return res.data;
 }, (err) => {
   return Promise.reject(err.response.data);
-})
+});
 
 // 获取短信验证码
 export const getSMSCode = mobile => axios.get('/v1/aider/sms_code', { params: mobile });

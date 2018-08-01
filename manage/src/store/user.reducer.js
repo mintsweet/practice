@@ -4,7 +4,8 @@ const SUCCESS = 'USER_SUCCESS';
 const ERROR = 'USER_ERROR';
 
 const INIT = {
-  user: {},
+  info: {},
+  token: '',
   error: ''
 };
 
@@ -13,14 +14,27 @@ export function user(state = {}, action) {
   const { type, payload } = action;
   switch(type) {
     case SUCCESS:
-      return { ...state, user: payload, error: '' };
+      return { ...state, info: payload, error: '' };
     case ERROR:
-      return { ...state, user: {}, error: payload };
+      return { ...state, info: {}, error: payload };
     default:
       return state;
   }
 }
 
+// 保存用户信息
+export function saveCurrentUser(token) {
+  return async dispatch => {
+    try {
+      const user = await getUserInfo(token);
+      dispatch(success(user));
+    } catch(err) {
+      dispatch(error(err));
+    }
+  };
+}
+
+// 登录方法
 export function signinFunc(user) {
   const info = {
     mobile: user.mobile
@@ -44,9 +58,14 @@ export function signinFunc(user) {
         throw new Error('权限不足');
       }
     } catch(err) {
-      dispatch(error(err.response.data));
+      dispatch(error(err));
     }
-  }
+  };
+}
+
+// 忘记密码
+export function forgetPassFunc() {
+  
 }
 
 function success(data) {

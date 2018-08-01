@@ -116,7 +116,7 @@ module.exports = {
       filename: 'index.html',
       inject: true,
       title: 'Mints(薄荷糖社区) - 后台管理系统',
-      favicon: './public/favicon.ico'
+      favicon: path.resolve(__dirname, './public/favicon.ico')
     }),
     new WebpackBar()
   ]

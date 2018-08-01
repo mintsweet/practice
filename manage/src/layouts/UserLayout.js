@@ -40,7 +40,7 @@ export default class UserLayout extends PureComponent {
                 <img alt="logo" className={styles.logo} src={logo} />
                 <span className={styles.title}>Mints Community</span>
               </Link>
-              <div className={styles.desc}>Mints(薄荷糖社区) - 后台管理系统</div>
+              <div className={styles.desc}>Mints - 后台管理系统</div>
             </div>
             <Switch>
               <Route exact path="/user" component={() => <Redirect to="/user/login" />} />

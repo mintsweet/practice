@@ -1,42 +1,61 @@
 .header {
-  height: 64px;
+  position: relative;
   padding: 0 12px 0 0;
+  height: 64px;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-  position: relative;
-}
-
-.logo {
-  height: 64px;
-  line-height: 58px;
-  vertical-align: top;
-  display: inline-block;
-  padding: 0 0 0 24px;
-  cursor: pointer;
-  font-size: 20px;
-  img {
+  .logo {
+    height: 64px;
+    line-height: 58px;
+    vertical-align: top;
     display: inline-block;
-    vertical-align: middle;
+    padding: 0 0 0 24px;
+    cursor: pointer;
+    font-size: 20px;
+    img {
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
-}
-
-.menu {
-  :global(.anticon) {
-    margin-right: 8px;
+  .trigger {
+    font-size: 20px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: all 0.3s, padding 0s;
+    padding: 0 24px;
+    &:hover {
+      color: #52c41a;
+      background: rgba(#52c41a, .1);
+    }
   }
-  :global(.ant-dropdown-menu-item) {
-    width: 160px;
-  }
-}
-
-.trigger {
-  font-size: 20px;
-  line-height: 64px;
-  cursor: pointer;
-  transition: all 0.3s, padding 0s;
-  padding: 0 24px;
-  &:hover {
-    color: #16982B;
-    background: rgba(#16982B, .1);
+  .right {
+    float: right;
+    height: 100%;
+    .action {
+      cursor: pointer;
+      padding: 0 12px;
+      display: inline-block;
+      transition: all 0.3s;
+      height: 100%;
+      &:hover,
+      &:global(.ant-popover-open) {
+        background: rgba(#52c41a, .1);
+      }
+    }
+    .search {
+      padding: 0;
+      margin: 0 12px;
+      &:hover {
+        background: transparent;
+      }
+    }
+    .account {
+      .avatar {
+        margin: 20px 8px 20px 0;
+        color: #52c41a;
+        background: rgba(255, 255, 255, 0.85);
+        vertical-align: middle;
+      }
+    }
   }
 }

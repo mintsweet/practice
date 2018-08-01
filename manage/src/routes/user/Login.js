@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert } from 'antd';
+import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert, message } from 'antd';
 import { signinFunc } from '@/store/user.reducer';
+import { getSMSCode } from '../../service/api';
 import styles from './Login.scss';
 
 const FormItem = Form.Item;
@@ -10,7 +11,7 @@ const TabPane = Tabs.TabPane;
 
 @connect(
   ({ user }) => ({
-    user: user.user,
+    user: user.info,
     error: user.error
   }),
   { signinFunc }
@@ -31,6 +32,13 @@ export default class Login extends Component {
       value: ''
     }
   };
+
+  componentWillReceiveProps(nextProps) {
+    const { user } = nextProps;
+    if (user && user.id) {
+      this.props.history.push('/');
+    }
+  }
 
   // 校验手机号
   validateMobile = mobile => {
@@ -122,16 +130,33 @@ export default class Login extends Component {
   };
 
   // 获取短信验证码
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
+  onGetCaptcha = async () => {
+    const { mobile } = this.state;
+    const mobileStatus = this.validateMobile(mobile.value);
+
+    if (mobileStatus.errorMsg) {
+      this.setState({
+        mobile: {
+          ...mobileStatus
+        }
+      });
+      return;
+    }
+ 
+    try {
+      await getSMSCode({ mobile: mobile.value });
+      let count = 59;
       this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
+      this.interval = setInterval(() => {
+        count -= 1;
+        this.setState({ count });
+        if (count === 0) {
+          clearInterval(this.interval);
+        }
+      }, 1000);
+    } catch(err) {
+      message.error(err.message);
+    }
   };
 
   // 提交
@@ -178,9 +203,7 @@ export default class Login extends Component {
 
   render() {
     const { count, autoLogin, mobile, password, sms, type } = this.state;
-    const { user, error } = this.props;
-
-    if (user) return 1;
+    const { error } = this.props;
 
     return (
       <div className={styles.main}>
