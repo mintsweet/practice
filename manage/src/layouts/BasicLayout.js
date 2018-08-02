@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { Layout, Icon } from 'antd';
-import SiderMenu from '../components/SiderMenu';
-import GlobalFooter from '../components/GlobalFooter';
-import GlobalHeader from '../components/GlobalHeader';
-import { getMenuData } from '../utils/menu';
-import routerData from '../utils/router';
-import { getLocal, removeLocal } from '@/utils/local';
-import { saveCurrentUser } from '@/store/user.reducer';
+import SiderMenu from '@/components/SiderMenu';
+import GlobalFooter from '@/components/GlobalFooter';
+import GlobalHeader from '@/components/GlobalHeader';
+import { getMenuData } from '@/utils/menu';
+import routerData from '@/utils/router';
+import { getLocal } from '@/utils/local';
+import { saveUserFunc, signoutFunc } from '@/store/user.reducer';
 import logo from '../assets/logo.png';
 
 const { Header, Content, Footer } = Layout;
@@ -34,9 +34,10 @@ const NoMatch = ({ location }) => (
 @withRouter
 @connect(
   ({ user }) => ({
-    user: user.info
+    user: user.info,
+    token: user.token
   }),
-  { saveCurrentUser }
+  { saveUserFunc, signoutFunc }
 )
 export default class BasicLayout extends PureComponent {
   state = {
@@ -44,15 +45,17 @@ export default class BasicLayout extends PureComponent {
   };
 
   componentDidMount() {
-    this.getUserInfo();
+    const token = getLocal('token') || this.props.token;
+    if (!token) {
+      this.props.history.push('/user');
+    } else {
+      this.props.saveUserFunc(token);
+    }
   }
 
-  // 获取当前登录用户信息
-  getUserInfo = () => {
-    const token = getLocal('token');
-    if (token) {
-      this.props.saveCurrentUser(token);
-    } else {
+  componentWillReceiveProps(nextProps) {
+    const { user } = nextProps;
+    if (!user || !user.id) {
       this.props.history.push('/user');
     }
   }
@@ -67,10 +70,11 @@ export default class BasicLayout extends PureComponent {
   // 控制用户菜单
   handleMenuClick = ({ key }) => {
     if (key === 'logout') {
-      removeLocal('token');
+      this.props.signoutFunc();
     }
   }
 
+  // 设置页面标题
   getPageTitle = () => {
     const { location: { pathname } } = this.props;
     let title = 'Minst(后台管理系统)';

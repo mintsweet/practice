@@ -1,45 +1,45 @@
-import { signin, getUserInfo } from '@/service/api';
+import { signin, getUserInfo, forgetPass } from '@/service/api';
+import { setLocal, removeLocal } from '@/utils/local';
 
-const SUCCESS = 'USER_SUCCESS';
-const ERROR = 'USER_ERROR';
+const SAVE_TOKEN = 'SAVE_TOKEN';
+const SAVE_USER = 'SAVE_USER';
+const SIGNOUT = 'SIGNOUT_SUCCESS';
+const FORGET_PASS = 'FOGET_PASS_SUCCESS';
+const ERROR = 'ERROR_USER';
 
 const INIT = {
+  status: 0,
   info: {},
   token: '',
   error: ''
 };
 
 // reducer
-export function user(state = {}, action) {
+export function user(state = INIT, action) {
   const { type, payload } = action;
   switch(type) {
-    case SUCCESS:
-      return { ...state, info: payload, error: '' };
+    case SAVE_TOKEN:
+      return { ...state, status: 1, token: payload };
+    case SAVE_USER:
+      return { ...state, status: 1, info: payload, error: '' };
+    case SIGNOUT:
+      return { ...state, status: 1, info: {}, token: '', error: '' };
+    case FORGET_PASS:
+      return { ...state, status: 1, error: '' };
     case ERROR:
-      return { ...state, info: {}, error: payload };
+      return { ...state, status: 0, info: {}, error: payload };
     default:
       return state;
   }
 }
 
-// 保存用户信息
-export function saveCurrentUser(token) {
-  return async dispatch => {
-    try {
-      const user = await getUserInfo(token);
-      dispatch(success(user));
-    } catch(err) {
-      dispatch(error(err));
-    }
-  };
-}
-
-// 登录方法
+// 登录
 export function signinFunc(user) {
   const info = {
     mobile: user.mobile
   };
 
+  // 根据登录类型组装参数
   if (user.type === 'acc') {
     info.password = user.password;
   } else {
@@ -50,28 +50,49 @@ export function signinFunc(user) {
   return async dispatch => {
     try {
       const token = await signin(info);
-      const user = await getUserInfo(token);
-
-      if (user.role > 0) {
-        dispatch(success(user));
-      } else {
-        throw new Error('权限不足');
+      // 自动登录持久化存储
+      if (user.autoLogin) {
+        setLocal('token', token);
       }
+      dispatch({ type: SAVE_TOKEN, payload: token });
     } catch(err) {
-      dispatch(error(err));
+      dispatch({ type: ERROR, payload: err });
     }
   };
 }
 
+// 保存用户信息
+export function saveUserFunc(token) {
+  return async dispatch => {
+    try {
+      const user = await getUserInfo(token);
+      if (user.role > 0) {
+        dispatch({ type: SAVE_USER, payload, token });
+      } else {
+        throw '权限不足';
+      }
+    } catch(err) {
+      dispatch({ type: ERROR, payload: err });
+    }
+  };
+}
+
+// 登出
+export function signoutFunc() {
+  return dispatch => {
+    removeLocal('token');
+    dispatch({ type: SIGNOUT });
+  };
+}
+
 // 忘记密码
-export function forgetPassFunc() {
-  
-}
-
-function success(data) {
-  return { type: SUCCESS, payload: data };
-}
-
-function error(msg) {
-  return { type: ERROR, payload: msg };
+export function forgetPassFunc(user) {
+  return async dispatch => {
+    try {
+      await forgetPass(user);
+      dispatch({ type: FORGET_PASS });
+    } catch(err) {
+      dispatch({ type: ERROR, payload: err });
+    }
+  };
 }

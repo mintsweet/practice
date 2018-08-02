@@ -1,11 +1,11 @@
 export function setLocal(key, token) {
-  return sessionStorage.setItem(key, token);
+  return localStorage.setItem(key, token);
 }
 
 export function getLocal(key) {
-  return sessionStorage.getItem(key);
+  return localStorage.getItem(key);
 }
 
 export function removeLocal(key) {
-  return sessionStorage.removeItem(key);
+  return localStorage.removeItem(key);
 }

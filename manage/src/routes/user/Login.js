@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert, message } from 'antd';
-import { signinFunc } from '@/store/user.reducer';
-import { getSMSCode } from '../../service/api';
+import { signinFunc, saveUserFunc } from '@/store/user.reducer';
+import { getSMSCode } from '@/service/api';
+import { getLocal } from '@/utils/local';
 import styles from './Login.scss';
 
 const FormItem = Form.Item;
@@ -12,11 +13,11 @@ const TabPane = Tabs.TabPane;
 @connect(
   ({ user }) => ({
     user: user.info,
+    token: user.token,
     error: user.error
   }),
-  { signinFunc }
+  { signinFunc, saveUserFunc }
 )
-@Form.create()
 export default class Login extends Component {
   state = {
     count: 0,
@@ -33,9 +34,21 @@ export default class Login extends Component {
     }
   };
 
+  componentDidMount() {
+    const token = getLocal('token');
+    if (token) {
+      this.props.saveUserFunc(token);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { user } = nextProps;
+    const { token, user } = nextProps;
+    if (token && this.props.token !== token) {
+      this.props.saveUserFunc(token);
+    }
+
     if (user && user.id) {
+      message.success('登录成功');
       this.props.history.push('/');
     }
   }
@@ -100,7 +113,7 @@ export default class Login extends Component {
     }
     return {
       validateStatus: 'error',
-      errorMsg: '请输入正确格式验证码'
+      errorMsg: '请输入六位验证码'
     };
   }
 
@@ -135,12 +148,9 @@ export default class Login extends Component {
     const mobileStatus = this.validateMobile(mobile.value);
 
     if (mobileStatus.errorMsg) {
-      this.setState({
-        mobile: {
-          ...mobileStatus
-        }
+      return this.setState({
+        mobile: mobileStatus
       });
-      return;
     }
  
     try {
@@ -162,7 +172,7 @@ export default class Login extends Component {
   // 提交
   handleSubmit = (e) => {
     e.preventDefault();
-    const { type, mobile, password, sms } = this.state;
+    const { autoLogin, type, mobile, password, sms } = this.state;
     
     const mobileStatus = this.validateMobile(mobile.value);
     const passwordStatus = this.validatePass(password.value);
@@ -170,25 +180,20 @@ export default class Login extends Component {
     
     if (mobileStatus.errorMsg) {
       return this.setState({
-        mobile: {
-          ...mobile
-        }
+        mobile: mobileStatus
       });
     } else if (passwordStatus.errorMsg && type === 'acc') {
       return this.setState({
-        password: {
-          ...this.validatePass(password.value)
-        }
+        password: passwordStatus
       });
     } else if (smsStatus.errorMsg && type ==='msg') {
       return this.setState({
-        sms: {
-          ...this.validateSMS(sms.value)
-        }
+        sms: smsStatus
       });
     }
     
     this.props.signinFunc({
+      autoLogin,
       type,
       mobile: mobile.value,
       password: password.value,
@@ -258,6 +263,7 @@ export default class Login extends Component {
               </FormItem>
               <FormItem
                 validateStatus={sms.validateStatus}
+                help={sms.errorMsg}
               >
                 <Row gutter={8}>
                   <Col span={16}>
@@ -268,7 +274,6 @@ export default class Login extends Component {
                       autoComplete="off"
                       value={sms.value}
                       onChange={this.handleSMSChange}
-                      help={sms.errorMsg}
                     />
                   </Col>
                   <Col span={8}>
