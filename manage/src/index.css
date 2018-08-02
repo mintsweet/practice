@@ -10,3 +10,7 @@ body {
 a {
   text-decoration: none;
 }
+
+#root {
+  height: 100%;
+}

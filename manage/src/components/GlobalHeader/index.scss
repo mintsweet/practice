@@ -5,11 +5,11 @@
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   .logo {
+    display: inline-block;
+    padding: 0 0 0 10px;
     height: 64px;
     line-height: 58px;
     vertical-align: top;
-    display: inline-block;
-    padding: 0 0 0 24px;
     cursor: pointer;
     font-size: 20px;
     img {

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Icon, Dropdown, Avatar, Spin, Menu } from 'antd';
+import { Link } from 'react-router-dom';
+import { Icon, Dropdown, Avatar, Spin, Menu, Divider } from 'antd';
 import styles from './index.scss';
 
 const { Item: MenuItem} = Menu;
@@ -10,7 +11,7 @@ export default class GlobalHeader extends PureComponent {
   }
 
   render() {
-    const { collapsed, user, onMenuClick } = this.props;
+    const { logo, collapsed, user, isMobile, onMenuClick } = this.props;
     
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -29,6 +30,12 @@ export default class GlobalHeader extends PureComponent {
 
     return (
       <div className={styles.header}>
+        {isMobile && [
+          <Link to="/" className={styles.logo} key="logo">
+            <img src={logo} alt="logo" width="50" />
+          </Link>,
+          <Divider type="vertical" key="line" />,
+        ]}
         <Icon
           className={styles.trigger}
           type={collapsed ? 'menu-unfold' : 'menu-fold'}

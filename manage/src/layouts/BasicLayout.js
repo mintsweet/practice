@@ -1,19 +1,23 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import { Layout, Icon } from 'antd';
+import { ContainerQuery } from 'react-container-query';
+import { Layout, Icon, message } from 'antd';
+import classNames from 'classnames';
+import { enquireScreen, unenquireScreen } from 'enquire-js';
 import SiderMenu from '@/components/SiderMenu';
 import GlobalFooter from '@/components/GlobalFooter';
 import GlobalHeader from '@/components/GlobalHeader';
 import { getMenuData } from '@/utils/menu';
 import routerData from '@/utils/router';
-import { getLocal } from '@/utils/local';
 import { saveUserFunc, signoutFunc } from '@/store/user.reducer';
 import logo from '../assets/logo.png';
 
 const { Header, Content, Footer } = Layout;
 
+// 路由生成器
 const RouteWithSubRoutes = route => (
   <Route
     path={route.path}
@@ -23,6 +27,7 @@ const RouteWithSubRoutes = route => (
   />
 );
 
+// 404
 const NoMatch = ({ location }) => (
   <div>
     <h3>
@@ -30,6 +35,37 @@ const NoMatch = ({ location }) => (
     </h3>
   </div>
 );
+
+// 响应式间距
+const query = {
+  'screen-xs': {
+    maxWidth: 575,
+  },
+  'screen-sm': {
+    minWidth: 576,
+    maxWidth: 767,
+  },
+  'screen-md': {
+    minWidth: 768,
+    maxWidth: 991,
+  },
+  'screen-lg': {
+    minWidth: 992,
+    maxWidth: 1199,
+  },
+  'screen-xl': {
+    minWidth: 1200,
+    maxWidth: 1599,
+  },
+  'screen-xxl': {
+    minWidth: 1600,
+  },
+};
+
+let isMobile;
+enquireScreen(b => {
+  isMobile = b;
+});
 
 @withRouter
 @connect(
@@ -41,23 +77,27 @@ const NoMatch = ({ location }) => (
 )
 export default class BasicLayout extends PureComponent {
   state = {
-    collapsed: false
+    collapsed: false,
+    isMobile
   };
 
   componentDidMount() {
-    const token = getLocal('token') || this.props.token;
-    if (!token) {
-      this.props.history.push('/user');
+    this.enquireHandler = enquireScreen(mobile => {
+      this.setState({
+        isMobile: mobile,
+      });
+    });
+
+    const { token, user } = this.props;
+    if (token) {
+      if (!user) this.props.saveUserFunc(token);
     } else {
-      this.props.saveUserFunc(token);
+      this.props.history.push('/user');
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { user } = nextProps;
-    if (!user || !user.id) {
-      this.props.history.push('/user');
-    }
+  componentWillUnmount() {
+    unenquireScreen(this.enquireHandler);
   }
 
   // 控制右侧菜单收缩
@@ -71,6 +111,8 @@ export default class BasicLayout extends PureComponent {
   handleMenuClick = ({ key }) => {
     if (key === 'logout') {
       this.props.signoutFunc();
+      message.success('退出成功');
+      this.props.history.push('/user');
     }
   }
 
@@ -85,19 +127,25 @@ export default class BasicLayout extends PureComponent {
 
   render() {
     const { collapsed } = this.state;
-    const { user } = this.props;
+    const { user, location } = this.props;
+    const { isMobile: mb } = this.state;
 
     const layout = (
       <Layout>
         <SiderMenu
           logo={logo}
+          isMobile={mb}
           collapsed={collapsed}
+          location={location}
           menuData={getMenuData()}
+          onCollapse={this.handleMenuCollapse}
         />
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
             <GlobalHeader
+              logo={logo}
               user={user}
+              isMobile={mb}
               collapsed={collapsed}
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
@@ -138,7 +186,9 @@ export default class BasicLayout extends PureComponent {
 
     return (
       <DocumentTitle title={this.getPageTitle()}>
-        {layout}
+        <ContainerQuery query={query}>
+          {params => <div className={classNames(params)}>{layout}</div>}
+        </ContainerQuery>
       </DocumentTitle>
     );
   }

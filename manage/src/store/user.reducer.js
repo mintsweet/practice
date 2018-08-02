@@ -1,5 +1,5 @@
 import { signin, getUserInfo, forgetPass } from '@/service/api';
-import { setLocal, removeLocal } from '@/utils/local';
+import { getLocal, setLocal, removeLocal } from '@/utils/local';
 
 const SAVE_TOKEN = 'SAVE_TOKEN';
 const SAVE_USER = 'SAVE_USER';
@@ -9,8 +9,8 @@ const ERROR = 'ERROR_USER';
 
 const INIT = {
   status: 0,
-  info: {},
-  token: '',
+  info: null,
+  token: getLocal('token') || '',
   error: ''
 };
 
@@ -23,11 +23,11 @@ export function user(state = INIT, action) {
     case SAVE_USER:
       return { ...state, status: 1, info: payload, error: '' };
     case SIGNOUT:
-      return { ...state, status: 1, info: {}, token: '', error: '' };
+      return { ...state, status: 1, info: null, token: '', error: '' };
     case FORGET_PASS:
       return { ...state, status: 1, error: '' };
     case ERROR:
-      return { ...state, status: 0, info: {}, error: payload };
+      return { ...state, status: 0, info: null, token: '', error: payload };
     default:
       return state;
   }
@@ -67,7 +67,7 @@ export function saveUserFunc(token) {
     try {
       const user = await getUserInfo(token);
       if (user.role > 0) {
-        dispatch({ type: SAVE_USER, payload, token });
+        dispatch({ type: SAVE_USER, payload: user });
       } else {
         throw '权限不足';
       }

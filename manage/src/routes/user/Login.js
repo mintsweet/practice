@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert, message } from 'antd';
 import { signinFunc, saveUserFunc } from '@/store/user.reducer';
 import { getSMSCode } from '@/service/api';
-import { getLocal } from '@/utils/local';
 import styles from './Login.scss';
 
 const FormItem = Form.Item;
@@ -12,7 +11,6 @@ const TabPane = Tabs.TabPane;
 
 @connect(
   ({ user }) => ({
-    user: user.info,
     token: user.token,
     error: user.error
   }),
@@ -35,19 +33,16 @@ export default class Login extends Component {
   };
 
   componentDidMount() {
-    const token = getLocal('token');
+    const { token } = this.props;
     if (token) {
-      this.props.saveUserFunc(token);
+      message.success('登录成功');
+      this.props.history.push('/');
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { token, user } = nextProps;
-    if (token && this.props.token !== token) {
-      this.props.saveUserFunc(token);
-    }
-
-    if (user && user.id) {
+    const { token } = nextProps;
+    if (token) {
       message.success('登录成功');
       this.props.history.push('/');
     }

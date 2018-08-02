@@ -30,10 +30,10 @@ export default class SiderMenu extends PureComponent {
     } else {
       return (
         <MenuItem key={item.path}>
-          <Icon type={item.icon} />
-          <span>
-            <Link to={item.path}>{item.name}</Link>
-          </span>
+          <Link to={item.path} replace={item.path == this.props.location.pathname}>
+            {item.icon && <Icon type={item.icon} />}
+            <span>{item.name}</span>
+          </Link>
         </MenuItem>
       );
     }
