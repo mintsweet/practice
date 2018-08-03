@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -89,9 +88,17 @@ export default class BasicLayout extends PureComponent {
     });
 
     const { token, user } = this.props;
+    
     if (token) {
       if (!user) this.props.saveUserFunc(token);
     } else {
+      this.props.history.push('/user');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { token } = nextProps;
+    if (!token) {
       this.props.history.push('/user');
     }
   }
@@ -151,7 +158,7 @@ export default class BasicLayout extends PureComponent {
               onMenuClick={this.handleMenuClick}
             />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ padding: 24 }}>
             <Switch>
               {routerData.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
               <Route component={NoMatch} />

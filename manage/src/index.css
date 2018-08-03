@@ -3,7 +3,7 @@ div {
   user-select: none;
 }
 
-body {
+body, p {
   margin: 0;
 }
 

@@ -1,0 +1,62 @@
+.statisCard {
+  .header {
+    position: relative;
+    overflow: hidden;
+    .icon {
+      font-size: 40px;
+    }
+    .title {
+      margin-bottom: 8px;
+      line-height: 22px;
+      font-size: 14px;
+      color: #a1a1a1;
+    }
+    .number {
+      margin-left: 10px;
+      line-height: 1;
+      font-size: 32px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  .main {
+    position: relative;
+    margin-top: 10px;
+    >span {
+      color: #a1a1a1;
+      & + span {
+        margin-left: 16px;
+      }
+    }
+    .rate {
+      margin-left: 8px;
+      color: #666;
+    }
+    .icon {
+      position: relative;
+      top: 1px;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+    .up {
+      color: #f5222d;
+    }
+    .down {
+      top: -1px;
+      color: #52c41a;
+    }
+  }
+  .footer {
+    border-top: 1px solid #e8e8e8;
+    padding-top: 9px;
+    margin-top: 8px;
+    span {
+      color: #a1a1a1;
+    }
+    .total {
+      margin: 0 4px;
+      color: #666;
+    }
+  }
+}

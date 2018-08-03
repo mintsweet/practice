@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { signin, getUserInfo, forgetPass } from '@/service/api';
 import { getLocal, setLocal, removeLocal } from '@/utils/local';
 
@@ -7,10 +8,15 @@ const SIGNOUT = 'SIGNOUT_SUCCESS';
 const FORGET_PASS = 'FOGET_PASS_SUCCESS';
 const ERROR = 'ERROR_USER';
 
+//
+const token = getLocal('token') || '';
+
+if (token) axios.defaults.headers.common['Authorization'] = token;
+
 const INIT = {
   status: 0,
   info: null,
-  token: getLocal('token') || '',
+  token,
   error: ''
 };
 
@@ -54,6 +60,7 @@ export function signinFunc(user) {
       if (user.autoLogin) {
         setLocal('token', token);
       }
+      axios.defaults.headers.common['Authorization'] = token;
       dispatch({ type: SAVE_TOKEN, payload: token });
     } catch(err) {
       dispatch({ type: ERROR, payload: err });
@@ -72,6 +79,7 @@ export function saveUserFunc(token) {
         throw '权限不足';
       }
     } catch(err) {
+      removeLocal('token');
       dispatch({ type: ERROR, payload: err });
     }
   };

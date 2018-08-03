@@ -2,7 +2,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = '/api';
 
-axios.interceptors.response.use((res) => {
+axios.interceptors.response.use(res => {
   return res.data;
 }, (err) => {
   return Promise.reject(err.response.data);
@@ -18,4 +18,13 @@ export const signin = user => axios.post('/v1/signin', user);
 export const forgetPass = user => axios.patch('/v1/forget_pass', user);
 
 // 获取当前登录用户信息
-export const getUserInfo = token => axios.get('/v1/info', { headers: { 'Authorization': token } });
+export const getUserInfo = () => axios.get('/v1/info');
+
+// 获取本周新增用户数量
+export const getNewUserThisWeek = () => axios.get('/v2/user/new_this_week');
+
+// 获取上周新增用户数量
+export const getNewUserLastWeek = () => axios.get('/v2/user/new_last_week');
+
+// 获取用户总数量
+export const getUserTotal = () => axios.get('/v2/user/total');

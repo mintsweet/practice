@@ -43,6 +43,7 @@ UserSchema.plugin(Plugin);
 
 UserSchema.index({ mobile: 1 }, { unique: true });
 UserSchema.index({ score: -1 });
+UserSchema.index({ create_at: -1 });
 
 UserSchema.virtual('isAdvanced').get(function() {
   return this.score > 1000 || this.star;

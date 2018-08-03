@@ -5,28 +5,24 @@ const menuData = [
     path: 'dashboard'
   },
   {
-    name: '话题管理',
+    name: '内容管理',
     icon: 'laptop',
-    path: 'topic',
+    path: 'content',
     children: [
       {
-        name: '列表',
-        path: 'list'
-      }
-    ]
-  },
-  {
-    name: '系统设置',
-    icon: 'setting',
-    path: 'system',
-    children: [
-      {
-        name: '基本信息',
-        path: 'basic'
+        name: '用户',
+        path: 'user',
+        icon: 'user'
       },
       {
-        name: '站点管理',
-        path: 'site'
+        name: '话题',
+        path: 'topic',
+        icon: 'profile'
+      },
+      {
+        name: '评论',
+        path: 'reply',
+        icon: 'tag-o'
       }
     ]
   }

@@ -57,7 +57,9 @@ const routerV2 = new Router({
 
 routerV2
   .get('/', ctx => { ctx.body = 'Version_2 API'; }) // V2入口测试
-  .get('/user/total', Auth.adminRequired, UserV2.countUserTotal); // 统计用户总数
+  .get('/user/new_this_week', Auth.adminRequired, UserV2.countUserThisWeek) // 获取本周新增用户数
+  .get('/user/new_last_week', Auth.adminRequired, UserV2.countUserLastWeek) // 获取上周新增用户数
+  .get('/user/total', Auth.adminRequired, UserV2.countUserTotal); // 获取用户总数
 
 module.exports = {
   v1: routerV1.routes(),
