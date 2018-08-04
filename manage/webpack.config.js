@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const config = require('../config.default');
 
 module.exports = {
   mode: 'development',
@@ -16,7 +17,7 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   devServer: {
-    port: 3002,
+    port: config.manage_port,
     noInfo: true,
     proxy: {
       "/api": {

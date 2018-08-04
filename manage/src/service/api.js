@@ -28,3 +28,12 @@ export const getNewUserLastWeek = () => axios.get('/v2/user/new_last_week');
 
 // 获取用户总数量
 export const getUserTotal = () => axios.get('/v2/user/total');
+
+// 获取本周新增话题数量
+export const getNewTopicThisWeek = () => axios.get('/v2/topic/new_this_week');
+
+// 获取上周新增话题数量
+export const getNewTopicLastWeek = () => axios.get('/v2/topic/new_last_week');
+
+// 获取话题总数量
+export const getTopicTotal = () => axios.get('/v2/topic/total');

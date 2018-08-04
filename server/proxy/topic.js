@@ -55,7 +55,7 @@ module.exports = class Topic {
    * @param {Object} query
    * @returns
    */
-  static countTopic(query) {
+  static countTopicByQuery(query) {
     return TopicModel.countDocuments(query);
   }
 

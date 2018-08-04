@@ -30,7 +30,10 @@ const config = {
     { name: '分享', url: 'share' },
     { name: '问答', url: 'ask' },
     { name: '招聘', url: 'offer' }
-  ]
+  ],
+
+  // Manage
+  manage_port: 3002
 };
 
 module.exports = config;

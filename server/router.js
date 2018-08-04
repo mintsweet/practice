@@ -7,6 +7,7 @@ const TopicV1 = require('./controllers/v1/topic');
 const ReplyV1 = require('./controllers/v1/reply');
 const NoticeV1 = require('./controllers/v1/notice');
 const UserV2 = require('./controllers/v2/user');
+const TopicV2 = require('./controllers/v2/topic');
 
 const routerV1 = new Router({
   prefix: '/v1'
@@ -59,7 +60,10 @@ routerV2
   .get('/', ctx => { ctx.body = 'Version_2 API'; }) // V2入口测试
   .get('/user/new_this_week', Auth.adminRequired, UserV2.countUserThisWeek) // 获取本周新增用户数
   .get('/user/new_last_week', Auth.adminRequired, UserV2.countUserLastWeek) // 获取上周新增用户数
-  .get('/user/total', Auth.adminRequired, UserV2.countUserTotal); // 获取用户总数
+  .get('/user/total', Auth.adminRequired, UserV2.countUserTotal) // 获取用户总数
+  .get('/topic/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
+  .get('/topic/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek) // 获取上周新增话题数
+  .get('/topic/total', Auth.adminRequired, TopicV2.countTopicTotal); // 获取话题总数
 
 module.exports = {
   v1: routerV1.routes(),

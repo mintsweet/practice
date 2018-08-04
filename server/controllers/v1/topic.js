@@ -111,7 +111,7 @@ class Topic {
       sort: '-top -last_reply_at'
     };
 
-    const count = await TopicProxy.countTopic(query);
+    const count = await TopicProxy.countTopicByQuery(query);
     const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', option);
 
     const promiseAuthor = await Promise.all(topics.map(item => {
@@ -163,7 +163,7 @@ class Topic {
       sort: '-top -last_reply_at'
     };
 
-    const count = await TopicProxy.countTopic(query);
+    const count = await TopicProxy.countTopicByQuery(query);
     const topics = await TopicProxy.getTopicsByQuery(query, '-lock -delete', option);
 
     const promiseAuthor = await Promise.all(topics.map(item => {

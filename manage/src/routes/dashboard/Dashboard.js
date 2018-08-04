@@ -3,7 +3,10 @@ import { Row, Col, Card, Icon } from 'antd';
 import CountUp from 'react-countup';
 import classNames from 'classnames';
 import Loading from '@/components/Loading';
-import { getNewUserThisWeek, getNewUserLastWeek, getUserTotal } from '@/service/api';
+import {
+  getNewUserThisWeek, getNewUserLastWeek, getUserTotal,
+  getNewTopicThisWeek, getNewTopicLastWeek, getTopicTotal
+} from '@/service/api';
 import styles from './Dashboard.scss';
 
 // 计数卡片
@@ -49,6 +52,13 @@ export default class Dashboard extends Component {
     const newUserThisWeek = await getNewUserThisWeek();
     const newUserLastWeek = await getNewUserLastWeek();
     const userTotal = await getUserTotal();
+    const userRate = newUserLastWeek === 0 ? '-' : (newUserThisWeek - newUserLastWeek) / newUserLastWeek * 100 + '%';
+    const newTopicThisWeek = await getNewTopicThisWeek();
+    const newTopicLastWeek = await getNewTopicLastWeek();
+    const topicTotal = await getTopicTotal();
+    const topicRate = newTopicLastWeek === 0 ? '-' : (newTopicThisWeek - newTopicLastWeek) / newTopicLastWeek * 100 + '%';
+
+    console.log();
 
     const statisData = [
       {
@@ -57,8 +67,17 @@ export default class Dashboard extends Component {
         color: '#52c41a',
         count: newUserThisWeek,
         last_count: newUserLastWeek,
-        rate: (newUserThisWeek - newUserLastWeek) / newUserLastWeek * 100 + '%',
+        rate:  userRate,
         total: userTotal
+      },
+      {
+        title: '本周新增话题量',
+        icon: 'profile',
+        color: '#fa8c16',
+        count: newTopicThisWeek,
+        last_count: newTopicLastWeek,
+        rate: topicRate,
+        total: topicTotal
       }
     ];
 
