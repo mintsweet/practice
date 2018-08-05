@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Spin } from 'antd';
 import styles from './index.scss';

@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -34,6 +35,23 @@ const NoMatch = ({ location }) => (
     </h3>
   </div>
 );
+
+// 面包屑映射
+const getBreadcrumbNameMap = (menuData, routerData) => {
+  const result = {};
+  for (const i of menuData) {
+    const item = routerData.find(item => item.path === i.path);
+    if (item) {
+      result[i.path] = item.name;
+    }
+
+    if (i.children) {
+      Object.assign(result, getBreadcrumbNameMap(i.children, routerData));
+    }
+  }
+
+  return result;
+}
 
 // 响应式间距
 const query = {
@@ -75,10 +93,26 @@ enquireScreen(b => {
   { saveUserFunc, signoutFunc }
 )
 export default class BasicLayout extends PureComponent {
+  static childContextTypes = {
+    location: PropTypes.object,
+    breadcrumbNameMap: PropTypes.object,
+  };
+
   state = {
     collapsed: false,
     isMobile
   };
+
+  getChildContext() {
+    const { location } = this.props;
+
+    console.log(getBreadcrumbNameMap(getMenuData(), routerData))
+
+    return {
+      location,
+      breadcrumbNameMap: getBreadcrumbNameMap(getMenuData(), routerData)
+    }
+  }
 
   componentDidMount() {
     this.enquireHandler = enquireScreen(mobile => {

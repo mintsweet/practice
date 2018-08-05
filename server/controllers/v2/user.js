@@ -27,6 +27,12 @@ class User {
     const count = await UserProxy.countUserByQuery();
     ctx.body = count;
   }
+
+  // 用户列表
+  async getUserList(ctx) {
+    const users = await UserProxy.getUsersByQuery();
+    ctx.body = users;
+  }
 }
 
 module.exports = new User();

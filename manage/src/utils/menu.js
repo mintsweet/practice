@@ -18,11 +18,6 @@ const menuData = [
         name: '话题',
         path: 'topic',
         icon: 'profile'
-      },
-      {
-        name: '评论',
-        path: 'reply',
-        icon: 'tag-o'
       }
     ]
   }

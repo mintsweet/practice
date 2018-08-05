@@ -4,7 +4,6 @@ import Dashboard from '@/routes/dashboard/Dashboard';
 // 内容管理
 import User from '@/routes/content/user';
 import Topic from '@/routes/content/topic';
-import Reply from '@/routes/content/reply';
 
 const routerData = [
   {
@@ -36,12 +35,6 @@ const routerData = [
     path: '/content/topic',
     name: '话题',
     component: Topic
-  },
-  {
-    exact: true,
-    path: '/content/reply',
-    name: '回复',
-    component: Reply
   }
 ];
 

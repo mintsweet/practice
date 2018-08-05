@@ -61,6 +61,7 @@ routerV2
   .get('/user/new_this_week', Auth.adminRequired, UserV2.countUserThisWeek) // 获取本周新增用户数
   .get('/user/new_last_week', Auth.adminRequired, UserV2.countUserLastWeek) // 获取上周新增用户数
   .get('/user/total', Auth.adminRequired, UserV2.countUserTotal) // 获取用户总数
+  .get('/user/list', Auth.adminRequired, UserV2.getUserList) // 获取用户列表
   .get('/topic/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
   .get('/topic/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek) // 获取上周新增话题数
   .get('/topic/total', Auth.adminRequired, TopicV2.countTopicTotal); // 获取话题总数

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PageLayout from '@/layouts/PageLayout';
 
 export default class User extends Component {
   render() {
-    return <div>User</div>;
+    return (
+      <PageLayout>
+        
+      </PageLayout>
+    );
   }
 }
