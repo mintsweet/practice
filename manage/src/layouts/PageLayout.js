@@ -45,8 +45,6 @@ export default class PageLayout extends PureComponent {
       </Fragment>
     );
 
-    console.log(loading);
-
     return (
       <div className={classNames({ [styles.loading]: loading })}>
         {loading ? <Spin tip="Loading..." size="large" /> : content}

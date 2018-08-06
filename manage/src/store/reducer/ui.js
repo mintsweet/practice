@@ -1,5 +1,4 @@
-const CHANGE_LOADING = 'CHANGE_LOADING';
-const CHANGE_COLLAPSED = 'CHANGE_COLLAPSED';
+import { CHANGE_LOADING, CHANGE_COLLAPSED } from '../types';
 
 const INIT = {
   loading: true,
@@ -7,7 +6,7 @@ const INIT = {
 };
 
 // reducer
-export function global(state = INIT, action) {
+export function ui(state = INIT, action) {
   const { type, payload } = action
   switch(type) {
     case CHANGE_LOADING:

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert, message } from 'antd';
-import { signinFunc, saveUserFunc } from '@/store/user.reducer';
+import { signinFunc } from '@/store/reducer/user';
 import { getSMSCode } from '@/service/api';
 import styles from './Login.scss';
 
@@ -10,11 +10,11 @@ const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
 @connect(
-  ({ user }) => ({
+  ({ user, error }) => ({
     token: user.token,
-    error: user.error
+    error: error.info
   }),
-  { signinFunc, saveUserFunc }
+  { signinFunc }
 )
 export default class Login extends Component {
   state = {

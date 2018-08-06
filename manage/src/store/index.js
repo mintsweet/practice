@@ -1,9 +1,12 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { global } from './global.reducer';
-import { user } from './user.reducer';
+import { error } from './reducer/error';
+import { status } from './reducer/status';
+import { token } from './reducer/token';
+import { ui } from './reducer/ui';
+import { user } from './reducer/user';
 
-const store = createStore(combineReducers({ global, user }), compose(
+const store = createStore(combineReducers({ error, status, token, ui, user }), compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));

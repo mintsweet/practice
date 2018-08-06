@@ -6,7 +6,7 @@ import {
   getNewUserThisWeek, getNewUserLastWeek, getUserTotal,
   getNewTopicThisWeek, getNewTopicLastWeek, getTopicTotal
 } from '@/service/api';
-import { changeLoadingAction } from '@/store/global.reducer';
+import { changeLoadingAction } from '@/store/reducer/ui';
 import CountCard from './components/CountCard';
 
 @connect(

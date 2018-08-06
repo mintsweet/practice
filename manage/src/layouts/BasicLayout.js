@@ -12,7 +12,8 @@ import GlobalFooter from '@/components/GlobalFooter';
 import GlobalHeader from '@/components/GlobalHeader';
 import { getMenuData } from '@/utils/menu';
 import routerData from '@/utils/router';
-import { saveUserFunc, signoutFunc } from '@/store/user.reducer';
+import { saveUserFunc } from '@/store/reducer/user';
+import { signoutFunc } from '@/store/reducer/status';
 import logo from '../assets/logo.png';
 
 const { Header, Content, Footer } = Layout;

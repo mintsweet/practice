@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PageLayout from '@/layouts/PageLayout';
-import { changeLoadingAction } from '@/store/global.reducer';
+import { changeLoadingAction } from '@/store/reducer/ui';
 
 @connect(
   ({}) => ({}),

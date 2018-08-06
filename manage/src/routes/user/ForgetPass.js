@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input, Icon, Row, Col, Button, Alert, message } from 'antd';
 import { getSMSCode } from '@/service/api';
-import { forgetPassFunc } from '@/store/user.reducer';
+import { forgetPassFunc } from '@/store/reducer/status';
 import styles from './ForgetPass.scss';
 
 const FormItem = Form.Item;
 
 @connect(
-  ({ user }) => ({
+  ({ user, error }) => ({
     status: user.status,
-    error: user.error
+    error: error.info
   }),
   { forgetPassFunc }
 )
