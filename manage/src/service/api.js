@@ -21,16 +21,16 @@ export const forgetPass = user => axios.patch('/v1/forget_pass', user);
 export const getUserInfo = () => axios.get('/v1/info');
 
 // 获取本周新增用户数量
-export const getNewUserThisWeek = () => axios.get('/v2/user/new_this_week');
+export const getNewUserThisWeek = () => axios.get('/v2/users/new_this_week');
 
 // 获取上周新增用户数量
-export const getNewUserLastWeek = () => axios.get('/v2/user/new_last_week');
+export const getNewUserLastWeek = () => axios.get('/v2/users/new_last_week');
 
 // 获取用户总数量
-export const getUserTotal = () => axios.get('/v2/user/total');
+export const getUserTotal = () => axios.get('/v2/users/total');
 
 // 获取用户列表
-export const getUserList = query => axios.get('/v2/user/list', { params: query });
+export const getUserList = query => axios.get('/v2/users/list', { params: query });
 
 // 获取本周新增话题数量
 export const getNewTopicThisWeek = () => axios.get('/v2/topic/new_this_week');

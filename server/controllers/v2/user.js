@@ -33,6 +33,31 @@ class User {
     const users = await UserProxy.getUsersByQuery();
     ctx.body = users;
   }
+
+  // 创建用户
+  createUser(ctx) {
+
+  }
+
+  // 删除用户(超管物理删除)
+  deleteUser(ctx) {
+
+  }
+
+  // 编辑用户
+  editUser(ctx) {
+
+  }
+
+  // 设为星标用户
+  starUser(ctx) {
+
+  }
+
+  // 锁定用户(封号)
+  lockUser(ctx) {
+
+  }
 }
 
 module.exports = new User();

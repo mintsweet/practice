@@ -58,13 +58,22 @@ const routerV2 = new Router({
 
 routerV2
   .get('/', ctx => { ctx.body = 'Version_2 API'; }) // V2入口测试
-  .get('/user/new_this_week', Auth.adminRequired, UserV2.countUserThisWeek) // 获取本周新增用户数
-  .get('/user/new_last_week', Auth.adminRequired, UserV2.countUserLastWeek) // 获取上周新增用户数
-  .get('/user/total', Auth.adminRequired, UserV2.countUserTotal) // 获取用户总数
-  .get('/user/list', Auth.adminRequired, UserV2.getUserList) // 获取用户列表
+  .get('/users/new_this_week', Auth.adminRequired, UserV2.countUserThisWeek) // 获取本周新增用户数
+  .get('/users/new_last_week', Auth.adminRequired, UserV2.countUserLastWeek) // 获取上周新增用户数
+  .get('/users/total', Auth.adminRequired, UserV2.countUserTotal) // 获取用户总数
+  .get('/users/list', Auth.adminRequired, UserV2.getUserList) // 获取用户列表
+  .post('/users/create', Auth.adminRequired, UserV2.createUser) // 新增用户
+  .delete('/user/:uid/delete', Auth.rootRequired, UserV2.deleteUser) // 删除用户(超管物理删除)
+  .put('/user/:uid/edit', Auth.rootRequired, UserV2.editUser) // 编辑用户
+  .patch('/user/:uid/star', Auth.adminRequired, UserV2.starUser) // 设为星标用户
+  .patch('/user/:uid/lock', Auth.adminRequired, UserV2.lockUser) // 锁定用户(封号)
   .get('/topic/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
   .get('/topic/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek) // 获取上周新增话题数
-  .get('/topic/total', Auth.adminRequired, TopicV2.countTopicTotal); // 获取话题总数
+  .get('/topic/total', Auth.adminRequired, TopicV2.countTopicTotal) // 获取话题总数
+  .delete('/topic/:tid/delete', Auth.rootRequired, TopicV2.deleteTopic) // 删除话题(超管物理删除)
+  .patch('/topic/:tid/top', Auth.adminRequired, TopicV2.topTopic) // 话题置顶
+  .patch('/topic/:tid/good', Auth.adminRequired, TopicV2.goodTopic) // 话题加精华
+  .patch('/topic/:tid/lock', Auth.adminRequired, TopicV2.lockTopic); // 话题锁定(封贴)
 
 module.exports = {
   v1: routerV1.routes(),

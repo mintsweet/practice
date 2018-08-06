@@ -4,7 +4,7 @@ const log4js = require('log4js');
 const env = process.env.NODE_ENV || 'production';
 
 log4js.configure({
-  appenders: { cheese: { type: 'file', filename: path.join(__dirname, '../log/cheese.log') } },
+  appenders: { cheese: { type: 'file', filename: path.join(__dirname, '../logs/cheese.log') } },
   categories: { default: { appenders: ['cheese'], level: env !== 'production' ? 'debug' : 'error' } }
 });
 

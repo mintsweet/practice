@@ -105,9 +105,6 @@ export default class BasicLayout extends PureComponent {
 
   getChildContext() {
     const { location } = this.props;
-
-    console.log(getBreadcrumbNameMap(getMenuData(), routerData))
-
     return {
       location,
       breadcrumbNameMap: getBreadcrumbNameMap(getMenuData(), routerData)

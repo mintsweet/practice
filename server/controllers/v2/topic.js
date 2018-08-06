@@ -27,6 +27,26 @@ class Topic {
     const count = await TopicProxy.countTopicByQuery();
     ctx.body = count;
   }
+
+  // 删除话题(超管物理删除)
+  deleteTopic(ctx) {
+
+  }
+
+  // 话题置顶
+  topTopic(ctx) {
+
+  }
+
+  // 话题加精华
+  goodTopic(ctx) {
+
+  }
+
+  // 话题锁定(封贴)
+  lockTopic(ctx) {
+
+  }
 }
 
 module.exports = new Topic();
