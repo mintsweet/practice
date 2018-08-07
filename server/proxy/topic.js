@@ -73,4 +73,27 @@ module.exports = class Topic {
     topic.reply_count += 1;
     await topic.save();
   }
+
+  /**
+   * 根据ID删除话题
+   *
+   * @static
+   * @param {ObjectId} id
+   * @returns
+   */
+  static async deleteTopicById(id) {
+    return TopicModel.findByIdAndRemove(id);
+  }
+
+  /**
+   * 根据ID更新话题
+   *
+   * @static
+   * @param {ObjectId} id
+   * @param {Object} update
+   * @param {Object} option
+   */
+  static async updateTopicById(id, update, option) {
+    return TopicModel.findByIdAndUpdate(id, update, option);
+  }
 };

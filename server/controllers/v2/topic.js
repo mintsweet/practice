@@ -29,23 +29,31 @@ class Topic {
   }
 
   // 删除话题(超管物理删除)
-  deleteTopic(ctx) {
-
+  async deleteTopic(ctx) {
+    const { tid } = ctx.params;
+    await TopicProxy.deleteTopicById(tid);
+    ctx.body = '';
   }
 
   // 话题置顶
-  topTopic(ctx) {
-
+  async topTopic(ctx) {
+    const { tid } = ctx.params;
+    await TopicProxy.updateTopicById(tid, { top: true });
+    ctx.body = '';
   }
 
   // 话题加精华
-  goodTopic(ctx) {
-
+  async goodTopic(ctx) {
+    const { tid } = ctx.params;
+    await TopicProxy.updateTopicById(tid, { good: true });
+    ctx.body = '';
   }
 
   // 话题锁定(封贴)
-  lockTopic(ctx) {
-
+  async lockTopic(ctx) {
+    const { tid } = ctx.params;
+    await TopicProxy.updateTopicById(tid, { lock: true });
+    ctx.body = '';
   }
 }
 

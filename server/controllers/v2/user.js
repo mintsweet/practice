@@ -35,28 +35,38 @@ class User {
   }
 
   // 创建用户
-  createUser(ctx) {
-
+  async createUser(ctx) {
+    const { mobile, password, nickname } = ctx.request.body;
+    const user = await UserProxy.createUser(mobile, password, nickname);
+    ctx.body = user;
   }
 
   // 删除用户(超管物理删除)
-  deleteUser(ctx) {
-
+  async deleteUser(ctx) {
+    const { uid } = ctx.params;
+    await UserProxy.deleteUser(uid);
+    ctx.body = '';
   }
 
   // 编辑用户
-  editUser(ctx) {
-
+  async editUser(ctx) {
+    const { uid } = ctx.params;
+    await UserProxy.updateUserById(uid, ctx.request.body);
+    ctx.body = '';
   }
 
   // 设为星标用户
-  starUser(ctx) {
-
+  async starUser(ctx) {
+    const { uid } = ctx.params;
+    await UserProxy.updateUserById(uid, { star: true });
+    ctx.body = '';
   }
 
   // 锁定用户(封号)
-  lockUser(ctx) {
-
+  async lockUser(ctx) {
+    const { uid } = ctx.params;
+    await UserProxy.updateUserById(uid, { lock: true });
+    ctx.body = '';
   }
 }
 

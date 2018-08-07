@@ -88,4 +88,15 @@ module.exports = class User {
   static updateUserById(id, update, option) {
     return UserModel.findByIdAndUpdate(id, update, option);
   }
+
+  /**
+   * 根据ID删除用户
+   *
+   * @static
+   * @param {ObjectId} id
+   * @returns
+   */
+  static removeUserById(id) {
+    return UserModel.findByIdAndRemove(id);
+  }
 };
