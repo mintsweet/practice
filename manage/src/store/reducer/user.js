@@ -14,7 +14,7 @@ export function user(state = {}, action) {
 }
 
 // 保存用户信息
-export function saveUserFunc(token) {
+export function saveUserAction(token) {
   return async dispatch => {
     try {
       const user = await getUserInfo(token);

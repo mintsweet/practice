@@ -9,8 +9,8 @@ import styles from './PageLayout.scss';
 const { Item: BreadcrumbItem } = Breadcrumb;
 
 @connect(
-  ({ global }) => ({
-    loading: global.loading
+  ({ ui }) => ({
+    loading: ui.loading
   })
 )
 export default class PageLayout extends PureComponent {

@@ -1,19 +1,20 @@
+import axios from 'axios';
 import { signin } from '@/service/api';
-import { getLocal } from '@/utils/local';
-import { SAVE_TOKEN } from '../types';
+import { getLocal, setLocal } from '@/utils/local';
+import { SIGNIN, ERROR } from '../types';
 
 export function token(state = getLocal('token') || '', action) {
   const { type, payload } = action;
   switch(type) {
-    case SAVE_TOKEN:
-      return { ...state, token: payload };
+    case SIGNIN:
+      return payload;
     default:
       return state;
   }
 }
 
-// 登录
-export function signinFunc(user) {
+// 登录 - 存储 token
+export function signinAction(user) {
   const info = {
     mobile: user.mobile
   };
@@ -34,9 +35,9 @@ export function signinFunc(user) {
         setLocal('token', token);
       }
       axios.defaults.headers.common['Authorization'] = token;
-      dispatch({ type: SAVE_TOKEN, payload: token });
+      dispatch({ type: SIGNIN, payload: token });
     } catch(err) {
-      dispatch({ type: 'ERROR', payload: err });
+      dispatch({ type: ERROR, payload: err });
     }
   };
 }

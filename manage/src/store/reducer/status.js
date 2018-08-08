@@ -1,22 +1,22 @@
-import { signin, forgetPass } from '@/service/api';
-import { getLocal, setLocal } from '@/utils/local';
-import { SIGNOUT, FORGET_PASS } from '../types';
+import { forgetPass } from '@/service/api';
+import { removeLocal } from '@/utils/local';
+import { SIGNOUT, FORGET_PASS, ERROR } from '../types';
 
 // reducer
 export function status(state = 0, action) {
-  const { type, payload } = action;
+  const { type } = action;
   switch(type) {
     case SIGNOUT:
-      return { ...state, status: 1 };
+      return 1;
     case FORGET_PASS:
-      return { ...state, status: 1 };
+      return 1;
     default:
       return state;
   };
 }
 
 // 登出
-export function signoutFunc() {
+export function signoutAction() {
   return dispatch => {
     removeLocal('token');
     dispatch({ type: SIGNOUT });
@@ -24,13 +24,13 @@ export function signoutFunc() {
 }
 
 // 忘记密码
-export function forgetPassFunc(user) {
+export function forgetPassAction(user) {
   return async dispatch => {
     try {
       await forgetPass(user);
       dispatch({ type: FORGET_PASS });
     } catch(err) {
-      dispatch({ type: 'ERROR', payload: err });
+      dispatch({ type: ERROR, payload: err });
     }
   };
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon, Form, Tabs, Input, Row, Col, Button, Checkbox, Alert, message } from 'antd';
-import { signinFunc } from '@/store/reducer/user';
+import { signinAction } from '@/store/reducer/token';
 import { getSMSCode } from '@/service/api';
 import styles from './Login.scss';
 
@@ -10,11 +10,11 @@ const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
 @connect(
-  ({ user, error }) => ({
-    token: user.token,
-    error: error.info
+  ({ token, error }) => ({
+    token: token,
+    error: error
   }),
-  { signinFunc }
+  { signinAction }
 )
 export default class Login extends Component {
   state = {
@@ -187,7 +187,7 @@ export default class Login extends Component {
       });
     }
     
-    this.props.signinFunc({
+    this.props.signinAction({
       autoLogin,
       type,
       mobile: mobile.value,

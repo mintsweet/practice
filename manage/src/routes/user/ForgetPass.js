@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input, Icon, Row, Col, Button, Alert, message } from 'antd';
 import { getSMSCode } from '@/service/api';
-import { forgetPassFunc } from '@/store/reducer/status';
+import { forgetPassAction } from '@/store/reducer/status';
 import styles from './ForgetPass.scss';
 
 const FormItem = Form.Item;
 
 @connect(
-  ({ user, error }) => ({
-    status: user.status,
-    error: error.info
+  ({ status, error }) => ({
+    status: status,
+    error: error
   }),
-  { forgetPassFunc }
+  { forgetPassAction }
 )
 export default class ForgetPass extends Component {
   state = {
@@ -162,7 +162,7 @@ export default class ForgetPass extends Component {
       });
     }
 
-    this.props.forgetPassFunc({
+    this.props.forgetPassAction({
       mobile: mobile.value,
       newPass: newPass.value,
       sms: sms.value

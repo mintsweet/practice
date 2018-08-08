@@ -12,8 +12,8 @@ import GlobalFooter from '@/components/GlobalFooter';
 import GlobalHeader from '@/components/GlobalHeader';
 import { getMenuData } from '@/utils/menu';
 import routerData from '@/utils/router';
-import { saveUserFunc } from '@/store/reducer/user';
-import { signoutFunc } from '@/store/reducer/status';
+import { saveUserAction } from '@/store/reducer/user';
+import { signoutAction } from '@/store/reducer/status';
 import logo from '../assets/logo.png';
 
 const { Header, Content, Footer } = Layout;
@@ -87,11 +87,11 @@ enquireScreen(b => {
 
 @withRouter
 @connect(
-  ({ user }) => ({
-    user: user.info,
-    token: user.token
+  ({ token, user }) => ({
+    user: user,
+    token: token
   }),
-  { saveUserFunc, signoutFunc }
+  { saveUserAction, signoutAction }
 )
 export default class BasicLayout extends PureComponent {
   static childContextTypes = {
@@ -122,7 +122,7 @@ export default class BasicLayout extends PureComponent {
     const { token, user } = this.props;
     
     if (token) {
-      if (!user) this.props.saveUserFunc(token);
+      if (!user) this.props.saveUserAction(token);
     } else {
       this.props.history.push('/user');
     }
@@ -149,7 +149,7 @@ export default class BasicLayout extends PureComponent {
   // 控制用户菜单
   handleMenuClick = ({ key }) => {
     if (key === 'logout') {
-      this.props.signoutFunc();
+      this.props.signoutAction();
       message.success('退出成功');
       this.props.history.push('/user');
     }
