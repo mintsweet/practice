@@ -1,6 +1,6 @@
 import { forgetPass } from '@/service/api';
 import { removeLocal } from '@/utils/local';
-import { SIGNOUT, FORGET_PASS, ERROR } from '../types';
+import { ERROR, SIGNOUT, FORGET_PASS } from '../types';
 
 // reducer
 export function status(state = 0, action) {
@@ -12,7 +12,7 @@ export function status(state = 0, action) {
       return 1;
     default:
       return state;
-  };
+  }
 }
 
 // 登出
@@ -30,7 +30,7 @@ export function forgetPassAction(user) {
       await forgetPass(user);
       dispatch({ type: FORGET_PASS });
     } catch(err) {
-      dispatch({ type: ERROR, payload: err });
+      dispatch({ type: ERROR, payload: err, way: FORGET_PASS });
     }
   };
 }

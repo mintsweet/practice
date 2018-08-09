@@ -30,7 +30,14 @@ class User {
 
   // 用户列表
   async getUserList(ctx) {
-    const users = await UserProxy.getUsersByQuery();
+    const result = await UserProxy.getUsersByQuery({}, 'id avatar mobile nickname create_at delete lock star role score');
+    const users = result.map(item => {
+      return {
+        ...item.toObject(),
+        create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
+      };
+    });
+
     ctx.body = users;
   }
 

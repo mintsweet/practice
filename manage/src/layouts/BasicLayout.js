@@ -13,7 +13,8 @@ import GlobalHeader from '@/components/GlobalHeader';
 import { getMenuData } from '@/utils/menu';
 import routerData from '@/utils/router';
 import { saveUserAction } from '@/store/reducer/user';
-import { signoutAction } from '@/store/reducer/status';
+import { signoutAction } from '@/store/reducer/error';
+import { changeLoadingAction, changeCollapsedAction } from '@/store/reducer/ui';
 import logo from '../assets/logo.png';
 
 const { Header, Content, Footer } = Layout;
@@ -87,11 +88,12 @@ enquireScreen(b => {
 
 @withRouter
 @connect(
-  ({ token, user }) => ({
-    user: user,
-    token: token
+  ({ token, user, ui }) => ({
+    user,
+    token,
+    collapsed: ui.collapsed
   }),
-  { saveUserAction, signoutAction }
+  { saveUserAction, signoutAction, changeLoadingAction, changeCollapsedAction }
 )
 export default class BasicLayout extends PureComponent {
   static childContextTypes = {
@@ -100,7 +102,6 @@ export default class BasicLayout extends PureComponent {
   };
 
   state = {
-    collapsed: false,
     isMobile
   };
 
@@ -113,6 +114,10 @@ export default class BasicLayout extends PureComponent {
   }
 
   componentDidMount() {
+    this.props.history.listen(() => {
+      this.props.changeLoadingAction(true);
+    })
+
     this.enquireHandler = enquireScreen(mobile => {
       this.setState({
         isMobile: mobile,
@@ -122,7 +127,7 @@ export default class BasicLayout extends PureComponent {
     const { token, user } = this.props;
     
     if (token) {
-      if (!user) this.props.saveUserAction(token);
+      if (!user.id) this.props.saveUserAction(token);
     } else {
       this.props.history.push('/user');
     }
@@ -141,9 +146,7 @@ export default class BasicLayout extends PureComponent {
 
   // 控制右侧菜单收缩
   handleMenuCollapse = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
+    this.props.changeCollapsedAction(!this.props.collapsed);
   };
 
   // 控制用户菜单
@@ -165,8 +168,7 @@ export default class BasicLayout extends PureComponent {
   }
 
   render() {
-    const { collapsed } = this.state;
-    const { user, location } = this.props;
+    const { user, location, collapsed } = this.props;
     const { isMobile: mb } = this.state;
 
     const layout = (

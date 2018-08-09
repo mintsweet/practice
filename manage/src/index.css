@@ -14,3 +14,7 @@ a {
 #root {
   height: 100%;
 }
+
+.table-action {
+  margin-bottom: 20px;
+}

@@ -3,7 +3,11 @@ import { signin } from '@/service/api';
 import { getLocal, setLocal } from '@/utils/local';
 import { SIGNIN, ERROR } from '../types';
 
-export function token(state = getLocal('token') || '', action) {
+const value = getLocal('token') || '';
+
+if (value) axios.defaults.headers['Authorization'] = value;
+
+export function token(state = value, action) {
   const { type, payload } = action;
   switch(type) {
     case SIGNIN:
@@ -37,7 +41,7 @@ export function signinAction(user) {
       axios.defaults.headers.common['Authorization'] = token;
       dispatch({ type: SIGNIN, payload: token });
     } catch(err) {
-      dispatch({ type: ERROR, payload: err });
+      dispatch({ type: ERROR, payload: err, way: SIGNIN });
     }
   };
 }

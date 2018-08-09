@@ -11,8 +11,8 @@ const TabPane = Tabs.TabPane;
 
 @connect(
   ({ token, error }) => ({
-    token: token,
-    error: error
+    token,
+    error
   }),
   { signinAction }
 )
@@ -210,7 +210,7 @@ export default class Login extends Component {
         <Form onSubmit={this.handleSubmit}>
           <Tabs className={styles.tabs} defaultActiveKey="acc" onChange={this.handleChangeTab}>
             <TabPane tab="账号密码登录" key="acc">
-              {error && type === 'acc' && this.renderMessage(error)}
+              {type === 'acc' && error.way === 'SIGNIN' && error.content && this.renderMessage(error.content)}
               <FormItem
                 hasFeedback
                 validateStatus={mobile.validateStatus}
@@ -241,7 +241,7 @@ export default class Login extends Component {
               </FormItem>
             </TabPane>
             <TabPane tab="手机快捷登录" key="sms">
-              {error && type === 'sms' && this.renderMessage(error)}
+              {type === 'sms' && error.way === 'SIGNIN' && error.content && this.renderMessage(error.content)}
               <FormItem
                 hasFeedback
                 validateStatus={mobile.validateStatus}

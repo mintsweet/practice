@@ -10,8 +10,8 @@ const FormItem = Form.Item;
 
 @connect(
   ({ status, error }) => ({
-    status: status,
-    error: error
+    status,
+    error
   }),
   { forgetPassAction }
 )
@@ -181,7 +181,7 @@ export default class ForgetPass extends Component {
     return (
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
-          {error && this.renderMessage(error)}
+          {error.way === 'FORGET_PASS' && error.content && this.renderMessage(error.content)}
           <FormItem
             hasFeedback
             validateStatus={mobile.validateStatus}

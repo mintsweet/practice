@@ -1,13 +1,17 @@
 import { getUserInfo } from '@/service/api';
 import { removeLocal } from '@/utils/local';
-import { SAVE_USER } from '../types';
+import { SAVE_USER, ERROR } from '../types';
+
+const INIT = {
+  id: null
+}
 
 // reducer
-export function user(state = {}, action) {
+export function user(state = INIT, action) {
   const { type, payload } = action;
   switch(type) {
     case SAVE_USER:
-      return { ...state, info: payload };
+      return { ...state, ...payload };
     default:
       return state;
   }
@@ -25,7 +29,7 @@ export function saveUserAction(token) {
       }
     } catch(err) {
       removeLocal('token');
-      dispatch({ type: 'ERROR', payload: err });
+      dispatch({ type: ERROR, payload: err, way: SAVE_USER });
     }
   };
 }
