@@ -25,6 +25,7 @@ module.exports = {
         pathRewrite: {"^/api" : "/"}
       }
     },
+    open: true
   },
   module: {
     rules: [

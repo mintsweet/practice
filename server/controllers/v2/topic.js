@@ -28,6 +28,18 @@ class Topic {
     ctx.body = count;
   }
 
+  // 获取话题列表
+  async getTopicList(ctx) {
+    const result = await TopicProxy.getTopicsByQuery({});
+    const topics = result.map(item => {
+      return {
+        ...item.toObject(),
+        create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
+      };
+    });
+    ctx.body = topics;
+  }
+
   // 删除话题(超管物理删除)
   async deleteTopic(ctx) {
     const { tid } = ctx.params;

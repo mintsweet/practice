@@ -15,6 +15,11 @@ a {
   height: 100%;
 }
 
+.page-content {
+  padding: 24px;
+  background: #fff;
+}
+
 .table-action {
   margin-bottom: 20px;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Button, Avatar, Tag, Divider } from 'antd';
+import { Table, Button, Avatar, Tag, Badge, Divider } from 'antd';
 import PageLayout from '@/layouts/PageLayout';
 import { changeLoadingAction } from '@/store/reducer/ui';
 import { getUserList } from '@/service/api';
@@ -51,7 +51,7 @@ export default class User extends Component {
       render: record => record.star ? <Tag color="blue">是</Tag> : <Tag color="magenta">否</Tag>
     }, {
       title: '用户状态',
-      render: record => record.delete ? <Tag color="red">已删除</Tag> : record.lock ? <Tag color="volcano">已封号</Tag> : <Tag color="blue">正常</Tag>
+      render: record => record.delete ? <Badge status="error" text="已删除" /> : record.lock ? <Badge color="warning" text="已封号" /> : <Badge status="success" text="正常" />
     }, {
       title: '创建时间',
       render: record => <span>{record.create_at}</span>
@@ -62,6 +62,10 @@ export default class User extends Component {
           <a href="javascript:;">编辑</a>
           <Divider type="vertical" />
           <a href="javascript:;">删除</a>
+          <Divider type="vertical" />
+          <a href="javascript:;">{ record.star ? '取消星标' : '设为星标'}</a>
+          <Divider type="vertical" />
+          <a href="javascript:;">{ record.lock ? '取消锁定' : '锁定账户' }</a>
         </span>
       )
     }];
@@ -72,16 +76,18 @@ export default class User extends Component {
 
     return (
       <PageLayout>
-        <div className="table-action">
-          <Button type="primary">新增</Button>
+        <div className="page-content">
+          <div className="table-action">
+            <Button type="primary">新增</Button>
+          </div>
+          <Table
+            rowKey="id"
+            size="middle"
+            dataSource={data}
+            columns={columns}
+            rowSelection={rowSelection}
+          />
         </div>
-        <Table
-          rowKey="id"
-          size="middle"
-          dataSource={data}
-          columns={columns}
-          rowSelection={rowSelection}
-        />
       </PageLayout>
     );
   }

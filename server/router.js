@@ -67,9 +67,10 @@ routerV2
   .put('/user/:uid/edit', Auth.rootRequired, UserV2.editUser) // 编辑用户
   .patch('/user/:uid/star', Auth.adminRequired, UserV2.starUser) // 设为星标用户
   .patch('/user/:uid/lock', Auth.adminRequired, UserV2.lockUser) // 锁定用户(封号)
-  .get('/topic/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
-  .get('/topic/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek) // 获取上周新增话题数
-  .get('/topic/total', Auth.adminRequired, TopicV2.countTopicTotal) // 获取话题总数
+  .get('/topics/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
+  .get('/topics/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek) // 获取上周新增话题数
+  .get('/topics/total', Auth.adminRequired, TopicV2.countTopicTotal) // 获取话题总数
+  .get('/topics/list', Auth.adminRequired, TopicV2.getTopicList) // 获取话题列表
   .delete('/topic/:tid/delete', Auth.rootRequired, TopicV2.deleteTopic) // 删除话题(超管物理删除)
   .patch('/topic/:tid/top', Auth.adminRequired, TopicV2.topTopic) // 话题置顶
   .patch('/topic/:tid/good', Auth.adminRequired, TopicV2.goodTopic) // 话题加精华

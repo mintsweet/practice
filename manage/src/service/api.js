@@ -33,10 +33,13 @@ export const getUserTotal = () => axios.get('/v2/users/total');
 export const getUserList = query => axios.get('/v2/users/list', { params: query });
 
 // 获取本周新增话题数量
-export const getNewTopicThisWeek = () => axios.get('/v2/topic/new_this_week');
+export const getNewTopicThisWeek = () => axios.get('/v2/topics/new_this_week');
 
 // 获取上周新增话题数量
-export const getNewTopicLastWeek = () => axios.get('/v2/topic/new_last_week');
+export const getNewTopicLastWeek = () => axios.get('/v2/topics/new_last_week');
 
 // 获取话题总数量
-export const getTopicTotal = () => axios.get('/v2/topic/total');
+export const getTopicTotal = () => axios.get('/v2/topics/total');
+
+// 获取话题列表
+export const getTopicList = query => axios.get('/v2/topics/list', { parmas: query });
