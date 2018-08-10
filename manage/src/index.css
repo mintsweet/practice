@@ -23,3 +23,15 @@ a {
 .table-action {
   margin-bottom: 20px;
 }
+
+.text-error {
+  color: #f5222d;
+}
+
+.text-warn {
+  color: #faad14;
+}
+
+.text-default {
+  color: #bfbfbf;
+}

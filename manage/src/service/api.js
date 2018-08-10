@@ -32,6 +32,9 @@ export const getUserTotal = () => axios.get('/v2/users/total');
 // 获取用户列表
 export const getUserList = query => axios.get('/v2/users/list', { params: query });
 
+// 新增用户
+export const createUser = user => axios.post('/v2/users/create', user);
+
 // 获取本周新增话题数量
 export const getNewTopicThisWeek = () => axios.get('/v2/topics/new_this_week');
 

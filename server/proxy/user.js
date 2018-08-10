@@ -70,10 +70,11 @@ module.exports = class User {
    * @param {Number} mobile
    * @param {String} password
    * @param {String} nickname
+   * @param {Object} restProps
    * @returns
    */
-  static createUser(mobile, password, nickname) {
-    return UserModel.create({ mobile, password, nickname });
+  static createUser(mobile, password, nickname, restProps) {
+    return UserModel.create({ mobile, password, nickname, ...restProps });
   }
 
   /**
