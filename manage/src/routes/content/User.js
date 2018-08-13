@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Table, Button, Avatar, Tag, Badge, Divider, Modal, Form, Input, InputNumber, message } from 'antd';
 import PageLayout from '@/layouts/PageLayout';
 import { changeLoadingAction } from '@/store/reducer/ui';
-import { getUserList, createUser } from '@/service/api';
+import { getUserList, createUser, deleteUser, starOrUnUser, lockOrUnUser } from '@/service/api';
 
 const { Item: FormItem } = Form;
 
@@ -146,14 +146,62 @@ export default class User extends Component {
   }
 
   // 删除用户
-  handleDeleteUser = () => {
+  handleDeleteUser = record => {
+    const { user } = this.props;
+    const that = this;
+
+    if (user.id === record.id) {
+      message.error('不能对自己操作');
+      return false;
+    }
+
+    if (user.role < record.role) {
+      message.error('不能操作比自己权限更高的用户');
+      return false;
+    }
+
     Modal.confirm({
       title: '确定物理删除这条数据吗?',
       content: '直接从数据库中删除数据是无法恢复的，请慎重考虑以后在进行操作！',
-      onOk() {
-        console.log(1);
+      async onOk() {
+        await deleteUser(record.id);
+        that.getData();
       }
     });
+  }
+
+  // 用户星标状态修改
+  handleStarUser = async record => {
+    const { user } = this.props;
+
+    if (user.id === record.id) {
+      message.error('不能对自己操作');
+      return false;
+    }
+
+    if (user.role < record.role) {
+      message.error('不能操作比自己权限更高的用户');
+      return false;
+    }
+
+    await starOrUnUser(record.id);
+  }
+
+  // 用户锁定状态修改
+  handleLockUser = async record => {
+    const { user } = this.props;
+
+    if (user.id === record.id) {
+      message.error('不能对自己操作');
+      return false;
+    }
+
+    if (user.role < record.role) {
+      message.error('不能操作比自己权限更高的用户');
+      return false;
+    }
+
+    await lockOrUnUser(record.id);
   }
 
   render() {
@@ -202,13 +250,13 @@ export default class User extends Component {
         <span>
           {user.role > 100 && (
             <span>
-              <a href="javascript:;" className="text-error" onClick={this.handleDeleteUser}>删除</a>
+              <a href="javascript:;" className="text-error" onClick={() => this.handleDeleteUser(record)}>删除</a>
               <Divider type="vertical" />
             </span>
           )}
-          <a href="javascript:;" className="text-default">{ record.star ? '取消星标' : '设为星标'}</a>
+          <a href="javascript:;" className="text-default" onClick={() => this.handleStarUser(record)}>{ record.star ? '取消星标' : '设为星标'}</a>
           <Divider type="vertical" />
-          <a href="javascript:;" className="text-warn">{ record.lock ? '取消锁定' : '锁定账户' }</a>
+          <a href="javascript:;" className="text-warn" onClick={() => this.handleLockUser(record)}>{ record.lock ? '取消锁定' : '锁定账户' }</a>
         </span>
       )
     }];

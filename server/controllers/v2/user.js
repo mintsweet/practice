@@ -90,7 +90,7 @@ class User {
   // 删除用户(超管物理删除)
   async deleteUser(ctx) {
     const { uid } = ctx.params;
-    await UserProxy.deleteUser(uid);
+    await UserProxy.removeUserById(uid);
     ctx.body = '';
   }
 
