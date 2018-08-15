@@ -104,24 +104,33 @@ export default class User extends Component {
   state = {
     data: [],
     visible: false,
-    confirmLoading: false
+    confirmLoading: false,
+    page: 1,
+    size: 10,
+    total: 0
   };
 
   componentDidMount() {
-    this.getData();
+    this.getData(this.state.page);
   }
 
-  getData = async () => {
-    const data = await getUserList();
+  getData = async page => {
+    const data = await getUserList({ page, size: this.state.size });
     this.setState({
-      data
+      data: data.users,
+      page: data.page,
+      size: data.size,
+      total: data.total
     });
     this.props.changeLoadingAction(false);
   }
 
-  // 表格选中
-  onSelectTable = (selectedRowKeys) => {
-    console.log(selectedRowKeys);
+  // 切换页码
+  handleChangePage = page => {
+    this.getData(page);
+    this.setState({
+      page
+    });
   }
 
   // 显示隐藏编辑框
@@ -136,19 +145,24 @@ export default class User extends Component {
     this.setState({
       confirmLoading: true
     });
-    await createUser(values);
-    await this.getData();
-    message.success('新增用户成功');
+    try {
+      await createUser(values);
+      await this.getData();
+      message.success('新增用户成功');
+      this.setState({
+        visible: false
+      });
+    } catch(err) {
+      message.error(err);
+    }
     this.setState({
-      visible: false,
       confirmLoading: false
     });
   }
 
-  // 删除用户
-  handleDeleteUser = record => {
+  // 校验操作规则
+  validAction = record => {
     const { user } = this.props;
-    const that = this;
 
     if (user.id === record.id) {
       message.error('不能对自己操作');
@@ -160,69 +174,74 @@ export default class User extends Component {
       return false;
     }
 
-    Modal.confirm({
-      title: '确定物理删除这条数据吗?',
-      content: '直接从数据库中删除数据是无法恢复的，请慎重考虑以后在进行操作！',
-      async onOk() {
-        await deleteUser(record.id);
-        that.getData();
-      }
-    });
+    return true;
+  }
+
+  // 删除用户
+  handleDeleteUser = record => {
+    if (this.validAction(record)) {
+      Modal.confirm({
+        title: '确定物理删除这条数据吗?',
+        content: '直接从数据库中删除数据是无法恢复的，请慎重考虑以后在进行操作！',
+        onOk: async () => {
+          await deleteUser(record.id);
+          message.success('删除用户成功');
+          this.getData();
+        }
+      });
+    }
   }
 
   // 用户星标状态修改
   handleStarUser = async record => {
-    const { user } = this.props;
-
-    if (user.id === record.id) {
-      message.error('不能对自己操作');
-      return false;
+    if (this.validAction(record)) {
+      const action = await starOrUnUser(record.id);
+      if (action.indexOf('un') === 0) {
+        message.success('取消星标用户');
+      } else {
+        message.success('设为星标用户');
+      }
+      this.getData();
     }
-
-    if (user.role < record.role) {
-      message.error('不能操作比自己权限更高的用户');
-      return false;
-    }
-
-    await starOrUnUser(record.id);
   }
 
   // 用户锁定状态修改
   handleLockUser = async record => {
-    const { user } = this.props;
-
-    if (user.id === record.id) {
-      message.error('不能对自己操作');
-      return false;
+    if (this.validAction(record)) {
+      const action = await lockOrUnUser(record.id);
+      if (action.indexOf('un') === 0) {
+        message.success('取消锁定用户');
+      } else {
+        message.success('锁定用户账户')
+      }
+      this.getData();
     }
-
-    if (user.role < record.role) {
-      message.error('不能操作比自己权限更高的用户');
-      return false;
-    }
-
-    await lockOrUnUser(record.id);
   }
 
   render() {
-    const { data, visible, confirmLoading } = this.state;
+    const { data, visible, confirmLoading, page, size, total } = this.state;
     const { user } = this.props;
 
     const columns = [{
       title: '头像',
+      key: 'avatar',
       render: record => <Avatar src={record.avatar} size="small" />
     }, {
       title: '手机号',
+      key: 'mobile',
       dataIndex: 'mobile'
     }, {
       title: '昵称',
+      key: 'nickname',
       dataIndex: 'nickname'
     }, {
       title: '积分',
+      key: 'score',
       dataIndex: 'score',
       sorter: (a, b) => a.role - b.role
     }, {
       title: '星标用户',
+      key: 'star',
       dataIndex: 'star',
       filters: [{
         text: '是',
@@ -236,16 +255,20 @@ export default class User extends Component {
       render: star => star ? <Tag color="blue">是</Tag> : <Tag color="magenta">否</Tag>
     }, {
       title: '用户状态',
-      render: record => record.delete ? <Badge status="error" text="已删除" /> : record.lock ? <Badge color="warning" text="已封号" /> : <Badge status="success" text="正常" />
+      key: 'status',
+      render: record => record.delete ? <Badge status="error" text="已注销" /> : record.lock ? <Badge status="warning" text="已锁定" /> : <Badge status="success" text="正常" />
     }, {
       title: '权限值',
+      key: 'role',
       dataIndex: 'role',
       sorter: (a, b) => a.role - b.role
     }, {
       title: '创建时间',
+      key: 'create_at',
       dataIndex: 'create_at'
     }, {
       title: '操作',
+      key: 'action',
       render: record => (
         <span>
           {user.role > 100 && (
@@ -260,11 +283,6 @@ export default class User extends Component {
         </span>
       )
     }];
-
-    // 表格选择
-    const rowSelection = {
-      onChange: this.onSelectTable
-    };
 
     // 模态框父级方法
     const parentMethods = {
@@ -283,10 +301,11 @@ export default class User extends Component {
             size="middle"
             dataSource={data}
             columns={columns}
-            rowSelection={rowSelection}
             pagination={{
-              pageSize: 10,
-              total: 10
+              current: page,
+              pageSize: size,
+              total,
+              onChange: this.handleChangePage
             }}
           />
           <CreateModal

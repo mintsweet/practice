@@ -36,15 +36,30 @@ class User {
 
   // 用户列表
   async getUserList(ctx) {
-    const result = await UserProxy.getUsersByQuery({}, 'id avatar mobile nickname create_at delete lock star role score');
-    const users = result.map(item => {
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
+
+    const option = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: 'create_at'
+    };
+
+    const total = await UserProxy.countUserByQuery({});
+    const users = await UserProxy.getUsersByQuery({}, '-password', option);
+    const list = users.map(item => {
       return {
         ...item.toObject(),
         create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
       };
     });
 
-    ctx.body = users;
+    ctx.body = {
+      users: list,
+      page,
+      size,
+      total
+    };
   }
 
   // 创建用户
@@ -97,15 +112,53 @@ class User {
   // 设为星标用户
   async starUser(ctx) {
     const { uid } = ctx.params;
-    await UserProxy.updateUserById(uid, { star: true });
-    ctx.body = '';
+    const { user: currentUser } = ctx.state;
+
+    if (currentUser.id === uid) {
+      ctx.throw(403, '不能操作自身');
+    }
+
+    const user = await UserProxy.getUserById(uid);
+
+    if (currentUser.role < user.role) {
+      ctx.throw(403, '不能操作权限值高于自身的用户');
+    }
+
+    if (user.star) {
+      await UserProxy.updateUserById(uid, { star: false });
+    } else {
+      await UserProxy.updateUserById(uid, { star: true });
+    }
+
+    const action = user.star ? 'un_star' : 'star';
+
+    ctx.body = action;
   }
 
   // 锁定用户(封号)
   async lockUser(ctx) {
     const { uid } = ctx.params;
-    await UserProxy.updateUserById(uid, { lock: true });
-    ctx.body = '';
+    const { user: currentUser } = ctx.state;
+
+    if (currentUser.id === uid) {
+      ctx.throw(403, '不能操作自身');
+    }
+
+    const user = await UserProxy.getUserById(uid);
+
+    if (currentUser.role < user.role) {
+      ctx.throw(403, '不能操作权限值高于自身的用户');
+    }
+
+    if (user.lock) {
+      await UserProxy.updateUserById(uid, { lock: false });
+    } else {
+      await UserProxy.updateUserById(uid, { lock: true });
+    }
+
+    const action = user.lock ? 'un_lock' : 'lock';
+
+    ctx.body = action;
   }
 }
 

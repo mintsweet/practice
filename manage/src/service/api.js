@@ -42,7 +42,7 @@ export const deleteUser = uid => axios.delete(`/v2/user/${uid}/delete`);
 export const starOrUnUser = uid => axios.patch(`/v2/user/${uid}/star`);
 
 // 修改用户锁定
-export const lockOrUnUser = uid => axios.patch(`/v2/user/${uid/lock}`);
+export const lockOrUnUser = uid => axios.patch(`/v2/user/${uid}/lock`);
 
 // 获取本周新增话题数量
 export const getNewTopicThisWeek = () => axios.get('/v2/topics/new_this_week');
