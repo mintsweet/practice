@@ -55,3 +55,15 @@ export const getTopicTotal = () => axios.get('/v2/topics/total');
 
 // 获取话题列表
 export const getTopicList = query => axios.get('/v2/topics/list', { parmas: query });
+
+// 删除话题
+export const deleteTopic = tid => axios.delete(`/v2/topic/${tid}/delete`);
+
+// 修改话题置顶
+export const topOrUnTopic = tid => axios.patch(`/v2/topic/${tid}/top`);
+
+// 修改话题精华
+export const goodOrUnTopic = tid => axios.patch(`/v2/topic/${tid}/good`);
+
+// 修改话题锁定
+export const lockOrUnTopic = tid => axios.patch(`/v2/topic/${tid}/lock`);

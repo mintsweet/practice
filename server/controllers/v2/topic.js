@@ -30,14 +30,30 @@ class Topic {
 
   // 获取话题列表
   async getTopicList(ctx) {
-    const result = await TopicProxy.getTopicsByQuery({});
-    const topics = result.map(item => {
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
+
+    const option = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: 'create_at'
+    };
+
+    const total = await TopicProxy.countTopicByQuery({});
+    const topics = await TopicProxy.getTopicsByQuery({}, '', option);
+    const list = topics.map(item => {
       return {
         ...item.toObject(),
         create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
       };
     });
-    ctx.body = topics;
+
+    ctx.body = {
+      topics: list,
+      page,
+      size,
+      total
+    };
   }
 
   // 删除话题(超管物理删除)
@@ -50,22 +66,49 @@ class Topic {
   // 话题置顶
   async topTopic(ctx) {
     const { tid } = ctx.params;
-    await TopicProxy.updateTopicById(tid, { top: true });
-    ctx.body = '';
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (topic.top) {
+      await TopicProxy.updateTopicById(tid, { top: false });
+    } else {
+      await TopicProxy.updateTopicById(tid, { top: true });
+    }
+
+    const action = topic.top ? 'un_top' : 'top';
+
+    ctx.body = action;
   }
 
   // 话题加精华
   async goodTopic(ctx) {
     const { tid } = ctx.params;
-    await TopicProxy.updateTopicById(tid, { good: true });
-    ctx.body = '';
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (topic.good) {
+      await TopicProxy.updateTopicById(tid, { good: false });
+    } else {
+      await TopicProxy.updateTopicById(tid, { good: true });
+    }
+
+    const action = topic.top ? 'un_good' : 'good';
+
+    ctx.body = action;
   }
 
   // 话题锁定(封贴)
   async lockTopic(ctx) {
     const { tid } = ctx.params;
-    await TopicProxy.updateTopicById(tid, { lock: true });
-    ctx.body = '';
+    const topic = await TopicProxy.getTopicById(tid);
+
+    if (topic.lock) {
+      await TopicProxy.updateTopicById(tid, { lock: false });
+    } else {
+      await TopicProxy.updateTopicById(tid, { lock: true });
+    }
+
+    const action = topic.top ? 'un_lock' : 'lock';
+
+    ctx.body = action;
   }
 }
 
