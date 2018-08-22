@@ -10,7 +10,7 @@ mongoose.connect(dbpath, { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.on('error', err => {
-  logger.error(`MongoDB Connection error: ${err}`);
+  logger.error(`MongoDB connection error: ${err}`);
   process.exit(1);
 });
 
@@ -24,11 +24,11 @@ const client = redis.createClient({
 });
 
 client.on('connect', () => {
-  logger.info('Redis Connection Success!');
+  logger.info('Redis connection success!');
 });
 
 client.on('error', err => {
-  logger.error(`Redis Connection Error: ${err}`);
+  logger.error(`Redis connection error: ${err}`);
   process.exit(1);
 });
 

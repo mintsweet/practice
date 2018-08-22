@@ -41,12 +41,10 @@ class Topic {
 
     const total = await TopicProxy.countTopicByQuery({});
     const topics = await TopicProxy.getTopicsByQuery({}, '', option);
-    const list = topics.map(item => {
-      return {
-        ...item.toObject(),
-        create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
-      };
-    });
+    const list = topics.map(item => ({
+      ...item.toObject(),
+      create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
+    }));
 
     ctx.body = {
       topics: list,

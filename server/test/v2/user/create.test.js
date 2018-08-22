@@ -118,7 +118,7 @@ describe('test /v2/users/create', function() {
       res = await request.post('/v2/users/create').send({
         mobile: '18800000002',
         password: 'a123456',
-        nickname: '新',
+        nickname: '新建用户',
         role: 10
       }).set('Authorization', res.text).expect(400);
 
@@ -156,7 +156,7 @@ describe('test /v2/users/create', function() {
       }).expect(200);
 
       res = await request.post('/v2/users/create').send({
-        mobile: '18800000000',
+        mobile: '18800000002',
         password: 'a123456',
         nickname: mockUser.nickname,
         role: 0
