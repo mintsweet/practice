@@ -5,18 +5,34 @@ const support = require('../../support');
 
 describe('test /v2/user/total', function() {
   let mockUser;
+  let mockUser2;
 
   before(async function() {
-    mockUser = await support.createUser('18800000000', '管理员', { role: 1 });
+    mockUser = await support.createUser('18800000000', '普通用户');
+    mockUser2 = await support.createUser('18800000001', '管理员', { role: 1 });
   });
 
   after(async function() {
     await support.deleteUser(mockUser.mobile);
+    await support.deleteUser(mockUser2.mobile);
   });
 
-  it('should / status 401 when the insufficient permissions', async function() {
+  it('should / status 401 when the not signin', async function() {
     try {
-      await request.get('/v2/user/total').expect(401);
+      await request.get('/v2/users/total').expect(401);
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  it('should / status 401 when the no permission', async function() {
+    try {
+      const res = await request.post('/v1/signin').send({
+        mobile: mockUser.mobile,
+        password: 'a123456'
+      }).expect(200);
+
+      await request.get('/v2/users/total').set('Authorization', res.text).expect(401);
     } catch(err) {
       should.ifError(err.message);
     }
@@ -24,12 +40,14 @@ describe('test /v2/user/total', function() {
 
   it('should / status 200', async function() {
     try {
-      const res = await request.post('/v1/signin').send({
-        mobile: mockUser.mobile,
+      let res = await request.post('/v1/signin').send({
+        mobile: mockUser2.mobile,
         password: 'a123456'
       }).expect(200);
 
-      await request.get('/v2/user/total').set('Authorization', res.text).expect(200);
+      res = await request.get('/v2/users/total').set('Authorization', res.text).expect(200);
+
+      res.body.text = 3;
     } catch(err) {
       should.ifError(err.message);
     }

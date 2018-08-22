@@ -64,6 +64,7 @@ class User {
 
   // 创建用户
   async createUser(ctx) {
+    const { user } = ctx.state;
     const { mobile, password, nickname, role } = ctx.request.body;
 
     try {
@@ -73,6 +74,8 @@ class User {
         throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6至18位之间');
       } else if (!nickname || nickname.length > 8 || nickname.length < 2) {
         throw new Error('昵称必须在2至8位之间');
+      } else if (user.role < role || role < 0 || role > 100) {
+        throw new Error('权限值必须在0至100之间、且不能大于当前用户的权限值');
       }
     } catch(err) {
       ctx.throw(400, err.message);
@@ -105,6 +108,12 @@ class User {
   // 删除用户(超管物理删除)
   async deleteUser(ctx) {
     const { uid } = ctx.params;
+    const currentUser = await UserProxy.getUserById(uid);
+
+    if (currentUser.role > 100) {
+      ctx.throw(401, '无法删除超级管理员');
+    }
+
     await UserProxy.removeUserById(uid);
     ctx.body = '';
   }
