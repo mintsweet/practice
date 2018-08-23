@@ -1,0 +1,7 @@
+<view class="container" bindtap="viewTap">
+  <open-data class="avatar" type="userAvatarUrl"></open-data>
+  <open-data class="nickname" type="userNickName"></open-data>
+  <view class="introduction">
+    <text>心，若没有栖息的地方，到哪里都是流浪</text>
+  </view>
+</view>
