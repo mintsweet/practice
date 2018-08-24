@@ -1,4 +1,5 @@
 const { BMP24 } = require('gd-bmp');
+const logger = require('../../utils/logger');
 const { setRedis } = require('../../db');
 
 class Aider {
@@ -61,10 +62,11 @@ class Aider {
 
     await setRedis(mobile, code, 'PX', expired);
 
-    if (process.env.NODE_ENV === 'production') {
-      ctx.body = '';
-    } else {
+    if (process.env.NODE_ENV === 'test') {
       ctx.body = code;
+    } else {
+      logger.debug(`${mobile}: ${code}`);
+      ctx.body = '';
     }
   }
 }

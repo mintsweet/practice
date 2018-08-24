@@ -51,10 +51,11 @@
     var getcode = $('.getcode');
     var mobile = $('#mobile');
     var piccaptcha = $('#piccaptcha');
-    var countTime = 60;
-    var timer;
     var alert = $('.alert');
     getcode.click(function() {
+      var countTime = 60;
+      var timer;
+
       if ($(this).hasClass('disabled')) {
         return false;
       }

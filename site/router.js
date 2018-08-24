@@ -2,7 +2,7 @@ const express = require('express');
 const Auth = require('./middlewares/auth');
 const Site = require('./controllers/site');
 const Static = require('./controllers/static');
-const Captcha = require('./controllers/captcha');
+const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Notice = require('./controllers/notice');
@@ -26,8 +26,8 @@ router.get('/api', wrap(Static.renderApiDoc));
 router.get('/about', wrap(Static.renderAboutDoc));
 
 // 验证码
-router.get('/captcha/pic', wrap(Captcha.getPicCaptcha));
-router.get('/captcha/sms', wrap(Captcha.getSmsCaptcha));
+router.get('/captcha/pic', wrap(Aider.getCaptcha));
+router.get('/captcha/sms', wrap(Aider.getSmsCode));
 
 // 用户
 router.get('/signup', wrap(User.renderSignup));

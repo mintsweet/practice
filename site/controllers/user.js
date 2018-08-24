@@ -1,10 +1,9 @@
-const formidable = require('formidable');
 const Base = require('./base');
 const {
   signup, signin, forgetPass, signout,
   getUserBehaviors, getUserCreates, getUserStars,
   getUserCollections, getUserFollower, getUserFollowing,
-  setting, updatePass, followOrUn, uploadAvatar
+  setting, updatePass, followOrUn
 } = require('../http/api');
 
 class User extends Base {
@@ -31,7 +30,7 @@ class User extends Base {
 
   // 注册页
   async renderSignup(req, res) {
-    const url = await this.getPicCaptchaUrl(req);
+    const url = await this.getCaptchaUrl(req);
 
     return res.render('user/signup', {
       title: '注册',
@@ -40,41 +39,32 @@ class User extends Base {
   }
 
   // 注册
-  signup(req, res) {
-    const form = new formidable.IncomingForm();
+  async signup(req, res) {
+    const sms_code = req.app.locals.sms_code || {};
+    const url = await this.getCaptchaUrl(req);
 
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+    if (!sms_code.mobile) {
+      return res.render('user/signup', {
+        title: '注册',
+        error: '尚未获取短信验证码',
+        picUrl: url
+      });
+    }
 
-      const sms_code = req.app.locals.sms_code || {};
-      const url = await this.getPicCaptchaUrl(req);
-
-      if (!sms_code.mobile) {
-        return res.render('user/signup', {
-          title: '注册',
-          error: '尚未获取短信验证码',
-          picUrl: url
-        });
-      }
-
-      try {
-        await signup(fields);
-
-        return res.render('transform/index', {
-          title: '注册成功',
-          type: 'success',
-          message: '注册成功'
-        });
-      } catch(err) {
-        return res.render('user/signup', {
-          title: '注册',
-          error: err.message,
-          picUrl: url
-        });
-      }
-    });
+    try {
+      await signup(req.body);
+      return res.render('transform/index', {
+        title: '注册成功',
+        type: 'success',
+        message: '注册成功'
+      });
+    } catch(err) {
+      return res.render('user/signup', {
+        title: '注册',
+        error: err.message,
+        picUrl: url
+      });
+    }
   }
 
   // 登录页
@@ -88,49 +78,40 @@ class User extends Base {
   }
 
   // 登录
-  signin(req, res) {
-    const form = new formidable.IncomingForm();
+  async signin(req, res) {
+    const { mobile, password, piccaptcha } = req.body;
+    const captcha = req.app.locals.captcha || {};
+    const url = await this.getPicCaptchaUrl(req);
 
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+    if (piccaptcha.toUpperCase() !== captcha.token) {
+      return res.render('user/signin', {
+        title: '登录',
+        error: '图形验证码错误',
+        picUrl: url
+      });
+    } else if (Date.now() > captcha.expired) {
+      return res.render('user/signin', {
+        title: '登录',
+        error: '图形验证码已经失效了，请重新获取',
+        picUrl: url
+      });
+    }
 
-      const { mobile, password, piccaptcha } = fields;
-      const pic_token = req.app.locals.pic_token || {};
+    try {
+      await signin({ mobile, password });
 
-      const url = await this.getPicCaptchaUrl(req);
-
-      if (piccaptcha.toUpperCase() !== pic_token.token) {
-        return res.render('user/signin', {
-          title: '登录',
-          error: '图形验证码错误',
-          picUrl: url
-        });
-      } else if (Date.now() > pic_token.expired) {
-        return res.render('user/signin', {
-          title: '登录',
-          error: '图形验证码已经失效了，请重新获取',
-          picUrl: url
-        });
-      }
-
-      try {
-        await signin({ mobile, password });
-
-        return res.render('transform/index', {
-          title: '登录成功',
-          type: 'success',
-          message: '登录成功'
-        });
-      } catch(err) {
-        return res.render('user/signin', {
-          title: '登录',
-          error: err.message,
-          picUrl: url
-        });
-      }
-    });
+      return res.render('transform/index', {
+        title: '登录成功',
+        type: 'success',
+        message: '登录成功'
+      });
+    } catch(err) {
+      return res.render('user/signin', {
+        title: '登录',
+        error: err.message,
+        picUrl: url
+      });
+    }
   }
 
   // 忘记密码页
@@ -145,40 +126,32 @@ class User extends Base {
 
   // 忘记密码
   async forgetPass(req, res) {
-    const form = new formidable.IncomingForm();
+    const sms_code = req.app.locals.sms_code || {};
+    const url = await this.getPicCaptchaUrl(req);
 
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+    if (!sms_code.mobile) {
+      return res.render('user/forget_pass', {
+        title: '忘记密码',
+        error: '尚未获取短信验证码',
+        picUrl: url
+      });
+    }
 
-      const sms_code = req.app.locals.sms_code || {};
-      const url = await this.getPicCaptchaUrl(req);
+    try {
+      await forgetPass(req.body);
 
-      if (!sms_code.mobile) {
-        return res.render('user/forget_pass', {
-          title: '忘记密码',
-          error: '尚未获取短信验证码',
-          picUrl: url
-        });
-      }
-
-      try {
-        await forgetPass(fields);
-
-        return res.render('transform/index', {
-          title: '找回密码成功',
-          type: 'success',
-          message: '找回密码成功'
-        });
-      } catch(err) {
-        return res.render('user/forget_pass', {
-          title: '忘记密码',
-          error: err.message,
-          picUrl: url
-        });
-      }
-    });
+      return res.render('transform/index', {
+        title: '找回密码成功',
+        type: 'success',
+        message: '找回密码成功'
+      });
+    } catch(err) {
+      return res.render('user/forget_pass', {
+        title: '忘记密码',
+        error: err.message,
+        picUrl: url
+      });
+    }
   }
 
   // 登出
@@ -303,31 +276,24 @@ class User extends Base {
   }
 
   // 更新个人设置
-  setting(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+  async setting(req, res) {
+    const top100 = await this.getUsersTop100();
 
-      const top100 = await this.getUsersTop100();
+    try {
+      await setting(req.body);
 
-      try {
-        await setting({ ...fields });
-
-        return res.render('user/transform', {
-          type: 'success',
-          message: '更新个人资料成功',
-          url: '/setting'
-        });
-      } catch(err) {
-        return res.render('user/setting', {
-          title: '个人资料',
-          error: err.message,
-          top100
-        });
-      }
-    });
+      return res.render('user/transform', {
+        type: 'success',
+        message: '更新个人资料成功',
+        url: '/setting'
+      });
+    } catch(err) {
+      return res.render('user/setting', {
+        title: '个人资料',
+        error: err.message,
+        top100
+      });
+    }
   }
 
   // 修改密码页
@@ -341,31 +307,24 @@ class User extends Base {
   }
 
   // 修改密码
-  updatePass(req, res) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+  async updatePass(req, res) {
+    const top100 = await this.getUsersTop100();
 
-      const top100 = await this.getUsersTop100();
+    try {
+      await updatePass(req.body);
 
-      try {
-        await updatePass({ ...fields });
-
-        return res.render('transform/index', {
-          type: 'success',
-          message: '修改成功',
-          url: '/update_pass'
-        });
-      } catch(err) {
-        return res.render('user/update_pass', {
-          title: '修改密码',
-          error: err.message,
-          top100
-        });
-      }
-    });
+      return res.render('transform/index', {
+        type: 'success',
+        message: '修改成功',
+        url: '/update_pass'
+      });
+    } catch(err) {
+      return res.render('user/update_pass', {
+        title: '修改密码',
+        error: err.message,
+        top100
+      });
+    }
   }
 
   // 关注或者取消关注

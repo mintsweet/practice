@@ -16,37 +16,19 @@ const request = async (url, data, method = 'GET') => {
     query.body = data;
   }
 
-  const res = await rq(query);
-
-  // 此处完善为restful风格的API以后更新内容
-  if (res.status === 1) {
-    return res.data;
-  } else {
-    throw new Error(res.message);
-  }
+  return rq(query);
 };
 
-/*
-* 静态
-*/
 // 快速开始
 exports.getQuickStartDoc = () => request('/static/quick_start');
 // API说明
-exports.getApiDoc = () => request('/static/api');
+exports.getApiDoc = () => request('/static/api_doc');
 // 关于
 exports.getAboutDoc = () => request('/static/about');
-
-/*
-* 验证码
-*/
 // 获取图形验证码
-exports.getPicCaptcha = () => request('/captcha/pic', { width: 100, height: 34 });
+exports.getCaptcha = () => request('/aider/captcha', { width: 100, height: 34 });
 // 获取短信验证码
-exports.getSmsCaptcha = mobile => request('/captcha/sms', mobile);
-
-/*
-* 用户
-*/
+exports.getSmsCode = mobile => request('/aider/sms_code', mobile);
 // 注册
 exports.signup = info => request('/signup', info, 'POST');
 // 登录
@@ -81,10 +63,6 @@ exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 exports.getUserFollowing = uid => request(`/user/${uid}/following`);
 // 关注或者取消关注某个用户
 exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
-
-/*
-* 主题
-*/
 // 创建话题
 exports.createTopic = obj => request('/create', obj, 'POST');
 // 删除话题
@@ -103,10 +81,6 @@ exports.getTopicDetail = tid => request(`/topic/${tid}`);
 exports.starOrUnstarTopic = tid => request(`/topic/${tid}/star_or_un`, {}, 'PATCH');
 // 收藏或者取消收藏话题
 exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
-
-/*
-* 回复
-*/
 // 创建回复
 exports.createReply = (tid, content) => request(`/topic/${tid}/reply`, content, 'POST');
 // 删除回复
@@ -115,10 +89,6 @@ exports.deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');
 exports.editReply = (rid, content) => request(`/reply/${rid}/edit`, content, 'PUT');
 // 回复点赞
 exports.upReply = rid => request(`/reply/${rid}/up`, {}, 'PATCH');
-
-/*
-* 消息
-*/
 // 获取用户消息
 exports.getUserNotice = uid => request('/notice/user', uid);
 // 获取系统消息
