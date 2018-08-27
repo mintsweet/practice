@@ -22,12 +22,12 @@ router.get('/', wrap(Site.renderIndex));
 
 // 静态
 router.get('/quick_start', wrap(Static.renderQuickStartDoc));
-router.get('/api', wrap(Static.renderApiDoc));
+router.get('/api_doc', wrap(Static.renderApiDoc));
 router.get('/about', wrap(Static.renderAboutDoc));
 
 // 验证码
-router.get('/captcha/pic', wrap(Aider.getCaptcha));
-router.get('/captcha/sms', wrap(Aider.getSmsCode));
+router.get('/aider/captcha', wrap(Aider.getCaptcha));
+router.get('/aider/sms_code', wrap(Aider.getSmsCode));
 
 // 用户
 router.get('/signup', wrap(User.renderSignup));

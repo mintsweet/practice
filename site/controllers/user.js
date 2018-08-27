@@ -31,7 +31,6 @@ class User extends Base {
   // 注册页
   async renderSignup(req, res) {
     const url = await this.getCaptchaUrl(req);
-
     return res.render('user/signup', {
       title: '注册',
       picUrl: url
@@ -69,8 +68,7 @@ class User extends Base {
 
   // 登录页
   async renderSignin(req, res) {
-    const url = await this.getPicCaptchaUrl(req);
-
+    const url = await this.getCaptchaUrl(req);
     return res.render('user/signin', {
       title: '登录',
       picUrl: url
@@ -81,7 +79,7 @@ class User extends Base {
   async signin(req, res) {
     const { mobile, password, piccaptcha } = req.body;
     const captcha = req.app.locals.captcha || {};
-    const url = await this.getPicCaptchaUrl(req);
+    const url = await this.getCaptchaUrl(req);
 
     if (piccaptcha.toUpperCase() !== captcha.token) {
       return res.render('user/signin', {
@@ -98,7 +96,9 @@ class User extends Base {
     }
 
     try {
-      await signin({ mobile, password });
+      const jwt = await signin({ mobile, password });
+
+      req.app.locals.jwt = jwt;
 
       return res.render('transform/index', {
         title: '登录成功',
@@ -116,7 +116,7 @@ class User extends Base {
 
   // 忘记密码页
   async renderForgetPass(req, res) {
-    const url = await this.getPicCaptchaUrl(req);
+    const url = await this.getCaptchaUrl(req);
 
     return res.render('user/forget_pass', {
       title: '忘记密码',
@@ -127,7 +127,7 @@ class User extends Base {
   // 忘记密码
   async forgetPass(req, res) {
     const sms_code = req.app.locals.sms_code || {};
-    const url = await this.getPicCaptchaUrl(req);
+    const url = await this.getCaptchaUrl(req);
 
     if (!sms_code.mobile) {
       return res.render('user/forget_pass', {

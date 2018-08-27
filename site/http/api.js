@@ -1,30 +1,35 @@
 const rq = require('request-promise');
 const { baseUrl } = require('./env');
 
-const request = async (url, data, method = 'GET') => {
-  const query = {
+const request = async (url, data, method = 'GET', token) => {
+  const options = {
     baseUrl,
     url,
     method,
-    json: true,
-    jar: true
+    json: true
   };
 
   if (method === 'GET') {
-    query.qs = data;
+    options.qs = data;
   } else {
-    query.body = data;
+    options.body = data;
   }
 
-  return rq(query);
+  if (token) {
+    options.headers = {
+      Authorization: token
+    };
+  }
+
+  return rq(options);
 };
 
 // 快速开始
-exports.getQuickStartDoc = () => request('/static/quick_start');
+exports.getQuickStart = () => request('/static/quick_start');
 // API说明
 exports.getApiDoc = () => request('/static/api_doc');
 // 关于
-exports.getAboutDoc = () => request('/static/about');
+exports.getAbout = () => request('/static/about');
 // 获取图形验证码
 exports.getCaptcha = () => request('/aider/captcha', { width: 100, height: 34 });
 // 获取短信验证码
@@ -33,12 +38,10 @@ exports.getSmsCode = mobile => request('/aider/sms_code', mobile);
 exports.signup = info => request('/signup', info, 'POST');
 // 登录
 exports.signin = info => request('/signin', info, 'POST');
-// 登出
-exports.signout = () => request('/signout', {}, 'DELETE');
 // 忘记密码
 exports.forgetPass = obj => request('/forget_pass', obj, 'PATCH');
 // 获取当前登录用户信息
-exports.getCurrentUserInfo = () => request('/info');
+exports.getCurrentUserInfo = jwt => request('/info', {}, 'GET', jwt);
 // 更新个人信息
 exports.setting = info => request('/setting', info, 'PUT');
 // 修改密码

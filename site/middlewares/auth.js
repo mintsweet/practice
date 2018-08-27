@@ -11,17 +11,13 @@ class Auth {
   }
 
   async getUserInfo(req, res, next) {
+    const { jwt } = req.app.locals;
     try {
-      const user = await getCurrentUserInfo();
+      const user = await getCurrentUserInfo(jwt);
       req.app.locals.user = user;
       next();
     } catch(err) {
-      req.app.locals.user = null;
-      if (err.name === 'RequestError') {
-        next(err);
-      } else {
-        next();
-      }
+      next();
     }
   }
 }
