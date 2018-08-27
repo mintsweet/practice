@@ -26,14 +26,14 @@
       {
         "pagePath": "pages/notice/notice",
         "text": "消息",
-        "iconPath": "images/tab/home.png",
-        "selectedIconPath": "images/tab/home_active.png"
+        "iconPath": "images/tab/notice.png",
+        "selectedIconPath": "images/tab/notice_active.png"
       },
       {
         "pagePath": "pages/me/me",
         "text": "我的",
-        "iconPath": "images/tab/home.png",
-        "selectedIconPath": "images/tab/home_active.png"
+        "iconPath": "images/tab/me.png",
+        "selectedIconPath": "images/tab/me_active.png"
       }
     ]
   }
