@@ -17,6 +17,7 @@ class Auth {
       req.app.locals.user = user;
       next();
     } catch(err) {
+      req.app.locals.user = null;
       next();
     }
   }

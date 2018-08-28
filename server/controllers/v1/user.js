@@ -30,7 +30,7 @@ class User {
         throw new Error('昵称必须在2至8位之间');
       } else if (!code) {
         throw new Error('尚未获取短信验证码或者已经失效');
-      } else if (code !== sms) {
+      } else if (code !== sms.toString()) {
         throw new Error('短信验证码不正确');
       }
     } catch(err) {
@@ -256,7 +256,7 @@ class User {
     const actions = await ActionProxy.getActionByQuery({ type: 'create', author_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
-        resolve(TopicProxy.getTopicById(item.target_id, 'id title star_count collect_count visit_count'));
+        resolve(TopicProxy.getTopicById(item.target_id, 'id title like_count collect_count visit_count'));
       });
     }));
 

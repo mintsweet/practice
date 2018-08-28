@@ -16,7 +16,9 @@ describe('test /controllers/aider.test', function() {
 
   it('should get /aider/sms_code', async function() {
     try {
-      const res = await request.get('/aider/sms_code').expect(200);
+      const res = await request.get('/aider/sms_code').query({
+        mobile: '18800000000'
+      }).expect(200);
 
       res.body.status.should.equal(1);
     } catch(err) {

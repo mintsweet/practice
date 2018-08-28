@@ -39,7 +39,7 @@ class Captcha extends Base {
     }
 
     try {
-      await getSmsCode({ mobile });
+      const code = await getSmsCode({ mobile });
 
       req.app.locals.sms_code = {
         mobile,
@@ -47,7 +47,8 @@ class Captcha extends Base {
       };
 
       return res.send({
-        status: 1
+        status: 1,
+        data: code
       });
     } catch(err) {
       return res.send({

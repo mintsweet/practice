@@ -2,10 +2,10 @@
   "name": "site",
   "version": "1.0.0",
   "scripts": {
-    "start": "gulp",
+    "start": "cross-env NODE_ENV=development gulp",
     "lint": "eslint **/*",
-    "test": "mocha",
-    "test:cover": "nyc --reporter=html mocha"
+    "test": "cross-env NODE_ENV=test mocha",
+    "test:cover": "cross-env NODE_ENV=test nyc --reporter=html mocha"
   },
   "license": "MIT",
   "dependencies": {
@@ -20,6 +20,7 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.2.0",
     "eslint": "^5.0.1",
     "eslint-config-mints": "^1.0.0-alpha.1",
     "gulp": "^3.9.1",

@@ -19,14 +19,14 @@ block content
           a.action.follow_user(href="javascript:;") 取消关注
     .user-gener
       .gener
-        a(href=`/user/${info.id}`, class={active: type === 'behavior'}) 动态
-        a(href=`/user/${info.id}/creates`, class={active: type === 'create'}) 专栏
-        a(href=`/user/${info.id}/stars`, class={active: type === 'star'}) 喜欢
+        a(href=`/user/${info.id}`, class={active: type === 'action'}) 动态
+        a(href=`/user/${info.id}/create`, class={active: type === 'create'}) 专栏
+        a(href=`/user/${info.id}/like`, class={active: type === 'like'}) 喜欢
         span(class={active: type === 'following' || type === 'follower' || type === 'collect' }) 更多
           .more
             a(href=`/user/${info.id}/following`, class={active: type === 'following'}) 关注
             a(href=`/user/${info.id}/follower`, class={active: type === 'follower'}) 粉丝
-            a(href=`/user/${info.id}/collections`, class={active: type === 'collect'}) 收藏集
+            a(href=`/user/${info.id}/collect`, class={active: type === 'collect'}) 收藏集
       ul.content
         if type === 'following' || type === 'follower'
           each item in data
@@ -60,7 +60,7 @@ block content
                   span 发布了话题
                   time #{item.create_at}
                   a.topic(href=`/topic/${item.id}`) #{item.title}
-                when 'star'
+                when 'like'
                   span 喜欢了话题
                   time #{item.create_at}
                   a.topic(href=`/topic/${item.id}`) #{item.title}
@@ -72,7 +72,7 @@ block content
                   span 关注了用户
                   time #{item.create_at}
                   .info
-                    a.avatar(href=`/user/${item.id}`) 
+                    a.avatar(href=`/user/${item.id}`)
                       img(src=item.avatar)
                     .detail
                       a.nickname(href=`/user/${item.id}`) #{item.nickname}
@@ -104,7 +104,7 @@ block content
         .title 关注者
         a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
     .user-collect
-      a(href=`/user/${info.id}/collections`) 收藏集
+      a(href=`/user/${info.id}/collect`) 收藏集
   include ../includes/global_message.pug
 append footer
   script.

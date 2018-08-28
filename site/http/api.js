@@ -43,9 +43,9 @@ exports.forgetPass = obj => request('/forget_pass', obj, 'PATCH');
 // 获取当前登录用户信息
 exports.getCurrentUserInfo = jwt => request('/info', {}, 'GET', jwt);
 // 更新个人信息
-exports.setting = info => request('/setting', info, 'PUT');
+exports.setting = (info, jwt) => request('/setting', info, 'PUT', jwt);
 // 修改密码
-exports.updatePass = obj => request('/update_pass', obj, 'PATCH');
+exports.updatePass = (obj, jwt) => request('/update_pass', obj, 'PATCH', jwt);
 // 获取星标用户列表
 exports.getUsersStar = () => request('/users/star');
 // 获取积分榜前一百用户列表
@@ -53,19 +53,19 @@ exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
 exports.getUserInfoById = uid => request(`/user/${uid}`);
 // 获取用户动态
-exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
+exports.getUserAction = uid => request(`/user/${uid}/action`);
 // 获取用户专栏列表
-exports.getUserCreates = uid => request(`/user/${uid}/creates`);
+exports.getUserCreate = uid => request(`/user/${uid}/create`);
 // 获取用户喜欢列表
-exports.getUserStars = uid => request(`/user/${uid}/stars`);
+exports.getUserLike = uid => request(`/user/${uid}/like`);
 // 获取用户收藏列表
-exports.getUserCollections = uid => request(`/user/${uid}/collections`);
+exports.getUserCollect = uid => request(`/user/${uid}/collect`);
 // 获取用户粉丝列表
 exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 // 获取用户关注列表
 exports.getUserFollowing = uid => request(`/user/${uid}/following`);
 // 关注或者取消关注某个用户
-exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
+exports.followOrUn = (uid, jwt) => request(`/user/${uid}/follow_or_un`, {}, 'PATCH', jwt);
 // 创建话题
 exports.createTopic = obj => request('/create', obj, 'POST');
 // 删除话题

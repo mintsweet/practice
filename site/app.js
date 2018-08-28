@@ -23,6 +23,7 @@ app.locals.config = config;
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(Auth.getUserInfo);
 
 // routes
