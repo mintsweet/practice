@@ -7,13 +7,12 @@ const request = (params, url) => {
   wx.request({
     url: perfix + url,
     data: params.data || {},
-    header: {
-      'content-type': 'application/json'
-    },
     method: params.method || 'GET',
     success: res => {
-      params.success && params.success(res);
-      wx.hideLoading();
+      if (res.statusCode === 200) {
+        params.success && params.success(res.data);
+        wx.hideLoading();
+      }
     }
   });
 };

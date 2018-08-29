@@ -1,2 +1,29 @@
-<!--pages/index/index.wxml-->
-<text>pages/index/index.wxml</text>
+<view class="container">
+  <view class="header">
+    <image class="logo" src="../../images/logo.png" mode="aspectFit" />
+    <input class="search" type="text" confirm-type="search" placeholder="搜索主题内容" />
+    <view class="menu">
+      <navigator>快速开始</navigator>
+      <navigator>API文档</navigator>
+      <navigator>关于</navigator>
+    </view>
+  </view>
+  <view class="tabs">
+    <scroll-view scroll-x>
+      <block wx:for="{{tabs}}" wx:key="url">
+        <view wx:if="{{item.url === currentTab}}" class="tab active">{{item.name}}</view>
+        <view wx:else class="tab">{{item.name}}</view>
+      </block>
+    </scroll-view>
+  </view>
+  <view class="topics">
+    <view class="topic" wx:for="{{topics}}" wx:key="id">
+      <image class="avatar" src="{{item.author.avatar}}" mode="aspectFit" />
+      <text class="tag point" wx:if="{{item.top}}">置顶</text>
+      <text class="tag point" wx:elif="{{item.good}}">精华</text>
+      <text class="tag" wx:else>{{item.tabName}}</text>
+      <view class="title">{{item.title}}</view>
+      <text class="time">{{item.last_reply_at_ago}}</text>
+    </view>
+  </view>
+</view>

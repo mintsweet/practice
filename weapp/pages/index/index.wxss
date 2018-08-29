@@ -1,1 +1,96 @@
-/* pages/index/index.wxss */
+.header {
+  height: 320rpx;
+  background: rgba(22,152,43,.1);
+}
+
+.header .logo {
+  display: block;
+  margin: 0 auto;
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.header .search {
+  display: block;
+  margin: 30rpx auto 40rpx;
+  padding: 0 20rpx;
+  width: 80%;
+  height: 60rpx;
+  font-size: 30rpx;
+  color: #333;
+  background: #fefefe;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+}
+
+.header .menu {
+  display: flex;
+}
+
+.header .menu navigator {
+  flex: 1;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+.tabs {
+  padding: 20rpx 30rpx;
+}
+
+.tabs scroll-view {
+  white-space: nowrap;
+  background: #fefefe;
+}
+
+.tabs .tab {
+  display: inline-block;
+  width: 25%;
+  line-height: 60rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+.tabs .tab.active {
+  color: #fff;
+  background: rgb(22,152,43);
+}
+
+.topic {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  height: 100rpx;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.topic .avatar {
+  flex: 0 0 60rpx;
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.topic .tag {
+  margin-left: 20rpx;
+  flex: 0 0 48rpx;
+  padding: 4rpx 8rpx;
+  background: #e5e5e5;
+  color: #999;
+  font-size: 24rpx;
+  border-radius: 6rpx;
+}
+
+.topic .title {
+  flex: auto;
+  margin: 0 20rpx;
+  font-size: 30rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topic .time {
+  flex: 0 0 150rpx;
+  font-size: 22rpx;
+  text-align: center;
+}

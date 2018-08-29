@@ -1,3 +1,3 @@
 import request from './request';
 
-exports.getQuickStartDoc = params => request(params, '/v1/static/quick_start');
+exports.getTopicList = params => request(params, '/v1/topics/list');
