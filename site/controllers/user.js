@@ -4,7 +4,7 @@ const {
   signup, signin, forgetPass, signout,
   getUserBehaviors, getUserCreates, getUserStars,
   getUserCollections, getUserFollower, getUserFollowing,
-  setting, updatePass, followOrUn, uploadAvatar
+  setting, updatePass, followOrUn
 } = require('../http/api');
 
 class User extends Base {

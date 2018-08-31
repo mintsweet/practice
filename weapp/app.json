@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/index/detail/detail",
+    "pages/index/search/search",
     "pages/static/static",
+    "pages/user/user",
     "pages/notice/notice",
     "pages/me/me",
     "pages/welcome/welcome"

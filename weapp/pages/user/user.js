@@ -1,11 +1,11 @@
 Page({
   data: {
-    tid: ''
+    uid: ''
   },
   onLoad: function (options) {
-    this.setData({ tid: options.tid });
+    this.setData({ uid: options.uid });
   },
   onReady: function () {
-  
+
   },
 })

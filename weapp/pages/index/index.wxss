@@ -16,8 +16,9 @@
   padding: 0 20rpx;
   width: 80%;
   height: 60rpx;
+  line-height: 60rpx;
   font-size: 30rpx;
-  color: #333;
+  color: #a1a1a1;
   background: #fefefe;
   border-radius: 10rpx;
   box-sizing: border-box;
@@ -100,4 +101,11 @@
   flex: 0 0 150rpx;
   font-size: 22rpx;
   text-align: center;
+}
+
+.no-content {
+  margin: 20rpx 0;
+  text-align: center;
+  font-size: 40rpx;
+  color: #a1a1a1;
 }

@@ -1,7 +1,7 @@
 <view class="container">
   <view class="header">
     <image class="logo" src="../../images/logo.png" mode="aspectFit" />
-    <input class="search" type="text" confirm-type="search" placeholder="搜索主题内容" />
+    <navigator url="/pages/index/search/search" class="search">搜索主题内容</navigator>
     <view class="menu">
       <navigator hover-class="hover" url="/pages/static/static?type=quick_start">快速开始</navigator>
       <navigator hover-class="hover" url="/pages/static/static?type=api_doc">API文档</navigator>
@@ -12,18 +12,23 @@
     <scroll-view scroll-x>
       <block wx:for="{{tabs}}" wx:key="url">
         <view wx:if="{{item.url === currentTab}}" class="tab active">{{item.name}}</view>
-        <view wx:else class="tab">{{item.name}}</view>
+        <view wx:else data-tab="{{item.url}}" class="tab" bindtap="onChangeTab">{{item.name}}</view>
       </block>
     </scroll-view>
   </view>
-  <view class="topics">
+  <view class="topics" wx:if="{{topics.length > 0}}">
     <view class="topic" wx:for="{{topics}}" wx:key="id">
-      <image class="avatar" src="{{item.author.avatar}}" mode="aspectFit" />
+      <navigator url="/pages/user/user?uid={{item.author.id}}">
+        <image class="avatar" src="{{item.author.avatar}}" mode="aspectFit" />
+      </navigator>
       <text class="tag point" wx:if="{{item.top}}">置顶</text>
       <text class="tag point" wx:elif="{{item.good}}">精华</text>
       <text class="tag" wx:else>{{item.tabName}}</text>
-      <view class="title">{{item.title}}</view>
+      <navigator url="/pages/index/detail/detail?tid={{item.id}}" class="title">{{item.title}}</navigator>
       <text class="time">{{item.last_reply_at_ago}}</text>
     </view>
+  </view>
+  <view wx:else class="no-content">
+    <text>暂无内容</text>
   </view>
 </view>
