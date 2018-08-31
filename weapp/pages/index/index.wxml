@@ -3,9 +3,9 @@
     <image class="logo" src="../../images/logo.png" mode="aspectFit" />
     <input class="search" type="text" confirm-type="search" placeholder="搜索主题内容" />
     <view class="menu">
-      <navigator>快速开始</navigator>
-      <navigator>API文档</navigator>
-      <navigator>关于</navigator>
+      <navigator hover-class="hover" url="/pages/static/static?type=quick_start">快速开始</navigator>
+      <navigator hover-class="hover" url="/pages/static/static?type=api_doc">API文档</navigator>
+      <navigator hover-class="hover" url="/pages/static/static?type=about">关于</navigator>
     </view>
   </view>
   <view class="tabs">

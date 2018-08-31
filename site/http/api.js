@@ -83,7 +83,7 @@ exports.getUserFollowing = uid => request(`/user/${uid}/following`);
 exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
 
 /*
-* 主题
+* 话题
 */
 // 创建话题
 exports.createTopic = obj => request('/create', obj, 'POST');

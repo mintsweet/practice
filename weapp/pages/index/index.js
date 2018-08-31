@@ -1,4 +1,4 @@
-const api = require('../../service/api.js');
+import { getTopicList} from '../../service/api.js';
 
 Page({
   data: {
@@ -7,15 +7,12 @@ Page({
     topics: []
   },
   onReady: function () {
-    api.getTopicList({
-      success: res => {
-        console.log(res);
-        this.setData({
-          tabs: res.tabs,
-          currentTab: res.tab,
-          topics: res.topics
-        });
-      }
+    getTopicList().then(res => {
+      this.setData({
+        tabs: [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(res.tabs),
+        currentTab: res.currentTab,
+        topics: res.topics
+      });
     });
   },
 })
