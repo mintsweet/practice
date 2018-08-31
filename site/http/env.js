@@ -7,7 +7,7 @@ let baseUrl;
 if (process.env.NODE_ENV === 'production') {
   baseUrl = '';
 } else {
-  baseUrl = 'http://localhost:3000/api';
+  baseUrl = 'http://localhost:3000/v1';
 }
 
 module.exports = {

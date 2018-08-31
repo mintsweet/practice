@@ -1,66 +1,51 @@
 const rq = require('request-promise');
 const { baseUrl } = require('./env');
 
-const request = async (url, data, method = 'GET') => {
-  const query = {
+const request = async (url, data, method = 'GET', token) => {
+  const options = {
     baseUrl,
     url,
     method,
-    json: true,
-    jar: true
+    json: true
   };
 
   if (method === 'GET') {
-    query.qs = data;
+    options.qs = data;
   } else {
-    query.body = data;
+    options.body = data;
   }
 
-  const res = await rq(query);
-
-  // 此处完善为restful风格的API以后更新内容
-  if (res.status === 1) {
-    return res.data;
-  } else {
-    throw new Error(res.message);
+  if (token) {
+    options.headers = {
+      Authorization: token
+    };
   }
+
+  return rq(options);
 };
 
-/*
-* 静态
-*/
 // 快速开始
-exports.getQuickStartDoc = () => request('/static/quick_start');
+exports.getQuickStart = () => request('/static/quick_start');
 // API说明
-exports.getApiDoc = () => request('/static/api');
+exports.getApiDoc = () => request('/static/api_doc');
 // 关于
-exports.getAboutDoc = () => request('/static/about');
-
-/*
-* 验证码
-*/
+exports.getAbout = () => request('/static/about');
 // 获取图形验证码
-exports.getPicCaptcha = () => request('/captcha/pic', { width: 100, height: 34 });
+exports.getCaptcha = () => request('/aider/captcha', { width: 100, height: 34 });
 // 获取短信验证码
-exports.getSmsCaptcha = mobile => request('/captcha/sms', mobile);
-
-/*
-* 用户
-*/
+exports.getSmsCode = mobile => request('/aider/sms_code', mobile);
 // 注册
 exports.signup = info => request('/signup', info, 'POST');
 // 登录
 exports.signin = info => request('/signin', info, 'POST');
-// 登出
-exports.signout = () => request('/signout', {}, 'DELETE');
 // 忘记密码
 exports.forgetPass = obj => request('/forget_pass', obj, 'PATCH');
 // 获取当前登录用户信息
-exports.getCurrentUserInfo = () => request('/info');
+exports.getCurrentUserInfo = jwt => request('/info', {}, 'GET', jwt);
 // 更新个人信息
-exports.setting = info => request('/setting', info, 'PUT');
+exports.setting = (info, jwt) => request('/setting', info, 'PUT', jwt);
 // 修改密码
-exports.updatePass = obj => request('/update_pass', obj, 'PATCH');
+exports.updatePass = (obj, jwt) => request('/update_pass', obj, 'PATCH', jwt);
 // 获取星标用户列表
 exports.getUsersStar = () => request('/users/star');
 // 获取积分榜前一百用户列表
@@ -68,23 +53,19 @@ exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
 exports.getUserInfoById = uid => request(`/user/${uid}`);
 // 获取用户动态
-exports.getUserBehaviors = uid => request(`/user/${uid}/behaviors`);
+exports.getUserAction = uid => request(`/user/${uid}/action`);
 // 获取用户专栏列表
-exports.getUserCreates = uid => request(`/user/${uid}/creates`);
+exports.getUserCreate = uid => request(`/user/${uid}/create`);
 // 获取用户喜欢列表
-exports.getUserStars = uid => request(`/user/${uid}/stars`);
+exports.getUserLike = uid => request(`/user/${uid}/like`);
 // 获取用户收藏列表
-exports.getUserCollections = uid => request(`/user/${uid}/collections`);
+exports.getUserCollect = uid => request(`/user/${uid}/collect`);
 // 获取用户粉丝列表
 exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 // 获取用户关注列表
 exports.getUserFollowing = uid => request(`/user/${uid}/following`);
 // 关注或者取消关注某个用户
-exports.followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
-
-/*
-* 话题
-*/
+exports.followOrUn = (uid, jwt) => request(`/user/${uid}/follow_or_un`, {}, 'PATCH', jwt);
 // 创建话题
 exports.createTopic = obj => request('/create', obj, 'POST');
 // 删除话题
@@ -103,10 +84,6 @@ exports.getTopicDetail = tid => request(`/topic/${tid}`);
 exports.starOrUnstarTopic = tid => request(`/topic/${tid}/star_or_un`, {}, 'PATCH');
 // 收藏或者取消收藏话题
 exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
-
-/*
-* 回复
-*/
 // 创建回复
 exports.createReply = (tid, content) => request(`/topic/${tid}/reply`, content, 'POST');
 // 删除回复
@@ -115,10 +92,6 @@ exports.deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');
 exports.editReply = (rid, content) => request(`/reply/${rid}/edit`, content, 'PUT');
 // 回复点赞
 exports.upReply = rid => request(`/reply/${rid}/up`, {}, 'PATCH');
-
-/*
-* 消息
-*/
 // 获取用户消息
 exports.getUserNotice = uid => request('/notice/user', uid);
 // 获取系统消息

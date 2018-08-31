@@ -51,10 +51,11 @@
     var getcode = $('.getcode');
     var mobile = $('#mobile');
     var piccaptcha = $('#piccaptcha');
-    var countTime = 60;
-    var timer;
     var alert = $('.alert');
     getcode.click(function() {
+      var countTime = 60;
+      var timer;
+
       if ($(this).hasClass('disabled')) {
         return false;
       }
@@ -79,7 +80,7 @@
         }
       }
 
-      $.getJSON(`/captcha/sms?piccaptcha=${piccaptcha.val()}&mobile=${mobile.val()}`, function(res) {
+      $.getJSON(`/aider/sms_code?piccaptcha=${piccaptcha.val()}&mobile=${mobile.val()}`, function(res) {
         if (res.status === 1) {
           timer = setInterval(countStats, 1000);
         } else {
@@ -95,7 +96,7 @@
     var captcha = $('.captcha');
     var alert = $('.alert');
     captcha.click(function() {
-      $.getJSON('/captcha/pic', function(res) {
+      $.getJSON('/aider/captcha', function(res) {
         if (res.status === 1) {
           captcha.attr('src', res.data);
         } else {

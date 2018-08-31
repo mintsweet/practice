@@ -288,15 +288,15 @@ class Topic {
     const action = await ActionProxy.setAction('like', id, topic.id);
 
     if (action.is_un) {
-      topic.star_count -= 1;
+      topic.like_count -= 1;
       await topic.save();
-      author.star_count -= 1;
+      author.like_count -= 1;
       author.score -= 10;
       await author.save();
     } else {
-      topic.star_count += 1;
+      topic.like_count += 1;
       topic.save();
-      author.star_count += 1;
+      author.like_count += 1;
       author.score += 10;
       await author.save();
       await NoticeProxy.createLikeNotice(id, topic.author_id, topic.id);

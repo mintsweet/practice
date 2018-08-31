@@ -19,7 +19,7 @@ const TopicSchema = new Schema({
   lock: { type: Boolean, default: false },
 
   // 统计
-  star_count: { type: Number, default: 0 },
+  like_count: { type: Number, default: 0 },
   collect_count: { type: Number, default: 0 },
   reply_count: { type: Number, default: 0 },
   visit_count: { type: Number, default: 0 },

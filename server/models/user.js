@@ -24,7 +24,7 @@ const UserSchema = new Schema({
 
   // 统计
   topic_count: { type: Number, default: 0 }, // 累计发布话题数
-  star_count: { type: Number, default: 0 }, // 累计话题被喜欢数
+  like_count: { type: Number, default: 0 }, // 累计话题被喜欢数
   collect_count: { type: Number, default: 0 }, // 累计话题被收藏数
   follower_count: { type: Number, default: 0 }, // 累计粉丝数
   following_count: { type: Number, default: 0 }, // 累计关注数

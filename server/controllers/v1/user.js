@@ -22,7 +22,7 @@ class User {
     const code = await getRedis(mobile);
 
     try {
-      if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+      if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
         throw new Error('手机号格式不正确');
       } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
         throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6至18位之间');
@@ -30,7 +30,7 @@ class User {
         throw new Error('昵称必须在2至8位之间');
       } else if (!code) {
         throw new Error('尚未获取短信验证码或者已经失效');
-      } else if (code !== sms) {
+      } else if (code !== sms.toString()) {
         throw new Error('短信验证码不正确');
       }
     } catch(err) {
@@ -67,7 +67,7 @@ class User {
     const { mobile, password, issms, sms } = ctx.request.body;
 
     // 校验手机号
-    if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+    if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
       ctx.throw(400, '手机号格式错误');
     }
 
@@ -108,7 +108,7 @@ class User {
     const code = await getRedis(mobile);
 
     try {
-      if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+      if (!mobile || !/^1[3,5,7,8,9]\w{9}$/.test(mobile)) {
         throw new Error('手机号格式不正确');
       } else if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
         throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
@@ -256,7 +256,7 @@ class User {
     const actions = await ActionProxy.getActionByQuery({ type: 'create', author_id: uid, is_un: false });
     const data = await Promise.all(actions.map(item => {
       return new Promise(resolve => {
-        resolve(TopicProxy.getTopicById(item.target_id, 'id title star_count collect_count visit_count'));
+        resolve(TopicProxy.getTopicById(item.target_id, 'id title like_count collect_count visit_count'));
       });
     }));
 

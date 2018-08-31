@@ -2,7 +2,7 @@ const express = require('express');
 const Auth = require('./middlewares/auth');
 const Site = require('./controllers/site');
 const Static = require('./controllers/static');
-const Captcha = require('./controllers/captcha');
+const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Notice = require('./controllers/notice');
@@ -22,12 +22,12 @@ router.get('/', wrap(Site.renderIndex));
 
 // 静态
 router.get('/quick_start', wrap(Static.renderQuickStartDoc));
-router.get('/api', wrap(Static.renderApiDoc));
+router.get('/api_doc', wrap(Static.renderApiDoc));
 router.get('/about', wrap(Static.renderAboutDoc));
 
 // 验证码
-router.get('/captcha/pic', wrap(Captcha.getPicCaptcha));
-router.get('/captcha/sms', wrap(Captcha.getSmsCaptcha));
+router.get('/aider/captcha', wrap(Aider.getCaptcha));
+router.get('/aider/sms_code', wrap(Aider.getSmsCode));
 
 // 用户
 router.get('/signup', wrap(User.renderSignup));
@@ -39,9 +39,9 @@ router.post('/forget_pass', wrap(User.forgetPass));
 router.get('/signout', wrap(User.signout));
 router.get('/users/top100', wrap(User.renderUsersTop100));
 router.get('/user/:uid', wrap(User.renderUserInfo));
-router.get('/user/:uid/creates', wrap(User.renderUserCreates));
-router.get('/user/:uid/stars', wrap(User.renderUserStars));
-router.get('/user/:uid/collections', wrap(User.renderUserCollections));
+router.get('/user/:uid/create', wrap(User.renderUserCreate));
+router.get('/user/:uid/like', wrap(User.renderUserLike));
+router.get('/user/:uid/collect', wrap(User.renderUserCollect));
 router.get('/user/:uid/follower', wrap(User.renderUserFollower));
 router.get('/user/:uid/following', wrap(User.renderUserFollowing));
 router.get('/setting', Auth.userRequired, wrap(User.renderSetting));

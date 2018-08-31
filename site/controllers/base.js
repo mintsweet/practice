@@ -1,15 +1,15 @@
 const {
-  getUserInfoById, getPicCaptcha,
+  getCaptcha, getUserInfoById,
   getUsersTop100, getNoReplyTopic,
   getUsersStar
 } = require('../http/api');
 
 module.exports = class BaseComponent {
-  // 获取图形验证码的路径
-  async getPicCaptchaUrl(req) {
-    const data = await getPicCaptcha();
+  // 获取图形验证码
+  async getCaptchaUrl(req) {
+    const data = await getCaptcha();
 
-    req.app.locals.pic_token = {
+    req.app.locals.captcha = {
       token: data.token,
       expired: Date.now() + 1000 * 60 * 10
     };
