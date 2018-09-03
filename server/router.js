@@ -15,11 +15,11 @@ const routerV1 = new Router({
 
 routerV1
   .get('/', ctx => { ctx.body = 'Version_1 API'; }) // V1入口测试
-  .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
-  .get('/aider/sms_code', AiderV1.getSmscode) // 获取短信验证码
   .get('/static/quick_start', StaticV1.getQuickStart) // 获取快速开始文档
   .get('/static/api_doc', StaticV1.getApiDoc) // 获取API说明文档
   .get('/static/about', StaticV1.getAbout) // 获取关于文档
+  .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
+  .get('/aider/sms_code', AiderV1.getSmscode) // 获取短信验证码
   .post('/signup', UserV1.signup) // 注册
   .post('/signin', UserV1.signin) // 登录
   .patch('/forget_pass', UserV1.forgetPass) // 忘记密码

@@ -1,14 +1,14 @@
-const Base = require('./base');
 const {
+  getCaptcha,
   signup, signin, forgetPass,
+  getUserInfoById, getUsersTop100,
   getUserAction, getUserCreate, getUserLike,
   getUserCollect, getUserFollower, getUserFollowing,
   setting, updatePass, followOrUn
 } = require('../http/api');
 
-class User extends Base {
+class User {
   constructor() {
-    super();
     this.renderSignup = this.renderSignup.bind(this);
     this.signup = this.signup.bind(this);
     this.renderSignin = this.renderSignin.bind(this);
@@ -26,6 +26,18 @@ class User extends Base {
     this.setting = this.setting.bind(this);
     this.renderUpdatePass = this.renderUpdatePass.bind(this);
     this.updatePass = this.updatePass.bind(this);
+  }
+
+  // 图形验证码
+  async getCaptchaUrl(req) {
+    const data = await getCaptcha();
+
+    req.app.locals.captcha = {
+      token: data.token,
+      expired: Date.now() + 1000 * 60 * 10
+    };
+
+    return data.url;
   }
 
   // 注册页
@@ -97,9 +109,7 @@ class User extends Base {
 
     try {
       const jwt = await signin({ mobile, password });
-
       req.app.locals.jwt = jwt;
-
       return res.render('transform/index', {
         title: '登录成功',
         type: 'success',
@@ -166,7 +176,7 @@ class User extends Base {
 
   // 积分榜前一百
   async renderUsersTop100(req, res) {
-    const top100 = await this.getUsersTop100();
+    const top100 = await getUsersTop100();
     return res.render('user/top100', {
       title: '积分榜前一百',
       top100
@@ -177,8 +187,10 @@ class User extends Base {
   async renderUserInfo(req, res) {
     const { uid } = req.params;
 
-    const info = await this.getUserInfo(uid);
+    const info = await getUserInfoById(uid);
     const data = await getUserAction(uid);
+
+    console.log(data);
 
     return res.render('user/info', {
       title: '动态 - 用户信息',
@@ -192,7 +204,7 @@ class User extends Base {
   async renderUserCreate(req, res) {
     const { uid } = req.params;
 
-    const info = await this.getUserInfo(uid);
+    const info = await getUserInfoById(uid);
     const data = await getUserCreate(uid);
 
     return res.render('user/info', {
@@ -207,7 +219,7 @@ class User extends Base {
   async renderUserLike(req, res) {
     const { uid } = req.params;
 
-    const info = await this.getUserInfo(uid);
+    const info = await getUserInfoById(uid);
     const data = await getUserLike(uid);
 
     return res.render('user/info', {
@@ -222,7 +234,7 @@ class User extends Base {
   async renderUserCollect(req, res) {
     const { uid } = req.params;
 
-    const info = await this.getUserInfo(uid);
+    const info = await getUserInfoById(uid);
     const data = await getUserCollect(uid);
 
     return res.render('user/info', {
@@ -237,7 +249,7 @@ class User extends Base {
   async renderUserFollower(req, res) {
     const { uid } = req.params;
 
-    const info = await this.getUserInfo(uid);
+    const info = await getUserInfoById(uid);
     const data = await getUserFollower(uid);
 
     return res.render('user/info', {
@@ -252,7 +264,7 @@ class User extends Base {
   async renderUserFollowing(req, res) {
     const { uid } = req.params;
 
-    const info = await this.getUserInfo(uid);
+    const info = await getUserInfoById(uid);
     const data = await getUserFollowing(uid);
 
     return res.render('user/info', {
@@ -265,7 +277,7 @@ class User extends Base {
 
   // 更新个人设置页
   async renderSetting(req, res) {
-    const top100 = await this.getUsersTop100();
+    const top100 = await getUsersTop100();
 
     return res.render('user/setting', {
       title: '个人资料',
@@ -275,7 +287,7 @@ class User extends Base {
 
   // 更新个人设置
   async setting(req, res) {
-    const top100 = await this.getUsersTop100();
+    const top100 = await getUsersTop100();
     const { jwt } = req.app.locals;
 
     try {
@@ -297,7 +309,7 @@ class User extends Base {
 
   // 修改密码页
   async renderUpdatePass(req, res) {
-    const top100 = await this.getUsersTop100();
+    const top100 = await getUsersTop100();
 
     return res.render('user/update_pass', {
       title: '修改密码',
@@ -307,7 +319,7 @@ class User extends Base {
 
   // 修改密码
   async updatePass(req, res) {
-    const top100 = await this.getUsersTop100();
+    const top100 = await getUsersTop100();
     const { jwt } = req.app.locals;
 
     try {

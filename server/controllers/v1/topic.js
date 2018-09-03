@@ -1,3 +1,4 @@
+const config = require('../../../config.default');
 const TopicProxy = require('../../proxy/topic');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
@@ -140,7 +141,8 @@ class Topic {
       currentPage: page,
       total: count,
       totalPage: Math.ceil(count / size),
-      tab,
+      currentTab: tab,
+      tabs: config.tabs,
       size
     };
   }
