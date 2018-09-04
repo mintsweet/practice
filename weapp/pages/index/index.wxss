@@ -1,3 +1,7 @@
+.container {
+  background: #f5f5f5;
+}
+
 .header {
   height: 320rpx;
   background: rgba(22,152,43,.1);

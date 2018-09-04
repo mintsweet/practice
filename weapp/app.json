@@ -24,20 +24,20 @@
       {
         "pagePath": "pages/index/index",
         "text": "主页",
-        "iconPath": "images/tab/home.png",
-        "selectedIconPath": "images/tab/home_active.png"
+        "iconPath": "static/img/tab/home.png",
+        "selectedIconPath": "static/img/tab/home_active.png"
       },
       {
         "pagePath": "pages/notice/notice",
         "text": "消息",
-        "iconPath": "images/tab/notice.png",
-        "selectedIconPath": "images/tab/notice_active.png"
+        "iconPath": "static/img/tab/notice.png",
+        "selectedIconPath": "static/img/tab/notice_active.png"
       },
       {
         "pagePath": "pages/me/me",
         "text": "我的",
-        "iconPath": "images/tab/me.png",
-        "selectedIconPath": "images/tab/me_active.png"
+        "iconPath": "static/img/tab/me.png",
+        "selectedIconPath": "static/img/tab/me_active.png"
       }
     ]
   }

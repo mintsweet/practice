@@ -23,5 +23,15 @@ exports.getUserInfoById = uid => request(`/user/${uid}`);
 exports.getTopicList = params => request('/topics/list', params);
 // 搜索话题列表
 exports.getTopicBySearch = params => request('/topics/search', params);
+// 获取无人回复的话题
+exports.getNoReplyTopic = count => request('/topics/no_reply', count);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
+
+/**
+ * 消息
+ */
+// 获取用户消息
+exports.getUserNotice = () => request('/notice/user');
+// 获取系统消息
+exports.getSystemNotice = () => request('/notice/system');

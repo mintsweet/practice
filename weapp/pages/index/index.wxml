@@ -1,6 +1,6 @@
 <view class="container">
   <view class="header">
-    <image class="logo" src="../../images/logo.png" mode="aspectFit" />
+    <image class="logo" src="../../static/img/logo.png" mode="aspectFit" />
     <navigator url="/pages/index/search/search" class="search">搜索主题内容</navigator>
     <view class="menu">
       <navigator hover-class="hover" url="/pages/static/static?type=quick_start">快速开始</navigator>

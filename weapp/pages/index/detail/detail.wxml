@@ -1,2 +1,41 @@
-<!--pages/index/detail/detail.wxml-->
-<text>pages/index/detail/detail.wxml</text>
+<view class="container">
+  <view class="title">{{topic.title}}</view>
+  <view class="content">
+    <wemark md="{{topic.content}}" />
+  </view>
+  <view class="author">
+    <view class="sub-title">作者</view>
+    <view class="author-content">
+      <image src="{{author.avatar}}" class="author-avatar"></image>
+      <view class="author-desc">
+        <view class="author-nickname">
+          {{author.nickname}}
+          <text class="practice icon-location">{{author.location}}</text>
+        </view>
+        <view class="author-signature">{{author.signature}}</view>
+      </view>
+      <view class="author-score">积分：{{author.score}}</view>
+    </view>
+  </view>
+  <view class="no-reply" wx:if="{{noReplyTopic.length > 0}}">
+    <view class="sub-title">无人回复</view>
+    <navigator
+      wx:for="{{noReplyTopic}}"
+      wx:key="id"
+      url="/pages/index/detail/detail?tid={{item.id}}"
+      class="no-reply-item"
+      open-type="redirect"
+    >{{item.title}}</navigator>
+  </view>
+  <view class="reply-list" wx:if="{{replies.length > 0}}">
+    <view class="sub-title">回复列表</view>
+  </view>
+  <view class="footer">
+    <view class="collect {{collect ? 'active' : ''}}">
+      <text class="practice icon-collect"></text>
+    </view>
+    <view class="count">
+      <text>{{topic.like_count}} 喜欢 · {{topic.reply_count}} 评论</text>
+    </view>
+  </view>
+</view>

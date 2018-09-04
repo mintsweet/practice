@@ -1,4 +1,4 @@
-import { getTopicList, getTopicBySearch } from '../../service/api.js';
+import { getTopicList } from '../../service/api.js';
 
 Page({
   data: {

@@ -1,1 +1,104 @@
-/* pages/index/detail/detail.wxss */
+.container {
+  padding: 0 30rpx 100rpx;
+}
+
+.title {
+  padding: 20rpx 30rpx 0;
+  font-size: 40rpx;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sub-title {
+  position: relative;
+  margin: 30rpx 0;
+  line-height: 1.6;
+  font-size: 36rpx;
+}
+
+.sub-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 150rpx;
+  height: 6rpx;
+  background: #666;
+}
+
+.author .author-content {
+  display: flex;
+  height: 80rpx;
+}
+
+.author .author-avatar {
+  flex: 0 0 80rpx;
+  margin-right: 20rpx;
+  width: 80rxp;
+  height: 80rpx;
+}
+
+.author .author-desc {
+  flex: auto;
+}
+
+.author .author-nickname {
+  font-size: 32rpx;
+}
+
+.author .author-nickname text {
+  margin-left: 10rpx;
+  font-size: 24rpx;
+  color: #a1a1a1;
+}
+
+.author .author-signature {
+  font-size: 26rpx;
+}
+
+.author .author-score {
+  flex: 0 0 150rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+}
+
+.no-reply .no-reply-item {
+  line-height: 1.8;
+  font-size: 32rpx;
+  color: #a1a1a1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 10px;
+  background: #fff;
+  box-shadow: 0 -2rpx 6rpx rgba(0,0,0,.1);
+  text-align: right;
+  box-sizing: border-box;
+}
+
+.footer .collect {
+  flex: 0 0 40rpx;
+}
+
+.footer .collect.active {
+  color: #16982b;
+}
+
+.footer .count {
+  flex: auto;
+  font-size: 30rpx;
+  color: #a1a1a1;
+}
