@@ -82,11 +82,11 @@ exports.followOrUn = (uid, jwt) => request(`/user/${uid}/follow_or_un`, {}, 'PAT
  * 话题
  */
 // 创建话题
-exports.createTopic = obj => request('/create', obj, 'POST');
+exports.createTopic = (obj, jwt) => request('/create', obj, 'POST', jwt);
 // 删除话题
-exports.deleteTopic = tid => request(`/topic/${tid}/delete`, {}, 'DELETE');
+exports.deleteTopic = (tid, jwt) => request(`/topic/${tid}/delete`, {}, 'DELETE', jwt);
 // 编辑话题
-exports.editTopic = (tid, obj) => request(`/topic/${tid}/edit`, obj, 'PUT');
+exports.editTopic = (tid, obj, jwt) => request(`/topic/${tid}/edit`, obj, 'PUT', jwt);
 // 获取话题列表
 exports.getTopicList = page => request('/topics/list', page);
 // 搜索话题列表
@@ -96,21 +96,21 @@ exports.getNoReplyTopic = number => request('/topics/no_reply', number);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
 // 喜欢或者取消喜欢话题
-exports.starOrUnstarTopic = tid => request(`/topic/${tid}/star_or_un`, {}, 'PATCH');
+exports.starOrUnstarTopic = (tid, jwt) => request(`/topic/${tid}/star_or_un`, {}, 'PATCH', jwt);
 // 收藏或者取消收藏话题
-exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
+exports.collectOrUncollectTopic = (tid, jwt) => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH', jwt);
 
 /**
  * 回复
  */
 // 创建回复
-exports.createReply = (tid, content) => request(`/topic/${tid}/reply`, content, 'POST');
+exports.createReply = (tid, content, jwt) => request(`/topic/${tid}/reply`, content, 'POST', jwt);
 // 删除回复
-exports.deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');
+exports.deleteReply = (rid, jwt) => request(`/reply/${rid}/delete`, {}, 'DELETE', jwt);
 // 编辑回复
-exports.editReply = (rid, content) => request(`/reply/${rid}/edit`, content, 'PUT');
+exports.editReply = (rid, content, jwt) => request(`/reply/${rid}/edit`, content, 'PUT', jwt);
 // 回复点赞
-exports.upReply = rid => request(`/reply/${rid}/up`, {}, 'PATCH');
+exports.upReply = (rid, jwt) => request(`/reply/${rid}/up`, {}, 'PATCH', jwt);
 
 /**
  * 消息

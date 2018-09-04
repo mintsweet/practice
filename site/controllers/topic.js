@@ -21,8 +21,10 @@ class Topic {
 
   // 创建话题
   async createTopic(req, res) {
+    const { jwt } = req.app.locals;
+
     try {
-      await createTopic(req.body);
+      await createTopic(req.body, jwt);
 
       return res.render('transform/index', {
         title: '发布话题成功',
@@ -40,17 +42,18 @@ class Topic {
   // 删除话题
   async deleteTopic(req, res) {
     const { tid } = req.params;
+    const { jwt } = req.app.locals;
 
     try {
-      await deleteTopic(tid);
+      await deleteTopic(tid, jwt);
 
-      return res.render('/transform/index', {
+      return res.render('transform/index', {
         title: '删除话题',
         type: 'success',
         message: '删除话题成功'
       });
     } catch(err) {
-      return res.render('/transform/index', {
+      return res.render('transform/index', {
         title: '删除话题失败',
         type: 'error',
         message: '删除话题失败'
@@ -65,15 +68,18 @@ class Topic {
 
     return res.render('topic/create', {
       title: '编辑话题',
-      topic: data,
+      topic: data.topic,
       action: 'edit'
     });
   }
 
   // 编辑话题
   async editTopic(req, res) {
+    const { tid } = req.params;
+    const { jwt } = req.app.locals;
+
     try {
-      await editTopic(req.body);
+      await editTopic(tid, req.body, jwt);
 
       return res.render('transform/index', {
         title: '编辑话题成功',
@@ -127,9 +133,9 @@ class Topic {
   // 喜欢或者取消喜欢
   async starOrUnstarTopic(req, res) {
     const { tid } = req.params;
-    const { user } = req.app.locals;
+    const { jwt } = req.app.locals;
 
-    if (!user) {
+    if (!jwt) {
       return res.send({
         status: 0,
         message: '尚未登录'
@@ -137,7 +143,7 @@ class Topic {
     }
 
     try {
-      const action = await starOrUnstarTopic(tid);
+      const action = await starOrUnstarTopic(tid, jwt);
 
       return res.send({
         status: 1,
@@ -154,9 +160,9 @@ class Topic {
   // 收藏或者取消收藏
   async collectOrUncollectTopic(req, res) {
     const { tid } = req.params;
-    const { user } = req.app.locals;
+    const { jwt } = req.app.locals;
 
-    if (!user) {
+    if (!jwt) {
       return res.send({
         status: 0,
         message: '尚未登录'
@@ -164,7 +170,7 @@ class Topic {
     }
 
     try {
-      const action = await collectOrUncollectTopic(tid);
+      const action = await collectOrUncollectTopic(tid, jwt);
 
       return res.send({
         status: 1,
