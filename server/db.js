@@ -6,6 +6,7 @@ const config = require('../config.default');
 
 // connect mongodb
 const dbpath = process.env.NODE_ENV === 'test' ? 'mongodb://localhost:27017/practice-test' : config.mongodb;
+mongoose.set('useCreateIndex', true);
 mongoose.connect(dbpath, { useNewUrlParser: true });
 const db = mongoose.connection;
 

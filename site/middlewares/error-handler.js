@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */ 
+/* eslint-disable no-unused-vars */
 class ErrorHandler {
   handle404(req, res, next) {
     return res.render('exception/404', {
@@ -7,8 +7,6 @@ class ErrorHandler {
   }
 
   handle500(err, req, res, next) {
-    console.error(err.message);
-
     return res.render('exception/500', {
       title: '500',
       error: err.message

@@ -99,7 +99,10 @@ class Topic {
     };
 
     if (!tab || tab === 'all') {
-      query = {};
+      query = {
+        lock: false,
+        delete: false
+      };
     } else if (tab === 'good') {
       query.good = true;
     } else {
@@ -261,7 +264,7 @@ class Topic {
     collect = (collect && !collect.is_un) || false;
 
     ctx.body = {
-      topic,
+      topic: topic.toObject({ virtuals: true }),
       author,
       replies,
       like,

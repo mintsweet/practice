@@ -1,15 +1,12 @@
-const formidable = require('formidable');
-const Base = require('./base');
 const md2html = require('../utils/md2html');
 const {
   createTopic, deleteTopic, editTopic,
-  getTopicDetail, starOrUnstarTopic,
+  getTopicDetail, starOrUnstarTopic, getNoReplyTopic,
   getTopicBySearch, collectOrUncollectTopic
 } = require('../http/api');
 
-class Topic extends Base {
+class Topic {
   constructor() {
-    super();
     this.renderDetail = this.renderDetail.bind(this);
     this.renderSearch = this.renderSearch.bind(this);
   }
@@ -23,45 +20,40 @@ class Topic extends Base {
   }
 
   // 创建话题
-  createTopic(req, res) {
-    const form = new formidable.IncomingForm();
+  async createTopic(req, res) {
+    const { jwt } = req.app.locals;
 
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+    try {
+      await createTopic(req.body, jwt);
 
-      try {
-        await createTopic(fields);
-
-        return res.render('transform/index', {
-          title: '发布话题成功',
-          type: 'success',
-          message: '发布话题成功'
-        });
-      } catch(err) {
-        return res.render('topic/create', {
-          title: '发布话题',
-          error: err.message
-        });
-      }
-    });
+      return res.render('transform/index', {
+        title: '发布话题成功',
+        type: 'success',
+        message: '发布话题成功'
+      });
+    } catch(err) {
+      return res.render('topic/create', {
+        title: '发布话题',
+        error: err.message
+      });
+    }
   }
 
   // 删除话题
   async deleteTopic(req, res) {
     const { tid } = req.params;
+    const { jwt } = req.app.locals;
 
     try {
-      await deleteTopic(tid);
+      await deleteTopic(tid, jwt);
 
-      return res.render('/transform/index', {
+      return res.render('transform/index', {
         title: '删除话题',
         type: 'success',
         message: '删除话题成功'
       });
     } catch(err) {
-      return res.render('/transform/index', {
+      return res.render('transform/index', {
         title: '删除话题失败',
         type: 'error',
         message: '删除话题失败'
@@ -72,52 +64,50 @@ class Topic extends Base {
   // 编辑话题页
   async renderEdit(req, res) {
     const { tid } = req.params;
-
     const data = await getTopicDetail(tid);
 
     return res.render('topic/create', {
       title: '编辑话题',
-      topic: data,
+      topic: data.topic,
       action: 'edit'
     });
   }
 
   // 编辑话题
-  editTopic(req, res) {
-    const form = new formidable.IncomingForm();
+  async editTopic(req, res) {
+    const { tid } = req.params;
+    const { jwt } = req.app.locals;
 
-    form.parse(req, async (err, fields) => {
-      if (err) {
-        throw new Error(err);
-      }
+    try {
+      await editTopic(tid, req.body, jwt);
 
-      try {
-        await editTopic(fields);
-
-        return res.render('transform/index', {
-          title: '编辑话题成功',
-          type: 'success',
-          message: '编辑话题成功'
-        });
-      } catch(err) {
-        return res.render('topic/create', {
-          title: '编辑话题',
-          error: err.message
-        });
-      }
-    });
+      return res.render('transform/index', {
+        title: '编辑话题成功',
+        type: 'success',
+        message: '编辑话题成功'
+      });
+    } catch(err) {
+      return res.render('topic/create', {
+        title: '编辑话题',
+        error: err.message
+      });
+    }
   }
 
   // 话题详情页
   async renderDetail(req, res) {
     const { tid } = req.params;
 
-    const noReplyTopic = await this.getNoReplyTopic();
-    const topic = await getTopicDetail(tid);
+    const noReplyTopic = await getNoReplyTopic();
+    const data = await getTopicDetail(tid);
 
     return res.render('topic/detail', {
       title: '话题详情',
-      topic: { ...topic, content: md2html(topic.content) },
+      topic: { ...data.topic, content: md2html(data.topic.content) },
+      author: { ...data.author },
+      replies: data.replies,
+      like: data.like,
+      collect: data.collect,
       noReplyTopic
     });
   }
@@ -126,7 +116,7 @@ class Topic extends Base {
   async renderSearch(req, res) {
     const { q } = req.query;
 
-    const noReplyTopic = await this.getNoReplyTopic();
+    const noReplyTopic = await getNoReplyTopic();
     const data = await getTopicBySearch({ title: q });
 
     return res.render('topic/search', {
@@ -143,9 +133,9 @@ class Topic extends Base {
   // 喜欢或者取消喜欢
   async starOrUnstarTopic(req, res) {
     const { tid } = req.params;
-    const { user } = req.app.locals;
+    const { jwt } = req.app.locals;
 
-    if (!user) {
+    if (!jwt) {
       return res.send({
         status: 0,
         message: '尚未登录'
@@ -153,7 +143,7 @@ class Topic extends Base {
     }
 
     try {
-      const action = await starOrUnstarTopic(tid);
+      const action = await starOrUnstarTopic(tid, jwt);
 
       return res.send({
         status: 1,
@@ -170,9 +160,9 @@ class Topic extends Base {
   // 收藏或者取消收藏
   async collectOrUncollectTopic(req, res) {
     const { tid } = req.params;
-    const { user } = req.app.locals;
+    const { jwt } = req.app.locals;
 
-    if (!user) {
+    if (!jwt) {
       return res.send({
         status: 0,
         message: '尚未登录'
@@ -180,7 +170,7 @@ class Topic extends Base {
     }
 
     try {
-      const action = await collectOrUncollectTopic(tid);
+      const action = await collectOrUncollectTopic(tid, jwt);
 
       return res.send({
         status: 1,

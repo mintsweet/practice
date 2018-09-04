@@ -1,18 +1,18 @@
-const Base = require('./base');
-const { getSmsCode } = require('../http/api');
+const { getCaptcha, getSmsCode } = require('../http/api');
 
-class Captcha extends Base {
-  constructor() {
-    super();
-    this.getCaptcha = this.getCaptcha.bind(this);
-  }
-
+class Captcha {
   async getCaptcha(req, res) {
     try {
-      const url = await this.getCaptchaUrl(req);
+      const data = await getCaptcha();
+
+      req.app.locals.captcha = {
+        token: data.token,
+        expired: Date.now() + 1000 * 60 * 10
+      };
+
       return res.send({
         status: 1,
-        data: url
+        data: process.env.NODE_ENV === 'test' ? data : data.url
       });
     } catch(err) {
       return res.send({

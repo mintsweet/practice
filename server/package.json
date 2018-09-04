@@ -18,7 +18,7 @@
     "koa-router": "^7.4.0",
     "log4js": "^3.0.2",
     "moment": "^2.22.2",
-    "mongoose": "^5.2.5",
+    "mongoose": "^5.2.12",
     "qiniu": "^7.2.1",
     "redis": "^2.8.0"
   },

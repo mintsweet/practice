@@ -45,7 +45,7 @@ block content
               .desc
                 span
                   i.practice &#xe63b;
-                  | #{item.star_count}
+                  | #{item.like_count}
                 span
                   i.practice &#xe65f;
                   | #{item.collect_count}
@@ -55,7 +55,7 @@ block content
         else
           each item in data
             li.behavior-item
-              case item.action
+              case item.type
                 when 'create'
                   span 发布了话题
                   time #{item.create_at}
@@ -87,7 +87,7 @@ block content
         li
           span.practice &#xe63b;
           .gener.
-            获得喜欢#[span.count #{info.star_count}]次
+            获得喜欢#[span.count #{info.like_count}]次
         li
           span.practice &#xe65f;
           .gener.

@@ -1,9 +1,7 @@
-const Base = require('./base');
-const { getTopicList } = require('../http/api');
+const { getUsersTop100, getNoReplyTopic, getTopicList } = require('../http/api');
 
-class Site extends Base {
+class Site {
   constructor() {
-    super();
     this.renderIndex = this.renderIndex.bind(this);
   }
 
@@ -11,8 +9,8 @@ class Site extends Base {
   async renderIndex(req, res) {
     const { tab, page } = req.query;
 
-    const top100 = await this.getUsersTop100();
-    const noReplyTopic = await this.getNoReplyTopic();
+    const top100 = await getUsersTop100();
+    const noReplyTopic = await getNoReplyTopic();
 
     const data = await getTopicList({
       tab: tab || 'all',
@@ -25,7 +23,7 @@ class Site extends Base {
       topics: data.topics,
       totalPage: data.totalPage,
       currentPage: data.currentPage,
-      currentTab: data.tab,
+      currentTab: data.currentTab,
       top100: top100.slice(0, 10),
       noReplyTopic
     });

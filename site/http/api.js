@@ -24,16 +24,27 @@ const request = async (url, data, method = 'GET', token) => {
   return rq(options);
 };
 
+/**
+ * 静态
+ */
 // 快速开始
 exports.getQuickStart = () => request('/static/quick_start');
 // API说明
 exports.getApiDoc = () => request('/static/api_doc');
 // 关于
 exports.getAbout = () => request('/static/about');
+
+/**
+ * 辅助
+ */
 // 获取图形验证码
 exports.getCaptcha = () => request('/aider/captcha', { width: 100, height: 34 });
 // 获取短信验证码
 exports.getSmsCode = mobile => request('/aider/sms_code', mobile);
+
+/**
+ * 用户
+ */
 // 注册
 exports.signup = info => request('/signup', info, 'POST');
 // 登录
@@ -42,10 +53,6 @@ exports.signin = info => request('/signin', info, 'POST');
 exports.forgetPass = obj => request('/forget_pass', obj, 'PATCH');
 // 获取当前登录用户信息
 exports.getCurrentUserInfo = jwt => request('/info', {}, 'GET', jwt);
-// 更新个人信息
-exports.setting = (info, jwt) => request('/setting', info, 'PUT', jwt);
-// 修改密码
-exports.updatePass = (obj, jwt) => request('/update_pass', obj, 'PATCH', jwt);
 // 获取星标用户列表
 exports.getUsersStar = () => request('/users/star');
 // 获取积分榜前一百用户列表
@@ -64,14 +71,22 @@ exports.getUserCollect = uid => request(`/user/${uid}/collect`);
 exports.getUserFollower = uid => request(`/user/${uid}/follower`);
 // 获取用户关注列表
 exports.getUserFollowing = uid => request(`/user/${uid}/following`);
+// 更新个人信息
+exports.setting = (info, jwt) => request('/setting', info, 'PUT', jwt);
+// 修改密码
+exports.updatePass = (obj, jwt) => request('/update_pass', obj, 'PATCH', jwt);
 // 关注或者取消关注某个用户
 exports.followOrUn = (uid, jwt) => request(`/user/${uid}/follow_or_un`, {}, 'PATCH', jwt);
+
+/**
+ * 话题
+ */
 // 创建话题
-exports.createTopic = obj => request('/create', obj, 'POST');
+exports.createTopic = (obj, jwt) => request('/create', obj, 'POST', jwt);
 // 删除话题
-exports.deleteTopic = tid => request(`/topic/${tid}/delete`, {}, 'DELETE');
+exports.deleteTopic = (tid, jwt) => request(`/topic/${tid}/delete`, {}, 'DELETE', jwt);
 // 编辑话题
-exports.editTopic = (tid, obj) => request(`/topic/${tid}/edit`, obj, 'PUT');
+exports.editTopic = (tid, obj, jwt) => request(`/topic/${tid}/edit`, obj, 'PUT', jwt);
 // 获取话题列表
 exports.getTopicList = page => request('/topics/list', page);
 // 搜索话题列表
@@ -81,18 +96,26 @@ exports.getNoReplyTopic = number => request('/topics/no_reply', number);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
 // 喜欢或者取消喜欢话题
-exports.starOrUnstarTopic = tid => request(`/topic/${tid}/star_or_un`, {}, 'PATCH');
+exports.starOrUnstarTopic = (tid, jwt) => request(`/topic/${tid}/star_or_un`, {}, 'PATCH', jwt);
 // 收藏或者取消收藏话题
-exports.collectOrUncollectTopic = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
+exports.collectOrUncollectTopic = (tid, jwt) => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH', jwt);
+
+/**
+ * 回复
+ */
 // 创建回复
-exports.createReply = (tid, content) => request(`/topic/${tid}/reply`, content, 'POST');
+exports.createReply = (tid, content, jwt) => request(`/topic/${tid}/reply`, content, 'POST', jwt);
 // 删除回复
-exports.deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');
+exports.deleteReply = (rid, jwt) => request(`/reply/${rid}/delete`, {}, 'DELETE', jwt);
 // 编辑回复
-exports.editReply = (rid, content) => request(`/reply/${rid}/edit`, content, 'PUT');
+exports.editReply = (rid, content, jwt) => request(`/reply/${rid}/edit`, content, 'PUT', jwt);
 // 回复点赞
-exports.upReply = rid => request(`/reply/${rid}/up`, {}, 'PATCH');
+exports.upReply = (rid, jwt) => request(`/reply/${rid}/up`, {}, 'PATCH', jwt);
+
+/**
+ * 消息
+ */
 // 获取用户消息
-exports.getUserNotice = uid => request('/notice/user', uid);
+exports.getUserNotice = jwt => request('/notice/user', {}, 'GET', jwt);
 // 获取系统消息
-exports.getSystemNotice = uid => request('/notice/system', uid);
+exports.getSystemNotice = jwt => request('/notice/system', {}, 'GET', jwt);

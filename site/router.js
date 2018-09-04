@@ -53,7 +53,7 @@ router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
 // 话题
 router.get('/topics/create', Auth.userRequired, wrap(Topic.renderCreate));
 router.post('/topics/create', Auth.userRequired, wrap(Topic.createTopic));
-router.post('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
+router.get('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
 router.get('/topic/:tid/edit', Auth.userRequired, wrap(Topic.renderEdit));
 router.post('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic));
 router.get('/topics/search', wrap(Topic.renderSearch));
