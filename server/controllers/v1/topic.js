@@ -203,6 +203,8 @@ class Topic {
 
   // 获取无人回复话题
   async getNoReplyTopic(ctx) {
+    const count = parseInt(ctx.query.count) || 10;
+
     const query = {
       lock: false,
       delete: false,
@@ -210,7 +212,7 @@ class Topic {
     };
 
     const options = {
-      limit: 10,
+      limit: count,
       sort: '-top -good'
     };
 

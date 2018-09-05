@@ -190,8 +190,6 @@ class User {
     const info = await getUserInfoById(uid);
     const data = await getUserAction(uid);
 
-    console.log(data);
-
     return res.render('user/info', {
       title: '动态 - 用户信息',
       info,

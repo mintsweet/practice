@@ -3,7 +3,7 @@ const { getCurrentUserInfo } = require('../http/api');
 class Auth {
   userRequired(req, res, next) {
     if (!req.app.locals.user) {
-      return res.status(403).render('exception/403', {
+      return res.render('exception/403', {
         title: '403'
       });
     }

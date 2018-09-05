@@ -17,7 +17,7 @@ class Reply {
       return res.render('transform/index', {
         title: '创建回复失败',
         type: 'error',
-        message: err.message,
+        message: err.error,
         url: `/topic/${tid}`
       });
     }
@@ -35,7 +35,7 @@ class Reply {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.message
+        message: err.error
       });
     }
   }
@@ -77,7 +77,7 @@ class Reply {
     } catch(err) {
       return res.send({
         status: 0,
-        messsage: err.message
+        messsage: err.error
       });
     }
   }

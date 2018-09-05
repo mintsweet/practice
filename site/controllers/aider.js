@@ -17,7 +17,7 @@ class Captcha {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.message
+        message: err.error
       });
     }
   }
@@ -53,7 +53,7 @@ class Captcha {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.message
+        message: err.error
       });
     }
   }

@@ -133,19 +133,19 @@
   // 话题点赞
   Utils.starTopic = function() {
     const utils = this;
-    $('.action.star_topic').click(function() {
+    $('.action.like_topic').click(function() {
       const trigger = this;
       $.post(`${window.location.pathname}/star_or_un`, function(res) {
         if (res.status === 1) {
           if (res.action === 'star') {
             utils.globalMessage('success', '喜欢了该话题');
 
-            $(trigger).children('.number').text(parseInt($('.action.star_topic .number').text()) + 1);
+            $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) + 1);
             $(trigger).addClass('active');
           } else {
             utils.globalMessage('success', '取消喜欢该话题');
 
-            $(trigger).children('.number').text(parseInt($('.action.star_topic .number').text()) - 1);
+            $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) - 1);
             $(trigger).removeClass('active');
           }
         } else {
@@ -200,8 +200,7 @@
   Utils.editReply = function() {
     $('.action.edit_reply').click(function() {
       $('.reply-form.reply_reply_form').slideUp();
-      $('.reply-form.edit_reply_form').slideUp();
-      $(this).siblings('.reply-form.edit_reply_form').slideDown();
+      $(this).siblings('.reply-form.edit_reply_form').slideToggle();
     });
   };
 
@@ -231,8 +230,7 @@
   Utils.replyReply = function() {
     $('.action.reply_reply').click(function() {
       $('.reply-form.edit_reply_form').slideUp();
-      $('.reply-form.reply_reply_form').slideUp();
-      $(this).siblings('.reply-form.reply_reply_form').slideDown();
+      $(this).siblings('.reply-form.reply_reply_form').slideToggle();
     });
   };
 

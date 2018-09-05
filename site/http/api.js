@@ -92,7 +92,7 @@ exports.getTopicList = page => request('/topics/list', page);
 // 搜索话题列表
 exports.getTopicBySearch = title => request('/topics/search', title);
 // 获取无人回复的话题
-exports.getNoReplyTopic = number => request('/topics/no_reply', number);
+exports.getNoReplyTopic = count => request('/topics/no_reply', count);
 // 根据ID获取话题详情
 exports.getTopicDetail = tid => request(`/topic/${tid}`);
 // 喜欢或者取消喜欢话题

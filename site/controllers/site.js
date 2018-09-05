@@ -10,7 +10,7 @@ class Site {
     const { tab, page } = req.query;
 
     const top100 = await getUsersTop100();
-    const noReplyTopic = await getNoReplyTopic();
+    const noReplyTopic = await getNoReplyTopic({ count: 5 });
 
     const data = await getTopicList({
       tab: tab || 'all',

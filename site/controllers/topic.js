@@ -14,8 +14,7 @@ class Topic {
   // 创建话题
   renderCreate(req, res) {
     return res.render('topic/create', {
-      title: '发布话题',
-      action: 'create'
+      title: '发布话题'
     });
   }
 
@@ -34,7 +33,7 @@ class Topic {
     } catch(err) {
       return res.render('topic/create', {
         title: '发布话题',
-        error: err.message
+        error: err.error
       });
     }
   }
@@ -68,8 +67,7 @@ class Topic {
 
     return res.render('topic/create', {
       title: '编辑话题',
-      topic: data.topic,
-      action: 'edit'
+      topic: data.topic
     });
   }
 
@@ -89,7 +87,7 @@ class Topic {
     } catch(err) {
       return res.render('topic/create', {
         title: '编辑话题',
-        error: err.message
+        error: err.error
       });
     }
   }
@@ -152,7 +150,7 @@ class Topic {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.message
+        message: err.error
       });
     }
   }
@@ -179,7 +177,7 @@ class Topic {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.message
+        message: err.error
       });
     }
   }
