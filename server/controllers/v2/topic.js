@@ -42,7 +42,7 @@ class Topic {
     const total = await TopicProxy.countTopicByQuery({});
     const topics = await TopicProxy.getTopicsByQuery({}, '', option);
     const list = topics.map(item => ({
-      ...item.toObject(),
+      ...item.toObject({ virtuals: true }),
       create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
     }));
 

@@ -111,17 +111,15 @@
   Utils.followOrUn = function() {
     var utils = this;
     $('.action.follow_user').click(function() {
-      const trigger = this;
-      $.post(`${window.location.pathname}/follow_or_un`, function(res) {
+      const id = $(this).attr('data-id');
+      $.post(`/user/${id}/follow_or_un`, res => {
         if (res.status === 1) {
           if (res.action === 'follow') {
             utils.globalMessage('success', '关注成功');
-
-            $(trigger).text('取消关注');
+            $(this).text('取消关注');
           } else {
             utils.globalMessage('success', '取消关注');
-
-            $(trigger).text('关注');
+            $(this).text('关注');
           }
         } else {
           utils.globalMessage('error', res.message);
@@ -131,13 +129,13 @@
   };
 
   // 话题点赞
-  Utils.starTopic = function() {
+  Utils.likeTopic = function() {
     const utils = this;
     $('.action.like_topic').click(function() {
       const trigger = this;
-      $.post(`${window.location.pathname}/star_or_un`, function(res) {
+      $.post(`${window.location.pathname}/like_or_un`, function(res) {
         if (res.status === 1) {
-          if (res.action === 'star') {
+          if (res.action === 'like') {
             utils.globalMessage('success', '喜欢了该话题');
 
             $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) + 1);

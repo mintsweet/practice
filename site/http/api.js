@@ -58,7 +58,7 @@ exports.getUsersStar = () => request('/users/star');
 // 获取积分榜前一百用户列表
 exports.getUsersTop100 = () => request('/users/top100');
 // 根据ID获取用户信息
-exports.getUserInfoById = uid => request(`/user/${uid}`);
+exports.getUserInfoById = (uid, jwt) => request(`/user/${uid}`, {}, 'GET', jwt);
 // 获取用户动态
 exports.getUserAction = uid => request(`/user/${uid}/action`);
 // 获取用户专栏列表
@@ -94,11 +94,11 @@ exports.getTopicBySearch = title => request('/topics/search', title);
 // 获取无人回复的话题
 exports.getNoReplyTopic = count => request('/topics/no_reply', count);
 // 根据ID获取话题详情
-exports.getTopicDetail = tid => request(`/topic/${tid}`);
+exports.getTopicDetail = (tid, jwt) => request(`/topic/${tid}`, {}, 'GET', jwt);
 // 喜欢或者取消喜欢话题
-exports.starOrUnstarTopic = (tid, jwt) => request(`/topic/${tid}/star_or_un`, {}, 'PATCH', jwt);
+exports.likeOrUn = (tid, jwt) => request(`/topic/${tid}/like_or_un`, {}, 'PATCH', jwt);
 // 收藏或者取消收藏话题
-exports.collectOrUncollectTopic = (tid, jwt) => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH', jwt);
+exports.collectOrUn = (tid, jwt) => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH', jwt);
 
 /**
  * 回复

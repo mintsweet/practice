@@ -58,8 +58,8 @@ router.get('/topic/:tid/edit', Auth.userRequired, wrap(Topic.renderEdit));
 router.post('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic));
 router.get('/topics/search', wrap(Topic.renderSearch));
 router.get('/topic/:tid', wrap(Topic.renderDetail));
-router.post('/topic/:tid/star_or_un', wrap(Topic.starOrUnstarTopic));
-router.post('/topic/:tid/collect_or_un', wrap(Topic.collectOrUncollectTopic));
+router.post('/topic/:tid/like_or_un', wrap(Topic.likeOrUn));
+router.post('/topic/:tid/collect_or_un', wrap(Topic.collectOrUn));
 
 // 回复
 router.post('/topic/:tid/reply', wrap(Reply.createReply));

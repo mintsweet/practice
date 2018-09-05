@@ -1,8 +1,8 @@
 const md2html = require('../utils/md2html');
 const {
   createTopic, deleteTopic, editTopic,
-  getTopicDetail, starOrUnstarTopic, getNoReplyTopic,
-  getTopicBySearch, collectOrUncollectTopic
+  getTopicDetail, getNoReplyTopic, getTopicBySearch,
+  likeOrUn, collectOrUn
 } = require('../http/api');
 
 class Topic {
@@ -95,9 +95,10 @@ class Topic {
   // 话题详情页
   async renderDetail(req, res) {
     const { tid } = req.params;
+    const { jwt } = req.app.locals;
 
     const noReplyTopic = await getNoReplyTopic();
-    const data = await getTopicDetail(tid);
+    const data = await getTopicDetail(tid, jwt);
 
     return res.render('topic/detail', {
       title: '话题详情',
@@ -129,7 +130,7 @@ class Topic {
   }
 
   // 喜欢或者取消喜欢
-  async starOrUnstarTopic(req, res) {
+  async likeOrUn(req, res) {
     const { tid } = req.params;
     const { jwt } = req.app.locals;
 
@@ -141,7 +142,7 @@ class Topic {
     }
 
     try {
-      const action = await starOrUnstarTopic(tid, jwt);
+      const action = await likeOrUn(tid, jwt);
 
       return res.send({
         status: 1,
@@ -156,7 +157,7 @@ class Topic {
   }
 
   // 收藏或者取消收藏
-  async collectOrUncollectTopic(req, res) {
+  async collectOrUn(req, res) {
     const { tid } = req.params;
     const { jwt } = req.app.locals;
 
@@ -168,7 +169,7 @@ class Topic {
     }
 
     try {
-      const action = await collectOrUncollectTopic(tid, jwt);
+      const action = await collectOrUn(tid, jwt);
 
       return res.send({
         status: 1,

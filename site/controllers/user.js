@@ -186,8 +186,9 @@ class User {
   // 个人信息页
   async renderUserInfo(req, res) {
     const { uid } = req.params;
+    const { jwt } = req.app.locals;
 
-    const info = await getUserInfoById(uid);
+    const info = await getUserInfoById(uid, jwt);
     const data = await getUserAction(uid);
 
     return res.render('user/info', {
@@ -201,8 +202,9 @@ class User {
   // 用户专栏页
   async renderUserCreate(req, res) {
     const { uid } = req.params;
+    const { jwt } = req.app.locals;
 
-    const info = await getUserInfoById(uid);
+    const info = await getUserInfoById(uid, jwt);
     const data = await getUserCreate(uid);
 
     return res.render('user/info', {
@@ -216,8 +218,9 @@ class User {
   // 用户喜欢页
   async renderUserLike(req, res) {
     const { uid } = req.params;
+    const { jwt } = req.app.locals;
 
-    const info = await getUserInfoById(uid);
+    const info = await getUserInfoById(uid, jwt);
     const data = await getUserLike(uid);
 
     return res.render('user/info', {
@@ -231,8 +234,9 @@ class User {
   // 用户收藏页
   async renderUserCollect(req, res) {
     const { uid } = req.params;
+    const { jwt } = req.app.locals;
 
-    const info = await getUserInfoById(uid);
+    const info = await getUserInfoById(uid, jwt);
     const data = await getUserCollect(uid);
 
     return res.render('user/info', {
@@ -246,8 +250,9 @@ class User {
   // 用户粉丝页
   async renderUserFollower(req, res) {
     const { uid } = req.params;
+    const { jwt } = req.app.locals;
 
-    const info = await getUserInfoById(uid);
+    const info = await getUserInfoById(uid, jwt);
     const data = await getUserFollower(uid);
 
     return res.render('user/info', {
@@ -261,8 +266,9 @@ class User {
   // 用户关注页
   async renderUserFollowing(req, res) {
     const { uid } = req.params;
+    const { jwt } = req.app.locals;
 
-    const info = await getUserInfoById(uid);
+    const info = await getUserInfoById(uid, jwt);
     const data = await getUserFollowing(uid);
 
     return res.render('user/info', {

@@ -274,7 +274,7 @@ class User {
       });
     }));
 
-    ctx.body = data;
+    ctx.body = data.map(item => ({ ...item.toObject({ virtuals: true }), type: 'like' }));
   }
 
   // 获取用户收藏列表
@@ -288,7 +288,7 @@ class User {
       });
     }));
 
-    ctx.body = data;
+    ctx.body = data.map(item => ({ ...item.toObject({ virtuals: true }), type: 'collect' }));
   }
 
   // 获取用户粉丝列表

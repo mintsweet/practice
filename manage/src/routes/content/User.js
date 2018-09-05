@@ -238,7 +238,7 @@ export default class User extends Component {
       title: '积分',
       key: 'score',
       dataIndex: 'score',
-      sorter: (a, b) => a.role - b.role
+      sorter: (a, b) => a.score - b.score
     }, {
       title: '星标用户',
       key: 'star',
