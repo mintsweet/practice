@@ -18,7 +18,7 @@ class Site {
       size: 20
     });
 
-    return res.render('site/index', {
+    return res.render('pages/index', {
       title: '首页',
       topics: data.topics,
       totalPage: data.totalPage,

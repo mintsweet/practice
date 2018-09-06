@@ -13,7 +13,7 @@ class Topic {
 
   // 创建话题
   renderCreate(req, res) {
-    return res.render('topic/create', {
+    return res.render('pages/topic/create', {
       title: '发布话题'
     });
   }
@@ -25,13 +25,13 @@ class Topic {
     try {
       await createTopic(req.body, jwt);
 
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '发布话题成功',
         type: 'success',
         message: '发布话题成功'
       });
     } catch(err) {
-      return res.render('topic/create', {
+      return res.render('pages/topic/create', {
         title: '发布话题',
         error: err.error
       });
@@ -46,13 +46,13 @@ class Topic {
     try {
       await deleteTopic(tid, jwt);
 
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '删除话题',
         type: 'success',
         message: '删除话题成功'
       });
     } catch(err) {
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '删除话题失败',
         type: 'error',
         message: '删除话题失败'
@@ -65,7 +65,7 @@ class Topic {
     const { tid } = req.params;
     const data = await getTopicDetail(tid);
 
-    return res.render('topic/create', {
+    return res.render('pages/topic/create', {
       title: '编辑话题',
       topic: data.topic
     });
@@ -79,13 +79,13 @@ class Topic {
     try {
       await editTopic(tid, req.body, jwt);
 
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '编辑话题成功',
         type: 'success',
         message: '编辑话题成功'
       });
     } catch(err) {
-      return res.render('topic/create', {
+      return res.render('pages/topic/create', {
         title: '编辑话题',
         error: err.error
       });
@@ -100,7 +100,7 @@ class Topic {
     const noReplyTopic = await getNoReplyTopic();
     const data = await getTopicDetail(tid, jwt);
 
-    return res.render('topic/detail', {
+    return res.render('pages/topic/detail', {
       title: '话题详情',
       topic: { ...data.topic, content: md2html(data.topic.content) },
       author: { ...data.author },
@@ -118,7 +118,7 @@ class Topic {
     const noReplyTopic = await getNoReplyTopic();
     const data = await getTopicBySearch({ title: q });
 
-    return res.render('topic/search', {
+    return res.render('pages/topic/search', {
       title: '搜索结果',
       topics: data.topics,
       currentPage: data.currentPage,

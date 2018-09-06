@@ -43,7 +43,7 @@ class User {
   // 注册页
   async renderSignup(req, res) {
     const url = await this.getCaptchaUrl(req);
-    return res.render('user/signup', {
+    return res.render('pages/user/signup', {
       title: '注册',
       picUrl: url
     });
@@ -55,7 +55,7 @@ class User {
     const url = await this.getCaptchaUrl(req);
 
     if (!sms_code.mobile) {
-      return res.render('user/signup', {
+      return res.render('pages/user/signup', {
         title: '注册',
         error: '尚未获取短信验证码',
         picUrl: url
@@ -64,13 +64,13 @@ class User {
 
     try {
       await signup(req.body);
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '注册成功',
         type: 'success',
         message: '注册成功'
       });
     } catch(err) {
-      return res.render('user/signup', {
+      return res.render('pages/user/signup', {
         title: '注册',
         error: err.error,
         picUrl: url
@@ -81,7 +81,7 @@ class User {
   // 登录页
   async renderSignin(req, res) {
     const url = await this.getCaptchaUrl(req);
-    return res.render('user/signin', {
+    return res.render('pages/user/signin', {
       title: '登录',
       picUrl: url
     });
@@ -94,13 +94,13 @@ class User {
     const url = await this.getCaptchaUrl(req);
 
     if (piccaptcha.toUpperCase() !== captcha.token) {
-      return res.render('user/signin', {
+      return res.render('pages/user/signin', {
         title: '登录',
         error: '图形验证码错误',
         picUrl: url
       });
     } else if (Date.now() > captcha.expired) {
-      return res.render('user/signin', {
+      return res.render('pages/user/signin', {
         title: '登录',
         error: '图形验证码已经失效了，请重新获取',
         picUrl: url
@@ -110,13 +110,13 @@ class User {
     try {
       const jwt = await signin({ mobile, password });
       req.app.locals.jwt = jwt;
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '登录成功',
         type: 'success',
         message: '登录成功'
       });
     } catch(err) {
-      return res.render('user/signin', {
+      return res.render('pages/user/signin', {
         title: '登录',
         error: err.error,
         picUrl: url
@@ -128,7 +128,7 @@ class User {
   async renderForgetPass(req, res) {
     const url = await this.getCaptchaUrl(req);
 
-    return res.render('user/forget_pass', {
+    return res.render('pages/user/forget_pass', {
       title: '忘记密码',
       picUrl: url
     });
@@ -140,7 +140,7 @@ class User {
     const url = await this.getCaptchaUrl(req);
 
     if (!sms_code.mobile) {
-      return res.render('user/forget_pass', {
+      return res.render('pages/user/forget_pass', {
         title: '忘记密码',
         error: '尚未获取短信验证码',
         picUrl: url
@@ -150,13 +150,13 @@ class User {
     try {
       await forgetPass(req.body);
 
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '找回密码成功',
         type: 'success',
         message: '找回密码成功'
       });
     } catch(err) {
-      return res.render('user/forget_pass', {
+      return res.render('pages/user/forget_pass', {
         title: '忘记密码',
         error: err.error,
         picUrl: url
@@ -167,7 +167,7 @@ class User {
   // 登出
   async signout(req, res) {
     req.app.locals.jwt = '';
-    return res.render('transform/index', {
+    return res.render('pages/transform', {
       title: '退出成功',
       type: 'success',
       message: '退出成功'
@@ -177,7 +177,7 @@ class User {
   // 积分榜前一百
   async renderUsersTop100(req, res) {
     const top100 = await getUsersTop100();
-    return res.render('user/top100', {
+    return res.render('pages/user/top100', {
       title: '积分榜前一百',
       top100
     });
@@ -191,7 +191,7 @@ class User {
     const info = await getUserInfoById(uid, jwt);
     const data = await getUserAction(uid);
 
-    return res.render('user/info', {
+    return res.render('pages/user/info', {
       title: '动态 - 用户信息',
       info,
       data,
@@ -207,7 +207,7 @@ class User {
     const info = await getUserInfoById(uid, jwt);
     const data = await getUserCreate(uid);
 
-    return res.render('user/info', {
+    return res.render('pages/user/info', {
       title: '专栏 - 用户信息',
       info,
       data,
@@ -223,7 +223,7 @@ class User {
     const info = await getUserInfoById(uid, jwt);
     const data = await getUserLike(uid);
 
-    return res.render('user/info', {
+    return res.render('pages/user/info', {
       title: '喜欢 - 用户信息',
       info,
       data,
@@ -239,7 +239,7 @@ class User {
     const info = await getUserInfoById(uid, jwt);
     const data = await getUserCollect(uid);
 
-    return res.render('user/info', {
+    return res.render('pages/user/info', {
       title: '收藏 - 用户信息',
       info,
       data,
@@ -255,7 +255,7 @@ class User {
     const info = await getUserInfoById(uid, jwt);
     const data = await getUserFollower(uid);
 
-    return res.render('user/info', {
+    return res.render('pages/user/info', {
       title: '粉丝 - 用户信息',
       info,
       data,
@@ -271,7 +271,7 @@ class User {
     const info = await getUserInfoById(uid, jwt);
     const data = await getUserFollowing(uid);
 
-    return res.render('user/info', {
+    return res.render('pages/user/info', {
       title: '关注 - 用户信息',
       info,
       data,
@@ -283,7 +283,7 @@ class User {
   async renderSetting(req, res) {
     const top100 = await getUsersTop100();
 
-    return res.render('user/setting', {
+    return res.render('pages/user/setting', {
       title: '个人资料',
       top100: top100.slice(0, 10)
     });
@@ -297,13 +297,13 @@ class User {
     try {
       await setting(req.body, jwt);
 
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         type: 'success',
         message: '更新个人资料成功',
         url: '/setting'
       });
     } catch(err) {
-      return res.render('user/setting', {
+      return res.render('pages/user/setting', {
         title: '个人资料',
         error: err.error,
         top100
@@ -315,7 +315,7 @@ class User {
   async renderUpdatePass(req, res) {
     const top100 = await getUsersTop100();
 
-    return res.render('user/update_pass', {
+    return res.render('pages/user/update_pass', {
       title: '修改密码',
       top100: top100.slice(0, 10)
     });
@@ -329,13 +329,13 @@ class User {
     try {
       await updatePass(req.body, jwt);
 
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         type: 'success',
         message: '修改成功',
         url: '/update_pass'
       });
     } catch(err) {
-      return res.render('user/update_pass', {
+      return res.render('pages/user/update_pass', {
         title: '修改密码',
         error: err.error,
         top100

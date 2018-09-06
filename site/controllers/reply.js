@@ -7,14 +7,14 @@ class Reply {
     const { jwt } = req.app.locals;
     try {
       await createReply(tid, req.body, jwt);
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '创建回复成功',
         type: 'success',
         message: '创建回复成功',
         url: `/topic/${tid}`
       });
     } catch(err) {
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '创建回复失败',
         type: 'error',
         message: err.error,
@@ -48,14 +48,14 @@ class Reply {
 
     try {
       await editReply(rid, { content }, jwt);
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '编辑回复成功',
         type: 'success',
         message: '编辑回复成功',
         url: `/topic/${tid}`
       });
     } catch(err) {
-      return res.render('transform/index', {
+      return res.render('pages/transform', {
         title: '编辑回复失败',
         type: 'error',
         message: '编辑回复失败',

@@ -26,8 +26,8 @@ class User {
         throw new Error('手机号格式不正确');
       } else if (!password || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password)) {
         throw new Error('密码必须为数字、字母和特殊字符其中两种组成并且在6至18位之间');
-      } else if (!nickname || nickname.length > 8 || nickname.length < 2) {
-        throw new Error('昵称必须在2至8位之间');
+      } else if (!nickname || nickname.length > 6 || nickname.length < 2) {
+        throw new Error('昵称必须在2至6位之间');
       } else if (!code) {
         throw new Error('尚未获取短信验证码或者已经失效');
       } else if (code !== sms.toString()) {

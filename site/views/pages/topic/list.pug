@@ -26,7 +26,7 @@ dl.topic-list
         else
           | #{topic.create_at}
   else
-    include ../includes/no_content.pug
+    include ../../includes/components/no_content.pug
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 if topics.length > 0
   ul.pagination

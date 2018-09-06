@@ -1,4 +1,4 @@
-extends ../layout.pug
+extends ../../layout.pug
 
 append header
   .setting-bar
@@ -23,7 +23,7 @@ block content
       .form-item
         button.btn(type="submit") 保存修改
   .layout-sider
-    include ../cards/user_ranking.pug
+    include ../../includes/cards/user_ranking.pug
 append footer
   script.
     var oldPass = $('#oldPass');

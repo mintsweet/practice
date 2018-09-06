@@ -1,4 +1,4 @@
-extends ../layout.pug
+extends ../../layout.pug
 
 block content
   .layout-content.attach
@@ -70,7 +70,7 @@ block content
           .signature(title=author.signature) **#{author.signature}**
         else
           .signature **这家伙很懒，莫有签名**
-    include ../cards/no_reply_topic.pug
+    include ../../includes/cards/no_reply_topic.pug
   .float-action
     a.practice.action.like_topic(href="javascript:;", class={ active: like }) &#xe63b;
       span.number #{topic.like_count}
@@ -78,4 +78,4 @@ block content
       span.number #{topic.reply_count}
     a.practice.action.collect_topic(href="javascript:;", class={ active: collect }) &#xe65f;
       span.number #{topic.collect_count}
-  include ../includes/global_message.pug
+  include ../../includes/components/global_message.pug

@@ -1,4 +1,4 @@
-extends ../layout.pug
+extends ../../layout.pug
 
 block content
   .layout-full.user-acc
@@ -51,8 +51,8 @@ append footer
     var alert = $('.alert');
 
     $('#signupForm').submit(function() {
-      if (!nickname.val() || nickname.val().length > 8 || nickname.val().length < 2) {
-        alert.text('请填写2-8位的昵称').slideDown();
+      if (!nickname.val() || nickname.val().length > 6 || nickname.val().length < 2) {
+        alert.text('请填写2-6位的昵称').slideDown();
         return false;
       } else if (!mobile.val() || !/^1[3,5,7,8,9]\d{9}$/.test(mobile.val())) {
         alert.text('请填写正确格式的手机号').slideDown();

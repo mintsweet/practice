@@ -5,7 +5,7 @@ class Notice {
   async renderNoticeUser(req, res) {
     const { jwt } = req.app.locals;
     const data = await getUserNotice(jwt);
-    return res.render('notice/index', {
+    return res.render('pages/notice', {
       title: '用户消息',
       type: 'user',
       data
@@ -16,7 +16,7 @@ class Notice {
   async renderNoticeSystem(req, res) {
     const { jwt } = req.app.locals;
     const data = await getSystemNotice(jwt);
-    return res.render('notice/index', {
+    return res.render('pages/notice', {
       title: '系统消息',
       type: 'system',
       data

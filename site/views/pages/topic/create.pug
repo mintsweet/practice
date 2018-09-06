@@ -1,4 +1,4 @@
-extends ../layout.pug
+extends ../../layout.pug
 
 append head
   link(rel="stylesheet", href="/static/lib/simplemde/simplemde.min.css")
@@ -27,7 +27,7 @@ block content
       .form-item
         .control
           button.btn.submit(type="submit") 发布话题
-  include ../includes/global_message.pug
+  include ../../includes/components/global_message.pug
 append footer
   script(src="/static/lib/simplemde/simplemde.min.js")
   script.
