@@ -25,17 +25,20 @@ class Captcha {
   async getSmsCode(req, res) {
     const { piccaptcha, mobile } = req.query;
     const captcha = req.app.locals.captcha || {};
+    const env = process.env.NODE_ENV;
 
-    if (captcha.token !== piccaptcha.toUpperCase()) {
-      return res.send({
-        status: 0,
-        message: '图形验证码不正确'
-      });
-    } else if (Date.now() > captcha.expired) {
-      return res.send({
-        status: 0,
-        message: '图形验证码已过期'
-      });
+    if (env !== 'test') {
+      if (captcha.token !== piccaptcha.toUpperCase()) {
+        return res.send({
+          status: 0,
+          message: '图形验证码不正确'
+        });
+      } else if (Date.now() > captcha.expired) {
+        return res.send({
+          status: 0,
+          message: '图形验证码已过期'
+        });
+      }
     }
 
     try {

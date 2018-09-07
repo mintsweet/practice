@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "cross-env NODE_ENV=development gulp",
-    "lint": "eslint ./",
-    "test": "cross-env NODE_ENV=test mocha",
-    "test:cover": "cross-env NODE_ENV=test nyc --reporter=html mocha"
+    "lint": "eslint ./"
   },
   "license": "MIT",
   "dependencies": {
@@ -31,11 +29,6 @@
     "gulp-load-plugins": "^1.5.0",
     "gulp-nodemon": "^2.2.1",
     "gulp-sass": "^4.0.1",
-    "gulp-uglify": "^3.0.0",
-    "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "should": "^13.2.1",
-    "sinon": "^6.1.5",
-    "supertest": "^3.1.0"
+    "gulp-uglify": "^3.0.0"
   }
 }

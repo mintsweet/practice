@@ -29,7 +29,7 @@ class Reply {
     const reply = await ReplyProxy.createReply(content, id, tid, reply_id);
 
     // 修改最后一次回复
-    await TopicProxy.updateTopicLastReply(tid, reply.id);
+    await TopicProxy.updateTopicLastReply(tid, id);
 
     // 发送提醒
     if (reply_id) {

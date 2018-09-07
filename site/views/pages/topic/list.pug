@@ -20,7 +20,7 @@ dl.topic-list
           | #{topic.reply_count}
       .date
         if topic.last_reply_author
-          a(href=`/user/${topic.last_reply_author.id}`)
+          a(href=`/user/${topic.last_reply_author.id}`, title=topic.last_reply_author.nickname)
             img(src=topic.last_reply_author.avatar)
           span #{topic.last_reply_at_ago}
         else

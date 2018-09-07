@@ -1,6 +1,4 @@
 const TopicModel = require('../models/topic');
-const UserProxy = require('./user');
-const ActionProxy = require('./action');
 
 module.exports = class Topic {
   /**
@@ -34,18 +32,8 @@ module.exports = class Topic {
    * @static
    * @param {Object} params
    */
-  static async createTopic(params) {
-    const topic = await TopicModel.create(params);
-    const author = await UserProxy.getUserById(topic.author_id);
-
-    // 积分累计
-    author.score += 1;
-    // 话题数量累计
-    author.topic_count += 1;
-    // 更新用户信息
-    await author.save();
-    // 创建行为
-    await ActionProxy.createAction('create', author.id, topic.id);
+  static async createTopic(tab, title, content, author_id) {
+    return TopicModel.create({ tab, title, content, author_id });
   }
 
   /**
@@ -64,11 +52,11 @@ module.exports = class Topic {
    *
    * @static
    * @param {ObjectId} tid
-   * @param {ObjectId} reply_id
+   * @param {ObjectId} author_id
    */
-  static async updateTopicLastReply(tid, reply_id) {
+  static async updateTopicLastReply(tid, author_id) {
     const topic = await this.getTopicById(tid);
-    topic.last_reply = reply_id;
+    topic.last_reply = author_id;
     topic.last_reply_at = new Date();
     topic.reply_count += 1;
     await topic.save();

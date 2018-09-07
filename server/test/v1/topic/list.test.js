@@ -25,7 +25,7 @@ describe('test /v1/topics/list', function() {
       res.body.currentPage.should.equal(1);
       res.body.total.should.equal(2);
       res.body.totalPage.should.equal(1);
-      res.body.tab.should.equal('all');
+      res.body.currentTab.should.equal('all');
       res.body.size.should.equal(10);
     } catch(err) {
       should.ifError(err.message);
@@ -42,7 +42,7 @@ describe('test /v1/topics/list', function() {
       res.body.currentPage.should.equal(1);
       res.body.total.should.equal(0);
       res.body.totalPage.should.equal(0);
-      res.body.tab.should.equal('good');
+      res.body.currentTab.should.equal('good');
       res.body.size.should.equal(10);
     } catch(err) {
       should.ifError(err.message);
@@ -61,7 +61,7 @@ describe('test /v1/topics/list', function() {
       res.body.currentPage.should.equal(2);
       res.body.total.should.equal(2);
       res.body.totalPage.should.equal(2);
-      res.body.tab.should.equal('ask');
+      res.body.currentTab.should.equal('ask');
       res.body.size.should.equal(1);
     } catch(err) {
       should.ifError(err.message);
