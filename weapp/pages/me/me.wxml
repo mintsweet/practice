@@ -1,2 +1,15 @@
-<!--pages/me/me.wxml-->
-<text>pages/me/me.wxml</text>
+<view class="container">
+  <view class="acc">
+    <text class="practice icon-me"></text>
+    <text class="text">登录/注册</text>
+    <text class="practice icon-right"></text>
+  </view>
+  <view class="action">
+    <view class="item">我喜欢的</view>
+    <view class="item">收藏集</view>
+  </view>
+  <view class="action">
+    <view class="item">意见反馈</view>
+    <view class="item">设置</view>
+  </view>
+</view>

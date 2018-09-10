@@ -33,13 +33,25 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
 					"name": "文章详情",
 					"pathName": "pages/index/detail/detail",
 					"query": "tid=5b8dedeeb99aef18b6a6325f"
+				},
+				{
+					"id": -1,
+					"name": "我的",
+					"pathName": "pages/me/me",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "登录",
+					"pathName": "pages/me/signin/signin",
+					"query": ""
 				}
 			]
 		}

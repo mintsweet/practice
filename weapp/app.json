@@ -7,6 +7,9 @@
     "pages/user/user",
     "pages/notice/notice",
     "pages/me/me",
+    "pages/me/signin/signin",
+    "pages/me/signup/signup",
+    "pages/me/forget/forget",
     "pages/welcome/welcome"
   ],
   "window": {

@@ -1,0 +1,47 @@
+.logo {
+  margin: 60rpx auto;
+  width: 200rxp;
+  height: 200rpx;
+}
+
+.logo image {
+  width: 100%;
+  height: 100%;
+}
+
+.form {
+  display: block;
+  padding: 0 40rpx;
+}
+
+.form-item {
+  border-top: 2rpx solid #efefef;
+}
+
+.form-item input {
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 36rpx;
+}
+
+.submit {
+  margin: 30rpx 0;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  color: #fff;
+  background: #16982b;
+  border-radius: 8rpx;
+  font-size: 36rpx;
+}
+
+.action {
+  display: flex;
+  padding: 0 40rpx;
+  justify-content: space-between;
+}
+
+.action navigator {
+  font-size: 34rpx;
+  color: #a1a1a1;
+}
