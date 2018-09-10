@@ -8,9 +8,9 @@ block content
           a.active(href="?tab=" + item.url) #{item.name}
         else
           a(href="?tab=" + item.url) #{item.name}
-    include ../topic/list.pug
+    include ./topic/list.pug
   aside.layout-sider
-    include ../cards/view_source.pug
-    include ../cards/user_ranking.pug
-    include ../cards/no_reply_topic.pug
-    include ../cards/friendship_community.pug
+    include ../includes/cards/view_source.pug
+    include ../includes/cards/user_ranking.pug
+    include ../includes/cards/no_reply_topic.pug
+    include ../includes/cards/friendship_community.pug

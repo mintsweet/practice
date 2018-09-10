@@ -1,4 +1,4 @@
-extends ../layout
+extends ../../layout.pug
 
 block content
   .layout-content
@@ -14,9 +14,9 @@ block content
         if user && info.id === user.id
           a.action(href=`/setting`) 编辑个人资料
         else if user && !info.follow
-          a.action.follow_user(href="javascript:;") 关注
+          a.action.follow_user(href="javascript:;", data-id=info.id) 关注
         else if user && info.follow
-          a.action.follow_user(href="javascript:;") 取消关注
+          a.action.follow_user(href="javascript:;", data-id=info.id) 取消关注
     .user-gener
       .gener
         a(href=`/user/${info.id}`, class={active: type === 'action'}) 动态
@@ -35,9 +35,8 @@ block content
                 img(src=item.avatar)
               a.nickname(href=`/user/${item.id}`)
                 span #{item.nickname}
-              a.action.follow_user(href="javascript:;") 关注
           else
-            include ../includes/no_content.pug
+            include ../../includes/components/no_content.pug
         else if type === 'create'
           each item in data
             li.topic-item
@@ -51,7 +50,7 @@ block content
                   | #{item.collect_count}
                 span 阅读数 #{item.visit_count}
           else
-            include ../includes/no_content.pug
+            include ../../includes/components/no_content.pug
         else
           each item in data
             li.behavior-item
@@ -77,9 +76,8 @@ block content
                     .detail
                       a.nickname(href=`/user/${item.id}`) #{item.nickname}
                       span.signature #{item.signature}
-                    a.action.follow_user(href="javascript:;") 关注
           else
-            include ../includes/no_content.pug
+            include ../../includes/components/no_content.pug
   aside.layout-sider
     .aside-block
       .title 个人成就
@@ -105,7 +103,7 @@ block content
         a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
     .user-collect
       a(href=`/user/${info.id}/collect`) 收藏集
-  include ../includes/global_message.pug
+  include ../../includes/components/global_message.pug
 append footer
   script.
     $('.user-gener .gener>span').hover(function() {

@@ -6,7 +6,7 @@ $(document).ready(function () {
   Utils.getSMSCode();
   Utils.renewCaptcha();
   Utils.followOrUn();
-  Utils.starTopic();
+  Utils.likeTopic();
   Utils.collectTopic();
   Utils.deleteReply();
   Utils.editReply();

@@ -52,7 +52,7 @@ describe('test /v1/signup', function() {
         sms: 666666
       }).expect(400);
 
-      res.text.should.equal('昵称必须在2至8位之间');
+      res.text.should.equal('昵称必须在2至6位之间');
     } catch(err) {
       should.ifError(err.message);
     }

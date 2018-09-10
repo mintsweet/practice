@@ -23,7 +23,21 @@ class Topic {
       ctx.throw(400, err.message);
     }
 
-    await TopicProxy.createTopic({ tab, title, content, author_id: id });
+    // 创建话题
+    const topic = await TopicProxy.createTopic(tab, title, content, id);
+
+    // 查询作者
+    const author = await UserProxy.getUserById(id);
+
+    // 积分累计
+    author.score += 1;
+    // 话题数量累计
+    author.topic_count += 1;
+    // 更新用户信息
+    await author.save();
+
+    // 创建行为
+    await ActionProxy.createAction('create', author.id, topic.id);
 
     ctx.body = '';
   }
@@ -47,6 +61,7 @@ class Topic {
     topic.delete = true;
     await topic.save();
 
+    // 查询作者
     const author = await UserProxy.getUserById(topic.author_id);
 
     // 积分减去
@@ -55,6 +70,7 @@ class Topic {
     author.topic_count -= 1;
     // 更新用户信息
     await author.save();
+
     // 更新行为
     await ActionProxy.setAction('create', author.id, topic.id);
 
@@ -203,6 +219,8 @@ class Topic {
 
   // 获取无人回复话题
   async getNoReplyTopic(ctx) {
+    const count = parseInt(ctx.query.count) || 10;
+
     const query = {
       lock: false,
       delete: false,
@@ -210,7 +228,7 @@ class Topic {
     };
 
     const options = {
-      limit: 10,
+      limit: count,
       sort: '-top -good'
     };
 

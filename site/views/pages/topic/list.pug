@@ -14,19 +14,19 @@ dl.topic-list
       .statistics
         span(title="喜欢数")
           i.practice &#xe63b;
-          | #{topic.star_count}
+          | #{topic.like_count}
         span(title="回复数")
           i.practice &#xe619;
           | #{topic.reply_count}
       .date
         if topic.last_reply_author
-          a(href=`/user/${topic.last_reply_author.id}`)
+          a(href=`/user/${topic.last_reply_author.id}`, title=topic.last_reply_author.nickname)
             img(src=topic.last_reply_author.avatar)
           span #{topic.last_reply_at_ago}
         else
           | #{topic.create_at}
   else
-    include ../includes/no_content.pug
+    include ../../includes/components/no_content.pug
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 if topics.length > 0
   ul.pagination

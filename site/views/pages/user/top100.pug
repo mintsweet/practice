@@ -1,4 +1,4 @@
-extends ../layout
+extends ../../layout.pug
 
 block content
   .user-top100
@@ -23,7 +23,7 @@ block content
               a(href=`/user/${item.id}`) #{item.nickname}
             td #{item.score}
             td #{item.topic_count}
-            td #{item.star_count}
+            td #{item.like_count}
             td #{item.collect_count}
             td #{item.follower_count}
 

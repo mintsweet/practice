@@ -1,33 +1,33 @@
-extends ../layout.pug
+extends ../../layout.pug
 
 append head
   link(rel="stylesheet", href="/static/lib/simplemde/simplemde.min.css")
 block content
   .topic-create
-    .title #{action === 'edit' ? '编辑话题' : '发布话题'}
+    .title #{topic ? '编辑话题' : '发布话题'}
     form#createTopic.form(method="post")
       .form-item
         label.label(for="tab")
         .control
-          input.select-hidden(type="hidden", name="tab", value=topic.tab)
+          input.select-hidden(type="hidden", name="tab", value=topic && topic.tab)
           .select
-            a.placeholder(href="javascript:;") #{action === 'edit' ? topic.tabName : '请选择类别'}
+            a.placeholder(href="javascript:;") #{topic ? topic.tabName : '请选择类别'}
             .options
               each item in config.tabs
                 .option(data-value=item.url) #{item.name}
       .form-item
         label.label(for="title") 标题：
         .control
-          input#title(type="text", name="title", autocomplete="off", value=topic.title)
+          input#title(type="text", name="title", autocomplete="off", value=topic && topic.title)
       .form-item
         label.label(for="content") 内容：
         .control
           input.content-hidden(type="hidden", name="content")
-          textarea#editor #{action === 'edit' ? topic.content : ''}
+          textarea#editor #{topic ? topic.content : ''}
       .form-item
         .control
           button.btn.submit(type="submit") 发布话题
-  include ../includes/global_message.pug
+  include ../../includes/components/global_message.pug
 append footer
   script(src="/static/lib/simplemde/simplemde.min.js")
   script.
