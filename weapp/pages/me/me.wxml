@@ -1,9 +1,9 @@
 <view class="container">
-  <view class="acc">
+  <navigator class="acc" url="./signin/signin">
     <text class="practice icon-me"></text>
     <text class="text">登录/注册</text>
     <text class="practice icon-right"></text>
-  </view>
+  </navigator> 
   <view class="action">
     <view class="item">我喜欢的</view>
     <view class="item">收藏集</view>

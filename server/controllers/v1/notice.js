@@ -50,7 +50,7 @@ class Notice {
         break;
     }
 
-    return { ...data, type: item.type };
+    return { ...data, ...item };
   }
 
   // 获取用户消息

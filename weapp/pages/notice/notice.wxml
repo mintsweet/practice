@@ -1,2 +1,38 @@
-<!--pages/notice/notice.wxml-->
-<text>pages/notice/notice.wxml</text>
+<view class="container">
+  <view class="top-bar">
+    <view class="{{ type === 'user' ? 'item active' : 'item' }}" bindtap="handleChangeType" data-type="user">用户消息</view>
+    <view class="{{ type === 'system' ? 'item active' : 'item' }}" bindtap="handleChangeType" data-type="system">系统消息</view>
+  </view>
+  <view wx:if="{{data.length > 0}}" class="notice-list">
+    <block wx:for="{{data}}" wx:key="type">
+      <view wx:if="{{item.type === 'like' || item.type === 'collect' || item.type === 'reply'}}" class="notice-item topic">
+        <navigator class="avatar">
+          <image src="{{item.author.avatar}}" />
+        </navigator>
+        <view class="detail">
+          <navigator class="nickname">{{item.author.nickname}}</navigator>
+          <view class="time">{{item.create_at}}</view>
+          <view class="topic">
+            <text>{{item.typeName}}:</text>
+            <navigator>{{item.topic.title}}</navigator>
+          </view>
+        </view>
+      </view>
+      <view wx:elif="{{item.type === 'follow'}}" class="notice-item follow">
+        <view class="title">
+          <text class="type">{{item.typeName}}</text>
+          <text class="time">{{item.create_at}}</text>
+        </view>
+        <view class="detail">
+          <navigator class="avatar">
+            <image src="{{item.author.avatar}}"></image>
+          </navigator>
+          <navigator class="nickname">
+            <text>{{item.author.nickname}}</text>
+          </navigator>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view wx:else class="notice-no">暂无消息</view>
+</view>

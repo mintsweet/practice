@@ -1,66 +1,40 @@
-// pages/notice/notice.js
+import { getUserNotice, getSystemNotice } from '../../service/api.js';
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-  
+    type: 'user',
+    data: []
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
   onReady: function () {
-  
+    wx.getStorage({
+      key: 'token',
+      success: res => {
+        this.getNoticeData(this.data.type);
+      },
+      fail: function (res) {
+        wx.redirectTo({
+          url: '/pages/me/signin/signin',
+        });
+      }
+    });
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  // 获取消息数据
+  getNoticeData: function(type) {
+    if (type === 'user') {
+      getUserNotice().then(data => {
+        console.log(data);
+        this.setData({ data });
+      });
+    } else if (type === 'system') {
+      getSystemNotice().then(data => {
+        this.setData({ data });
+      });
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  // 改变消息类型
+  handleChangeType: function(e) {
+    const type = e.currentTarget.dataset.type;
+    this.getNoticeData(type);
+    this.setData({ type });
   }
 })

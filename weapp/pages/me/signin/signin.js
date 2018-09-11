@@ -13,12 +13,11 @@ Page({
   // 登录
   signin: function(e) {
     signin(e.detail.value).then(token => {
-      wx.setStorage({
-        key: 'token',
-        data: token,
-      });
-      wx.redirectTo({
-        url: '/pages/me/me',
+      // 保存token
+      wx.setStorageSync('token', token);
+      wx.showToast({
+        title: '登录成功',
+        icon: 'success'
       });
     });
   }
