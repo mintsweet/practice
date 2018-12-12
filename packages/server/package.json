@@ -4,13 +4,14 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon app.js",
-    "test": "cross-env NODE_ENV=test mocha",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=html mocha"
+    "test": "cross-env NODE_ENV=test nyc mocha",
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "dependencies": {
     "koa": "^2.6.2"
   },
   "devDependencies": {
+    "codecov": "^3.1.0",
     "cross-env": "^5.2.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.8",

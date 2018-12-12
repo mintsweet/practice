@@ -1,0 +1,15 @@
+language: node_js
+
+node_js:
+  - 10
+
+cache: yarn
+
+env:
+  - NODE_ENV=test
+
+script:
+  - cd ./packages/server && yarn test
+
+after_success:
+  - yarn run coverage
