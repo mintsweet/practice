@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development nodemon app.js",
+    "test": "cross-env NODE_ENV=test mocha",
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=html mocha"
+  },
+  "dependencies": {
+    "koa": "^2.6.2"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.8",
+    "nyc": "^13.1.0",
+    "should": "^13.2.3",
+    "supertest": "^3.3.0"
+  }
+}
