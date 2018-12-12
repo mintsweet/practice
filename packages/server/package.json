@@ -8,6 +8,7 @@
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "dependencies": {
+    "gd-bmp": "^1.2.4",
     "koa": "^2.6.2",
     "koa-router": "^7.4.0",
     "log4js": "^3.0.6"
