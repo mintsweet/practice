@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Practice</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="keywords" content="practice,github">
+  <meta name="description" content="You never have seen practice.">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="shortcut icon" href="_media/favicon.ico">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <style>
+    nav.app-nav li ul {
+      min-width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">Loading...</div>
+  <script>
+    window.$docsify = {
+      alias: {
+        '/.*/_navbar.md': '/_navbar.md',
+      },
+      repo: 'mintsweet/practice',
+      auto2top: true,
+      loadNavbar: true,
+      loadSidebar: true,
+      mergeNavbar: true,
+      maxLevel: 4,
+      subMaxLevel: 2,
+      name: 'Practice',
+      search: {
+        noData: {
+          '/': '没有结果！',
+          '/en-us': 'No results!',
+        },
+        paths: 'auto',
+        placeholder: {
+          '/': '搜索',
+          '/en-us': 'Search',
+        }
+      },
+      plugins: [
+        function (hook, vm) {
+          hook.beforeEach(function (html) {
+            if (/githubusercontent\.com/.test(vm.route.file)) {
+              url = vm.route.file
+                .replace('raw.githubusercontent.com', 'github.com')
+                .replace(/\/master/, '/blob/master')
+            } else {
+              url = 'https://github.com/mintsweet/practice/blob/master/docs/' + vm.route.file
+            }
+            var editHtml = '[:memo: Edit Document](' + url + ')\n'
+
+            return editHtml + html;
+          });
+        }
+      ]
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
+</body>
+</html>

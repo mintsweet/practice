@@ -1,6 +1,6 @@
-<p align="center">
+<p id="logo" align="center">
   <a href="https://docs.mintsweet.cn">
-    <img width="200" src="./docs/_media/logo.svg" />
+    <img width="200" src="./_media/logo.svg" />
   </a>
 </p>
 
