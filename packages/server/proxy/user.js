@@ -15,6 +15,19 @@ module.exports = class User {
   }
 
   /**
+   * 根据ID查找用户
+   *
+   * @static
+   * @param {ObjectId} id
+   * @param {String} select
+   * @param {Object} option
+   * @returns
+   */
+  static getUserById(id, select, option) {
+    return UserModel.findById(id, select, option);
+  }
+
+  /**
    * 创建用户
    *
    * @static

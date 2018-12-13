@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const Plugin = require('./plugin');
 
 const { Schema } = mongoose;
 
@@ -40,6 +41,8 @@ const UserSchema = new Schema({
   // 注销账户 - 用户主动行为
   delete: { type: Boolean, default: false }
 });
+
+UserSchema.plugin(Plugin);
 
 UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ score: -1 });

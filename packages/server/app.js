@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const koaBody = require('koa-body');
+const koaJwt = require('koa-jwt');
 const config = require('./config');
 const router = require('./router');
 const logger = require('./utils/logger');
@@ -12,6 +13,10 @@ const app = module.exports = new Koa();
 // middleware
 app
   .use(koaBody())
+  .use(koaJwt({
+    secret: config.secret,
+    passthrough: true
+  }))
   .use(ErrorHandler.handleError);
 
 // router

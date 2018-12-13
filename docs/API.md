@@ -96,3 +96,30 @@ POST
 ```text
 Bearer <token>
 ```
+
+## 获取当前用户信息
+
+### 请求Url
+
+```bash
+/v1/user/info
+```
+
+### 前置条件
+
+*携带jwt*
+
+### 请求方式
+
+```bash
+GET
+```
+
+### 返回示例
+
+```json
+{
+  "id": 1,
+  "nickname": "青湛"
+}
+```

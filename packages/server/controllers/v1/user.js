@@ -87,6 +87,13 @@ class User {
 
     ctx.body = `Bearer ${token}`;
   }
+
+  // 当前用户信息
+  async getUserInfo(ctx) {
+    const { id } = ctx.state.user;
+    const user = await UserProxy.getUserById(id);
+    ctx.body = user;
+  }
 }
 
 module.exports = new User();
