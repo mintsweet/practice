@@ -69,3 +69,30 @@ POST
 | password |   Yes    | string | 数字、字母和特殊字符其中两种组成并且在6-18位之间 |
 | nickname |   Yes    | string | 4-8位字符                                        |
 
+
+## 登录
+
+### 请求Url
+
+```bash
+/v1/signin
+```
+
+### 请求方式
+
+```bash
+POST
+```
+
+### 参数类型：params
+
+| 参数     | 是否必选 | 类型   | 说明 |
+| :------- | :------: | :----- | :--- |
+| email    |   Yes    | string | 邮箱 |
+| password |    No    | string | 密码 |
+
+### 返回示例：
+
+```text
+Bearer <token>
+```

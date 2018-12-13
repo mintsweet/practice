@@ -11,7 +11,8 @@ routerV1
   .get('/', ctx => { ctx.body = 'Version_1 API'; })
   .get('/static/norms', StaticV1.getNorms) // 获取社区规范文档
   .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
-  .post('/signup', UserV1.signup); // 注册
+  .post('/signup', UserV1.signup) // 注册
+  .post('/signin', UserV1.signin); // 登录
 
 module.exports = {
   v1: routerV1.routes(),

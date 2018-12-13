@@ -1,5 +1,7 @@
-const UserProxy = require('../../proxy/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const UserProxy = require('../../proxy/user');
+const config = require('../../config');
 
 const SALT_WORK_FACTOR = 10;
 
@@ -47,6 +49,43 @@ class User {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const hash = await bcrypt.hash(password, salt);
     return hash;
+  }
+
+  // 登录
+  async signin(ctx) {
+    const { email, password } = ctx.request.body;
+
+    // 校验邮箱
+    if (!email || !/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(email)) {
+      ctx.throw(400, '邮箱格式错误');
+    }
+
+    const user = await UserProxy.getUserByQueryOne({ email });
+
+    // 判断用户是否存在
+    if (!user) {
+      ctx.throw(404, '尚未注册');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      ctx.throw(400, '密码错误');
+    }
+
+    // 返回JWT
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role
+      },
+      config.secret,
+      {
+        expiresIn: '1h'
+      }
+    );
+
+    ctx.body = `Bearer ${token}`;
   }
 }
 
