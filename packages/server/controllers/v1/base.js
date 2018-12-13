@@ -1,6 +1,10 @@
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
 const { qn } = require('../../config');
+
+// 密码加密位数
+const SALT_WORK_FACTOR = 10;
 
 // 方便集成测试的时候同时隐藏七牛 access_key 和 secret_key
 const QN_ACCESS_KEY = qn.ACCESS_KEY || process.env.QN_ACCESS_KEY;
@@ -10,6 +14,19 @@ module.exports = class Base {
   // 生成随机数
   _rand (min, max) {
     return Math.random() * (max - min + 1) + min | 0;
+  }
+
+  // 密码加密
+  async _encryption(password) {
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
+  }
+
+  // 密码比较
+  async _comparePass(pass, passTrue) {
+    const isMatch = await bcrypt.compare(pass, passTrue);
+    return isMatch;
   }
 
   // 七牛图片上传
