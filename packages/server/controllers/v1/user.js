@@ -1,13 +1,13 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UserProxy = require('../../proxy/user');
+const Base = require('./base');
 const config = require('../../config');
 
-const SALT_WORK_FACTOR = 10;
-
-class User {
+class User extends Base {
   constructor() {
+    super();
     this.signup = this.signup.bind(this);
+    this.signin = this.signin.bind(this);
   }
 
   // 注册
@@ -44,13 +44,6 @@ class User {
     ctx.body = '';
   }
 
-  // 密码加密
-  async _encryption(password) {
-    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-    const hash = await bcrypt.hash(password, salt);
-    return hash;
-  }
-
   // 登录
   async signin(ctx) {
     const { email, password } = ctx.request.body;
@@ -67,7 +60,7 @@ class User {
       ctx.throw(404, '尚未注册');
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await this._comparePass(password, user.password);
 
     if (!isMatch) {
       ctx.throw(400, '密码错误');
@@ -93,6 +86,20 @@ class User {
     const { id } = ctx.state.user;
     const user = await UserProxy.getUserById(id);
     ctx.body = user;
+  }
+
+  // 更新个人信息
+  async updateSetting(ctx) {
+    const { id } = ctx.state.user;
+    const { nickname } = ctx.request.body;
+
+    const user = await UserProxy.getUserByQueryOne({ nickname });
+    if (user) {
+      ctx.throw(409, '昵称已经注册过了');
+    }
+
+    await UserProxy.updateUserById(id, ctx.request.body);
+    ctx.body = '';
   }
 }
 

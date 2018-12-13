@@ -15,7 +15,8 @@ routerV1
   .post('/aider/upload_avatar', Auth.userRequired, AiderV1.uploadAvatar) // 头像上传
   .post('/signup', UserV1.signup) // 注册
   .post('/signin', UserV1.signin) // 登录
-  .get('/user/info', Auth.userRequired, UserV1.getUserInfo); // 获取当前用户信息
+  .get('/user/info', Auth.userRequired, UserV1.getUserInfo) // 获取当前用户信息
+  .put('/setting', Auth.userRequired, UserV1.updateSetting); // 更新个人信息
 
 const routerV2 = new Router({
   prefix: '/v2'
