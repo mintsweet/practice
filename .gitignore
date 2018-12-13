@@ -9,6 +9,7 @@ coverage.lcov
 # production
 dist
 cheese.log
+uploads/
 
 # misc
 .DS_Store

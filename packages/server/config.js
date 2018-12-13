@@ -8,4 +8,13 @@ module.exports = {
   },
 
   secret: 'practice', // 必改
+
+  // 七牛图片上传
+  qn: {
+    ACCESS_KEY: '',
+    SECRET_KEY: '',
+    BUCKET_NAME: 'image-mintsweet-cn',
+    DONAME: 'http://image.mintsweet.cn',
+    ZONE: 'Zone_z2',
+  },
 };

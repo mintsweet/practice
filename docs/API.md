@@ -43,6 +43,28 @@ GET
 }
 ```
 
+## 头像上传
+
+### 请求Url
+
+```bash
+/v1/aider/upload_avatar
+```
+
+### 请求方式
+
+```bash
+POST
+```
+
+### 返回示例
+
+```json
+{
+  "url": "..."
+}
+```
+
 ## 注册
 
 ### 请求Url
@@ -56,10 +78,6 @@ GET
 ```bash
 POST
 ```
-
-### 前置条件
-
-*需要注册的手机号首先要获取短信验证码*
 
 ### 参数类型：params
 
@@ -91,7 +109,7 @@ POST
 | email    |   Yes    | string | 邮箱 |
 | password |    No    | string | 密码 |
 
-### 返回示例：
+### 返回示例
 
 ```text
 Bearer <token>

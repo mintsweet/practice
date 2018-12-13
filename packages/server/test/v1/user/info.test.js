@@ -3,7 +3,7 @@ const request = require('supertest')(app);
 const should = require('should');
 const support = require('../../support');
 
-describe('test /v1/info', function() {
+describe('test /v1/user/info', function() {
   let mockUser;
 
   before(async function() {
@@ -16,7 +16,7 @@ describe('test /v1/info', function() {
 
   it('should / status 401 when the not signin', async function() {
     try {
-      const res = await request.get('/v1/info').expect(401);
+      const res = await request.get('/v1/user/info').expect(401);
 
       res.text.should.equal('尚未登录');
     } catch(err) {
@@ -31,7 +31,7 @@ describe('test /v1/info', function() {
         password: 'a123456'
       }).expect(200);
 
-      res = await request.get('/v1/info').set('Authorization', res.text).expect(200);
+      res = await request.get('/v1/user/info').set('Authorization', res.text).expect(200);
 
       res.body.should.have.property('id');
       res.body.id.should.equal(mockUser.id);

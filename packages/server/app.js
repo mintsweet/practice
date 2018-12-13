@@ -1,6 +1,7 @@
 const Koa = require('koa');
 const koaBody = require('koa-body');
 const koaJwt = require('koa-jwt');
+const path = require('path');
 const config = require('./config');
 const router = require('./router');
 const logger = require('./utils/logger');
@@ -12,7 +13,19 @@ const app = module.exports = new Koa();
 
 // middleware
 app
-  .use(koaBody())
+  .use(koaBody({
+    multipart: true,
+    formidable: {
+      uploadDir: `${__dirname}/uploads`,
+      keepExtensions: true,
+      multiples: false,
+      maxFieldsSize: 1024 * 1024 * 0.5, // 限制上传文件大小为 512kb
+      onFileBegin(name, file) {
+        const dir = path.dirname(file.path);
+        file.path = path.join(dir, file.name);
+      }
+    }
+  }))
   .use(koaJwt({
     secret: config.secret,
     passthrough: true
@@ -21,7 +34,8 @@ app
 
 // router
 app
-  .use(router.v1);
+  .use(router.v1)
+  .use(router.v2);
 
 // 404
 app.use(ctx => {
