@@ -3,15 +3,20 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "db-server": "bash ./utils/db-server.sh",
     "start": "cross-env NODE_ENV=development nodemon app.js",
-    "test": "cross-env NODE_ENV=test nyc mocha",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha",
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "gd-bmp": "^1.2.4",
     "koa": "^2.6.2",
+    "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
-    "log4js": "^3.0.6"
+    "log4js": "^3.0.6",
+    "moment": "^2.22.2",
+    "mongoose": "^5.3.16"
   },
   "devDependencies": {
     "codecov": "^3.1.0",

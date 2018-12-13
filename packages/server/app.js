@@ -1,13 +1,17 @@
 const Koa = require('koa');
+const koaBody = require('koa-body');
 const config = require('./config');
 const router = require('./router');
 const logger = require('./utils/logger');
 const ErrorHandler = require('./middlewares/error-handler');
 
+require('./db');
+
 const app = module.exports = new Koa();
 
 // middleware
 app
+  .use(koaBody())
   .use(ErrorHandler.handleError);
 
 // router
