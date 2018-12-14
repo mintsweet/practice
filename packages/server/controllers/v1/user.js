@@ -83,7 +83,7 @@ class User extends Base {
   }
 
   // 获取当前用户信息
-  async getUserInfo(ctx) {
+  async getCurrentUser(ctx) {
     const { id } = ctx.state.user;
     const user = await UserProxy.getUserById(id);
     ctx.body = user;
@@ -138,6 +138,19 @@ class User extends Base {
     const limit = parseInt(count);
     const users = await UserProxy.getUserByQuery({}, '', { limit, sort: '-score' });
     ctx.body = users;
+  }
+
+  // 根据ID获取用户信息
+  async getUserById(ctx) {
+    const { uid } = ctx.params;
+
+    const user = await UserProxy.getUserById(uid);
+
+    if (!user) {
+      ctx.throw(404, '用户不存在');
+    }
+
+    ctx.body = user.toObject({ virtuals: true });
   }
 }
 

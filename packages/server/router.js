@@ -15,10 +15,11 @@ routerV1
   .post('/aider/upload_avatar', Auth.userRequired, AiderV1.uploadAvatar) // 头像上传
   .post('/signup', UserV1.signup) // 注册
   .post('/signin', UserV1.signin) // 登录
-  .get('/user/info', Auth.userRequired, UserV1.getUserInfo) // 获取当前用户信息
+  .get('/info', Auth.userRequired, UserV1.getCurrentUser) // 获取当前用户信息
   .put('/setting', Auth.userRequired, UserV1.updateSetting) // 更新个人信息
   .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
-  .get('/users/top', UserV1.getUserTop); // 获取积分榜用户列表
+  .get('/users/top', UserV1.getUserTop) // 获取积分榜用户列表
+  .get('/user/:uid', UserV1.getUserById); // 根据ID获取用户信息
 
 const routerV2 = new Router({
   prefix: '/v2'

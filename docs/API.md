@@ -124,7 +124,7 @@ Bearer <token>
 ### 请求Url
 
 ```bash
-/v1/user/info
+/v1/info
 ```
 
 ### 前置条件
@@ -228,4 +228,33 @@ GET
   "id": 2,
   "nickname": "啦啦啦"
 }]
+```
+
+## 根据ID获取用户信息
+
+### 请求Url
+
+```bash
+/v1/user/:uid
+```
+
+### 请求方式
+
+```bash
+GET
+```
+
+### 参数类型：params
+
+| 参数 | 是否必选 | 类型   | 说明   |
+| :--- | :------: | :----- | :----- |
+| uid  |   Yes    | string | 用户ID |
+
+### 返回示例
+
+```json
+{
+  "id": 1,
+  "nickname": "青湛"
+}
 ```
