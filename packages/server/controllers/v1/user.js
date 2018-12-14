@@ -131,6 +131,14 @@ class User extends Base {
       ctx.throw(400, '旧密码错误');
     }
   }
+
+  // 获取积分榜用户列表
+  async getUserTop(ctx) {
+    const { count = 10 } = ctx.query;
+    const limit = parseInt(count);
+    const users = await UserProxy.getUserByQuery({}, '', { limit, sort: '-score' });
+    ctx.body = users;
+  }
 }
 
 module.exports = new User();

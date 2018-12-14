@@ -40,6 +40,19 @@ module.exports = class User {
   }
 
   /**
+   * 根据ID查找用户
+   *
+   * @static
+   * @param {ObjectId} id
+   * @param {String} select
+   * @param {Object} option
+   * @returns
+   */
+  static getUserById(id, select, option) {
+    return UserModel.findById(id, select, option);
+  }
+
+  /**
    * 根据条件查找用户一个
    *
    * @static
@@ -53,15 +66,15 @@ module.exports = class User {
   }
 
   /**
-   * 根据ID查找用户
+   * 根据条件查找用户
    *
    * @static
-   * @param {ObjectId} id
+   * @param {Object} query
    * @param {String} select
    * @param {Object} option
    * @returns
    */
-  static getUserById(id, select, option) {
-    return UserModel.findById(id, select, option);
+  static getUserByQuery(query, select, option) {
+    return UserModel.find(query, select, option);
   }
 };
