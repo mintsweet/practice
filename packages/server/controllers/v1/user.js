@@ -8,6 +8,7 @@ class User extends Base {
     super();
     this.signup = this.signup.bind(this);
     this.signin = this.signin.bind(this);
+    this.updatePass = this.updatePass.bind(this);
   }
 
   // 注册
@@ -81,7 +82,7 @@ class User extends Base {
     ctx.body = `Bearer ${token}`;
   }
 
-  // 当前用户信息
+  // 获取当前用户信息
   async getUserInfo(ctx) {
     const { id } = ctx.state.user;
     const user = await UserProxy.getUserById(id);
@@ -100,6 +101,35 @@ class User extends Base {
 
     await UserProxy.updateUserById(id, ctx.request.body);
     ctx.body = '';
+  }
+
+  // 修改密码
+  async updatePass(ctx) {
+    const { id } = ctx.state.user;
+    const { oldPass, newPass } = ctx.request.body;
+
+    try {
+      if (!oldPass) {
+        throw new Error('旧密码不能为空');
+      } else if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
+        throw new Error('新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+      }
+    } catch(err) {
+      ctx.throw(400, err.message);
+    }
+
+    const user = await UserProxy.getUserById(id);
+    const isMatch = await this._comparePass(oldPass, user.password);
+
+    if (isMatch) {
+      const bcryptPassword = await this._encryption(newPass);
+      // 更新用户密码
+      user.password = bcryptPassword;
+      await user.save();
+      ctx.body = '';
+    } else {
+      ctx.throw(400, '旧密码错误');
+    }
   }
 }
 

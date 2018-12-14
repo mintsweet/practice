@@ -172,3 +172,28 @@ PUT
 | avatar    |    No    | string | 用户头像             |
 | location  |    No    | string | 所在地               |
 | signature |    No    | string | 签名                 |
+
+## 修改密码
+
+### 请求Url
+
+```bash
+/v1/update_pass
+```
+
+### 前置条件
+
+*携带jwt*
+
+### 请求方式
+
+```bash
+PATCH
+```
+
+### 参数类型
+
+| 参数    | 是否必选 | 类型   | 说明                                               |
+| :------ | :------: | :----- | :------------------------------------------------- |
+| oldPass |   Yes    | string | 不为空                                             |
+| newPass |   Yes    | string | 新数字、字母和特殊字符其中两种组成并且在6-18位之间 |
