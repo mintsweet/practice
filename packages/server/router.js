@@ -3,6 +3,7 @@ const Auth = require('./middlewares/auth');
 const StaticV1 = require('./controllers/v1/static');
 const AiderV1 = require('./controllers/v1/aider');
 const UserV1 = require('./controllers/v1/user');
+const TopicV1 = require('./controllers/v1/topic');
 
 const routerV1 = new Router({
   prefix: '/v1'
@@ -19,7 +20,8 @@ routerV1
   .put('/setting', Auth.userRequired, UserV1.updateSetting) // 更新个人信息
   .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
   .get('/users/top', UserV1.getUserTop) // 获取积分榜用户列表
-  .get('/user/:uid', UserV1.getUserById); // 根据ID获取用户信息
+  .get('/user/:uid', UserV1.getUserById) // 根据ID获取用户信息
+  .post('/create', Auth.userRequired, TopicV1.createTopic); // 创建话题
 
 const routerV2 = new Router({
   prefix: '/v2'

@@ -258,3 +258,29 @@ GET
   "nickname": "青湛"
 }
 ```
+
+## 创建话题
+
+### 请求Url
+
+```bash
+/v1/create
+```
+
+### 请求方式
+
+```bash
+POST
+```
+
+### 前置条件
+
+*携带jwt*
+
+### 参数类型：params
+
+| 参数    | 是否必选 | 类型   | 说明     |
+| :------ | :------: | :----- | :------- |
+| tab     |   Yes    | string | 所属标签 |
+| title   |   Yes    | string | 话题标题 |
+| content |   Yes    | string | 话题内容 |
