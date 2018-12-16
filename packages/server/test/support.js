@@ -12,8 +12,16 @@ exports.deleteUser = function(email) {
   return UserProxy.deleteUserByQuery({ email });
 };
 
+exports.createTopic = function(author_id) {
+  return TopicProxy.create('ask', '这是一个测试标题', '这是测试内容', author_id);
+};
+
 exports.deleteTopic = function(id) {
   return TopicProxy.deleteById(id);
+};
+
+exports.createAction = function(type, author_id, target_id) {
+  return ActionProxy.create(type, author_id, target_id);
 };
 
 exports.deleteAction = function(author_id) {

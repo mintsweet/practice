@@ -34,7 +34,42 @@ class Topic {
     await author.save();
 
     // 创建行为
-    await ActionProxy.createAction('create', author.id, topic.id);
+    await ActionProxy.create('create', author.id, topic.id);
+
+    ctx.body = '';
+  }
+
+  // 删除话题
+  async deleteTopic(ctx) {
+    const { id } = ctx.state.user;
+    const { tid } = ctx.params;
+
+    const topic = await TopicProxy.getById(tid);
+
+    if (!topic) {
+      ctx.throw(404, '话题不存在');
+    }
+
+    if (!topic.author_id.equals(id)) {
+      ctx.throw(403, '不能删除别人的话题');
+    }
+
+    // 改变为删除状态
+    topic.delete = true;
+    await topic.save();
+
+    // 查询作者
+    const author = await UserProxy.getUserById(topic.author_id);
+
+    // 积分减去
+    author.score -= 1;
+    // 话题数量减少
+    author.topic_count -= 1;
+    // 更新用户信息
+    await author.save();
+
+    // 更新行为
+    await ActionProxy.update('create', author.id, topic.id);
 
     ctx.body = '';
   }

@@ -21,7 +21,8 @@ routerV1
   .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
   .get('/users/top', UserV1.getUserTop) // 获取积分榜用户列表
   .get('/user/:uid', UserV1.getUserById) // 根据ID获取用户信息
-  .post('/create', Auth.userRequired, TopicV1.createTopic); // 创建话题
+  .post('/create', Auth.userRequired, TopicV1.createTopic) // 创建话题
+  .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic); // 删除话题
 
 const routerV2 = new Router({
   prefix: '/v2'

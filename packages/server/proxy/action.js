@@ -10,7 +10,7 @@ module.exports = class Action {
    * @param {ObjectId} target_id
    * @returns
    */
-  static createAction(type, author_id, target_id) {
+  static create(type, author_id, target_id) {
     return ActionModel.create({ type, author_id, target_id });
   }
 
@@ -22,4 +22,19 @@ module.exports = class Action {
   static delete(query) {
     return ActionModel.deleteMany(query);
   }
+
+  /**
+   * 更新行为
+   *
+   * @static
+   * @param {String} type
+   * @param {ObjectId} author_id
+   * @param {ObjectId} target_id
+   */
+  static async update(type, author_id, target_id) {
+    const action = await ActionModel.findOne({ type, author_id, target_id });
+    action.is_un = !action.is_un;
+    await action.save();
+  }
+
 };

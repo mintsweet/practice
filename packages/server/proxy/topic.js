@@ -20,4 +20,14 @@ module.exports = class Topic {
   static async deleteById(id) {
     return TopicModel.deleteOne({ _id: id });
   }
+
+  /**
+   * 查询一篇话题
+   * 
+   * @static
+   * @parma {ObjectId} id
+   */
+  static async getById(id) {
+    return TopicModel.findById(id);
+  }
 };

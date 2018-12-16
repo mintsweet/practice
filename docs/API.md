@@ -284,3 +284,27 @@ POST
 | tab     |   Yes    | string | 所属标签 |
 | title   |   Yes    | string | 话题标题 |
 | content |   Yes    | string | 话题内容 |
+
+## 删除话题
+
+### 请求Url
+
+```bash
+/v1/topic/:tid/delete
+```
+
+### 请求方式
+
+```bash
+DELETE
+```
+
+### 前置条件
+
+*携带jwt，并且为当前用户所创建话题*
+
+### 参数类型：params
+
+| 参数 | 是否必选 | 类型   | 说明   |
+| :--- | :------: | :----- | :----- |
+| tid  |   Yes    | string | 话题ID |
