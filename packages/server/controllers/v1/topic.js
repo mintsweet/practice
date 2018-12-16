@@ -73,6 +73,36 @@ class Topic {
 
     ctx.body = '';
   }
+
+  // 编辑话题
+  async updateTopic(ctx) {
+    const { id } = ctx.state.user;
+    const { tid } = ctx.params;
+
+    const topic = await TopicProxy.getById(tid);
+
+    if (!topic) {
+      ctx.throw(404, '话题不存在');
+    }
+
+    if (!topic.author_id.equals(id)) {
+      ctx.throw(403, '不能编辑别人的话题');
+    }
+
+    // 更新内容
+    const {
+      tab = topic.tab,
+      title = topic.title,
+      content = topic.content
+    } = ctx.request.body;
+
+    topic.tab = tab;
+    topic.title = title;
+    topic.content = content;
+    await topic.save();
+
+    ctx.body = '';
+  }
 }
 
 module.exports = new Topic();
