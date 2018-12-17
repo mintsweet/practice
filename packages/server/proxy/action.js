@@ -5,36 +5,47 @@ module.exports = class Action {
    * 创建行为
    *
    * @static
-   * @param {String} type
-   * @param {ObjectId} author_id
-   * @param {ObjectId} target_id
+   * @param {Object} action
    * @returns
    */
-  static create(type, author_id, target_id) {
-    return ActionModel.create({ type, author_id, target_id });
+  static create(action) {
+    return ActionModel.create(action);
   }
 
   /**
    * 删除行为
+   *
    * @static
-   * @param {Object} query
+   * @param {Object} conditions
+   * @returns
    */
-  static delete(query) {
-    return ActionModel.deleteMany(query);
+  static delete(conditions) {
+    return ActionModel.deleteMany(conditions);
   }
 
   /**
    * 更新行为
    *
    * @static
-   * @param {String} type
-   * @param {ObjectId} author_id
-   * @param {ObjectId} target_id
+   * @param {Object} conditions
+   * @param {Object} doc
+   * @param {Object} options
+   * @returns
    */
-  static async update(type, author_id, target_id) {
-    const action = await ActionModel.findOne({ type, author_id, target_id });
-    action.is_un = !action.is_un;
-    await action.save();
+  static update(conditions, doc, options) {
+    return ActionModel.updateOne(conditions, doc, options);
   }
 
+  /**
+   * 查找行为
+   *
+   * @static
+   * @param {Object} query
+   * @param {Object|String} select
+   * @param {Object} options
+   * @returns
+   */
+  static getOne(query, select, options) {
+    return ActionModel.findOne(query, select, options);
+  }
 };

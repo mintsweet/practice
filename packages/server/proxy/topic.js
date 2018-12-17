@@ -2,33 +2,50 @@ const TopicModel = require('../models/topic');
 
 module.exports = class Topic {
   /**
-   * 创建一篇话题
+   * 创建话题
    *
    * @static
-   * @param {Object} params
+   * @param {Object} topic
+   * @returns
    */
-  static async create(tab, title, content, author_id) {
-    return TopicModel.create({ tab, title, content, author_id });
+  static async create(topic) {
+    return TopicModel.create(topic);
   }
 
   /**
-   * 删除一篇话题
+   * 根据条件删除话题
    *
    * @static
    * @param {Object} conditions
+   * @returns
    */
-  static async deleteOne(conditions) {
-    return TopicModel.deleteOne(conditions);
+  static async delete(conditions) {
+    return TopicModel.deleteMany(conditions);
   }
 
   /**
-   * 查询一篇话题
+   * 更新话题
+   *
+   * @param {Object} conditions
+   * @param {Object} doc
+   * @param {Object} options
+   * @returns
+   */
+  static update(conditions, doc, options) {
+    return TopicModel.updateOne(conditions, doc, options);
+  }
+
+  /**
+   * 根据ID查找话题
    *
    * @static
    * @param {ObjectId} id
+   * @param {Object|String} select
+   * @param {Object} options
+   * @returns
    */
-  static async getById(id) {
-    return TopicModel.findById(id);
+  static async getById(id, select, options) {
+    return TopicModel.findById(id, select, options);
   }
 
   /**

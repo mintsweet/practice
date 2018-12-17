@@ -29,18 +29,22 @@ class User extends Base {
 
     let existUser;
 
-    existUser = await UserProxy.getUserByQueryOne({ email });
+    existUser = await UserProxy.getOne({ email });
     if (existUser) {
       ctx.throw(409, '邮箱已经注册过了');
     }
 
-    existUser = await UserProxy.getUserByQueryOne({ nickname });
+    existUser = await UserProxy.getOne({ nickname });
     if (existUser) {
       ctx.throw(409, '昵称已经注册过了');
     }
 
     const bcryptPassword = await this._encryption(password);
-    await UserProxy.createUser(email, bcryptPassword, nickname);
+    await UserProxy.create({
+      email,
+      password: bcryptPassword,
+      nickname
+    });
 
     ctx.body = '';
   }
@@ -54,7 +58,7 @@ class User extends Base {
       ctx.throw(400, '邮箱格式错误');
     }
 
-    const user = await UserProxy.getUserByQueryOne({ email });
+    const user = await UserProxy.getOne({ email });
 
     // 判断用户是否存在
     if (!user) {
@@ -85,7 +89,7 @@ class User extends Base {
   // 获取当前用户信息
   async getCurrentUser(ctx) {
     const { id } = ctx.state.user;
-    const user = await UserProxy.getUserById(id);
+    const user = await UserProxy.getById(id);
     ctx.body = user;
   }
 
@@ -94,12 +98,12 @@ class User extends Base {
     const { id } = ctx.state.user;
     const { nickname } = ctx.request.body;
 
-    const user = await UserProxy.getUserByQueryOne({ nickname });
+    const user = await UserProxy.getOne({ nickname });
     if (user) {
       ctx.throw(409, '昵称已经注册过了');
     }
 
-    await UserProxy.updateUserById(id, ctx.request.body);
+    await UserProxy.update({ id }, ctx.request.body);
     ctx.body = '';
   }
 
@@ -118,7 +122,7 @@ class User extends Base {
       ctx.throw(400, err.message);
     }
 
-    const user = await UserProxy.getUserById(id);
+    const user = await UserProxy.getById(id);
     const isMatch = await this._comparePass(oldPass, user.password);
 
     if (isMatch) {
@@ -136,7 +140,7 @@ class User extends Base {
   async getUserTop(ctx) {
     const { count = 10 } = ctx.query;
     const limit = parseInt(count);
-    const users = await UserProxy.getUserByQuery({}, '', { limit, sort: '-score' });
+    const users = await UserProxy.get({}, '', { limit, sort: '-score' });
     ctx.body = users;
   }
 
@@ -144,7 +148,7 @@ class User extends Base {
   async getUserById(ctx) {
     const { uid } = ctx.params;
 
-    const user = await UserProxy.getUserById(uid);
+    const user = await UserProxy.getById(uid);
 
     if (!user) {
       ctx.throw(404, '用户不存在');

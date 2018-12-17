@@ -5,38 +5,35 @@ module.exports = class User {
    * 创建用户
    *
    * @static
-   * @param {String} email
-   * @param {String} password
-   * @param {String} nickname
-   * @param {Object} restProps
+   * @param {Object} user
    * @returns
    */
-  static createUser(email, password, nickname, restProps) {
-    return UserModel.create({ email, password, nickname, ...restProps });
+  static create(user) {
+    return UserModel.create(user);
   }
 
   /**
    * 根据条件删除用户
    *
    * @static
-   * @param {Object} query
+   * @param {Object} conditions
    * @returns
    */
-  static deleteUserByQuery(query) {
-    return UserModel.deleteMany(query);
+  static delete(conditions) {
+    return UserModel.deleteMany(conditions);
   }
 
   /**
-   * 根据ID更新用户
+   * 更新用户
    *
    * @static
-   * @param {ObjectId} id
-   * @param {Object} update
+   * @param {Object} conditions
+   * @param {Object} doc
    * @param {Object} options
    * @returns
    */
-  static updateUserById(id, update, options) {
-    return UserModel.updateOne({ _id: id }, update, options);
+  static update(conditions, doc, options) {
+    return UserModel.updateOne(conditions, doc, options);
   }
 
   /**
@@ -44,12 +41,12 @@ module.exports = class User {
    *
    * @static
    * @param {ObjectId} id
-   * @param {String} select
-   * @param {Object} option
+   * @param {Object|String} select
+   * @param {Object} options
    * @returns
    */
-  static getUserById(id, select, option) {
-    return UserModel.findById(id, select, option);
+  static getById(id, select, options) {
+    return UserModel.findById(id, select, options);
   }
 
   /**
@@ -57,12 +54,12 @@ module.exports = class User {
    *
    * @static
    * @param {Object} query
-   * @param {String} select
-   * @param {Object} option
+   * @param {Object|String} select
+   * @param {Object} options
    * @returns
    */
-  static getUserByQueryOne(query, select, option) {
-    return UserModel.findOne(query, select, option);
+  static getOne(query, select, options) {
+    return UserModel.findOne(query, select, options);
   }
 
   /**
@@ -71,10 +68,10 @@ module.exports = class User {
    * @static
    * @param {Object} query
    * @param {String} select
-   * @param {Object} option
+   * @param {Object} options
    * @returns
    */
-  static getUserByQuery(query, select, option) {
-    return UserModel.find(query, select, option);
+  static get(query, select, options) {
+    return UserModel.find(query, select, options);
   }
 };

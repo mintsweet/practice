@@ -22,10 +22,15 @@ class Topic {
     }
 
     // 创建话题
-    const topic = await TopicProxy.create(tab, title, content, id);
+    const topic = await TopicProxy.create({
+      tab,
+      title,
+      content,
+      author_id: id
+    });
 
     // 查询作者
-    const author = await UserProxy.getUserById(id);
+    const author = await UserProxy.getById(id);
 
     // 积分累计
     author.score += 1;
@@ -35,7 +40,11 @@ class Topic {
     await author.save();
 
     // 创建行为
-    await ActionProxy.create('create', author.id, topic.id);
+    await ActionProxy.create({
+      type: 'create',
+      author_id: author.id,
+      target_id: topic.id
+    });
 
     ctx.body = '';
   }
@@ -60,7 +69,7 @@ class Topic {
     await topic.save();
 
     // 查询作者
-    const author = await UserProxy.getUserById(topic.author_id);
+    const author = await UserProxy.getById(topic.author_id);
 
     // 积分减去
     author.score -= 1;
@@ -70,7 +79,18 @@ class Topic {
     await author.save();
 
     // 更新行为
-    await ActionProxy.update('create', author.id, topic.id);
+    const conditions = {
+      type: 'create',
+      author_id: author.id,
+      target_id: topic.id
+    };
+
+    const action = await ActionProxy.getOne(conditions);
+
+    await ActionProxy.update(conditions, {
+      ...action.toObject(),
+      is_un: true
+    });
 
     ctx.body = '';
   }
@@ -97,10 +117,12 @@ class Topic {
       content = topic.content
     } = ctx.request.body;
 
-    topic.tab = tab;
-    topic.title = title;
-    topic.content = content;
-    await topic.save();
+    await TopicProxy.update({ id: tid }, {
+      ...topic.toObject(),
+      tab,
+      title,
+      content
+    });
 
     ctx.body = '';
   }
@@ -111,13 +133,16 @@ class Topic {
     const page = parseInt(ctx.query.page) || 1;
     const size = parseInt(ctx.query.size) || 10;
 
-    const query = {
+    let query = {
       lock: false,
       delete: false
     };
 
     if (!tab || tab === 'all') {
-      delete query.tab;
+      query = {
+        lock: false,
+        delete: false
+      };
     } else if (tab === 'good') {
       query.good = true;
     } else {
@@ -135,13 +160,13 @@ class Topic {
 
     const promiseAuthor = await Promise.all(topics.map(item => {
       return new Promise(resolve => {
-        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+        resolve(UserProxy.getById(item.author_id, 'id nickname avatar'));
       });
     }));
 
     const promiseLastReply = await Promise.all(topics.map(item => {
       return new Promise(resolve => {
-        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+        resolve(UserProxy.getById(item.last_reply, 'id nickname avatar'));
       });
     }));
 
@@ -190,13 +215,13 @@ class Topic {
 
     const promiseAuthor = await Promise.all(topics.map(item => {
       return new Promise(resolve => {
-        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+        resolve(UserProxy.getById(item.author_id, 'id nickname avatar'));
       });
     }));
 
     const promiseLastReply = await Promise.all(topics.map(item => {
       return new Promise(resolve => {
-        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+        resolve(UserProxy.getById(item.last_reply, 'id nickname avatar'));
       });
     }));
 
