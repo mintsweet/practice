@@ -25,7 +25,8 @@ routerV1
   .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic) // 删除话题
   .put('/topic/:tid/update', Auth.userRequired, TopicV1.updateTopic) // 编辑话题
   .get('/topics/list', TopicV1.getTopicList) // 获取话题列表
-  .get('/topics/search', TopicV1.searchTopic); // 搜索话题列表
+  .get('/topics/search', TopicV1.searchTopic) // 搜索话题列表
+  .get('/topics/no_reply', TopicV1.getNoReplyTopic); // 获取无人回复的话题
 
 const routerV2 = new Router({
   prefix: '/v2'

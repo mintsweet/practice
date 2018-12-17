@@ -244,6 +244,26 @@ class Topic {
       size
     };
   }
+
+  // 获取无人回复话题
+  async getNoReplyTopic(ctx) {
+    const count = parseInt(ctx.query.count) || 10;
+
+    const query = {
+      lock: false,
+      delete: false,
+      reply_count: 0
+    };
+
+    const options = {
+      limit: count,
+      sort: '-top -good'
+    };
+
+    const topics = await TopicProxy.get(query, 'id title', options);
+
+    ctx.body = topics;
+  }
 }
 
 module.exports = new Topic();
