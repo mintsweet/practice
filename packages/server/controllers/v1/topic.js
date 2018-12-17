@@ -167,6 +167,58 @@ class Topic {
     };
   }
 
+  // 搜索话题
+  async searchTopic(ctx) {
+    const title = ctx.query.title || '';
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
+
+    const query = {
+      title: { $regex: title },
+      lock: false,
+      delete: false
+    };
+
+    const option = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: '-top -last_reply_at'
+    };
+
+    const count = await TopicProxy.count(query);
+    const topics = await TopicProxy.get(query, '-lock -delete', option);
+
+    const promiseAuthor = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    const promiseLastReply = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+      });
+    }));
+
+    const list = topics.map((item, i) => {
+      return {
+        ...item.toObject({
+          virtuals: true
+        }),
+        author: promiseAuthor[i],
+        last_reply_author: promiseLastReply[i],
+        last_reply_at_ago: item.last_reply_at_ago()
+      };
+    });
+
+    ctx.body = {
+      topics: list,
+      currentPage: page,
+      total: count,
+      totalPage: Math.ceil(count / size),
+      size
+    };
+  }
 }
 
 module.exports = new Topic();

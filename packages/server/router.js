@@ -24,7 +24,8 @@ routerV1
   .post('/create', Auth.userRequired, TopicV1.createTopic) // 创建话题
   .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic) // 删除话题
   .put('/topic/:tid/update', Auth.userRequired, TopicV1.updateTopic) // 编辑话题
-  .get('/topics/list', TopicV1.getTopicList); // 获取话题列表
+  .get('/topics/list', TopicV1.getTopicList) // 获取话题列表
+  .get('/topics/search', TopicV1.searchTopic); // 搜索话题列表
 
 const routerV2 = new Router({
   prefix: '/v2'
