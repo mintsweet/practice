@@ -18,7 +18,7 @@ describe('test /v1/topic/:tid/delete', function() {
 
   after(async function() {
     await support.deleteAction(mockUser.id);
-    await support.deleteTopic(mockUser.id);
+    await support.deleteTopic({ _id: mockTopic.id });
     await support.deleteUser(mockUser.email);
     await support.deleteUser(mockUser2.email);
   });

@@ -12,7 +12,7 @@ describe('test /v1/create', function() {
 
   after(async function() {
     await support.deleteAction(mockUser.id);
-    await support.deleteTopic(mockUser.id);
+    await support.deleteTopic({ author_id: mockUser.id });
     await support.deleteUser(mockUser.email);
   });
 
@@ -91,11 +91,15 @@ describe('test /v1/create', function() {
         password: 'a123456'
       }).expect(200);
 
-      await request.post('/v1/create').send({
-        tab: 'ask',
-        title: '测试标题',
-        content: '# 哈哈哈哈哈测试内容'
-      }).set('Authorization', res.text).expect(200);
+      await request
+        .post('/v1/create')
+        .send({
+          tab: 'ask',
+          title: '测试标题',
+          content: '# 哈哈哈哈哈测试内容'
+        })
+        .set('Authorization', res.text)
+        .expect(200);
     } catch(err) {
       should.ifError(err.message);
     }

@@ -334,3 +334,40 @@ PUT
 | tab     |    NO    | string | 所属标签 |
 | title   |    NO    | string | 话题标题 |
 | content |    NO    | string | 话题内容 |
+
+## 获取话题列表
+
+### 请求Url
+
+```bash
+/v1/topics/list
+```
+
+### 请求方式
+
+```bash
+GET
+```
+
+### 参数类型：query
+
+| 参数 | 是否必选 | 类型   | 说明     |
+| :--- | :------: | :----- | :------- |
+| tab  |    No    | string | 所属标签 |
+| page |    No    | string | 当前页数 |
+| size |    No    | string | 每页个数 |
+
+### 返回示例
+
+```json
+[
+  {
+    "id": 1,
+    "title": "test title"
+  },
+  {
+    "id": 2,
+    "title": "test title 2"
+  }
+]
+```

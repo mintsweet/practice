@@ -15,7 +15,11 @@ describe('test /v1/aider/upload_avatar', function() {
 
   after(async function() {
     await support.deleteUser(mockUser.email);
-    await Base._deleteImgByQn(path.basename(fileName.text));
+    try {
+      await Base._deleteImgByQn(path.basename(fileName.text));
+    } catch(err) {
+      console.log(err);
+    }
   });
 
   it('should / status 401 when the user not signin', async function() {

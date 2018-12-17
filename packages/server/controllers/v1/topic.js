@@ -1,6 +1,7 @@
 const TopicProxy = require('../../proxy/topic');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
+const config = require('../../config');
 
 class Topic {
   // 创建话题
@@ -103,6 +104,69 @@ class Topic {
 
     ctx.body = '';
   }
+
+  // 获取列表
+  async getTopicList(ctx) {
+    const tab = ctx.query.tab || 'all';
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
+
+    const query = {
+      lock: false,
+      delete: false
+    };
+
+    if (!tab || tab === 'all') {
+      delete query.tab;
+    } else if (tab === 'good') {
+      query.good = true;
+    } else {
+      query.tab = tab;
+    }
+
+    const options = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: '-top -last_reply_at'
+    };
+
+    const count = await TopicProxy.count(query);
+    const topics = await TopicProxy.get(query, '-lock -delete', options);
+
+    const promiseAuthor = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    const promiseLastReply = await Promise.all(topics.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getUserById(item.last_reply, 'id nickname avatar'));
+      });
+    }));
+
+    const list = topics.map((item, i) => {
+      return {
+        ...item.toObject({
+          virtuals: true
+        }),
+        author: promiseAuthor[i],
+        last_reply_author: promiseLastReply[i],
+        last_reply_at_ago: item.last_reply_at_ago()
+      };
+    });
+
+    ctx.body = {
+      topics: list,
+      currentPage: page,
+      total: count,
+      totalPage: Math.ceil(count / size),
+      currentTab: tab,
+      tabs: config.tabs,
+      size
+    };
+  }
+
 }
 
 module.exports = new Topic();

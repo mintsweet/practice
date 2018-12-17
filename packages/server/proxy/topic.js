@@ -13,21 +13,43 @@ module.exports = class Topic {
 
   /**
    * 删除一篇话题
-   * 
+   *
    * @static
-   * @parma {ObjectId} id
+   * @param {Object} conditions
    */
-  static async deleteById(id) {
-    return TopicModel.deleteOne({ _id: id });
+  static async deleteOne(conditions) {
+    return TopicModel.deleteOne(conditions);
   }
 
   /**
    * 查询一篇话题
-   * 
+   *
    * @static
-   * @parma {ObjectId} id
+   * @param {ObjectId} id
    */
   static async getById(id) {
     return TopicModel.findById(id);
+  }
+
+  /**
+   * 查询话题列表
+   *
+   * @static
+   * @param {Object} query
+   * @param {Object|String} select
+   * @param {Object} options
+   */
+  static async get(query, select, options) {
+    return TopicModel.find(query, select, options);
+  }
+
+  /**
+   * 根据条件统计话题
+   *
+   * @static
+   * @param {Object} filter
+   */
+  static async count(filter) {
+    return TopicModel.countDocuments(filter);
   }
 };
