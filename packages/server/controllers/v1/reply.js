@@ -83,6 +83,33 @@ class Reply {
 
     ctx.body = '';
   }
+
+  // 编辑回复
+  async updateReply(ctx) {
+    const { id } = ctx.state.user;
+    const { rid } = ctx.params;
+
+    const reply = await ReplyProxy.getById(rid);
+
+    if (!reply) {
+      ctx.throw(404, '回复不存在');
+    }
+
+    if (!reply.author_id.equals(id)) {
+      ctx.throw(403, '不能编辑别人的评论');
+    }
+
+    const { content } = ctx.request.body;
+
+    if (!content) {
+      ctx.throw(400, '回复内容不能为空');
+    }
+
+    reply.content = content;
+    await reply.save();
+
+    ctx.body = '';
+  }
 }
 
 module.exports = new Reply();
