@@ -30,7 +30,8 @@ routerV1
   .get('/topics/no_reply', TopicV1.getNoReplyTopic) // 获取无人回复的话题
   .post('/topic/:tid/reply', Auth.userRequired, ReplyV1.createReply) // 创建回复
   .delete('/reply/:rid/delete', Auth.userRequired, ReplyV1.deleteReply) // 删除回复
-  .put('/reply/:rid/update', Auth.userRequired, ReplyV1.updateReply); // 编辑回复
+  .put('/reply/:rid/update', Auth.userRequired, ReplyV1.updateReply) // 编辑回复
+  .patch('/reply/:rid/up_or_down', Auth.userRequired, ReplyV1.upOrDownReply); // 回复点赞或者取消点赞
 
 const routerV2 = new Router({
   prefix: '/v2'

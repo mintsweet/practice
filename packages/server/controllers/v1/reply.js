@@ -110,6 +110,45 @@ class Reply {
 
     ctx.body = '';
   }
+
+  // 回复点赞或者取消点赞
+  async upOrDownReply(ctx) {
+    const { id } = ctx.state.user;
+    const { rid } = ctx.params;
+
+    const reply = await ReplyProxy.getById(rid);
+
+    if (!reply) {
+      ctx.throw(404, '回复不存在');
+    }
+
+    if (reply.author_id.equals(id)) {
+      ctx.throw(403, '不能给自己点赞哟');
+    }
+
+    let action;
+
+    const upIndex = reply.ups.indexOf(id);
+
+    if (upIndex === -1) {
+      reply.ups.push(id);
+      action = 'up';
+      // 发送提醒
+      await NoticeProxy.create({
+        type: 'up',
+        author_id: id,
+        target_id: reply.author_id,
+        reply_id: reply.id
+      });
+    } else {
+      reply.ups.splice(upIndex, 1);
+      action = 'down';
+    }
+
+    await reply.save();
+
+    ctx.body = action;
+  }
 }
 
 module.exports = new Reply();
