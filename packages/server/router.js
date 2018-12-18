@@ -4,6 +4,7 @@ const StaticV1 = require('./controllers/v1/static');
 const AiderV1 = require('./controllers/v1/aider');
 const UserV1 = require('./controllers/v1/user');
 const TopicV1 = require('./controllers/v1/topic');
+const ReplyV1 = require('./controllers/v1/reply');
 
 const routerV1 = new Router({
   prefix: '/v1'
@@ -26,7 +27,8 @@ routerV1
   .put('/topic/:tid/update', Auth.userRequired, TopicV1.updateTopic) // 编辑话题
   .get('/topics/list', TopicV1.getTopicList) // 获取话题列表
   .get('/topics/search', TopicV1.searchTopic) // 搜索话题列表
-  .get('/topics/no_reply', TopicV1.getNoReplyTopic); // 获取无人回复的话题
+  .get('/topics/no_reply', TopicV1.getNoReplyTopic) // 获取无人回复的话题
+  .post('/topic/:tid/reply', Auth.userRequired, ReplyV1.createReply); // 创建回复
 
 const routerV2 = new Router({
   prefix: '/v2'

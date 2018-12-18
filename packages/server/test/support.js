@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const UserProxy = require('../proxy/user');
 const TopicProxy = require('../proxy/topic');
+const ReplyProxy = require('../proxy/reply');
+const NoticeProxy = require('../proxy/notice');
 const ActionProxy = require('../proxy/action');
 
 exports.createUser = function(email, nickname, other = {}) {
@@ -39,4 +41,24 @@ exports.createAction = function(type, author_id, target_id) {
 
 exports.deleteAction = function(author_id) {
   return ActionProxy.delete({ id: author_id });
+};
+
+exports.createReply = function(author_id, topic_id) {
+  return ReplyProxy.create({
+    author_id,
+    topic_id,
+    content: '# 回复哈哈哈哈'
+  });
+};
+
+exports.deleteReply = function(topic_id) {
+  return ReplyProxy.delete({
+    topic_id
+  });
+};
+
+exports.deleteNotice = function(target_id) {
+  return NoticeProxy.delete({
+    target_id
+  });
 };
