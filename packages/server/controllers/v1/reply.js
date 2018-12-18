@@ -56,6 +56,33 @@ class Reply {
 
     ctx.body = '';
   }
+
+  // 删除回复
+  async deleteReply(ctx) {
+    const { id } = ctx.state.user;
+    const { rid } = ctx.params;
+
+    const reply = await ReplyProxy.getById(rid);
+
+    if (!reply) {
+      ctx.throw(404, '回复不存在');
+    }
+
+    if (!reply.author_id.equals(id)) {
+      ctx.throw(403, '不能删除别人的回复');
+    }
+
+    // 修改话题回复数
+    const topic = await TopicProxy.getById(reply.topic_id);
+
+    topic.reply_count -= 1;
+    await topic.save();
+
+    // 删除回复
+    await ReplyProxy.deleteById(rid);
+
+    ctx.body = '';
+  }
 }
 
 module.exports = new Reply();

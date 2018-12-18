@@ -40,7 +40,7 @@ exports.createAction = function(type, author_id, target_id) {
 };
 
 exports.deleteAction = function(author_id) {
-  return ActionProxy.delete({ id: author_id });
+  return ActionProxy.delete({ author_id });
 };
 
 exports.createReply = function(author_id, topic_id) {
