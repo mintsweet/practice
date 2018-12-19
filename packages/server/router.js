@@ -33,7 +33,8 @@ routerV1
   .delete('/reply/:rid/delete', Auth.userRequired, ReplyV1.deleteReply) // 删除回复
   .put('/reply/:rid/update', Auth.userRequired, ReplyV1.updateReply) // 编辑回复
   .patch('/reply/:rid/up_or_down', Auth.userRequired, ReplyV1.upOrDownReply) // 回复点赞或者取消点赞
-  .get('/notice/user', Auth.userRequired, NoticeV1.getUserNotice); // 获取用户消息
+  .get('/notice/user', Auth.userRequired, NoticeV1.getUserNotice) // 获取用户消息
+  .get('/notice/system', Auth.userRequired, NoticeV1.getSystemNotice); // 获取系统消息
 
 const routerV2 = new Router({
   prefix: '/v2'

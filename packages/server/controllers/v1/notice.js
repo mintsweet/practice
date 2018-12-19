@@ -6,6 +6,7 @@ const ReplyProxy = require('../../proxy/reply');
 class Notice {
   constructor() {
     this.getUserNotice = this.getUserNotice.bind(this);
+    this.getSystemNotice = this.getSystemNotice.bind(this);
   }
 
   // 转化消息格式
@@ -71,6 +72,24 @@ class Notice {
         resolve(this.normalNotice(item.toObject()));
       });
     }));
+
+    ctx.body = data;
+  }
+
+  // 获取系统消息
+  async getSystemNotice(ctx) {
+    const { id } = ctx.state.user;
+
+    const query = {
+      target_id: id,
+      type: 'system'
+    };
+
+    const notices = await NoticeProxy.get(query);
+
+    const data = notices.map(item => {
+      return this.normalNotice(item.toObject());
+    });
 
     ctx.body = data;
   }
