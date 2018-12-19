@@ -21,4 +21,16 @@ module.exports = class Notice {
   static delete(conditions) {
     return NoticeModel.deleteMany(conditions);
   }
+
+  /**
+   * 查询提醒
+   *
+   * @param {Object} query
+   * @param {Object} select
+   * @param {Object} options
+   * @returns
+   */
+  static get(query, select, options) {
+    return NoticeModel.find(query, select, options);
+  }
 };

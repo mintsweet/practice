@@ -57,6 +57,14 @@ exports.deleteReply = function(topic_id) {
   });
 };
 
+exports.createNotice = function(type, target_id, restProps) {
+  return NoticeProxy.create({
+    type,
+    target_id,
+    ...restProps
+  });
+};
+
 exports.deleteNotice = function(target_id) {
   return NoticeProxy.delete({
     target_id

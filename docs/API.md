@@ -539,3 +539,34 @@ PATCH
 ```
 down or up
 ```
+
+## 获取用户消息
+
+### 请求Url
+
+```bash
+/v1/notice/user
+```
+
+### 请求方式
+
+```bash
+GET
+```
+
+### 前置条件
+
+*携带jwt*
+
+
+### 返回示例
+
+```json
+[
+  {
+    "id": 1,
+    "type": "reply",
+    "content": "谁谁谁回复了你"
+  }
+]
+```

@@ -5,6 +5,7 @@ const AiderV1 = require('./controllers/v1/aider');
 const UserV1 = require('./controllers/v1/user');
 const TopicV1 = require('./controllers/v1/topic');
 const ReplyV1 = require('./controllers/v1/reply');
+const NoticeV1 = require('./controllers/v1/notice');
 
 const routerV1 = new Router({
   prefix: '/v1'
@@ -31,7 +32,8 @@ routerV1
   .post('/topic/:tid/reply', Auth.userRequired, ReplyV1.createReply) // 创建回复
   .delete('/reply/:rid/delete', Auth.userRequired, ReplyV1.deleteReply) // 删除回复
   .put('/reply/:rid/update', Auth.userRequired, ReplyV1.updateReply) // 编辑回复
-  .patch('/reply/:rid/up_or_down', Auth.userRequired, ReplyV1.upOrDownReply); // 回复点赞或者取消点赞
+  .patch('/reply/:rid/up_or_down', Auth.userRequired, ReplyV1.upOrDownReply) // 回复点赞或者取消点赞
+  .get('/notice/user', Auth.userRequired, NoticeV1.getUserNotice); // 获取用户消息
 
 const routerV2 = new Router({
   prefix: '/v2'
