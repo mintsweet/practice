@@ -384,6 +384,62 @@ class Topic {
 
     ctx.body = action.toObject({ virtuals: true }).actualType;
   }
+
+  // 收藏或者取消收藏话题
+  async collectOrUnCollect(ctx) {
+    const { id } = ctx.state.user;
+    const { tid } = ctx.params;
+
+    const topic = await TopicProxy.getById(tid);
+
+    if (!topic) {
+      ctx.throw(404, '话题不存在');
+    }
+
+    if (topic.author_id.equals(id)) {
+      ctx.throw(403, '不能收藏自己的话题哟');
+    }
+
+    const author = await UserProxy.getById(topic.author_id);
+
+    const actionParam = {
+      type: 'collect',
+      author_id: id,
+      target_id: topic.id
+    };
+
+    let action;
+    action = await ActionProxy.getOne(actionParam);
+
+    if (action) {
+      action.is_un = !action.is_un;
+      await action.save();
+    } else {
+      action = await ActionProxy.create(actionParam);
+    }
+
+    if (action.is_un) {
+      topic.collect_count -= 1;
+      topic.save();
+      author.collect_count -= 1;
+      author.score -= 3;
+      author.save();
+    } else {
+      topic.collect_count += 1;
+      topic.save();
+      author.collect_count += 1;
+      author.score += 3;
+      await author.save();
+      await NoticeProxy.create({
+        type: 'collect',
+        author_id: id,
+        target_id: topic.author_id,
+        topic_id: topic.id
+      });
+    }
+
+    ctx.body = action.toObject({ virtuals: true }).actualType;
+  }
 }
 
 module.exports = new Topic();
