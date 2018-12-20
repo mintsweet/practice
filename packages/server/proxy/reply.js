@@ -44,4 +44,16 @@ module.exports = class Reply {
   static getById(id) {
     return ReplyModel.findById(id);
   }
+
+  /**
+   * 查询回复
+   *
+   * @param {Object} query
+   * @param {Object|String} select
+   * @param {Object} options
+   * @returns
+   */
+  static get(query, select, options) {
+    return ReplyModel.find(query, select, options);
+  }
 };

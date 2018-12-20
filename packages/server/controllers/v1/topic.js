@@ -1,6 +1,7 @@
 const TopicProxy = require('../../proxy/topic');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
+const ReplyProxy = require('../../proxy/reply');
 const config = require('../../config');
 
 class Topic {
@@ -263,6 +264,67 @@ class Topic {
     const topics = await TopicProxy.get(query, 'id title', options);
 
     ctx.body = topics;
+  }
+
+  // 获取话题详情
+  async getTopicById(ctx) {
+    const { tid } = ctx.params;
+
+    const topic = await TopicProxy.getById(tid);
+
+    if (!topic) {
+      ctx.throw(404, '话题不存在');
+    }
+
+    // 访问计数
+    topic.visit_count += 1;
+    await topic.save();
+
+    // 作者
+    const author = await UserProxy.getById(topic.author_id, 'id nickname avatar location signature score');
+    // 回复
+    let replies = await ReplyProxy.get({ topic_id: topic.id });
+    const reuslt = await Promise.all(replies.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getById(item.author_id, 'id nickname avatar'));
+      });
+    }));
+
+    replies = replies.map((item, i) => ({
+      ...item.toObject(),
+      author: reuslt[i],
+      create_at_ago: item.create_at_ago()
+    }));
+
+    // 状态
+    let like;
+    let collect;
+
+    const { user } = ctx.state;
+
+    if (user) {
+      like = await ActionProxy.getOne({
+        type: 'like',
+        author_id: user.id,
+        target_id: topic.id
+      });
+      collect = await ActionProxy.getOne({
+        type: 'collect',
+        author_id: user.id,
+        taget_id: topic.id
+      });
+    }
+
+    like = (like && !like.is_un) || false;
+    collect = (collect && !collect.is_un) || false;
+
+    ctx.body = {
+      topic: topic.toObject({ virtuals: true }),
+      author,
+      replies,
+      like,
+      collect
+    };
   }
 }
 
