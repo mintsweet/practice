@@ -26,6 +26,10 @@ const ActionSchema = new Schema({
 
 ActionSchema.plugin(Plugin);
 
+ActionSchema.virtual('actualType').get(function() {
+  return this.is_un ? `un_${this.type}` : this.type;
+});
+
 ActionSchema.index({ type: 1, author_id: 1, target_id: 1 }, { unique: true });
 ActionSchema.index({ author_id: 1, create_at: -1 });
 

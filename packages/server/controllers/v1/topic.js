@@ -2,6 +2,7 @@ const TopicProxy = require('../../proxy/topic');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
 const ReplyProxy = require('../../proxy/reply');
+const NoticeProxy = require('../../proxy/notice');
 const config = require('../../config');
 
 class Topic {
@@ -325,6 +326,63 @@ class Topic {
       like,
       collect
     };
+  }
+
+  // 喜欢或者取消喜欢话题
+  async likeOrUnLike(ctx) {
+    const { id } = ctx.state.user;
+    const { tid } = ctx.params;
+
+    const topic = await TopicProxy.getById(tid);
+
+    if (!topic) {
+      ctx.throw(404, '话题不存在');
+    }
+
+    if (topic.author_id.equals(id)) {
+      ctx.throw(403, '不能喜欢自己的话题哟');
+    }
+
+    const author = await UserProxy.getById(topic.author_id);
+
+    const actionParam = {
+      type: 'like',
+      author_id: id,
+      target_id: topic.id
+    };
+
+    let action;
+
+    action = await ActionProxy.getOne(actionParam);
+
+    if (action) {
+      action.is_un = !action.is_un;
+      await action.save();
+    } else {
+      action = await ActionProxy.create(actionParam);
+    }
+
+    if (action.is_un) {
+      topic.like_count -= 1;
+      await topic.save();
+      author.like_count -= 1;
+      author.score -= 10;
+      await author.save();
+    } else {
+      topic.like_count += 1;
+      await topic.save();
+      author.like_count += 1;
+      author.score += 10;
+      await author.save();
+      await NoticeProxy.create({
+        type: 'like',
+        author_id: id,
+        target_id: topic.author_id,
+        topic_id: topic.id
+      });
+    }
+
+    ctx.body = action.toObject({ virtuals: true }).actualType;
   }
 }
 

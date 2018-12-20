@@ -30,6 +30,7 @@ routerV1
   .get('/topics/search', TopicV1.searchTopic) // 搜索话题列表
   .get('/topics/no_reply', TopicV1.getNoReplyTopic) // 获取无人回复的话题
   .get('/topic/:tid', TopicV1.getTopicById) // 根据ID获取话题详情
+  .patch('/topic/:tid/like_or_un', Auth.userRequired, TopicV1.likeOrUnLike) // 喜欢或者取消喜欢话题
   .post('/topic/:tid/reply', Auth.userRequired, ReplyV1.createReply) // 创建回复
   .delete('/reply/:rid/delete', Auth.userRequired, ReplyV1.deleteReply) // 删除回复
   .put('/reply/:rid/update', Auth.userRequired, ReplyV1.updateReply) // 编辑回复
