@@ -211,6 +211,20 @@ class User extends Base {
 
     ctx.body = data.map(item => ({ ...item.toObject({ virtuals: true }), type: 'like' }));
   }
+
+  // 获取用户收藏列表
+  async getUserCollect(ctx) {
+    const { uid } = ctx.params;
+
+    const actions = await ActionProxy.get({ type: 'collect', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicProxy.getById(item.target_id, 'id title'));
+      });
+    }));
+
+    ctx.body = data.map(item => ({ ...item.toObject({ virtuals: true }), type: 'collect' }));
+  }
 }
 
 module.exports = new User();
