@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
-const UserProxy = require('../../proxy/user');
 const Base = require('./base');
+const UserProxy = require('../../proxy/user');
+const ActionProxy = require('../../proxy/action');
+const TopicProxy = require('../../proxy/topic');
 const config = require('../../config');
 
 class User extends Base {
@@ -155,6 +157,31 @@ class User extends Base {
     }
 
     ctx.body = user.toObject({ virtuals: true });
+  }
+
+  // 获取用户动态
+  async getUserAction(ctx) {
+    const { uid } = ctx.params;
+
+    const actions = await ActionProxy.get({ author_id: uid, is_un: false });
+    const result = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        if (item.type === 'follow') {
+          resolve(UserProxy.getById(item.target_id, 'id nickname signature avatar'));
+        } else {
+          resolve(TopicProxy.getById(item.target_id, 'id title'));
+        }
+      });
+    }));
+
+    const data = actions.map((item, i) => {
+      return {
+        ...result[i].toObject({ virtuals: true }),
+        type: item.type
+      };
+    });
+
+    ctx.body = data;
   }
 }
 

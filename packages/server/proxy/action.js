@@ -48,4 +48,17 @@ module.exports = class Action {
   static getOne(query, select, options) {
     return ActionModel.findOne(query, select, options);
   }
+
+  /**
+   * 查找行为
+   *
+   * @static
+   * @param {Object} query
+   * @param {Object|String} select
+   * @param {Object} options
+   * @returns
+   */
+  static get(query, select, options) {
+    return Action.find(query, select, options);
+  }
 };

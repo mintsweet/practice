@@ -23,6 +23,7 @@ routerV1
   .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
   .get('/users/top', UserV1.getUserTop) // 获取积分榜用户列表
   .get('/user/:uid', UserV1.getUserById) // 根据ID获取用户信息
+  .get('/user/:uid/action', UserV1.getUserAction) // 获取用户动态
   .post('/create', Auth.userRequired, TopicV1.createTopic) // 创建话题
   .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic) // 删除话题
   .put('/topic/:tid/update', Auth.userRequired, TopicV1.updateTopic) // 编辑话题
