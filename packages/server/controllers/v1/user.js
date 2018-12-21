@@ -197,6 +197,20 @@ class User extends Base {
 
     ctx.body = data;
   }
+
+  // 获取用户喜欢列表
+  async getUserLike(ctx) {
+    const { uid } = ctx.params;
+
+    const actions = await ActionProxy.get({ type: 'like', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicProxy.getById(item.target_id, 'id title'));
+      });
+    }));
+
+    ctx.body = data.map(item => ({ ...item.toObject({ virtuals: true }), type: 'like' }));
+  }
 }
 
 module.exports = new User();
