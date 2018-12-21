@@ -59,6 +59,6 @@ module.exports = class Action {
    * @returns
    */
   static get(query, select, options) {
-    return Action.find(query, select, options);
+    return ActionModel.find(query, select, options);
   }
 };

@@ -183,6 +183,20 @@ class User extends Base {
 
     ctx.body = data;
   }
+
+  // 获取用户专栏的列表
+  async getUserCreate(ctx) {
+    const { uid } = ctx.params;
+
+    const actions = await ActionProxy.get({ type: 'create', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(TopicProxy.getById(item.target_id, 'id title like_count collect_count visit_count'));
+      });
+    }));
+
+    ctx.body = data;
+  }
 }
 
 module.exports = new User();
