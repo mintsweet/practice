@@ -241,6 +241,20 @@ class User extends Base {
     ctx.body = data;
   }
 
+  // 获取用户关注的人列表
+  async getUserFollowing(ctx) {
+    const { uid } = ctx.params;
+
+    const actions = await ActionProxy.get({ type: 'follow', author_id: uid, is_un: false });
+    const data = await Promise.all(actions.map(item => {
+      return new Promise(resolve => {
+        resolve(UserProxy.getById(item.target_id, 'id nickname avatar'));
+      });
+    }));
+
+    ctx.body = data;
+  }
+
   // 关注或者取消关注某个用户
   async followOrUn(ctx) {
     const { uid } = ctx.params;
