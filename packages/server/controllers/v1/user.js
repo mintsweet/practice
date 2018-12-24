@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const Base = require('./base');
+const config = require('../../config');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
 const TopicProxy = require('../../proxy/topic');
-const config = require('../../config');
+const NoticeProxy = require('../../proxy/notice');
 
 class User extends Base {
   constructor() {
@@ -224,6 +225,54 @@ class User extends Base {
     }));
 
     ctx.body = data.map(item => ({ ...item.toObject({ virtuals: true }), type: 'collect' }));
+  }
+
+  // 关注或者取消关注某个用户
+  async followOrUn(ctx) {
+    const { uid } = ctx.params;
+    const { id } = ctx.state.user;
+
+    if (uid === id) {
+      ctx.throw(403, '不能关注你自己');
+    }
+
+    const targetUser = await UserProxy.getById(uid);
+    const authorUser = await UserProxy.getById(id);
+
+    const actionParam = {
+      type: 'follow',
+      author_id: id,
+      target_id: uid
+    };
+
+    let action;
+    action = await ActionProxy.getOne(actionParam);
+
+    if (action) {
+      action.is_un = !action.is_un;
+      await action.save();
+    } else {
+      action = await ActionProxy.create(actionParam);
+    }
+
+    if (action.is_un) {
+      targetUser.follower_count -= 1;
+      await targetUser.save();
+      authorUser.following_count -= 1;
+      await authorUser.save();
+    } else {
+      targetUser.follower_count += 1;
+      await targetUser.save();
+      authorUser.following_count += 1;
+      await authorUser.save();
+      await NoticeProxy.create({
+        type: 'follow',
+        author_id: id,
+        target_id: uid
+      });
+    }
+
+    ctx.body = action.toObject({ virtuals: true }).actualType;
   }
 }
 
