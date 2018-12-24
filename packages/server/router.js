@@ -27,6 +27,7 @@ routerV1
   .get('/user/:uid/create', UserV1.getUserCreate) // 获取用户专栏列表
   .get('/user/:uid/like', UserV1.getUserLike) // 获取用户喜欢列表
   .get('/user/:uid/collect', UserV1.getUserCollect) // 获取用户收藏列表
+  .get('/user/:uid/follower', UserV1.getUserFollower) // 获取用户粉丝列表
   .patch('/user/:uid/follow_or_un', Auth.userRequired, UserV1.followOrUn) // 关注或者取消关注用户
   .post('/create', Auth.userRequired, TopicV1.createTopic) // 创建话题
   .delete('/topic/:tid/delete', Auth.userRequired, TopicV1.deleteTopic) // 删除话题
