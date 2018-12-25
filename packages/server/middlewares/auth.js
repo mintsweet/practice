@@ -5,4 +5,12 @@ module.exports = class Auth {
     if (!user || !user.id) ctx.throw(401, '尚未登录');
     await next();
   }
+
+  // 管理员权限
+  static async adminRequired(ctx, next) {
+    const { user } = ctx.state;
+    if (!user || !user.id) ctx.throw(401, '尚未登录');
+    if (user.role < 1) ctx.throw(403, '需要管理员权限');
+    await next();
+  }
 };

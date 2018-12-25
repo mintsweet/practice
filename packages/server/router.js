@@ -3,6 +3,7 @@ const Auth = require('./middlewares/auth');
 const StaticV1 = require('./controllers/v1/static');
 const AiderV1 = require('./controllers/v1/aider');
 const UserV1 = require('./controllers/v1/user');
+const UserV2 = require('./controllers/v2/user');
 const TopicV1 = require('./controllers/v1/topic');
 const ReplyV1 = require('./controllers/v1/reply');
 const NoticeV1 = require('./controllers/v1/notice');
@@ -51,7 +52,8 @@ const routerV2 = new Router({
 });
 
 routerV2
-  .get('/', ctx => { ctx.body = 'Version_2 API'; });
+  .get('/', ctx => { ctx.body = 'Version_2 API'; })
+  .get('/users/new_this_week', Auth.adminRequired, UserV2.countUserThisWeek); // 获取本周新增用户数
 
 module.exports = {
   v1: routerV1.routes(),

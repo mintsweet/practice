@@ -74,4 +74,14 @@ module.exports = class User {
   static get(query, select, options) {
     return UserModel.find(query, select, options);
   }
+
+  /**
+   * 根据条件统计话题
+   *
+   * @static
+   * @param {Object} filter
+   */
+  static async count(filter) {
+    return UserModel.countDocuments(filter);
+  }
 };
