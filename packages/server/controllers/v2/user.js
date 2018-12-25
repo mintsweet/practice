@@ -25,6 +25,13 @@ class User {
 
     ctx.body = count;
   }
+
+  // 统计用户总数
+  async countUserTotal(ctx) {
+    const count = await UserProxy.count();
+
+    ctx.body = count;
+  }
 }
 
 module.exports = new User();

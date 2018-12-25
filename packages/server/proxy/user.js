@@ -81,7 +81,7 @@ module.exports = class User {
    * @static
    * @param {Object} filter
    */
-  static async count(filter) {
+  static async count(filter = {}) {
     return UserModel.countDocuments(filter);
   }
 };
