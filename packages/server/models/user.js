@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const Plugin = require('./plugin');
 
@@ -54,22 +53,5 @@ UserSchema.pre('save', function(next) {
 });
 
 const User = mongoose.model('User', UserSchema);
-
-// insert root data
-User.findOne((err, data) => {
-  if (err) throw new Error(err);
-
-  if (!data) {
-    User.create({
-      email: '0x1304570@gmail.com',
-      nickname: '青湛',
-      location: '四川，成都',
-      signature: '清明深湛，清澈透亮',
-      star: true,
-      role: 101,
-      password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10))
-    });
-  }
-});
 
 module.exports = User;
