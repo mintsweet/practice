@@ -32,6 +32,35 @@ class User {
 
     ctx.body = count;
   }
+
+  // 用户列表
+  async getUserList(ctx) {
+    const page = parseInt(ctx.query.page) || 1;
+    const size = parseInt(ctx.query.size) || 10;
+
+    const option = {
+      skip: (page - 1) * size,
+      limit: size,
+      sort: 'create_at'
+    };
+
+    const total = await UserProxy.count();
+    const users = await UserProxy.get({}, '-password', option);
+
+    const list = users.map(item => {
+      return {
+        ...item.toObject(),
+        create_at: moment(item.create_at).format('YYYY-MM-DD HH:mm')
+      };
+    });
+
+    ctx.body = {
+      users: list,
+      page,
+      size,
+      total
+    };
+  }
 }
 
 module.exports = new User();
