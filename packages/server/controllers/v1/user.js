@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Base = require('./base');
+const Base = require('../base');
 const config = require('../../config');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');

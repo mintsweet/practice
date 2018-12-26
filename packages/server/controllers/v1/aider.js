@@ -1,5 +1,5 @@
 const { BMP24 } = require('gd-bmp');
-const Base = require('./base');
+const Base = require('../base');
 const { qn } = require('../../config');
 
 class Aider extends Base {

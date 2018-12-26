@@ -1,7 +1,7 @@
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
-const { qn } = require('../../config');
+const { qn } = require('../config');
 
 // 密码加密位数
 const SALT_WORK_FACTOR = 10;

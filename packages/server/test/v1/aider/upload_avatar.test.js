@@ -1,5 +1,5 @@
 const path = require('path');
-const Base = require('../../../controllers/v1/base');
+const Base = require('../../../controllers/base');
 const app = require('../../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
