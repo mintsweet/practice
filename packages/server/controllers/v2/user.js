@@ -148,6 +148,34 @@ class User extends Base {
 
     ctx.body = action;
   }
+
+  // 锁定用户(封号)
+  async lockUser(ctx) {
+    const { uid } = ctx.params;
+    const { user: currentUser } = ctx.state;
+
+    if (currentUser.id === uid) {
+      ctx.throw(403, '不能操作自身');
+    }
+
+    const user = await UserProxy.getById(uid);
+
+    if (currentUser.role < user.role) {
+      ctx.throw(403, '不能操作权限值高于自身的用户');
+    }
+
+    if (user.lock) {
+      user.lock = false;
+      await user.save();
+    } else {
+      user.lock = true;
+      await user.save();
+    }
+
+    const action = user.lock ? 'lock' : 'un_lock';
+
+    ctx.body = action;
+  }
 }
 
 module.exports = new User();

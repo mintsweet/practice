@@ -59,7 +59,8 @@ routerV2
   .get('/users/list', Auth.adminRequired, UserV2.getUserList) // 获取用户列表
   .post('/users/create', Auth.adminRequired, UserV2.createUser) // 新增用户
   .delete('/user/:uid/delete', Auth.rootRequired, UserV2.deleteUser) // 删除用户(超管物理删除)
-  .patch('/user/:uid/star', Auth.rootRequired, UserV2.starUser); // 设为星标用户
+  .patch('/user/:uid/star', Auth.rootRequired, UserV2.starUser) // 设为星标用户
+  .patch('/user/:uid/lock', Auth.adminRequired, UserV2.lockUser); // 锁定用户(封号)
 
 module.exports = {
   v1: routerV1.routes(),
