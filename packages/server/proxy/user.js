@@ -24,6 +24,16 @@ module.exports = class User {
   }
 
   /**
+   * 根据ID删除用户
+   *
+   * @param {ObjectId} id
+   * @returns
+   */
+  static deleteById(id) {
+    return UserModel.findByIdAndDelete(id);
+  }
+
+  /**
    * 更新用户
    *
    * @static

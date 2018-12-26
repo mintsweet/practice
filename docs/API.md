@@ -605,6 +605,30 @@ POST
 | nickname |   Yes    | string | 2至8位长度昵称                          |
 | role     |   Yes    | string | 0至100位的权限值                        |
 
+## 删除用户(物理)
+
+### 请求Url
+
+```bash
+/v2/user/:uid/delete
+```
+
+### 请求方式
+
+```bash
+DELETE
+```
+
+### 前置条件
+
+*携带jwt，且为超级管理员*
+
+### 参数类型：params
+
+| 参数 | 是否必选 | 类型   | 说明   |
+| :--- | :------: | :----- | :----- |
+| uid  |   Yes    | string | 用户ID |
+
 ## 创建话题
 
 ### 请求Url

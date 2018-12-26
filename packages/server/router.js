@@ -57,7 +57,8 @@ routerV2
   .get('/users/new_last_week', Auth.adminRequired, UserV2.countUserLastWeek) // 获取上周新增用户数
   .get('/users/total', Auth.adminRequired, UserV2.countUserTotal) // 获取用户总数
   .get('/users/list', Auth.adminRequired, UserV2.getUserList) // 获取用户列表
-  .post('/users/create', Auth.adminRequired, UserV2.createUser); // 新增用户
+  .post('/users/create', Auth.adminRequired, UserV2.createUser) // 新增用户
+  .delete('/user/:uid/delete', Auth.rootRequired, UserV2.deleteUser); // 删除用户(超管物理删除)
 
 module.exports = {
   v1: routerV1.routes(),

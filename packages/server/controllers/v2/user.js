@@ -110,6 +110,20 @@ class User extends Base {
 
     ctx.body = '';
   }
+
+  // 删除用户(超管物理删除)
+  async deleteUser(ctx) {
+    const { uid } = ctx.params;
+    const currentUser = await UserProxy.getById(uid);
+
+    if (currentUser.role > 100) {
+      ctx.throw(401, '无法删除超级管理员');
+    }
+
+    await UserProxy.deleteById(uid);
+
+    ctx.body = '';
+  }
 }
 
 module.exports = new User();
