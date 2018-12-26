@@ -124,6 +124,30 @@ class User extends Base {
 
     ctx.body = '';
   }
+
+  // 设为星标用户
+  async starUser(ctx) {
+    const { uid } = ctx.params;
+    const { user: currentUser } = ctx.state;
+
+    if (currentUser.id === uid) {
+      ctx.throw(403, '不能操作自身');
+    }
+
+    const user = await UserProxy.getById(uid);
+
+    if (user.star) {
+      user.star = false;
+      await user.save();
+    } else {
+      user.star = true;
+      await user.save();
+    }
+
+    const action = user.star ? 'star' : 'un_star';
+
+    ctx.body = action;
+  }
 }
 
 module.exports = new User();

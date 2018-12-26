@@ -3,26 +3,24 @@ const request = require('supertest')(app);
 const should = require('should');
 const support = require('../../support');
 
-describe('test /v2/user/:uid/delete', function() {
+describe('test /v2/user/:uid/star', function() {
   let mockUser;
   let mockUser2;
-  let mockUser3;
 
   before(async function() {
-    mockUser = await support.createUser('123456@qq.com', '待删用户');
-    mockUser2 = await support.createUser('123457@qq.com', '管理员', { role: 1 });
-    mockUser3 = await support.createUser('123458@qq.com', '超级管理员', { role: 101 });
+    mockUser = await support.createUser('123456@qq.com', '普通用户');
+    mockUser2 = await support.createUser('123457@qq.com', '管理员', { role: 101 });
   });
 
   after(async function() {
+    await support.deleteUser(mockUser.email);
     await support.deleteUser(mockUser2.email);
-    await support.deleteUser(mockUser3.email);
   });
 
-  it('should / status 401 when the not signin', async function() {
+  it('should / status 401 when the not sigin', async function() {
     try {
       const res = await request
-        .delete(`/v2/user/${mockUser.id}/delete`)
+        .patch(`/v2/user/${mockUser.id}/star`)
         .expect(401);
 
       res.text.should.equal('尚未登录');
@@ -36,13 +34,13 @@ describe('test /v2/user/:uid/delete', function() {
       let res = await request
         .post('/v1/signin')
         .send({
-          email: mockUser2.email,
+          email: mockUser.email,
           password: 'a123456'
         })
         .expect(200);
 
       res = await request
-        .delete(`/v2/user/${mockUser.id}/delete`)
+        .patch(`/v2/user/${mockUser.id}/star`)
         .set('Authorization', res.text)
         .expect(403);
 
@@ -52,41 +50,64 @@ describe('test /v2/user/:uid/delete', function() {
     }
   });
 
-  it('should / status 401 when the user is root', async function() {
+  it('should / status 403 when the user is you', async function() {
     try {
       let res = await request
         .post('/v1/signin')
         .send({
-          email: mockUser3.email,
+          email: mockUser2.email,
           password: 'a123456'
         })
         .expect(200);
 
       res = await request
-        .delete(`/v2/user/${mockUser3.id}/delete`)
+        .patch(`/v2/user/${mockUser2.id}/star`)
         .set('Authorization', res.text)
-        .expect(401);
+        .expect(403);
 
-      res.text.should.equal('无法删除超级管理员');
+      res.text.should.equal('不能操作自身');
     } catch(err) {
       should.ifError(err.message);
     }
   });
 
-  it('should / status 200', async function() {
+  it('should / status 200 when the action is star', async function() {
     try {
-      const res = await request
+      let res = await request
         .post('/v1/signin')
         .send({
-          email: mockUser3.email,
+          email: mockUser2.email,
           password: 'a123456'
         })
         .expect(200);
 
-      await request
-        .delete(`/v2/user/${mockUser.id}/delete`)
+      res = await request
+        .patch(`/v2/user/${mockUser.id}/star`)
         .set('Authorization', res.text)
         .expect(200);
+
+      res.text.should.equal('star');
+    } catch(err) {
+      should.ifError(err.message);
+    }
+  });
+
+  it('should / status 200 when the action is un_star', async function() {
+    try {
+      let res = await request
+        .post('/v1/signin')
+        .send({
+          email: mockUser2.email,
+          password: 'a123456'
+        })
+        .expect(200);
+
+      res = await request
+        .patch(`/v2/user/${mockUser.id}/star`)
+        .set('Authorization', res.text)
+        .expect(200);
+
+      res.text.should.equal('un_star');
     } catch(err) {
       should.ifError(err.message);
     }
