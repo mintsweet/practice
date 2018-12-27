@@ -5,6 +5,7 @@ const AiderV1 = require('./controllers/v1/aider');
 const UserV1 = require('./controllers/v1/user');
 const UserV2 = require('./controllers/v2/user');
 const TopicV1 = require('./controllers/v1/topic');
+const TopicV2 = require('./controllers/v2/topic');
 const ReplyV1 = require('./controllers/v1/reply');
 const NoticeV1 = require('./controllers/v1/notice');
 
@@ -60,7 +61,8 @@ routerV2
   .post('/users/create', Auth.adminRequired, UserV2.createUser) // 新增用户
   .delete('/user/:uid/delete', Auth.rootRequired, UserV2.deleteUser) // 删除用户(超管物理删除)
   .patch('/user/:uid/star', Auth.rootRequired, UserV2.starUser) // 设为星标用户
-  .patch('/user/:uid/lock', Auth.adminRequired, UserV2.lockUser); // 锁定用户(封号)
+  .patch('/user/:uid/lock', Auth.adminRequired, UserV2.lockUser) // 锁定用户(封号)
+  .get('/topics/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek); // 获取本周新增话题数
 
 module.exports = {
   v1: routerV1.routes(),

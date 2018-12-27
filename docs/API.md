@@ -967,6 +967,30 @@ PATCH
 collect or un_collcet
 ```
 
+## 获取本周新增话题数
+
+### 请求Url
+
+```bash
+/v2/topics/new_this_week
+```
+
+### 请求方式
+
+```bash
+GET
+```
+
+### 前置条件
+
+*携带jwt，且为管理员*
+
+### 返回示例
+
+```text
+10
+```
+
 ## 创建回复
 
 ### 请求Url
