@@ -66,7 +66,7 @@ module.exports = class Topic {
    * @static
    * @param {Object} filter
    */
-  static async count(filter) {
+  static async count(filter = {}) {
     return TopicModel.countDocuments(filter);
   }
 };

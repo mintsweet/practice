@@ -25,6 +25,13 @@ class Topic {
 
     ctx.body = count;
   }
+
+  // 统计话题总数
+  async countTopicTotal(ctx) {
+    const count = await TopicProxy.count();
+
+    ctx.body = count;
+  }
 }
 
 module.exports = new Topic();
