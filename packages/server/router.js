@@ -62,7 +62,8 @@ routerV2
   .delete('/user/:uid/delete', Auth.rootRequired, UserV2.deleteUser) // 删除用户(超管物理删除)
   .patch('/user/:uid/star', Auth.rootRequired, UserV2.starUser) // 设为星标用户
   .patch('/user/:uid/lock', Auth.adminRequired, UserV2.lockUser) // 锁定用户(封号)
-  .get('/topics/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek); // 获取本周新增话题数
+  .get('/topics/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
+  .get('/topics/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek); // 获取上周新增话题数
 
 module.exports = {
   v1: routerV1.routes(),
