@@ -32,6 +32,15 @@ class Topic {
 
     ctx.body = count;
   }
+
+  // 删除话题(超管物理删除)
+  async deleteTopic(ctx) {
+    const { tid } = ctx.params;
+
+    await TopicProxy.deleteById(tid);
+
+    ctx.body = '';
+  }
 }
 
 module.exports = new Topic();

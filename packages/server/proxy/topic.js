@@ -8,7 +8,7 @@ module.exports = class Topic {
    * @param {Object} topic
    * @returns
    */
-  static async create(topic) {
+  static create(topic) {
     return TopicModel.create(topic);
   }
 
@@ -19,8 +19,19 @@ module.exports = class Topic {
    * @param {Object} conditions
    * @returns
    */
-  static async delete(conditions) {
+  static delete(conditions) {
     return TopicModel.deleteMany(conditions);
+  }
+
+  /**
+   * 根据ID删除话题
+   *
+   * @static
+   * @param {ObjectId} id
+   * @returns
+   */
+  static deleteById(id) {
+    return TopicModel.findByIdAndDelete(id);
   }
 
   /**
