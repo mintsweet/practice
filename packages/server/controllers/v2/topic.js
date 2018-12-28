@@ -41,6 +41,24 @@ class Topic {
 
     ctx.body = '';
   }
+
+  // 话题置顶
+  async topTopic(ctx) {
+    const { tid } = ctx.params;
+    const topic = await TopicProxy.getById(tid);
+
+    if (topic.top) {
+      topic.top = false;
+      await topic.save();
+    } else {
+      topic.top = true;
+      await topic.save();
+    }
+
+    const action = topic.top ? 'top' : 'un_top';
+
+    ctx.body = action;
+  }
 }
 
 module.exports = new Topic();

@@ -65,7 +65,8 @@ routerV2
   .get('/topics/new_this_week', Auth.adminRequired, TopicV2.countTopicThisWeek) // 获取本周新增话题数
   .get('/topics/new_last_week', Auth.adminRequired, TopicV2.countTopicLastWeek) // 获取上周新增话题数
   .get('/topics/total', Auth.adminRequired, TopicV2.countTopicTotal) // 获取话题总数
-  .delete('/topic/:tid/delete', Auth.rootRequired, TopicV2.deleteTopic); // 删除话题(超管物理删除)
+  .delete('/topic/:tid/delete', Auth.rootRequired, TopicV2.deleteTopic) // 删除话题(超管物理删除)
+  .patch('/topic/:tid/top', Auth.adminRequired, TopicV2.topTopic); // 话题置顶
 
 module.exports = {
   v1: routerV1.routes(),
