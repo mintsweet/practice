@@ -59,6 +59,24 @@ class Topic {
 
     ctx.body = action;
   }
+
+  // 话题加精
+  async goodTopic(ctx) {
+    const { tid } = ctx.params;
+    const topic = await TopicProxy.getById(tid);
+
+    if (topic.good) {
+      topic.good = false;
+      await topic.save();
+    } else {
+      topic.good = true;
+      await topic.save();
+    }
+
+    const action = topic.good ? 'good' : 'un_good';
+
+    ctx.body = action;
+  }
 }
 
 module.exports = new Topic();
