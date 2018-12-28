@@ -77,6 +77,24 @@ class Topic {
 
     ctx.body = action;
   }
+
+  // 话题锁定(封贴)
+  async lockTopic(ctx) {
+    const { tid } = ctx.params;
+    const topic = await TopicProxy.getById(tid);
+
+    if (topic.lock) {
+      topic.lock = false;
+      await topic.save();
+    } else {
+      topic.lock = true;
+      await topic.save();
+    }
+
+    const action = topic.lock ? 'lock' : 'un_lock';
+
+    ctx.body = action;
+  }
 }
 
 module.exports = new Topic();
