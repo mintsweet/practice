@@ -1,7 +1,8 @@
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
-const { qn } = require('../config');
+const nodemailer = require('nodemailer');
+const { qn, mail } = require('../config');
 
 // 密码加密位数
 const SALT_WORK_FACTOR = 10;
@@ -67,6 +68,18 @@ module.exports = class Base {
       bucketManager.delete(qn.BUCKET_NAME, name, (err, respBody, respInfo) => {
         if (err) reject(err);
         resolve(respInfo.statusCode);
+      });
+    });
+  }
+
+  // 邮件发送
+  _sendMail(opts) {
+    const transporter = nodemailer.createTransport(mail);
+
+    return new Promise((resolve, reject) => {
+      transporter.sendMail(opts, (err, info) => {
+        if (err) reject(err);
+        resolve(info);
       });
     });
   }

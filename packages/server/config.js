@@ -7,7 +7,8 @@ module.exports = {
     prod: ''
   },
 
-  secret: 'practice', // 必改
+  // token 签名 => 必改
+  secret: 'practice',
 
   // 七牛图片上传
   qn: {
@@ -17,4 +18,15 @@ module.exports = {
     DONAME: 'http://image.mintsweet.cn',
     ZONE: 'Zone_z2',
   },
+
+  // 邮件配置
+  mail: {
+    service: '',
+    secureConnection: true,
+    port: 465,
+    auth: {
+      user: '',
+      pass: ''
+    }
+  }
 };

@@ -19,6 +19,7 @@
     "log4js": "^3.0.6",
     "moment": "^2.23.0",
     "mongoose": "^5.3.16",
+    "nodemailer": "^5.0.0",
     "qiniu": "^7.2.1"
   },
   "devDependencies": {

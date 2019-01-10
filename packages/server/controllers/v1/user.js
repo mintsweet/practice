@@ -49,6 +49,16 @@ class User extends Base {
       nickname
     });
 
+    if (process.env.NODE_ENV !== 'test') {
+      const opts = {
+        from: '薄荷糖社区(Mints)',
+        to: email,
+        subject: 'Hello, World!',
+        html: ''
+      };
+      await this._sendMail(opts);
+    }
+
     ctx.body = '';
   }
 
