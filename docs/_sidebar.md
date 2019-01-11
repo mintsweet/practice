@@ -1,3 +1,7 @@
+- 快速入门
+
+  - [持续集成](ci.md)
+
 - 流程规范
 
   - [代码规范](codespecification.md)
