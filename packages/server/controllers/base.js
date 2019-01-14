@@ -2,6 +2,7 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const { qn, mail } = require('../config');
 
 // 密码加密位数
@@ -28,6 +29,12 @@ module.exports = class Base {
   async _comparePass(pass, passTrue) {
     const isMatch = await bcrypt.compare(pass, passTrue);
     return isMatch;
+  }
+
+  // md5加密
+  async _md5(value) {
+    const md5 = crypto.createHash('md5');
+    return md5.update(value).digest('hex');
   }
 
   // 七牛图片上传

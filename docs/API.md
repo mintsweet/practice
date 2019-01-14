@@ -119,6 +119,54 @@ POST
 Bearer <token>
 ```
 
+## 忘记密码
+
+### 请求Url
+
+```bash
+/v1/forget_pass
+```
+
+### 请求方式
+
+```bash
+POST
+```
+
+### 参数类型
+
+| 参数  | 是否必选 | 类型   | 说明 |
+| :---- | :------- | :----- | :--- |
+| email | Yes      | string | 邮箱 |
+
+### 返回示例
+
+```text
+/reset_pass?token=xxxx&email=xxxx
+```
+
+## 重置密码
+
+### 请求Url
+
+```bash
+/v1/reset_pass
+```
+
+### 请求方式
+
+```bash
+POST
+```
+
+### 参数类型
+
+| 参数    | 是否必选 | 类型          | 说明 |
+| :------ | :------- | :------------ | :--- |
+| newPass | Yes      | string        | 密码 |
+| email   | Yes      | string(query) | 邮箱 |
+| token   | Yes      | string(query) | 密钥 |
+
 ## 获取当前用户信息
 
 ### 请求Url

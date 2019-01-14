@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const redis = require('redis');
+const { promisify } = require('util');
 const logger = require('./utils/logger');
 const config = require('./config');
 
@@ -18,3 +20,16 @@ db.on('error', err => {
 db.once('open', function() {
   logger.info('MongoDB connection success!');
 });
+
+// connect redis
+const client = redis.createClient();
+
+client.on('error', err => {
+  logger.error(`Redis connection error: ${err}!`);
+  process.exit(1);
+});
+
+exports.redisProxy = {
+  set: promisify(client.set).bind(client),
+  get: promisify(client.get).bind(client)
+};

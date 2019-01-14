@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const uuid = require('uuid/v4');
 const Base = require('../base');
 const config = require('../../config');
+const { redisProxy } = require('../../db');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
 const TopicProxy = require('../../proxy/topic');
@@ -11,6 +13,8 @@ class User extends Base {
     super();
     this.signup = this.signup.bind(this);
     this.signin = this.signin.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
+    this.resetPass = this.resetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
   }
 
@@ -97,6 +101,57 @@ class User extends Base {
     );
 
     ctx.body = `Bearer ${token}`;
+  }
+
+  // 忘记密码
+  async forgetPass (ctx) {
+    const { baseUrl, email } = ctx.request.body;
+
+    // 校验邮箱
+    if (!email || !/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(email)) {
+      ctx.throw(400, '邮箱格式错误');
+    }
+
+    const user = await UserProxy.getOne({ email });
+
+    // 判断用户是否存在
+    if (!user) {
+      ctx.throw(404, '尚未注册');
+    }
+
+    // 随机的uuid
+    const secret = uuid();
+    const key = `${user.email}&${secret}`;
+
+    // 加密
+    const token = await this._md5(key);
+
+    await redisProxy.set(email, token, 'EX', 60 * 30);
+
+    const url = `${baseUrl || ''}/v1/reset_pass?token=${token}&email=${email}`;
+
+    ctx.body = url;
+  }
+
+  // 重置密码
+  async resetPass (ctx) {
+    const { email, token } = ctx.query;
+    const { newPass } = ctx.request.body;
+
+    const secret = await redisProxy.get(email);
+
+    if (secret !== token) {
+      ctx.throw(400, '链接未通过校验');
+    }
+
+    if (!newPass || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass)) {
+      ctx.throw(400, '新密码必须为数字、字母和特殊字符其中两种组成并且在6-18位之间');
+    }
+
+    const password = await this._encryption(newPass);
+    await UserProxy.update({ email }, { password });
+
+    ctx.body = '';
   }
 
   // 获取当前用户信息

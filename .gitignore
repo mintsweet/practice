@@ -10,6 +10,7 @@ coverage.lcov
 dist
 cheese.log
 uploads/
+dump.rdb
 
 # misc
 .DS_Store

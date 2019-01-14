@@ -20,6 +20,8 @@ routerV1
   .post('/aider/upload_avatar', Auth.userRequired, AiderV1.uploadAvatar) // 头像上传
   .post('/signup', UserV1.signup) // 注册
   .post('/signin', UserV1.signin) // 登录
+  .post('/forget_pass', UserV1.forgetPass) // 忘记密码
+  .post('/reset_pass', UserV1.resetPass) // 重置密码
   .get('/info', Auth.userRequired, UserV1.getCurrentUser) // 获取当前用户信息
   .put('/setting', Auth.userRequired, UserV1.updateSetting) // 更新个人信息
   .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
