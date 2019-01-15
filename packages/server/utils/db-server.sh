@@ -2,4 +2,4 @@
 mongod -f /usr/local/etc/mongod.conf
 
 # start redis service
-redis-server
+redis-server /usr/local/etc/redis.conf

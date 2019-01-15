@@ -53,15 +53,29 @@ class User extends Base {
       nickname
     });
 
-    if (process.env.NODE_ENV !== 'test') {
-      const opts = {
-        from: '薄荷糖社区(Mints)',
-        to: email,
-        subject: 'Hello, World!',
-        html: ''
-      };
-      await this._sendMail(opts);
+    // 随机的uuid
+    const secret = uuid();
+    const key = `${email}&${secret}`;
+
+    // 加密
+    const token = await this._md5(key);
+    await redisProxy.set(email, token, 'EX', 60 * 30);
+
+    const url = `/v1/set_active?token=${token}&email=${email}`;
+
+    ctx.body = url;
+  }
+
+  // 账户激活
+  async setActive(ctx) {
+    const { email, token } = ctx.query;
+    const secret = await redisProxy.get(email);
+
+    if (secret !== token) {
+      ctx.throw(400, '链接未通过校验');
     }
+
+    await UserProxy.update({ email }, { active: true });
 
     ctx.body = '';
   }
@@ -105,7 +119,7 @@ class User extends Base {
 
   // 忘记密码
   async forgetPass (ctx) {
-    const { baseUrl, email } = ctx.request.body;
+    const { email } = ctx.request.body;
 
     // 校验邮箱
     if (!email || !/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(email)) {
@@ -125,10 +139,9 @@ class User extends Base {
 
     // 加密
     const token = await this._md5(key);
-
     await redisProxy.set(email, token, 'EX', 60 * 30);
 
-    const url = `${baseUrl || ''}/v1/reset_pass?token=${token}&email=${email}`;
+    const url = `/v1/reset_pass?token=${token}&email=${email}`;
 
     ctx.body = url;
   }

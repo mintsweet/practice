@@ -91,6 +91,32 @@ POST
 | password |   Yes    | string | 数字、字母和特殊字符其中两种组成并且在6-18位之间 |
 | nickname |   Yes    | string | 4-8位字符                                        |
 
+### 返回示例
+
+```text
+/v1/set_active?token=xxxxxx&email=xxxxx
+```
+
+## 账户激活
+
+### 请求Url
+
+```bash
+/v1/set_active
+```
+
+### 请求方式
+
+```bash
+GET
+```
+
+### 参数类型
+
+| 参数  | 是否必选 | 类型   | 说明 |
+| :---- | :------: | :----- | :--- |
+| email |   Yes    | string | 邮箱 |
+| token |   Yes    | string | 密钥 |
 
 ## 登录
 

@@ -14,11 +14,13 @@ const routerV1 = new Router({
 });
 
 routerV1
+  .get('/error', () => { throw new Error('错误测试覆盖'); })
   .get('/', ctx => { ctx.body = 'Version_1 API'; })
   .get('/static/norms', StaticV1.getNorms) // 获取社区规范文档
   .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
   .post('/aider/upload_avatar', Auth.userRequired, AiderV1.uploadAvatar) // 头像上传
   .post('/signup', UserV1.signup) // 注册
+  .get('/set_active', UserV1.setActive) // 账户激活
   .post('/signin', UserV1.signin) // 登录
   .post('/forget_pass', UserV1.forgetPass) // 忘记密码
   .post('/reset_pass', UserV1.resetPass) // 重置密码
