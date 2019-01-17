@@ -15,18 +15,6 @@ describe('test /app.js', function() {
     }
   });
 
-  it('should / status 500', async function() {
-    try {
-      const res = await request
-        .get('/v1/error')
-        .expect(500);
-
-      res.text.should.equal('错误测试覆盖');
-    } catch(err) {
-      should.ifError(err.message);
-    }
-  });
-
   it('should / status 200', async function() {
     try {
       const res = await request

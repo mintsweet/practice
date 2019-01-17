@@ -14,7 +14,6 @@ const routerV1 = new Router({
 });
 
 routerV1
-  .get('/error', () => { throw new Error('错误测试覆盖'); })
   .get('/', ctx => { ctx.body = 'Version_1 API'; })
   .get('/static/norms', StaticV1.getNorms) // 获取社区规范文档
   .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码

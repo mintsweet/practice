@@ -5,8 +5,7 @@
   "scripts": {
     "db-server": "bash ./utils/db-server.sh",
     "start": "cross-env NODE_ENV=development nodemon app.js",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha",
-    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "test": "cross-env NODE_ENV=test mocha"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -25,11 +24,9 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "codecov": "^3.1.0",
     "cross-env": "^5.2.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.8",
-    "nyc": "^13.1.0",
     "should": "^13.2.3",
     "supertest": "^3.3.0"
   }
