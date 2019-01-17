@@ -33,6 +33,7 @@
 ## 🌈 项目
 
   - [数据服务 server](./packages/server/README.md)
+  - [PC客户端 client](./packages/client/README.md)
 
 ## ⚡其他
 
