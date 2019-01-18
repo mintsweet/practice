@@ -1,5 +1,6 @@
 const eslintConfig = {
   env: {
+    jest: true,
     mocha: true,
     jquery: true
   },

@@ -1,9 +1,9 @@
 const rq = require('request-promise');
-const { baseUrl } = require('./env');
+const { api } = require('../config');
 
 module.exports = (url, data, method = 'GET') => {
   const options = {
-    baseUrl,
+    baseUrl: api[process.env.NODE_ENV],
     url,
     method,
     json: true,

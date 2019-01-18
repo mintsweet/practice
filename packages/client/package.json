@@ -6,7 +6,7 @@
     "gulp": "gulp",
     "start": "cross-env NODE_ENV=development npm run gulp",
     "build": "cross-env NODE_ENV=production npm run gulp build",
-    "test": "cross-env NODE_ENV=test mocha"
+    "test": "cross-env NODE_ENV=test jest"
   },
   "dependencies": {
     "express": "^4.16.4",
@@ -24,8 +24,7 @@
     "gulp-less": "^4.0.1",
     "gulp-nodemon": "^2.4.2",
     "gulp-uglify": "^3.0.1",
-    "mocha": "^5.2.0",
-    "should": "^13.2.3",
+    "jest": "^23.6.0",
     "supertest": "^3.4.1"
   }
 }

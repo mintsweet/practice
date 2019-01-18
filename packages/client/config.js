@@ -9,6 +9,11 @@ module.exports = {
 
   port: 3001,
 
-  server: '',
+  // 接口地址
+  api: {
+    dev: '',
+    prod: '',
+    test: ''
+  },
 
 };

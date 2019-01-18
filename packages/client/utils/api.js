@@ -1,3 +1,7 @@
 const request = require('./request');
 
-exports.getNormsDoc = () => request('/static/norms');
+const getNormsDoc = () => request('/static/norms');
+
+module.exports = {
+  getNormsDoc
+};
