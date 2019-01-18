@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "express": "^4.16.4",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",

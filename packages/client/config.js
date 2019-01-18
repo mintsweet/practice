@@ -8,4 +8,7 @@ module.exports = {
   site_icon: '/static/img/favicon.ico',
 
   port: 3001,
+
+  server: '',
+
 };
