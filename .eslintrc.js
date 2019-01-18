@@ -1,6 +1,11 @@
 const eslintConfig = {
   env: {
-    mocha: true
+    mocha: true,
+    jquery: true
+  },
+
+  globals: {
+    document: true
   },
 
   extends: 'mints',

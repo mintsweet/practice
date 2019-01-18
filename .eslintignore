@@ -1,2 +1,5 @@
 # production
 dist
+
+# vendor
+public/vendor/

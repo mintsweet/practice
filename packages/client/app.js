@@ -9,6 +9,9 @@ const app = module.exports = new Express();
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
+// static
+app.use('/static', Express.static(path.join(__dirname, 'dist')));
+
 // config
 app.locals.config = config;
 

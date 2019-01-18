@@ -9,6 +9,9 @@ html
     title #{title} - 薄荷糖社区
     if config.site_icon
       link(rel="shortcut icon", href=config.site_icon, type="image/x-icon")
+    //- styles
+    block head
+      link(rel="stylesheet", href="/static/css/index.css")
   body
     .main
       block content
