@@ -1,6 +1,5 @@
 const Router = require('koa-router');
 const Auth = require('./middlewares/auth');
-const StaticV1 = require('./controllers/v1/static');
 const AiderV1 = require('./controllers/v1/aider');
 const UserV1 = require('./controllers/v1/user');
 const UserV2 = require('./controllers/v2/user');
@@ -15,7 +14,6 @@ const routerV1 = new Router({
 
 routerV1
   .get('/', ctx => { ctx.body = 'Version_1 API'; })
-  .get('/static/norms', StaticV1.getNorms) // 获取社区规范文档
   .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
   .post('/aider/upload_avatar', Auth.userRequired, AiderV1.uploadAvatar) // 头像上传
   .post('/signup', UserV1.signup) // 注册
