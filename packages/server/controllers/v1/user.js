@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
 const Base = require('../base');
 const config = require('../../config');
-const { redisProxy } = require('../../db');
+const redis = require('../../db/redis');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
 const TopicProxy = require('../../proxy/topic');
@@ -59,7 +59,7 @@ class User extends Base {
 
     // 加密
     const token = await this._md5(key);
-    await redisProxy.set(email, token, 'EX', 60 * 30);
+    await redis.set(email, token, 'EX', 60 * 30);
 
     const url = `/v1/set_active?token=${token}&email=${email}`;
 
@@ -69,7 +69,7 @@ class User extends Base {
   // 账户激活
   async setActive(ctx) {
     const { email, token } = ctx.query;
-    const secret = await redisProxy.get(email);
+    const secret = await redis.get(email);
 
     if (secret !== token) {
       ctx.throw(400, '链接未通过校验');
@@ -139,7 +139,7 @@ class User extends Base {
 
     // 加密
     const token = await this._md5(key);
-    await redisProxy.set(email, token, 'EX', 60 * 30);
+    await redis.set(email, token, 'EX', 60 * 30);
 
     const url = `/v1/reset_pass?token=${token}&email=${email}`;
 
@@ -151,7 +151,7 @@ class User extends Base {
     const { email, token } = ctx.query;
     const { newPass } = ctx.request.body;
 
-    const secret = await redisProxy.get(email);
+    const secret = await redis.get(email);
 
     if (secret !== token) {
       ctx.throw(400, '链接未通过校验');

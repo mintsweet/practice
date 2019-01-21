@@ -7,7 +7,7 @@ const router = require('./router');
 const logger = require('./utils/logger');
 const ErrorHandler = require('./middlewares/error-handler');
 
-require('./db');
+require('./db/mongodb');
 
 const app = module.exports = new Koa();
 

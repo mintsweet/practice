@@ -1,11 +1,7 @@
 module.exports = {
   port: 3000,
 
-  mongodb: {
-    test: 'mongodb://localhost:27017/practice-test',
-    dev: 'mongodb://localhost:27017/practice',
-    prod: ''
-  },
+  dbpath: 'mongodb://localhost:27017/practice',
 
   // token 签名 => 必改
   secret: 'practice',
