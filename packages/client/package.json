@@ -8,8 +8,13 @@
     "build": "cross-env NODE_ENV=production npm run gulp build",
     "test": "cross-env NODE_ENV=test jest"
   },
+  "jest": {
+    "verbose": true
+  },
   "dependencies": {
     "express": "^4.16.4",
+    "highlight.js": "^9.13.1",
+    "markdown-it": "^8.4.2",
     "pug": "^2.0.3",
     "request-promise": "^4.2.2"
   },
