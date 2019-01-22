@@ -9,7 +9,9 @@
     "test": "cross-env NODE_ENV=test jest"
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "collectCoverage": true,
+    "coverageDirectory": "coverage"
   },
   "dependencies": {
     "express": "^4.16.4",

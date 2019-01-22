@@ -11,9 +11,9 @@ module.exports = {
 
   // 接口地址
   api: {
-    dev: '',
+    dev: 'http://localhost:3000/v1',
     prod: '',
-    test: ''
+    test: 'https://jsonplaceholder.typicode.com'
   },
 
 };

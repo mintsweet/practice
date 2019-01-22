@@ -13,5 +13,9 @@ html
     block head
       link(rel="stylesheet", href="/static/css/index.css")
   body
+    block header
+      include ./includes/header.pug
     .main
       block content
+    block footer
+      include ./includes/footer.pug

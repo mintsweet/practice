@@ -1,0 +1,33 @@
+.header
+  .layout
+    h1.logo
+      a(href="/")
+        img(src="/static/img/logo.png")
+        span Mints - 薄荷糖社区
+    form.search(action="/topics/search")
+      input(type="text", name="q", required, placeholder="请输入搜索内容", autocomplete="off")
+      button.practice(type="submit") &#xe7de;
+    ul.menu
+      li
+        a(href="/staic/norms") 规范
+      li
+        a(href="https://docs.mintsweet.cn", target="_blank") 文档
+    .user
+      if user
+        .action
+          a.practice(href="/topics/create", title="发布主题") &#xea35;
+          a.practice(href="/notice/user", title="查看消息") &#xe60c;
+        .info
+          .avatar
+            img(src=user.avatar)
+          .nickname #{user.nickname}
+          .drop-menus
+            .item
+              a(href=`/user/${user.id}`) 个人主页
+            span.divider
+            .item
+              a(href="/signout") 退出登录
+      else
+        a(href="/signin") 登录
+        span.divider |
+        a(href="/signup") 注册
