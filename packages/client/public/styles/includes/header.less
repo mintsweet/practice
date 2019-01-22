@@ -1,0 +1,155 @@
+.header {
+  height: 55px;
+  line-height: 55px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  background-color: #fff;
+
+  & > .inner {
+    position: relative;
+    .layout();
+  }
+
+  .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    .size(55px);
+
+    span {
+      .text-hiden;
+    }
+  }
+
+  .search {
+    position: relative;
+    float: left;
+    margin-left: 60px;
+
+    input {
+      padding-right: 30px;
+      border: none;
+      border-bottom: 1px solid @light-gray;
+
+      &:hover,
+      &:focus {
+        border-color: @theme-color;
+      }
+    }
+
+    button {
+      position: absolute;
+      right: 10px;
+      top: 15px;
+      border: none;
+      background: transparent;
+      outline: none;
+    }
+  }
+
+  .menu {
+    float: left;
+    margin-left: 60px;
+
+    li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+
+  .right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 10px;
+    line-height: 55px;
+
+    .account {
+      .divider {
+        margin: 0 10px;
+      }
+    }
+
+    .action {
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: middle;
+
+      a {
+        font-size: 20px;
+
+        & + a {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    .user {
+      position: relative;
+      display: inline-block;
+      padding: 0 15px;
+
+      .avatar {
+        display: inline-block;
+        .size(40px);
+
+        vertical-align: middle;
+
+        img {
+          border-radius: 50%;
+        }
+      }
+
+      .nickname {
+        display: inline-block;
+        margin-left: 20px;
+        vertical-align: middle;
+      }
+
+      .drop-menus {
+        display: none;
+        position: absolute;
+        top: 55px;
+        left: 50%;
+        width: 120px;
+        color: @white;
+        text-align: center;
+        background: #a4d1aa;
+        transition: opacity .3s;
+        z-index: @zIndex-4;
+        transform: translateX(-50%);
+
+        .item {
+          line-height: 34px;
+          cursor: pointer;
+
+          a {
+            display: block;
+            color: #fff;
+          }
+        }
+
+        .divider {
+          display: block;
+          margin: 0;
+          width: 100%;
+          height: 1px;
+          background: #ddd;
+        }
+      }
+    }
+  }
+}
+
+.setting-bar {
+  position: relative;
+  z-index: @zIndex-1;
+  height: 40px;
+  line-height: 40px;
+  background: @white;
+  border-top: 1px dashed @light-gray;
+
+  .inner {
+    position: relative;
+    .layout();
+  }
+}

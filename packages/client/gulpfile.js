@@ -13,6 +13,7 @@ const PATH = {
     dist: './dist/img'
   },
   style: {
+    root: './public/styles/index.less',
     src: './public/styles/**/*.less',
     dist: './dist/css'
   },
@@ -37,7 +38,7 @@ function image() {
 }
 
 function style() {
-  return gulp.src(PATH.style.src)
+  return gulp.src(PATH.style.root)
     .pipe(less())
     .pipe(gulp.dest(PATH.style.dist));
 }

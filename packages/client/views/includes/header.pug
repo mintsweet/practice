@@ -1,5 +1,5 @@
 .header
-  .layout
+  .inner
     h1.logo
       a(href="/")
         img(src="/static/img/logo.png")
@@ -9,15 +9,15 @@
       button.practice(type="submit") &#xe7de;
     ul.menu
       li
-        a(href="/staic/norms") 规范
+        a(href="/static/norms") 规范
       li
         a(href="https://docs.mintsweet.cn", target="_blank") 文档
-    .user
+    .right
       if user
         .action
           a.practice(href="/topics/create", title="发布主题") &#xea35;
           a.practice(href="/notice/user", title="查看消息") &#xe60c;
-        .info
+        .user
           .avatar
             img(src=user.avatar)
           .nickname #{user.nickname}
@@ -28,6 +28,7 @@
             .item
               a(href="/signout") 退出登录
       else
-        a(href="/signin") 登录
-        span.divider |
-        a(href="/signup") 注册
+        .account
+          a(href="/signin") 登录
+          span.divider |
+          a(href="/signup") 注册
