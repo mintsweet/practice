@@ -14,11 +14,11 @@ class Aider extends Base {
       width = 100,
       height = 40,
       textColor = 'a1a1a1',
-      bgColor = 'fffff'
+      bgColor = 'ffffff'
     } = ctx.query;
 
     // 设置画布
-    const img = new BMP24(width, height, `0x${textColor}`);
+    const img = new BMP24(width, height);
     // 设置背景
     img.fillRect(0, 0, width, height, `0x${bgColor}`);
 
@@ -37,7 +37,7 @@ class Aider extends Base {
     for (let i = 0; i < token.length; i++) {
       y = 2 + this._rand(-4, 4);
       // 画字符
-      img.drawChar(token[i], x, y, BMP24.font12x24, '0xa1a1a1');
+      img.drawChar(token[i], x, y, BMP24.font12x24, `0x${textColor}`);
       x += 12 + this._rand(4, 8);
     }
 
