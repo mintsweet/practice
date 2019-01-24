@@ -7,7 +7,7 @@ block content
       | 用户登录
     .content
       form#signinForm.form.form-horizontal(method="post")
-        .alert.alert-error(class={hidden: !error}) #{error}
+        #js-alert.alert.alert-error(class={hidden: !error}) #{error}
         .form-item
           label(for="email") 邮箱：
           .control
@@ -20,7 +20,7 @@ block content
           label(for="captcha") 验证码：
           .control
             input#captcha(type="text",name="captcha", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
-            img.captcha(src="", alt="验证码")
+            img#js-captcha.captcha(src=url, alt="验证码")
         .form-item
           label
           .control

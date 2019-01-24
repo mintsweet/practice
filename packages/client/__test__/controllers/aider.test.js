@@ -7,17 +7,9 @@ jest.mock('../../utils/api.js', () => ({
 
 test('should / status 200', async () => {
   const res = await request
-    .get('/signin')
+    .get('/aider/captcha')
     .expect(200);
 
-  expect(res.text).toContain('登录');
+  expect(res.body.status).toEqual(1);
+  expect(res.body.url).toContain('xxx');
 });
-
-test('should / status 200', async () => {
-  const res = await request
-    .get('/signup')
-    .expect(200);
-
-  expect(res.text).toContain('注册');
-});
-

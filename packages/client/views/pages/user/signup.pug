@@ -7,7 +7,7 @@ block content
       | 用户注册
     .content
       form#signupForm.form.form-horizontal(method="post")
-        .alert.alert-error(class={hidden: !error}) #{error}
+        #js-alert.alert.alert-error(class={hidden: !error}) #{error}
         .form-item
           label(for="nickname") 昵称：
           .control
@@ -24,7 +24,7 @@ block content
           label(for="captcha") 验证码：
           .control
             input#cpatcha(type="text", name="captcha", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
-            img.captcha(src="", alt="验证码")
+            img#js-captcha.captcha(src=url, alt="验证码")
         .form-item
           label
           .control

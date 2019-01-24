@@ -6,7 +6,8 @@ const eslintConfig = {
   },
 
   globals: {
-    document: true
+    window: true,
+    document: true,
   },
 
   extends: 'mints',
