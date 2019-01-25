@@ -14,6 +14,7 @@
     "coverageDirectory": "coverage"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "highlight.js": "^9.13.1",
     "markdown-it": "^8.4.2",

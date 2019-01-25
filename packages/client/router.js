@@ -13,6 +13,8 @@ router.get('/', wrap(Site.renderIndex));
 router.get('/static/norms', wrap(Static.renderNormsDoc));
 router.get('/aider/captcha', wrap(Aider.getCaptcha));
 router.get('/signup', wrap(User.renderSignup));
+router.post('/signup', wrap(User.signup));
 router.get('/signin', wrap(User.renderSignin));
+router.post('/signin', wrap(User.signin));
 
 module.exports = router;

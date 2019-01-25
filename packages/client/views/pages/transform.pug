@@ -1,0 +1,25 @@
+extends ../layout.pug
+
+block content
+  .transform
+    i.practice(class=`icon-${type}`)
+    strong #{message}
+    .skip
+      span#time(data-url=url) 3
+      | 秒后将跳转…
+append footer
+  script.
+    var time = $('#time');
+    var countTime = 3;
+    var url = time.attr('data-url');
+    var timer;
+
+    timer = window.setInterval(function() {
+      countTime--;
+      if (countTime === 0) {
+        window.location.href = url || '/';
+        window.clearInterval(timer);
+        return false;
+      }
+      time.text(countTime);
+    }, 1000);

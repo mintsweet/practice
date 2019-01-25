@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const routes = require('./router');
 const config = require('./config');
@@ -14,6 +15,10 @@ app.use('/static', express.static(path.join(__dirname, 'dist')));
 
 // config
 app.locals.config = config;
+
+// middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // router
 app.use('/', routes);
