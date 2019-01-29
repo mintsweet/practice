@@ -17,6 +17,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "highlight.js": "^9.13.1",
+    "log4js": "^4.0.0",
     "markdown-it": "^8.4.2",
     "pug": "^2.0.3",
     "request-promise": "^4.2.2"

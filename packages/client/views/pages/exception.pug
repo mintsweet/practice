@@ -1,0 +1,13 @@
+extends ../layout.pug
+
+block content
+  .exception
+      i.practice.icon-error
+      h1 #{title}
+      h2 #{errorTitle}
+      p
+        strong 可能的原因：
+        each item in errorMsg
+          span #{item}
+      p
+        a.btn(href="/") 去首页看看
