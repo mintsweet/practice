@@ -6,6 +6,8 @@ class User {
     this.signup = this.signup.bind(this);
     this.renderSignin = this.renderSignin.bind(this);
     this.signin = this.signin.bind(this);
+    this.renderForgetPass = this.renderForgetPass.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
   }
 
   async getCaptchaUrl(req) {
@@ -110,6 +112,53 @@ class User {
         title: '登录',
         error: err.error,
         url
+      });
+    }
+  }
+
+  // 忘记密码页
+  async renderForgetPass(req, res) {
+    const url = await this.getCaptchaUrl(req);
+
+    return res.render('pages/user/forget_pass', {
+      title: '忘记密码',
+      url
+    });
+  }
+
+  // 忘记密码
+  async forgetPass(req, res) {
+    const { email, captcha } = req.body;
+    const data = req.app.locals.captcha || {};
+    const url = await this.getCaptchaUrl(req);
+
+    if (captcha.toUpperCase() !== data.token) {
+      return res.render('pages/user/signin', {
+        title: '登录',
+        error: '图形验证码错误',
+        url
+      });
+    } else if (Date.now() > data.expired) {
+      return res.render('pages/user/signin', {
+        title: '登录',
+        error: '图形验证码已经失效了，请重新获取',
+        url
+      });
+    }
+
+    try {
+      await API.forgetPass({ email });
+
+      return res.render('pages/transform', {
+        title: '找回密码成功',
+        type: 'success',
+        message: '找回密码成功'
+      });
+    } catch(err) {
+      return res.render('pages/user/forget_pass', {
+        title: '忘记密码',
+        error: err.error,
+        picUrl: url
       });
     }
   }

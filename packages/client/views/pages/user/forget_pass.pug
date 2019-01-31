@@ -1,0 +1,45 @@
+extends ../../layout.pug
+
+block content
+  .user-account
+    .title
+      span.practice &#xe601;
+      | 忘记密码
+    .content
+      form#forgetForm.form.form-horizontal(method="post")
+        .alert.alert-error(class={hidden: !error}) #{error}
+        .form-item
+          label.label(for="email") 邮箱：
+          .control
+            input#email(type="text", name="email", placeholder="请输入邮箱", autocomplete="off")
+        .form-item
+          label.label(for="captcha") 验证码：
+          .control
+            input#captcha(type="text", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
+            img#js-captcha.captcha(src=url, alt="图形验证码")
+        .form-item
+          label.label
+          .control
+            button.btn.submit(type="submit") 点击确认
+      .other
+        p 尚未拥有账号？
+        p 请点击
+          a(href="/signup") 注册
+        p 已经拥有账号？
+        p 请点击
+          a(href="/signin") 登录
+append footer
+  script.
+    var mobile = $('#email');
+    var captcha = $('#captcha');
+    var alert = $('.alert');
+
+    $('#forgetForm').submit(function() {
+      if (!email.val() || !(/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(email.val()))) {
+        alert.text('请填写正确格式的邮箱').slideDown();
+        return false;
+      } else if (!captcha.val() || captcha.val().length !== 5) {
+        alert.text('请填写正确格式的验证码').slideDown();
+        return false;
+      }
+    });

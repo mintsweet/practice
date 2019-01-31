@@ -110,3 +110,50 @@ test('should / status 200', async () => {
   expect(res.text).toContain('登录成功');
 });
 
+test('should / status 200', async () => {
+  const res = await request
+    .get('/forget_pass')
+    .expect(200);
+
+  expect(res.text).toContain('忘记密码');
+});
+
+test('should / status 200', async () => {
+  const res = await request
+    .post('/forget_pass')
+    .send({
+      email: '123456@qq.com',
+      captcha: 'ABCDE'
+    })
+    .expect(200);
+
+  expect(res.text).toContain('图形验证码错误');
+});
+
+test('should / status 200', async () => {
+  const now = Date.now() + 1000 * 60 * 11;
+  Date.now = jest.fn(() => now);
+
+  const res = await request
+    .post('/forget_pass')
+    .send({
+      email: '123456@qq.com',
+      captcha: '1U2CB'
+    })
+    .expect(200);
+
+  expect(res.text).toContain('图形验证码已经失效了，请重新获取');
+});
+
+test('should / status 200', async () => {
+  const res = await request
+    .post('/forget_pass')
+    .send({
+      email: '123456@qq.com',
+      captcha: '1U2CB'
+    })
+    .expect(200);
+
+  expect(res.text).toContain('发送至邮箱');
+});
+

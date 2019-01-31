@@ -16,5 +16,7 @@ router.get('/signup', wrap(User.renderSignup));
 router.post('/signup', wrap(User.signup));
 router.get('/signin', wrap(User.renderSignin));
 router.post('/signin', wrap(User.signin));
+router.get('/forget_pass', wrap(User.renderForgetPass));
+router.post('/forget_pass', wrap(User.forgetPass));
 
 module.exports = router;
