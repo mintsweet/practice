@@ -18,5 +18,6 @@ router.get('/signin', wrap(User.renderSignin));
 router.post('/signin', wrap(User.signin));
 router.get('/forget_pass', wrap(User.renderForgetPass));
 router.post('/forget_pass', wrap(User.forgetPass));
+router.get('/signout', wrap(User.signout));
 
 module.exports = router;

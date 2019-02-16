@@ -162,6 +162,16 @@ class User {
       });
     }
   }
+
+  // 登出
+  async signout(req, res) {
+    global.token = '';
+    return res.render('pages/transform', {
+      title: '退出成功',
+      type: 'success',
+      message: '退出成功'
+    });
+  }
 }
 
 module.exports = new User();
