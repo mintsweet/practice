@@ -42,3 +42,53 @@
     }
   }
 }
+
+.user-top {
+  flex: 1;
+  padding: 25px 20px;
+  background: @white;
+  border-radius: 4px;
+
+  .title {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  table {
+    width: 100%;
+    border: 1px solid @light-gray;
+    box-sizing: border-box;
+
+    thead {
+      background: #e9f1e7;
+    }
+
+    tr {
+      &:nth-child(even) {
+        background: #e9f1e7;
+      }
+    }
+
+    th {
+      padding: 10px;
+    }
+
+    td {
+      padding: 4px 10px;
+    }
+
+    a.avatar {
+      display: inline-block;
+      margin-right: 6px;
+      .size(36px);
+
+      vertical-align: middle;
+    }
+
+    a.nickname {
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+  }
+}

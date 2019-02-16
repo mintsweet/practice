@@ -19,5 +19,6 @@ router.post('/signin', wrap(User.signin));
 router.get('/forget_pass', wrap(User.renderForgetPass));
 router.post('/forget_pass', wrap(User.forgetPass));
 router.get('/signout', wrap(User.signout));
+router.get('/users/top100', wrap(User.renderUsersTop100));
 
 module.exports = router;

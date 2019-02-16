@@ -172,6 +172,16 @@ class User {
       message: '退出成功'
     });
   }
+
+  // 积分榜前一百
+  async renderUsersTop100(req, res) {
+    const top100 = await API.getUsersTop({ count: 100 });
+
+    return res.render('pages/user/top100', {
+      title: '积分榜前一百',
+      top100
+    });
+  }
 }
 
 module.exports = new User();

@@ -1,0 +1,30 @@
+extends ../../layout.pug
+
+block content
+  .user-top
+    .title 积分榜前一百用户
+    table
+      thead
+        tr
+          th #
+          th 昵称
+          th 积分
+          th 话题数
+          th 获得喜欢数
+          th 获得收藏数
+          th 粉丝数
+      tbody
+        each item, index in top100
+          tr
+            td #{index + 1}
+            td
+              a.avatar(href=`/user/${item.id}`)
+                img(src=item.avatar)
+              a.nickname(href=`/user/${item.id}`) #{item.nickname}
+            td #{item.score}
+            td #{item.topic_count}
+            td #{item.like_count}
+            td #{item.collect_count}
+            td #{item.follower_count}
+
+
