@@ -1,0 +1,111 @@
+extends ../../layout.pug
+
+block content
+  .content
+    .user-info
+      .avatar
+        img(src=info.avatar)
+      .desc
+        h1
+          | #{info.nickname}
+          if info.location
+            span.practice &#xe602; #{info.location}
+        h2 #{info.signature}
+        if user && info.id === user.id
+          a.action(href=`/setting`) 编辑个人资料
+        else if user && !info.follow
+          a.action.follow_user(href="javascript:;", data-id=info.id) 关注
+        else if user && info.follow
+          a.action.follow_user(href="javascript:;", data-id=info.id) 取消关注
+    .user-gener
+      .gener
+        a(href=`/user/${info.id}`, class={active: type === 'action'}) 动态
+        a(href=`/user/${info.id}/create`, class={active: type === 'create'}) 专栏
+        a(href=`/user/${info.id}/like`, class={active: type === 'like'}) 喜欢
+        span(class={active: type === 'following' || type === 'follower' || type === 'collect' }) 更多
+          .more
+            a(href=`/user/${info.id}/following`, class={active: type === 'following'}) 关注
+            a(href=`/user/${info.id}/follower`, class={active: type === 'follower'}) 粉丝
+            a(href=`/user/${info.id}/collect`, class={active: type === 'collect'}) 收藏集
+      ul.content
+        if type === 'following' || type === 'follower'
+          each item in data
+            li.follow-item
+              a.avatar(href=`/user/${item.id}`)
+                img(src=item.avatar)
+              a.nickname(href=`/user/${item.id}`)
+                span #{item.nickname}
+          else
+            include ../../includes/components/no_content.pug
+        else if type === 'create'
+          each item in data
+            li.topic-item
+              a.topic(href=`/topic/${item.id}`) #{item.title}
+              .desc
+                span
+                  i.practice &#xe63b;
+                  | #{item.like_count}
+                span
+                  i.practice &#xe65f;
+                  | #{item.collect_count}
+                span 阅读数 #{item.visit_count}
+          else
+            include ../../includes/components/no_content.pug
+        else
+          each item in data
+            li.action-item
+              case item.type
+                when 'create'
+                  span 发布了话题
+                  time #{item.create_at}
+                  a.topic(href=`/topic/${item.id}`) #{item.title}
+                when 'like'
+                  span 喜欢了话题
+                  time #{item.create_at}
+                  a.topic(href=`/topic/${item.id}`) #{item.title}
+                when 'collect'
+                  span 收藏了话题
+                  time #{item.create_at}
+                  a.topic(href=`/topic/${item.id}`) #{item.title}
+                when 'follow'
+                  span 关注了用户
+                  time #{item.create_at}
+                  .info
+                    a.avatar(href=`/user/${item.id}`)
+                      img(src=item.avatar)
+                    .detail
+                      a.nickname(href=`/user/${item.id}`) #{item.nickname}
+                      span.signature #{item.signature}
+          else
+            include ../../includes/components/no_content.pug
+  aside.asider
+    .aside-block
+      .title 个人成就
+      ul.content.user-stat
+        li
+          span.practice &#xe63b;
+          .gener.
+            获得喜欢#[span.count #{info.like_count}]次
+        li
+          span.practice &#xe65f;
+          .gener.
+            获得收藏#[span.count #{info.collect_count}]次
+        li
+          span.practice &#xe6a4;
+          .gener.
+            获得积分#[span.count #{info.score}]分
+    .user-follow
+      .item
+        .title 关注了
+        a.count(href=`/user/${info.id}/following`) #{info.following_count}
+      .item
+        .title 关注者
+        a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
+    .user-collect
+      a(href=`/user/${info.id}/collect`) 收藏集
+  include ../../includes/components/global_message.pug
+append footer
+  script.
+    $('.user-gener .gener>span').hover(function() {
+      $('.user-gener .more').stop(true, false).fadeToggle();
+    });

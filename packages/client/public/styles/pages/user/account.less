@@ -1,0 +1,44 @@
+.user-account {
+  flex: 1;
+  padding: @global-block-padding;
+  min-height: 400px;
+  background: @white;
+
+  .title {
+    margin-bottom: 20px;
+    font-size: 20px;
+
+    .practice {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+  }
+
+  .content {
+    display: flex;
+
+    .form,
+    .info {
+      flex: 1;
+      box-sizing: border-box;
+    }
+
+    .form {
+      padding: 10px 60px 10px 20px;
+    }
+
+    .info {
+      padding: 35px;
+      border-left: 1px solid #ddd;
+
+      a {
+        margin: 0 4px;
+        color: @theme-color;
+
+        &:hover {
+          color: darken(@theme-color,20%);
+        }
+      }
+    }
+  }
+}

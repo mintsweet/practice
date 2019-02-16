@@ -12,9 +12,17 @@ const signin = params => request('/signin', params, 'POST');
 // 获取积分榜用户列表
 const getUsersTop = params => request('/users/top', params);
 
+// 根据ID获取用户信息
+const getUserById = uid => request(`/user/${uid}`);
+
+// 获取用户动态
+const getUserAction = uid => request(`/user/${uid}/action`);
+
 module.exports = {
   getCaptcha,
   signup,
   signin,
-  getUsersTop
+  getUsersTop,
+  getUserById,
+  getUserAction
 };

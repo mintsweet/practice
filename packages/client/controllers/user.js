@@ -182,6 +182,22 @@ class User {
       top100
     });
   }
+
+
+  // 个人信息页
+  async renderUserInfo(req, res) {
+    const { uid } = req.params;
+
+    const info = await API.getUserById(uid);
+    const data = await API.getUserAction(uid);
+
+    return res.render('pages/user/info', {
+      title: '动态 - 用户信息',
+      type: 'action',
+      info,
+      data,
+    });
+  }
 }
 
 module.exports = new User();
