@@ -1,0 +1,32 @@
+.user-stat {
+  background: @white;
+
+  li {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .practice {
+    display: inline-block;
+    .size(25px);
+
+    line-height: 25px;
+    border-radius: 50%;
+    color: @theme-color;
+    background: rgba(@theme-color,.1);
+    text-align: center;
+  }
+
+  .gener {
+    display: inline-block;
+    margin-left: 10px;
+
+    .count {
+      margin: 0 4px;
+      font-weight: 600;
+    }
+  }
+}

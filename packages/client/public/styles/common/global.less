@@ -34,8 +34,11 @@ a {
   & > .content {
     flex: 3;
     margin-right: 20px;
-    background: @white;
     overflow: hidden;
+
+    &.has-bg {
+      background: @white;
+    }
   }
 
   & > .asider {
@@ -295,6 +298,7 @@ input[type="search"] {
 
 // no content
 .no-content {
+  padding: @global-block-padding;
   text-align: center;
   background: @white;
 

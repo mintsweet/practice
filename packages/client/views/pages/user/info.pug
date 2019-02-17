@@ -36,7 +36,7 @@ block content
               a.nickname(href=`/user/${item.id}`)
                 span #{item.nickname}
           else
-            include ../../includes/components/no_content.pug
+            include ../../includes/no_content.pug
         else if type === 'create'
           each item in data
             li.topic-item
@@ -50,7 +50,7 @@ block content
                   | #{item.collect_count}
                 span 阅读数 #{item.visit_count}
           else
-            include ../../includes/components/no_content.pug
+            include ../../includes/no_content.pug
         else
           each item in data
             li.action-item
@@ -77,7 +77,7 @@ block content
                       a.nickname(href=`/user/${item.id}`) #{item.nickname}
                       span.signature #{item.signature}
           else
-            include ../../includes/components/no_content.pug
+            include ../../includes/no_content.pug
   aside.asider
     .aside-block
       .title 个人成就
@@ -103,7 +103,6 @@ block content
         a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
     .user-collect
       a(href=`/user/${info.id}/collect`) 收藏集
-  include ../../includes/components/global_message.pug
 append footer
   script.
     $('.user-gener .gener>span').hover(function() {

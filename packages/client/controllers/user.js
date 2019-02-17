@@ -34,7 +34,7 @@ class User {
 
   // 注册
   async signup(req, res) {
-    const { nickanme, email, password, captcha } = req.body;
+    const { nickname, email, password, captcha } = req.body;
     const data = req.app.locals.captcha || {};
     const url = await this.getCaptchaUrl(req);
 
@@ -53,7 +53,7 @@ class User {
     }
 
     try {
-      await API.signup({ nickanme, email, password });
+      await API.signup({ nickname, email, password });
       return res.render('pages/transform', {
         title: '注册成功',
         type: 'success',
@@ -194,6 +194,81 @@ class User {
     return res.render('pages/user/info', {
       title: '动态 - 用户信息',
       type: 'action',
+      info,
+      data,
+    });
+  }
+
+  // 用户专栏页
+  async renderUserCreate(req, res) {
+    const { uid } = req.params;
+
+    const info = await API.getUserById(uid);
+    const data = await API.getUserCreate(uid);
+
+    return res.render('pages/user/info', {
+      title: '专栏 - 用户信息',
+      type: 'create',
+      info,
+      data,
+    });
+  }
+
+  // 用户喜欢页
+  async renderUserLike(req, res) {
+    const { uid } = req.params;
+
+    const info = await API.getUserById(uid);
+    const data = await API.getUserLike(uid);
+
+    return res.render('pages/user/info', {
+      title: '喜欢 - 用户信息',
+      type: 'like',
+      info,
+      data,
+    });
+  }
+
+  // 用户收藏页
+  async renderUserCollect(req, res) {
+    const { uid } = req.params;
+
+    const info = await API.getUserById(uid);
+    const data = await API.getUserCollect(uid);
+
+    return res.render('pages/user/info', {
+      title: '收藏 - 用户信息',
+      type: 'collect',
+      info,
+      data,
+    });
+  }
+
+  // 用户粉丝页
+  async renderUserFollower(req, res) {
+    const { uid } = req.params;
+
+    const info = await API.getUserById(uid);
+    const data = await API.getUserFollower(uid);
+
+    return res.render('pages/user/info', {
+      title: '粉丝 - 用户信息',
+      type: 'follower',
+      info,
+      data,
+    });
+  }
+
+  // 用户关注页
+  async renderUserFollowing(req, res) {
+    const { uid } = req.params;
+
+    const info = await API.getUserById(uid);
+    const data = await API.getUserFollowing(uid);
+
+    return res.render('pages/user/info', {
+      title: '关注 - 用户信息',
+      type: 'following',
       info,
       data,
     });
