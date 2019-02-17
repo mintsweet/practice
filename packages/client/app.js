@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const routes = require('./router');
 const config = require('./config');
+const Auth = require('./middlewares/auth');
 const ErrorHandler = require('./middlewares/error-handler');
 
 const app = module.exports = express();
@@ -20,6 +21,7 @@ app.locals.config = config;
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(Auth.getUserInfo);
 
 // router
 app.use('/', routes);
