@@ -1,0 +1,52 @@
+dl.topic-list
+  each topic in topics
+    dd.topic
+      a.avatar(href=`/user/${topic.author.id}`, title=topic.author.nickname)
+        img(src=topic.author.avatar)
+      .content
+        if topic.top
+          span.tag.stress 置顶
+        else if topic.good
+          span.tag.stress 精华
+        else
+          span.tag #{topic.tabName}
+        a.title(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}
+      .statistics
+        span(title="喜欢数")
+          i.practice &#xe63b;
+          | #{topic.like_count}
+        span(title="回复数")
+          i.practice &#xe619;
+          | #{topic.reply_count}
+      .date
+        if topic.last_reply_author
+          a(href=`/user/${topic.last_reply_author.id}`, title=topic.last_reply_author.nickname)
+            img(src=topic.last_reply_author.avatar)
+          span #{topic.last_reply_at_ago}
+        else
+          | #{topic.create_at}
+  else
+    include ../../includes/no_content.pug
+- var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
+if topics.length > 0
+  ul.pagination
+    if currentPage === 1
+      li.disabled
+        a.practice &#xe640;
+    else
+      li
+        a.practice(href=`${baseUrl}${currentPage - 1}`) &#xe640;
+    - for(var i = 1; i <= totalPage; i++) {
+        if currentPage === i
+          li.active.disabled
+            a #{i}
+        else
+          li
+            a(href=`${baseUrl}${i}`) #{i}
+    - }
+    if currentPage === totalPage
+      li.disabled
+        a.practice &#xe63f;
+    else
+      li
+        a.practice(href=`${baseUrl}${currentPage + 1}`) &#xe63f;

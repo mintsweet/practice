@@ -1,4 +1,36 @@
 extends ../layout.pug
 
 block content
-  h1 Hello,World!
+  .content
+    .tab-list
+      each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(tabs)
+        if currentTab === item.url
+          a.active(href="?tab=" + item.url) #{item.name}
+        else
+          a(href="?tab=" + item.url) #{item.name}
+    include ./topic/list.pug
+  aside.sider
+    .block.no-title
+      a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
+    .block
+      .title
+        span 积分榜
+        a(href="/users/top100") 更多
+      ul.content.score-list
+        each user in top100
+          li
+            a.nickname(href=`/user/${user.id}`) #{user.nickname}
+            span.score #{user.score}
+    .block
+      .title
+        span 无人回复的话题
+      ul.content.no-reply
+        each topic in noReplyTopic
+          li
+            a(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}
+    .block
+      .title 友情社区
+      ul.content
+        li
+          a(href="https://cnodejs.org/", target="_blank")
+            img(src="/static/img/cnode_logo_32.png")

@@ -1,0 +1,82 @@
+.topic-list {
+  margin-top: 10px;
+
+  .topic {
+    display: flex;
+    margin-bottom: 10px;
+    height: 50px;
+    line-height: 50px;
+    background: rgba(@theme-color,.1);
+
+    .avatar {
+      flex: 0 0 30px;
+      margin: 10px 0 0 10px;
+      .size(30px);
+    }
+
+    .content {
+      flex: auto;
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+      overflow: hidden;
+
+      .tag {
+        flex: 0 0 40px;
+        padding: 2px 0;
+        margin-right: 8px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+        color: @white;
+        background: @dark-gray;
+        border-radius: 2px;
+        text-align: center;
+
+        &.stress {
+          background: @theme-color;
+        }
+      }
+
+      a.title {
+        flex: auto;
+        .text-ellipsis;
+      }
+    }
+
+    .statistics {
+      flex: 0 0 80px;
+      display: flex;
+      align-items: center;
+
+      span {
+        flex: 1;
+        font-size: 12px;
+
+        i.practice {
+          margin-right: 4px;
+          font-size: 13px;
+          vertical-align: top;
+        }
+      }
+    }
+
+    .date {
+      flex: 0 0 110px;
+      font-size: 12px;
+      text-align: left;
+
+      a {
+        display: inline-block;
+        .size(30px);
+
+        vertical-align: middle;
+      }
+
+      span {
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
