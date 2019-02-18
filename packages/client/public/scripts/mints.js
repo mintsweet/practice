@@ -19,7 +19,7 @@
   };
 
   // 模态下拉框
-  Mints.modalSelect = function() {
+  Mints.modalSelect = () => {
     $('.select').click(function() {
       $('.select>.options').slideToggle();
     });
@@ -31,14 +31,14 @@
   };
 
   // 头部下拉菜单
-  Mints.headerDropMenu = function() {
+  Mints.headerDropMenu = () => {
     $('.header .info').hover(function() {
       $('.drop-menus').stop(true, false).slideToggle();
     });
   };
 
   // 全局消息提示
-  Mints.globalMessage = function(type = 'error', message = '', duration = 2000) {
+  Mints.globalMessage = (type = 'error', message = '', duration = 2000) => {
     $('.global-message .message').fadeIn();
     $('.global-message .message .content').addClass(type).text(message).fadeIn();
     setTimeout(function() {
@@ -58,6 +58,26 @@
         } else {
           alert.text(res.message).slideDown();
           return false;
+        }
+      });
+    });
+  };
+
+  // 关注取消关注
+  Mints.followOrUn = () => {
+    $('.action.follow_user').click(function() {
+      const id = $(this).attr('data-id');
+      $.post(`/user/${id}/follow_or_un`, res => {
+        if (res.status === 1) {
+          if (res.action === 'follow') {
+            Mints.globalMessage('success', '关注成功');
+            $(this).text('取消关注');
+          } else {
+            Mints.globalMessage('success', '取消关注');
+            $(this).text('关注');
+          }
+        } else {
+          Mints.globalMessage('error', res.message);
         }
       });
     });

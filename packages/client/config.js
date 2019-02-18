@@ -16,4 +16,5 @@ module.exports = {
     test: 'https://jsonplaceholder.typicode.com'
   },
 
+  home_topic_count: 20,
 };

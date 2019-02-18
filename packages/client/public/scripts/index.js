@@ -3,4 +3,5 @@ $(document).ready(function() {
   window.Mints.modalSelect();
   window.Mints.headerDropMenu();
   window.Mints.renewCaptcha();
+  window.Mints.followOrUn();
 });

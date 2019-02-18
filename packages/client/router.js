@@ -39,6 +39,7 @@ router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
 router.post('/setting', Auth.userRequired, wrap(User.setting));
 router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
 router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
+router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));

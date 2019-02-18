@@ -335,6 +335,25 @@ class User {
       });
     }
   }
+
+  // 关注或者取消关注
+  async followOrUn(req, res) {
+    const { uid } = req.params;
+
+    try {
+      const action = await API.followOrUn(uid);
+
+      return res.send({
+        status: 1,
+        action
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        message: err.error
+      });
+    }
+  }
 }
 
 module.exports = new User();
