@@ -3,6 +3,8 @@ const Site = require('./controllers/site');
 const Static = require('./controllers/static');
 const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
+const Notice = require('./controllers/notice');
+const Auth = require('./middlewares/auth');
 
 const router = express.Router();
 
@@ -33,5 +35,9 @@ router.get('/user/:uid/like', wrap(User.renderUserLike));
 router.get('/user/:uid/collect', wrap(User.renderUserCollect));
 router.get('/user/:uid/follower', wrap(User.renderUserFollower));
 router.get('/user/:uid/following', wrap(User.renderUserFollowing));
+
+// 消息
+router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));
+router.get('/notice/system', Auth.userRequired, wrap(Notice.renderNoticeSystem));
 
 module.exports = router;

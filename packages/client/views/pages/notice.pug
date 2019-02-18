@@ -1,0 +1,48 @@
+extends ../layout.pug
+
+append header
+  .setting-bar
+    .layout
+      a(href="/notice/user", class={active: type === 'user'}) 用户消息
+      a(href="/notice/system", class={active: type === 'system'}) 系统消息
+block content
+  .content
+    each item in data
+      case item.type
+        when 'like'
+        when 'collect'
+        when 'reply'
+          .notice-item.topic
+            a.avatar(href=`/user/${item.author.id}`)
+              img(src=item.author.avatar)
+            .detail
+              a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
+              time #{item.create_at}
+              .content
+                span #{item.typeName}你的话题：
+                a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+        when 'reply2'
+        when 'up'
+          .notice-item.topic
+            a.avatar(href=`/user/${item.author.id}`)
+              img(src=item.author.avatar)
+            .detail
+              a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
+              time #{item.create_at}
+              .content
+                span #{item.typeName}你的话题：
+                a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+        when 'follow'
+          .notice-item.follow
+            .title
+              span #{item.typeName}
+              time #{item.create_at}
+            .detail
+              a.avatar(href=`/user/${item.author.id}`)
+                img(src=item.author.avatar)
+              a.nickname(href=`/user/${item.author.id}`)
+                span #{item.author.nickname}
+              a.btn(href="javascript") 关注
+    else
+      include ../includes/no_content.pug
+  .asider
