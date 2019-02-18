@@ -30,15 +30,7 @@ block content
       .form-item
         button.btn(type="submit") 更新个人资料
   .asider
-    .block
-      .title
-        span 积分榜
-        a(href="/users/top100") 更多
-      ul.content.score-list
-        each user in top100
-          li
-            a.nickname(href=`/user/${user.id}`) #{user.nickname}
-            span.score #{user.score}
+    include ../../includes/user_ranking.pug
 append footer
   script.
     var signature = $('#signature');

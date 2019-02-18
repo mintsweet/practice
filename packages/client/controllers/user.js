@@ -300,7 +300,38 @@ class User {
       return res.render('pages/user/setting', {
         title: '个人资料',
         error: err.error,
-        data
+        top100: data
+      });
+    }
+  }
+
+  // 修改密码页
+  async renderUpdatePass(req, res) {
+    const data = await API.getUsersTop();
+
+    return res.render('pages/user/update_pass', {
+      title: '修改密码',
+      top100: data
+    });
+  }
+
+  // 修改密码
+  async updatePass(req, res) {
+    const data = await API.getUsersTop();
+
+    try {
+      await API.updatePass(req.body);
+
+      return res.render('pages/transform', {
+        type: 'success',
+        message: '修改成功',
+        url: '/update_pass'
+      });
+    } catch(err) {
+      return res.render('pages/user/update_pass', {
+        title: '修改密码',
+        error: err.error,
+        top100: data
       });
     }
   }

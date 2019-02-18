@@ -37,6 +37,8 @@ router.get('/user/:uid/follower', wrap(User.renderUserFollower));
 router.get('/user/:uid/following', wrap(User.renderUserFollowing));
 router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
 router.post('/setting', Auth.userRequired, wrap(User.setting));
+router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
+router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));
