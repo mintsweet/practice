@@ -273,6 +273,37 @@ class User {
       data,
     });
   }
+
+  // 更新个人设置页
+  async renderSetting(req, res) {
+    const data = await API.getUsersTop();
+
+    return res.render('pages/user/setting', {
+      title: '个人资料',
+      top100: data
+    });
+  }
+
+  // 更新个人设置
+  async setting(req, res) {
+    const data = await API.getUsersTop();
+
+    try {
+      await API.setting(req.body);
+
+      return res.render('pages/transform', {
+        type: 'success',
+        message: '更新个人资料成功',
+        url: '/setting'
+      });
+    } catch(err) {
+      return res.render('pages/user/setting', {
+        title: '个人资料',
+        error: err.error,
+        data
+      });
+    }
+  }
 }
 
 module.exports = new User();

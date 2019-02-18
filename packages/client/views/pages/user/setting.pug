@@ -1,0 +1,70 @@
+extends ../../layout.pug
+
+append header
+  .setting-bar
+    .layout
+      a.active(href="/setting") 个人资料
+      a(href="/update_pass") 修改密码
+block content
+  .content.has-bg
+    .setting-title 个人资料
+    form#settingForm.form.setting-form(method="post")
+      .alert.alert-error(class={hidden: !error}) #{error}
+      .form-item
+        label(for="avatar") 头像
+        .avatar
+          img(src=user.avatar)
+          p
+            input.file(type="file", name="file")
+            span 支持 jpg、png 格式大小 1M 以内的图片
+            a.btn.upload(href="javascript:;") 点击上传
+      .form-item
+        label(for="nickname") 昵称
+        input(type="text", id="nickname", name="nickname", placeholder="请输入昵称", autocomplete="off", value=user.nickname)
+      .form-item
+        label(for="location") 所在地
+        input(type="text", id="location", name="location", placeholder="请输入所在地", autocomplete="off", value=user.location)
+      .form-item
+        label(for="signature") 个人介绍
+        input(type="text", id="signature", name="signature", placeholder="请输入个人介绍", autocomplete="off", value=user.signature)
+      .form-item
+        button.btn(type="submit") 更新个人资料
+  .asider
+    .block
+      .title
+        span 积分榜
+        a(href="/users/top100") 更多
+      ul.content.score-list
+        each user in top100
+          li
+            a.nickname(href=`/user/${user.id}`) #{user.nickname}
+            span.score #{user.score}
+append footer
+  script.
+    var signature = $('#signature');
+    var alert = $('.alert');
+
+    $('#signature').submit(function() {
+      if (signature.val().length > 100) {
+        alert.text('签名长度不能超过100个字符').slideDown();
+        return false;
+      }
+    });
+
+    $('.upload').click(function() {
+      const file = $('.file').prop('files')[0];
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      $.ajax({
+        type: 'POST',
+        url: '/avatar/upload',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false
+      }).done(res => {
+        console.log(res);
+      });
+    });

@@ -35,6 +35,8 @@ router.get('/user/:uid/like', wrap(User.renderUserLike));
 router.get('/user/:uid/collect', wrap(User.renderUserCollect));
 router.get('/user/:uid/follower', wrap(User.renderUserFollower));
 router.get('/user/:uid/following', wrap(User.renderUserFollowing));
+router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
+router.post('/setting', Auth.userRequired, wrap(User.setting));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));
