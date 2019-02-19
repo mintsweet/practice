@@ -46,6 +46,38 @@ class Topic {
       });
     }
   }
+
+  // 编辑话题页
+  async renderEdit(req, res) {
+    const { tid } = req.params;
+
+    const data = await API.getTopicById(tid);
+
+    return res.render('pages/topic/create', {
+      title: '编辑话题',
+      topic: data.topic
+    });
+  }
+
+  // 编辑话题
+  async editTopic(req, res) {
+    const { tid } = req.params;
+
+    try {
+      await API.editTopic(tid, req.body);
+
+      return res.render('pages/transform', {
+        title: '编辑话题成功',
+        type: 'success',
+        message: '编辑话题成功'
+      });
+    } catch(err) {
+      return res.render('pages/topic/create', {
+        title: '编辑话题',
+        error: err.error
+      });
+    }
+  }
 }
 
 module.exports = new Topic();

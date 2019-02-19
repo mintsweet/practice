@@ -46,6 +46,8 @@ router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
 router.get('/topics/create', Auth.userRequired, wrap(Topic.renderCreate));
 router.post('/topics/create', Auth.userRequired, wrap(Topic.createTopic));
 router.get('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
+router.get('/topic/:tid/edit', Auth.userRequired, wrap(Topic.renderEdit));
+router.post('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));
