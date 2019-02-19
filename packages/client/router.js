@@ -3,6 +3,7 @@ const Site = require('./controllers/site');
 const Static = require('./controllers/static');
 const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
+const Topic = require('./controllers/topic');
 const Notice = require('./controllers/notice');
 const Auth = require('./middlewares/auth');
 
@@ -40,6 +41,10 @@ router.post('/setting', Auth.userRequired, wrap(User.setting));
 router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
 router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
 router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
+
+// 话题
+router.get('/topics/create', Auth.userRequired, wrap(Topic.renderCreate));
+router.post('/topics/create', Auth.userRequired, wrap(Topic.createTopic));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));
