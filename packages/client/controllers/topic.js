@@ -25,6 +25,27 @@ class Topic {
       });
     }
   }
+
+  // 删除话题
+  async deleteTopic(req, res) {
+    const { tid } = req.params;
+
+    try {
+      await API.deleteTopic(tid);
+
+      return res.render('pages/transform', {
+        title: '删除话题',
+        type: 'success',
+        message: '删除话题成功'
+      });
+    } catch(err) {
+      return res.render('pages/transform', {
+        title: '删除话题失败',
+        type: 'error',
+        message: '删除话题失败'
+      });
+    }
+  }
 }
 
 module.exports = new Topic();

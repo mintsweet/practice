@@ -45,6 +45,7 @@ router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
 // 话题
 router.get('/topics/create', Auth.userRequired, wrap(Topic.renderCreate));
 router.post('/topics/create', Auth.userRequired, wrap(Topic.createTopic));
+router.get('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));
