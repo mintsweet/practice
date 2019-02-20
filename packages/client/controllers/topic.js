@@ -78,6 +78,24 @@ class Topic {
       });
     }
   }
+
+  // 搜索结果页
+  async renderSearch(req, res) {
+    const { q } = req.query;
+
+    const noReplyTopic = await API.getNoReplyTopic();
+    const data = await API.getTopicBySearch({ title: q });
+
+    return res.render('pages/topic/search', {
+      title: '搜索结果',
+      topics: data.topics,
+      currentPage: data.currentPage,
+      totalPage: data.totalPage,
+      total: data.total,
+      q,
+      noReplyTopic
+    });
+  }
 }
 
 module.exports = new Topic();

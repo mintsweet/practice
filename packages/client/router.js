@@ -48,6 +48,7 @@ router.post('/topics/create', Auth.userRequired, wrap(Topic.createTopic));
 router.get('/topic/:tid/delete', Auth.userRequired, wrap(Topic.deleteTopic));
 router.get('/topic/:tid/edit', Auth.userRequired, wrap(Topic.renderEdit));
 router.post('/topic/:tid/edit', Auth.userRequired, wrap(Topic.editTopic));
+router.get('/topics/search', wrap(Topic.renderSearch));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));

@@ -12,22 +12,8 @@ block content
   aside.sider
     .block.no-title
       a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
-    .block
-      .title
-        span 积分榜
-        a(href="/users/top100") 更多
-      ul.content.score-list
-        each user in top100
-          li
-            a.nickname(href=`/user/${user.id}`) #{user.nickname}
-            span.score #{user.score}
-    .block
-      .title
-        span 无人回复的话题
-      ul.content.no-reply
-        each topic in noReplyTopic
-          li
-            a(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}
+    include ../includes/user_ranking.pug
+    include ../includes/no_reply_topic.pug
     .block
       .title 友情社区
       ul.content
