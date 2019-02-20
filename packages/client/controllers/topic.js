@@ -1,4 +1,5 @@
 const API = require('../utils/api');
+const md2html = require('../utils/md2html');
 
 class Topic {
   // 创建话题
@@ -95,6 +96,65 @@ class Topic {
       q,
       noReplyTopic
     });
+  }
+
+  // 话题详情页
+  async renderDetail(req, res) {
+    const { tid } = req.params;
+
+    const noReplyTopic = await API.getNoReplyTopic();
+    const data = await API.getTopicDetail(tid);
+
+    return res.render('pages/topic/detail', {
+      title: '话题详情',
+      topic: {
+        ...data.topic,
+        content: md2html(data.topic.content)
+      },
+      author: data.author,
+      replies: data.replies,
+      like: data.like,
+      collect: data.collect,
+      noReplyTopic
+    });
+  }
+
+  // 喜欢或者取消喜欢
+  async likeOrUn(req, res) {
+    const { tid } = req.params;
+
+    try {
+      const action = await API.likeOrUn(tid);
+
+      return res.send({
+        status: 1,
+        action
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        message: err.error
+      });
+    }
+  }
+
+  // 收藏或者取消收藏
+  async collectOrUn(req, res) {
+    const { tid } = req.params;
+
+    try {
+      const action = await API.collectOrUn(tid);
+
+      return res.send({
+        status: 1,
+        action
+      });
+    } catch(err) {
+      return res.send({
+        status: 0,
+        message: err.error
+      });
+    }
   }
 }
 

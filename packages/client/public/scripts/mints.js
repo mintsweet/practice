@@ -83,5 +83,55 @@
     });
   };
 
+  // 话题点赞
+  Mints.likeTopic = () => {
+    const utils = this;
+    $('.action.like_topic').click(function() {
+      const trigger = this;
+      $.post(`${window.location.pathname}/like_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'like') {
+            utils.globalMessage('success', '喜欢了该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) + 1);
+            $(trigger).addClass('active');
+          } else {
+            utils.globalMessage('success', '取消喜欢该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) - 1);
+            $(trigger).removeClass('active');
+          }
+        } else {
+          utils.globalMessage('error', res.message);
+        }
+      });
+    });
+  };
+
+  // 话题收藏
+  Mints.collectTopic = () => {
+    const utils = this;
+    $('.action.collect_topic').click(function() {
+      const trigger = this;
+      $.post(`${window.location.pathname}/collect_or_un`, function(res) {
+        if (res.status === 1) {
+          if (res.action === 'collect') {
+            utils.globalMessage('success', '收藏了该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.collect_topic .number').text()) + 1);
+            $(trigger).addClass('active');
+          } else {
+            utils.globalMessage('success', '取消收藏该话题');
+
+            $(trigger).children('.number').text(parseInt($('.action.collect_topic .number').text()) - 1);
+            $(trigger).removeClass('active');
+          }
+        } else {
+          utils.globalMessage('error', res.message);
+        }
+      });
+    });
+  };
+
   window.Mints = Mints;
 }(window, document, jQuery));
