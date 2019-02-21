@@ -37,6 +37,7 @@ a {
     overflow: hidden;
 
     &.has-bg {
+      padding: @global-block-padding;
       background: @white;
     }
   }
@@ -44,6 +45,23 @@ a {
   & > .asider {
     flex: 1;
     overflow: hidden;
+  }
+}
+
+.setting-bar {
+  position: relative;
+  z-index: @zIndex-1;
+  height: 40px;
+  line-height: 40px;
+  background: @white;
+  border-top: 1px dashed @light-gray;
+
+  a + a {
+    margin-left: 10px;
+  }
+
+  a.active {
+    color: @theme-color;
   }
 }
 

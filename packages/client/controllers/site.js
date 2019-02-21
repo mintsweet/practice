@@ -6,10 +6,10 @@ class Site {
   async renderIndex(req, res) {
     const { tab, page } = req.query;
 
-    const top100 = await API.getUsersTop100();
-    const noReplyTopic = await API.getNoReplyTopic({ count: 5 });
+    const top100 = await API.getUsersTop();
+    const noReplyTopic = await API.getTopicsNoReply({ count: 5 });
 
-    const data = await API.getTopicList({
+    const data = await API.getTopics({
       tab,
       page,
       size: config.home_topic_count
@@ -21,7 +21,6 @@ class Site {
       totalPage: data.totalPage,
       currentPage: data.currentPage,
       currentTab: data.currentTab,
-      tabs: data.tabs,
       top100: top100.slice(0, 10),
       noReplyTopic
     });

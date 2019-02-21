@@ -1,15 +1,15 @@
 extends ../layout.pug
 
 block content
-  .content
+  .content.has-bg
     .tab-list
-      each item in [{ name: '全部', url: 'all' }, { name: '精华', url: 'good' }].concat(tabs)
-        if currentTab === item.url
-          a.active(href="?tab=" + item.url) #{item.name}
+      each item in [{ name: '全部', tag: 'all' }, { name: '精华', tag: 'good' }].concat(config.tabs)
+        if currentTab === item.tag
+          a.active(href="?tab=" + item.tag) #{item.name}
         else
-          a(href="?tab=" + item.url) #{item.name}
+          a(href="?tab=" + item.tag) #{item.name}
     include ./topic/list.pug
-  aside.sider
+  aside.asider
     .block.no-title
       a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
     include ../includes/user_ranking.pug

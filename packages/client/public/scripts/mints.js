@@ -32,7 +32,7 @@
 
   // 头部下拉菜单
   Mints.headerDropMenu = () => {
-    $('.header .info').hover(function() {
+    $('.header .right .user').hover(function() {
       $('.drop-menus').stop(true, false).slideToggle();
     });
   };

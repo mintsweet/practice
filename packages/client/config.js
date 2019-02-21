@@ -16,5 +16,20 @@ module.exports = {
     test: 'https://jsonplaceholder.typicode.com'
   },
 
+  tabs: [
+    {
+      name: '分享',
+      tag: 'share'
+    },
+    {
+      name: '问答',
+      tag: 'ask'
+    },
+    {
+      name: '招聘',
+      tag: 'job'
+    }
+  ],
+
   home_topic_count: 20,
 };
