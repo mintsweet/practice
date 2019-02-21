@@ -4,6 +4,7 @@ const Static = require('./controllers/static');
 const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
+const Reply = require('./controllers/reply');
 const Notice = require('./controllers/notice');
 const Auth = require('./middlewares/auth');
 
@@ -52,6 +53,12 @@ router.get('/topics/search', wrap(Topic.renderSearch));
 router.get('/topic/:tid', wrap(Topic.renderDetail));
 router.post('/topic/:tid/like_or_un', wrap(Topic.likeOrUn));
 router.post('/topic/:tid/collect_or_un', wrap(Topic.collectOrUn));
+
+// 回复
+router.post('/topic/:tid/reply', wrap(Reply.createReply));
+router.post('/reply/:rid/delete', wrap(Reply.deleteReply));
+router.post('/reply/:rid/edit', wrap(Reply.editReply));
+router.post('/reply/:rid/up', wrap(Reply.upReplyOrUn));
 
 // 消息
 router.get('/notice/user', Auth.userRequired, wrap(Notice.renderNoticeUser));

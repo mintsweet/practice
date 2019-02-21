@@ -1,0 +1,26 @@
+.reply-title {
+  position: relative;
+  padding: 0 40%;
+  margin: 20px 0;
+  text-align: center;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    border: 1px dashed #f1f1f1;
+    background: #f1f1f1;
+  }
+
+  &::before {
+    left: 0;
+    transform: translate(10%,-50%);
+  }
+
+  &::after {
+    right: 0;
+    transform: translate(-10%,-50%);
+  }
+}

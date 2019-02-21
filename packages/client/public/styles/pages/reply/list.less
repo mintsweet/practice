@@ -1,0 +1,80 @@
+.reply-list {
+  margin-top: 20px;
+  padding: 10px 20px;
+
+  li {
+    display: flex;
+  }
+
+  .avatar {
+    flex: 0 0 40px;
+    margin-right: 20px;
+    height: 40px;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .detail {
+    flex: auto;
+    padding: 0 0 10px;
+    border-bottom: 1px dashed #f1f1f1;
+
+    .nickname {
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .content {
+      line-height: 30px;
+    }
+
+    .action {
+      position: relative;
+
+      a.practice {
+        margin-right: 10px;
+        color: @gray;
+        font-size: 12px;
+
+        &:hover {
+          color: @theme-color;
+        }
+
+        span {
+          margin-left: 4px;
+        }
+      }
+
+      time {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: @gray;
+        font-size: 13px;
+        vertical-align: middle;
+      }
+    }
+
+    .reply-form {
+      display: none;
+
+      textarea {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        width: 100%;
+        border-color: #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+  .no-reply {
+    text-align: center;
+    font-size: 18px;
+  }
+}
