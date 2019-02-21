@@ -22,7 +22,7 @@ const PATH = {
     dist: './dist/js'
   },
   vendor: {
-    src: './public/vendor/**/*.js',
+    src: './public/vendor/**/*',
     dist: './dist/lib'
   },
   font: {
@@ -75,7 +75,7 @@ function watch(done) {
 function dev(done) {
   nodemon({
     script: 'app.js',
-    ignore: ['gulpfile.js', 'node_modules'],
+    ignore: ['gulpfile.js', 'node_modules', 'public', 'dist'],
     ext: 'js'
   });
   done();
