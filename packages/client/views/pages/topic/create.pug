@@ -14,7 +14,7 @@ block content
             a.placeholder(href="javascript:;") #{topic ? topic.tabName : '请选择类别'}
             .options
               each item in config.tabs
-                .option(data-value=item.url) #{item.name}
+                .option(data-value=item.tag) #{item.name}
       .form-item
         label.label(for="title") 标题：
         .control
@@ -27,6 +27,7 @@ block content
       .form-item
         .control
           button.btn.submit(type="submit") 发布话题
+  .global-message
 append footer
   script(src="/static/lib/simplemde/simplemde.min.js")
   script.

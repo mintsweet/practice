@@ -39,10 +39,12 @@
 
   // 全局消息提示
   Mints.globalMessage = (type = 'error', message = '', duration = 2000) => {
-    $('.global-message .message').fadeIn();
-    $('.global-message .message .content').addClass(type).text(message).fadeIn();
+    const html = $(`<div class="content ${type}">${message}</div>`);
+
+    $('.global-message').html(html).fadeIn();
+    // $('.global-message .content').addClass(type).text(message).fadeIn();
     setTimeout(function() {
-      $('.global-message .message').fadeOut();
+      $('.global-message').fadeOut();
     }, duration);
   };
 

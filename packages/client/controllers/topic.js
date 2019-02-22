@@ -84,8 +84,8 @@ class Topic {
   async renderSearch(req, res) {
     const { q } = req.query;
 
-    const noReplyTopic = await API.getNoReplyTopic();
-    const data = await API.getTopicBySearch({ title: q });
+    const noReplyTopic = await API.getTopicsNoReply();
+    const data = await API.searchTopics({ title: q });
 
     return res.render('pages/topic/search', {
       title: '搜索结果',
@@ -102,8 +102,8 @@ class Topic {
   async renderDetail(req, res) {
     const { tid } = req.params;
 
-    const noReplyTopic = await API.getNoReplyTopic();
-    const data = await API.getTopicDetail(tid);
+    const noReplyTopic = await API.getTopicsNoReply();
+    const data = await API.getTopicById(tid);
 
     return res.render('pages/topic/detail', {
       title: '话题详情',

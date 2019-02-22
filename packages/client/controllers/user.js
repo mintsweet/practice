@@ -166,6 +166,7 @@ class User {
   // 登出
   async signout(req, res) {
     global.token = '';
+    req.app.locals.user = null;
     return res.render('pages/transform', {
       title: '退出成功',
       type: 'success',

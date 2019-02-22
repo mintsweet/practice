@@ -17,7 +17,6 @@ class Auth {
 
   async getUserInfo(req, res, next) {
     if (!global.token || (req.app.locals.user && req.app.locals.user.id)) {
-      req.app.locals.user = null;
       next();
     } else {
       try {

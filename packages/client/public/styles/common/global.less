@@ -279,6 +279,7 @@ input[type="search"] {
 
 // message
 .global-message {
+  display: none;
   position: fixed;
   top: 40px;
   left: 0;
@@ -287,29 +288,24 @@ input[type="search"] {
   pointer-events: none;
   z-index: @zIndex-5;
 
-  .message {
-    display: none;
-    padding: 0 8px;
+  .content {
+    display: inline-block;
+    padding: 8px 16px;
+    color: @white;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    pointer-events: all;
 
-    .content {
-      display: inline-block;
-      padding: 8px 16px;
-      color: @white;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15);
-      pointer-events: all;
+    &.error {
+      background: @error;
+    }
 
-      &.error {
-        background: @error;
-      }
+    &.warn {
+      background: @warning;
+    }
 
-      &.warn {
-        background: @warning;
-      }
-
-      &.success {
-        background: @success;
-      }
+    &.success {
+      background: @success;
     }
   }
 }
