@@ -180,11 +180,12 @@ class User extends Base {
     const { nickname } = ctx.request.body;
 
     const user = await UserProxy.getOne({ nickname });
-    if (user) {
+
+    if (user && user.id !== id) {
       ctx.throw(409, '昵称已经注册过了');
     }
 
-    await UserProxy.update({ id }, ctx.request.body);
+    await UserProxy.update({ _id: id }, ctx.request.body);
     ctx.body = '';
   }
 
@@ -228,6 +229,7 @@ class User extends Base {
   // 根据ID获取用户信息
   async getUserById(ctx) {
     const { uid } = ctx.params;
+    const { user: current } = ctx.state;
 
     const user = await UserProxy.getById(uid);
 
@@ -235,7 +237,22 @@ class User extends Base {
       ctx.throw(404, '用户不存在');
     }
 
-    ctx.body = user.toObject({ virtuals: true });
+    let follow;
+
+    if (current) {
+      follow = await ActionProxy.getOne({
+        type: 'follow',
+        author_id: current.id,
+        target_id: user.id
+      });
+    }
+
+    follow = (follow && !follow.is_un) || false;
+
+    ctx.body = {
+      ...user.toObject({ virtuals: true }),
+      follow
+    };
   }
 
   // 获取用户动态
@@ -255,7 +272,7 @@ class User extends Base {
 
     const data = actions.map((item, i) => {
       return {
-        ...result[i].toObject({ virtuals: true }),
+        ...result[i].toObject(),
         type: item.type
       };
     });
