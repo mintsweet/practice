@@ -71,10 +71,11 @@ block content
         else
           .signature **这家伙很懒，莫有签名**
     include ../../includes/no_reply_topic.pug
+  .global-message
   .float-action
     a.practice.action.like_topic(href="javascript:;", class={ active: like }) &#xe63b;
       span.number #{topic.like_count}
     a.practice(href="#reply") &#xe619;
-      span.number #{topic.reply_count}
+      span#reply_count.number #{topic.reply_count}
     a.practice.action.collect_topic(href="javascript:;", class={ active: collect }) &#xe65f;
       span.number #{topic.collect_count}

@@ -9,10 +9,6 @@ block content
       form#signupForm.form.form-horizontal(method="post")
         #js-alert.alert.alert-error(class={hidden: !error}) #{error}
         .form-item
-          label(for="nickname") 昵称：
-          .control
-            input#nickname(type="text", name="nickname", minlength="2", maxlength="8", placeholder="请输入昵称", autocomplete="off")
-        .form-item
           label(for="email") 邮箱：
           .control
             input#email(type="text", name="email", placeholder="请输入邮箱", autocomplete="off")
@@ -20,6 +16,10 @@ block content
           label(for="password") 密码：
           .control
             input#password(type="password", name="password", minlength="6", maxlength="18", placeholder="请输入密码", autocomplete="off")
+        .form-item
+          label(for="nickname") 昵称：
+          .control
+            input#nickname(type="text", name="nickname", minlength="2", maxlength="8", placeholder="请输入昵称", autocomplete="off")
         .form-item
           label(for="captcha") 验证码：
           .control

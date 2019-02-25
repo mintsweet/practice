@@ -18,7 +18,7 @@ class Reply {
       return res.render('pages/transform', {
         title: '创建回复失败',
         type: 'error',
-        message: err.error,
+        message: err.message,
         url: `/topic/${tid}`
       });
     }
@@ -37,7 +37,7 @@ class Reply {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.error
+        message: err.message
       });
     }
   }
@@ -71,7 +71,7 @@ class Reply {
     const { rid } = req.params;
 
     try {
-      const action = await API.upReply(rid);
+      const action = await API.upOrDown(rid);
       return res.send({
         status: 1,
         action

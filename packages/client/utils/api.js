@@ -79,13 +79,13 @@ const getTopicsNoReply = params => request('/topics/no_reply', params);
 const getTopicById = tid => request(`/topic/${tid}`);
 
 // 喜欢或者取消喜欢话题
-const likeOrUn = tid => request(`/topic/${tid}/like_or_un`, {}, 'PATHC');
+const likeOrUn = tid => request(`/topic/${tid}/like_or_un`, {}, 'PATCH');
 
 // 收藏或者取消收藏话题
 const collectOrUn = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
 
 // 创建回复
-const createReply = (tid, params) => request(`/topics/${tid}/reply`, params, 'POST');
+const createReply = (tid, params) => request(`/topic/${tid}/reply`, params, 'POST');
 
 // 删除回复
 const deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');

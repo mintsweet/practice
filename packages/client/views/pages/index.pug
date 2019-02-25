@@ -3,7 +3,7 @@ extends ../layout.pug
 block content
   .content.has-bg
     .tab-list
-      each item in [{ name: '全部', tag: 'all' }, { name: '精华', tag: 'good' }].concat(config.tabs)
+      each item in [{ name: '全部', tag: 'all' }, { name: '精华', tag: 'good' }].concat(tabs)
         if currentTab === item.tag
           a.active(href="?tab=" + item.tag) #{item.name}
         else

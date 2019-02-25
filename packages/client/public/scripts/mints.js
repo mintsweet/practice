@@ -42,7 +42,7 @@
     const html = $(`<div class="content ${type}">${message}</div>`);
 
     $('.global-message').html(html).fadeIn();
-    // $('.global-message .content').addClass(type).text(message).fadeIn();
+
     setTimeout(function() {
       $('.global-message').fadeOut();
     }, duration);
@@ -87,24 +87,22 @@
 
   // 话题点赞
   Mints.likeTopic = () => {
-    const utils = this;
     $('.action.like_topic').click(function() {
-      const trigger = this;
-      $.post(`${window.location.pathname}/like_or_un`, function(res) {
+      $.post(`${window.location.pathname}/like_or_un`, res => {
         if (res.status === 1) {
           if (res.action === 'like') {
-            utils.globalMessage('success', '喜欢了该话题');
+            Mints.globalMessage('success', '喜欢了该话题');
 
-            $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) + 1);
-            $(trigger).addClass('active');
+            $(this).children('.number').text(parseInt($('.action.like_topic .number').text()) + 1);
+            $(this).addClass('active');
           } else {
-            utils.globalMessage('success', '取消喜欢该话题');
+            Mints.globalMessage('success', '取消喜欢该话题');
 
-            $(trigger).children('.number').text(parseInt($('.action.like_topic .number').text()) - 1);
-            $(trigger).removeClass('active');
+            $(this).children('.number').text(parseInt($('.action.like_topic .number').text()) - 1);
+            $(this).removeClass('active');
           }
         } else {
-          utils.globalMessage('error', res.message);
+          Mints.globalMessage('error', res.message);
         }
       });
     });
@@ -112,24 +110,22 @@
 
   // 话题收藏
   Mints.collectTopic = () => {
-    const utils = this;
     $('.action.collect_topic').click(function() {
-      const trigger = this;
-      $.post(`${window.location.pathname}/collect_or_un`, function(res) {
+      $.post(`${window.location.pathname}/collect_or_un`, res => {
         if (res.status === 1) {
           if (res.action === 'collect') {
-            utils.globalMessage('success', '收藏了该话题');
+            Mints.globalMessage('success', '收藏了该话题');
 
-            $(trigger).children('.number').text(parseInt($('.action.collect_topic .number').text()) + 1);
-            $(trigger).addClass('active');
+            $(this).children('.number').text(parseInt($('.action.collect_topic .number').text()) + 1);
+            $(this).addClass('active');
           } else {
-            utils.globalMessage('success', '取消收藏该话题');
+            Mints.globalMessage('success', '取消收藏该话题');
 
-            $(trigger).children('.number').text(parseInt($('.action.collect_topic .number').text()) - 1);
-            $(trigger).removeClass('active');
+            $(this).children('.number').text(parseInt($('.action.collect_topic .number').text()) - 1);
+            $(this).removeClass('active');
           }
         } else {
-          utils.globalMessage('error', res.message);
+          Mints.globalMessage('error', res.message);
         }
       });
     });
@@ -137,15 +133,16 @@
 
   // 回复删除
   Mints.deleteReply = () => {
-    const that = this;
     $('.action.delete_reply').click(function() {
       const replyId = $(this).attr('data-id');
       $.post(`/reply/${replyId}/delete`, res => {
         if (res.status === 1) {
-          that.globalMessage('success', '删除回复成功');
+          Mints.globalMessage('success', '删除回复成功');
           $(this).parents('li').remove();
+          const replyCount = $('.float-action #reply_count');
+          $(replyCount).text(parseInt($(replyCount).text()) - 1);
         } else {
-          that.globalMessage('error', '删除回复失败');
+          Mints.globalMessage('error', '删除回复失败');
         }
       });
     });
@@ -161,21 +158,19 @@
 
   // 回复点赞
   Mints.upReply = () => {
-    const utils = this;
     $('.action.up_reply').click(function() {
       const rid = $(this).attr('data-id');
-      const trigger = this;
       $.post(`/reply/${rid}/up`, res => {
         if (res.status === 1) {
           if (res.action === 'up') {
-            utils.globalMessage('success', '点赞成功');
-            $(trigger).children('span').text(parseInt($('.action.up_reply span').text() + 1));
+            Mints.globalMessage('success', '点赞成功');
+            $(this).children('span').text(parseInt($('.action.up_reply span').text() + 1));
           } else {
-            utils.globalMessage('success', '取消点赞成功');
-            $(trigger).children('span').text(parseInt($('.action.up_reply span').text() - 1));
+            Mints.globalMessage('success', '取消点赞成功');
+            $(this).children('span').text(parseInt($('.action.up_reply span').text() - 1));
           }
         } else {
-          utils.globalMessage('error', res.messsage);
+          Mints.globalMessage('error', res.messsage);
         }
       });
     });

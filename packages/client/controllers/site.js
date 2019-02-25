@@ -22,6 +22,7 @@ class Site {
       currentPage: data.currentPage,
       currentTab: data.currentTab,
       top100: top100.slice(0, 10),
+      tabs: data.tabs,
       noReplyTopic
     });
   }

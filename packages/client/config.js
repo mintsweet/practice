@@ -9,13 +9,7 @@ module.exports = {
 
   port: 3001,
 
-  // 接口地址
-  api: {
-    development: 'http://localhost:3000/v1',
-    production: '',
-    test: 'https://jsonplaceholder.typicode.com'
-  },
-
+  // 话题分类
   tabs: [
     {
       name: '分享',
@@ -30,6 +24,13 @@ module.exports = {
       tag: 'job'
     }
   ],
+
+  // 接口地址
+  api: {
+    development: 'http://localhost:3000/v1',
+    production: '',
+    test: 'https://jsonplaceholder.typicode.com'
+  },
 
   home_topic_count: 20,
 };

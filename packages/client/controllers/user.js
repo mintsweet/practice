@@ -277,22 +277,30 @@ class User {
 
   // 更新个人设置页
   async renderSetting(req, res) {
-    const data = await API.getUsersTop();
+    const { id } = req.app.locals.user;
+
+    const top100 = await API.getUsersTop();
+    const user = await API.getUserById(id);
 
     return res.render('pages/user/setting', {
       title: '个人资料',
-      top100: data
+      top100,
+      user
     });
   }
 
   // 更新个人设置
   async setting(req, res) {
-    const data = await API.getUsersTop();
+    const { id } = req.app.locals.user;
+
+    const top100 = await API.getUsersTop();
+    const user = await API.getUserById(id);
 
     try {
-      await API.setting(req.body);
+      await API.updateSetting(req.body);
 
       return res.render('pages/transform', {
+        title: '更新个人设置成功',
         type: 'success',
         message: '更新个人资料成功',
         url: '/setting'
@@ -301,7 +309,8 @@ class User {
       return res.render('pages/user/setting', {
         title: '个人资料',
         error: err.error,
-        top100: data
+        top100,
+        user
       });
     }
   }
@@ -324,6 +333,7 @@ class User {
       await API.updatePass(req.body);
 
       return res.render('pages/transform', {
+        title: '修改密码成功',
         type: 'success',
         message: '修改成功',
         url: '/update_pass'

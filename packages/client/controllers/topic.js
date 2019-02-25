@@ -22,7 +22,7 @@ class Topic {
     } catch(err) {
       return res.render('pages/topic/create', {
         title: '发布话题',
-        error: err.error
+        error: err.message
       });
     }
   }
@@ -75,7 +75,7 @@ class Topic {
     } catch(err) {
       return res.render('pages/topic/create', {
         title: '编辑话题',
-        error: err.error
+        error: err.message
       });
     }
   }
@@ -133,7 +133,7 @@ class Topic {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.error
+        message: err.message
       });
     }
   }
@@ -152,7 +152,7 @@ class Topic {
     } catch(err) {
       return res.send({
         status: 0,
-        message: err.error
+        message: err.message
       });
     }
   }
