@@ -10,7 +10,7 @@ const UserSchema = new Schema({
 
   // 用户信息
   nickname: { type: String, required: true },
-  avatar: { type: String, default: 'http://p15hswd24.bkt.clouddn.com/avatar.jpg' },
+  avatar: { type: String, default: 'http://image.mintsweet.cn/avatar.jpeg' },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
 

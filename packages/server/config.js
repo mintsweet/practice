@@ -6,6 +6,22 @@ module.exports = {
   // token 签名 => 必改
   secret: 'practice',
 
+  // 话题分类
+  tabs: [
+    {
+      name: '分享',
+      tag: 'share'
+    },
+    {
+      name: '问答',
+      tag: 'ask'
+    },
+    {
+      name: '招聘',
+      tag: 'job'
+    }
+  ],
+
   // 七牛图片上传
   qn: {
     ACCESS_KEY: '',

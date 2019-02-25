@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Plugin = require('./plugin');
+const config = require('../config');
 
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
@@ -35,6 +36,11 @@ const TopicSchema = new Schema({
 
   // 删除话题 - 用户行为
   delete: { type: Boolean, default: false }
+});
+
+TopicSchema.virtual('tabName').get(function() {
+  const current = config.tabs.find(item => item.tag === this.tab);
+  return current.name;
 });
 
 TopicSchema.plugin(Plugin);
