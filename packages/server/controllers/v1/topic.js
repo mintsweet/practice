@@ -119,7 +119,7 @@ class Topic {
       content = topic.content
     } = ctx.request.body;
 
-    await TopicProxy.update({ id: tid }, {
+    await TopicProxy.update({ _id: tid }, {
       ...topic.toObject(),
       tab,
       title,
@@ -312,7 +312,7 @@ class Topic {
       collect = await ActionProxy.getOne({
         type: 'collect',
         author_id: user.id,
-        taget_id: topic.id
+        target_id: topic.id
       });
     }
 

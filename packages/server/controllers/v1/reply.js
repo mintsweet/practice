@@ -34,7 +34,9 @@ class Reply {
     const reply = await ReplyProxy.create(_reply);
 
     // 修改最后一次回复
-    await TopicProxy.update({ id: tid }, { last_reply: id });
+    topic.reply_count += 1;
+    topic.last_reply = id;
+    await topic.save();
 
     // 发送提醒
     if (reply_id) {
