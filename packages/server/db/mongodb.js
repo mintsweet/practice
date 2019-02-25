@@ -3,7 +3,7 @@ const logger = require('../utils/logger');
 const { dbpath } = require('../config');
 
 mongoose.set('useCreateIndex', true);
-mongoose.connect(dbpath, { useNewUrlParser: true });
+mongoose.connect(dbpath[process.env.NODE_ENV], { useNewUrlParser: true });
 
 const db = mongoose.connection;
 
