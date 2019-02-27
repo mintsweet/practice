@@ -31,8 +31,8 @@ const NoticeSchema = new Schema({
 
 NoticeSchema.plugin(Plugin);
 
-NoticeSchema.index({ target_id: 1, create_at: -1 });
-NoticeSchema.index({ author_id: 1, create_at: -1 });
+NoticeSchema.index({ target_id: 1, update_at: -1 });
+NoticeSchema.index({ author_id: 1, update_at: -1 });
 
 const Notice = mongoose.model('Notice', NoticeSchema);
 

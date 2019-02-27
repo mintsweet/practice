@@ -8,7 +8,13 @@ module.exports = class Notice {
    * @param {Object} notice
    * @returns
    */
-  static create(notice) {
+  static async create(notice) {
+    const temp = await NoticeModel.findOne(notice);
+
+    if (temp) {
+      return NoticeModel.updateOne(notice, { update_at: new Date() });
+    }
+
     return NoticeModel.create(notice);
   }
 
