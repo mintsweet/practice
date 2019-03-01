@@ -1,19 +1,18 @@
-import React from 'react';
-import styles from './index.css';
+/**
+ * title: 首页
+ */
+import * as React from 'react';
+import Link from 'umi/link';
 
-
-export default function() {
-  return (
-    <div className={styles.normal}>
-      <div className={styles.welcome} />
-      <ul className={styles.list}>
-        <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
-        <li>
-          <a href="https://umijs.org/guide/getting-started.html">
-            Getting Started
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
+export default class Index extends React.Component {
+  render() {
+    return (
+      <div>
+        <Link to="/content/topic">话题管理</Link>
+        <Link to="/content/user">用户管理</Link>
+        <Link to="/user/login">登录</Link>
+        <Link to="/user/forget_pass">忘记密码</Link>
+      </div>
+    );
+  }
 }
