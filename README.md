@@ -34,6 +34,7 @@
 
   - [数据服务 server](./packages/server/README.md)
   - [PC客户端 client](./packages/client/README.md)
+  - [后台管理 manage](./packages/manage/README.md)
 
 ## ⚡其他
 

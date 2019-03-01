@@ -11,6 +11,7 @@
 
   - [Server](server)
   - [Client](client)
+  - [Manage](manage)
 
 - 其他
 
