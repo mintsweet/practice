@@ -49,6 +49,7 @@ export default {
     {
       path: '/',
       component: '../layouts/basic',
+      Routes: ['src/pages/authorized'],
       routes: [
         { path: '/', component: './index' },
         { path: '/content', redirect: '/content/topic' },
