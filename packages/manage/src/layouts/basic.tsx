@@ -8,7 +8,7 @@ import SiderMenu from '../components/SiderMenu';
 const { Header, Footer, Content } = Layout;
 
 interface Props {
-  collapsed: boolean;
+  collapsed?: boolean;
   dispatch?: ({}) => void;
 }
 
@@ -37,7 +37,7 @@ export default class BasicLayout extends React.PureComponent<Props> {
               onCollapse={this.handleCollapse}
             />
           </Header>
-          <Content>{children}</Content>
+          <Content style={{ margin: 24, }}>{children}</Content>
           <Footer>
             <GlobalFooter
               links={[

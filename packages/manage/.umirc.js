@@ -4,6 +4,10 @@ export default {
 
   history: 'hash',
 
+  theme: {
+    '@primary-color': '#52c41a'
+  },
+
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
@@ -31,4 +35,26 @@ export default {
       style: true
     }],
   ],
+
+  routes: [
+    {
+      path: '/user',
+      component: '../layouts/user',
+      routes: [
+        { path: '/user', redirect: '/user/login' },
+        { path: '/user/login', component: './user/login' },
+        { path: '/user/forget_pass', component: './user/forget_pass' },
+      ],
+    },
+    {
+      path: '/',
+      component: '../layouts/basic',
+      routes: [
+        { path: '/', component: './index' },
+        { path: '/content', redirect: '/content/topic' },
+        { path: '/content/topic', component: './content/topic' },
+        { path: '/content/user', component: './content/user' },
+      ]
+    },
+  ]
 }
