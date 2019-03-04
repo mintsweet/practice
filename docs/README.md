@@ -33,6 +33,8 @@
 ## 🌈 项目
 
   - [数据服务 server](/server)
+  - [PC客户端 clinet](/client)
+  - [后台管理 manage](/manage)
 
 ## ⚡其他
 
