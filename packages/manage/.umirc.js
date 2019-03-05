@@ -8,6 +8,16 @@ export default {
     '@primary-color': '#52c41a'
   },
 
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      pathRewrite: {
+        '/api': ''
+      },
+    },
+  },
+
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {

@@ -1,10 +1,7 @@
 import * as React from 'react';
+import Redirect from 'umi/redirect';
 
 export default (props) => {
-  return (
-    <div style={{ height: '100%', }}>
-      {/* <div>PrivateRoute</div> */}
-      {props.children}
-    </div>
-  );
+  const dom = localStorage.getItem('token') ? <Redirect to="/user/login" /> : props.chilren;
+  return dom;
 }
