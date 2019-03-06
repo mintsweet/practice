@@ -61,10 +61,13 @@ export default {
       component: '../layouts/basic',
       Routes: ['src/pages/authorized'],
       routes: [
-        { path: '/', component: './index' },
+        { path: '/', redirect: '/dashboard' },
+        { path: '/dashboard', component: './index' },
         { path: '/content', redirect: '/content/topic' },
         { path: '/content/topic', component: './content/topic' },
         { path: '/content/user', component: './content/user' },
+        { path: '/system', redirect: '/system/setting' },
+        { path: '/system/setting', component: './system/setting' },
       ]
     },
   ]

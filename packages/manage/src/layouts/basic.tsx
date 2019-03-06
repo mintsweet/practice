@@ -4,12 +4,14 @@ import { connect } from 'dva';
 import GlobalHeader from '../components/Header';
 import GlobalFooter from '../components/Footer';
 import SiderMenu from '../components/SiderMenu';
+import logo from '../assets/logo.png';
 
 const { Header, Footer, Content } = Layout;
 
 interface Props {
   user?: object;
   collapsed?: boolean;
+  location?: any;
   dispatch?: ({}) => void;
 }
 
@@ -34,12 +36,14 @@ export default class BasicLayout extends React.PureComponent<Props> {
   }
 
   render() {
-    const { children, user, collapsed } = this.props;
+    const { children, user, collapsed, location } = this.props;
 
     const layout = (
       <Layout style={{ height: '100%', }}>
         <SiderMenu
+          logo={logo}
           collapsed={collapsed}
+          location={location}
         />
         <Layout>
           <Header style={{ background: '#fff', padding: 0, }}>
