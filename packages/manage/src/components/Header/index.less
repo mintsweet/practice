@@ -16,4 +16,31 @@
       background: rgba(#52c41a, .1);
     }
   }
+
+  .right {
+    float: right;
+    height: 100%;
+
+    .action {
+      cursor: pointer;
+      padding: 0 12px;
+      display: inline-block;
+      transition: all .3s;
+      height: 100%;
+
+      &:hover,
+      &:global(.ant-popover-open) {
+        background: rgba(#52c41a, .1);
+      }
+    }
+
+    .account {
+      .avatar {
+        margin: 20px 8px 20px 0;
+        color: #52c41a;
+        background: rgba(255, 255, 255, .85);
+        vertical-align: middle;
+      }
+    }
+  }
 }

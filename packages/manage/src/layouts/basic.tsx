@@ -8,22 +8,33 @@ import SiderMenu from '../components/SiderMenu';
 const { Header, Footer, Content } = Layout;
 
 interface Props {
+  user?: object;
   collapsed?: boolean;
   dispatch?: ({}) => void;
 }
 
 @connect(({ app }) => ({
-  collapsed: app.collapsed
+  collapsed: app.collapsed,
+  token: app.token,
+  user: app.user,
 }))
 export default class BasicLayout extends React.PureComponent<Props> {
+  componentDidMount() {
+    this.props.dispatch({ type: 'app/getUser' });
+  }
+
   handleCollapse = () => {
-    this.props.dispatch({
-      type: 'app/updateCollapsed'
-    });
+    this.props.dispatch({ type: 'app/updateCollapsed' });
+  }
+
+  handleMenuClick = ({ key }) => {
+    if (key === 'logout') {
+      this.props.dispatch({ type: 'app/signout' });
+    }
   }
 
   render() {
-    const { children, collapsed } = this.props;
+    const { children, user, collapsed } = this.props;
 
     const layout = (
       <Layout style={{ height: '100%', }}>
@@ -33,8 +44,10 @@ export default class BasicLayout extends React.PureComponent<Props> {
         <Layout>
           <Header style={{ background: '#fff', padding: 0, }}>
             <GlobalHeader
+              user={user}
               collapsed={collapsed}
               onCollapse={this.handleCollapse}
+              onMenuClick={this.handleMenuClick}
             />
           </Header>
           <Content style={{ margin: 24, }}>{children}</Content>

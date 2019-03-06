@@ -2,6 +2,9 @@
   "extends": "stylelint-config-standard",
   "rules": {
     "number-leading-zero": "never",
-    "function-comma-space-after": "always"
+    "function-comma-space-after": "always",
+    "selector-pseudo-class-no-unknown": [true, {
+      ignorePseudoClasses: ["global"]
+    }]
   }
 }
