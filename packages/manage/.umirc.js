@@ -24,7 +24,10 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      title: 'manage',
+      title: {
+        defaultTitle: '薄荷糖社区(Mints)',
+        format: '{current}{separator}{parent}'
+      },
       dll: true,
 
       routes: {
@@ -50,24 +53,26 @@ export default {
     {
       path: '/user',
       component: '../layouts/user',
+      title: '薄荷糖社区(Mints)',
       routes: [
         { path: '/user', redirect: '/user/login' },
-        { path: '/user/login', component: './user/login' },
-        { path: '/user/forget_pass', component: './user/forget_pass' },
+        { path: '/user/login', component: './user/login', title: '登录' },
+        { path: '/user/forget_pass', component: './user/forget_pass', title: '忘记密码' },
       ],
     },
     {
       path: '/',
       component: '../layouts/basic',
       Routes: ['src/pages/authorized'],
+      title: '薄荷糖社区(Mints)',
       routes: [
         { path: '/', redirect: '/dashboard' },
-        { path: '/dashboard', component: './index' },
+        { path: '/dashboard', component: './index', title: '首页' },
         { path: '/content', redirect: '/content/topic' },
-        { path: '/content/topic', component: './content/topic' },
-        { path: '/content/user', component: './content/user' },
+        { path: '/content/topic', component: './content/topic', title: '话题管理' },
+        { path: '/content/user', component: './content/user', title: '用户管理' },
         { path: '/system', redirect: '/system/setting' },
-        { path: '/system/setting', component: './system/setting' },
+        { path: '/system/setting', component: './system/setting', title: '系统设置' },
       ]
     },
   ]

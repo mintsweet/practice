@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getStorage } from '../utils/storage';
+import { getStorage, delStorage } from '../utils/storage';
 
 axios.defaults.baseURL = '/api';
 
@@ -20,6 +20,9 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(res => {
   return res.data;
 }, err => {
+  if (err.response.status === 401) {
+    delStorage('token');
+  }
   return Promise.reject(err.response.data);
 });
 
