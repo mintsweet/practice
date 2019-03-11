@@ -10,15 +10,15 @@ const data = [
     path: 'content',
     children: [
       {
-        name: '用户',
-        icon: 'user',
-        path: 'user',
-      },
-      {
         name: '话题',
         icon: 'profile',
-        path: 'topic',
-      }
+        path: 'topics',
+      },
+      {
+        name: '用户',
+        icon: 'user',
+        path: 'users',
+      },
     ],
   },
   {

@@ -1,5 +1,4 @@
 import { routerRedux } from 'dva/router';
-import { message } from 'antd';
 import * as API from '../services/api';
 import { getStorage, setStorage, delStorage } from '../utils/storage';
 
@@ -39,31 +38,21 @@ export default {
 
   effects: {
     *signin({ payload }, { call, put }) {
-      try {
-        const token = yield call(API.signin, payload);
-        setStorage('token', token);
-        yield put({ type: 'update', payload: { token } });
-        yield put(routerRedux.push('/'));
-        message.success('登录成功', 1);
-      } catch(err) {
-        message.error(err);
-      }
+      const token = yield call(API.signin, payload);
+      setStorage('token', token);
+      yield put({ type: 'update', payload: { token } });
+      yield put(routerRedux.push('/'));
     },
 
     *signout({ payload }, { call, put }) {
       delStorage('token');
       yield put({ type: 'update', payload: { token: '', user: {} }});
       yield put(routerRedux.push('/user/login'));
-      message.success('退出登录', 1);
     },
 
     *getUser({ payload }, { call, put }) {
-      try {
-        const user = yield call(API.getUser);
-        yield put({ type: 'update', payload: { user } });
-      } catch(err) {
-        message.error(err);
-      }
+      const user = yield call(API.getUser);
+      yield put({ type: 'update', payload: { user } });
     },
   },
 

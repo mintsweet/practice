@@ -68,9 +68,9 @@ export default {
       routes: [
         { path: '/', redirect: '/dashboard' },
         { path: '/dashboard', component: './index', title: '首页' },
-        { path: '/content', redirect: '/content/topic' },
-        { path: '/content/topic', component: './content/topic', title: '话题管理' },
-        { path: '/content/user', component: './content/user', title: '用户管理' },
+        { path: '/content', redirect: '/content/topics' },
+        { path: '/content/topics', component: './content/topics', title: '话题管理' },
+        { path: '/content/users', component: './content/users', title: '用户管理' },
         { path: '/system', redirect: '/system/setting' },
         { path: '/system/setting', component: './system/setting', title: '系统设置' },
       ]
