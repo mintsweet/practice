@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout, Icon, LocaleProvider } from 'antd';
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import { connect } from 'dva';
 import GlobalHeader from '../components/Header';
 import GlobalFooter from '../components/Footer';
@@ -83,9 +84,11 @@ export default class BasicLayout extends React.PureComponent<Props> {
     );
 
     return (
-      <div style={{ height: '100%', }}>
-        {layout}
-      </div>
+      <LocaleProvider locale={zh_CN}>
+        <div style={{ height: '100%', }}>
+          {layout}
+        </div>
+      </LocaleProvider>
     );
   }
 }
