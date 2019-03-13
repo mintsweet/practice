@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { connect } from 'dva';
-import { Table, Avatar, Tag, Badge, Divider, message } from 'antd';
+import { Table, Avatar, Tag, Badge, Divider, message, Card, Button, Modal } from 'antd';
+import PageLoding from '../../components/PageLoding';
+import CreateUser from './components/createUser';
 
 interface Props {
   user: any;
+  loading: boolean;
   data: [];
   page: number;
   size: number;
@@ -13,12 +16,18 @@ interface Props {
 
 @connect(({ app, users }) => ({
   user: app.user,
+  loading: app.loading,
   data: users.list,
   page: users.page,
   size: users.size,
   total: users.total,
 }))
 export default class User extends React.Component<Props> {
+  state = {
+    visible: false,
+  };
+
+  // 切换页码
   handleChangePage = page => {
     this.props.dispatch({
       type: 'users/fetch',
@@ -28,6 +37,7 @@ export default class User extends React.Component<Props> {
     });
   }
 
+  // 校验各个动作的权限
   validAction = record => {
     const { user } = this.props;
 
@@ -44,10 +54,25 @@ export default class User extends React.Component<Props> {
     return true;
   }
 
-  handleDeleteUser = id => {
-    console.log(id);
+  // 删除用户
+  handleDeleteUser = record => {
+    if (this.validAction(record)) {
+      Modal.confirm({
+        title: '确定物理删除这条数据吗?',
+        content: '直接从数据库中删除数据是无法恢复的，请慎重考虑以后在进行操作！',
+        onOk: () => {
+          this.props.dispatch({
+            type: 'users/delete',
+            payload: {
+              id: record.id
+            },
+          });
+        },
+      });
+    }
   }
 
+  // 改变用户星标状态
   handleStarUser = record => {
     if (this.validAction(record)) {
       this.props.dispatch({
@@ -61,6 +86,7 @@ export default class User extends React.Component<Props> {
     }
   }
 
+  // 改变用户锁定
   handleLockUser = record => {
     if (this.validAction(record)) {
       this.props.dispatch({
@@ -74,8 +100,29 @@ export default class User extends React.Component<Props> {
     }
   }
 
+  // 控制弹窗显示隐藏
+  handleToggleModal = () => {
+    const { visible } = this.state;
+    this.setState({
+      visible: !visible,
+    });
+  }
+
+  // 创建用户
+  handleSubmit = (values) => {
+    this.props.dispatch({
+      type: 'users/create',
+      payload: values
+    });
+
+    this.setState({
+      visible: false,
+    });
+  }
+
   render() {
-    const { user, data, page, size, total } = this.props;
+    const { visible } = this.state;
+    const { user, loading, data, page, size, total } = this.props;
 
     const columns = [
       {
@@ -150,20 +197,30 @@ export default class User extends React.Component<Props> {
     ];
 
     return (
-      <div>
-        <Table
-          rowKey="id"
-          size="middle"
-          dataSource={data}
-          columns={columns}
-          pagination={{
-            current: page,
-            pageSize: size,
-            total,
-            onChange: this.handleChangePage
-          }}
-        />
-      </div>
+      <PageLoding loading={loading}>
+        <Card>
+          <div className="table-action">
+            <Button type="primary" onClick={this.handleToggleModal}>新增</Button>
+          </div>
+          <Table
+            rowKey="id"
+            size="middle"
+            dataSource={data}
+            columns={columns}
+            pagination={{
+              current: page,
+              pageSize: size,
+              total,
+              onChange: this.handleChangePage
+            }}
+          />
+          <CreateUser
+            visible={visible}
+            handleToggleModal={this.handleToggleModal}
+            handleSubmit={this.handleSubmit}
+          />
+        </Card>
+      </PageLoding>
     );
   }
 }

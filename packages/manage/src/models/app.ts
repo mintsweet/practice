@@ -8,6 +8,7 @@ export default {
   state: {
     collapsed: false,
     autoLogin: false,
+    loading: false,
     token: '',
     user: {},
   },
@@ -25,6 +26,13 @@ export default {
       return {
         ...state,
         autoLogin: !state.autoLogin
+      }
+    },
+
+    updateLoading(state) {
+      return {
+        ...state,
+        loading: !state.loading
       }
     },
 

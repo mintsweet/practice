@@ -33,6 +33,11 @@ export default {
       });
     },
 
+    *create({ payload }, { call, put }) {
+      yield call(API.createUser, payload);
+      yield put({ type: 'reload' });
+    },
+
     *delete({ payload: { id } }, { call, put }) {
       yield call(API.deleteUser, id);
       yield put({ type: 'reload' });
