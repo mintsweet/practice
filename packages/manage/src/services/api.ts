@@ -41,3 +41,13 @@ export const deleteUser = id => axios.delete(`/v2/user/${id}/delete`);
 export const setUserStar = id => axios.patch(`/v2/user/${id}/star`);
 
 export const setUserLock = id => axios.patch(`/v2/user/${id}/lock`);
+
+export const getTopicList = params => axios.get('/v1/topics/list', params);
+
+export const deleteTopic = id => axios.delete(`/v2/topic/${id}/delete`);
+
+export const setTopicTop = id => axios.patch(`/v2/topic/${id}/top`);
+
+export const setTopicGood = id => axios.patch(`/v2/topic/${id}/good`);
+
+export const setTopicLock = id => axios.patch(`/v2/topic/${id}/lock`);

@@ -1058,7 +1058,7 @@ GET
 ### 请求Url
 
 ```bash
-/v2/users/new_last_week
+/v2/topics/new_last_week
 ```
 
 ### 请求方式
