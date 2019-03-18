@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import Link from 'umi/link';
 import pathToRegexp from 'path-to-regexp';
-import menuData from './menu';
 import styles from './index.less';
 
 const { Sider } = Layout;
@@ -35,6 +34,7 @@ const getDefaultCollapsedSubMenus = (flatMenuKeys, pathname) => {
 export interface Props {
   logo: any;
   collapsed: boolean;
+  menus: any;
   location: any;
 };
 
@@ -43,7 +43,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
 
   constructor(props) {
     super(props);
-    this.flatMenuKeys = getFlatMenuKeys(menuData);
+    this.flatMenuKeys = getFlatMenuKeys(props.menus);
     this.state = {
       openKeys: getDefaultCollapsedSubMenus(this.flatMenuKeys, props.location.pathname)
     };
@@ -100,7 +100,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
 
   // 子菜单展开
   handleOpenChange = openKeys => {
-    const moreThanOne = openKeys.filter(key => menuData.some(item => item.key === key || item.path === key)).length > 1;
+    const moreThanOne = openKeys.filter(key => this.props.menus.some(item => item.key === key || item.path === key)).length > 1;
     this.setState({
       openKeys: moreThanOne ? [openKeys.pop()] : [...openKeys]
     });
@@ -108,7 +108,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
 
   render() {
     let { openKeys } = this.state;
-    const { logo, collapsed, location: { pathname } } = this.props;
+    const { logo, collapsed, menus, location: { pathname } } = this.props;
 
     let selectedKeys = this.getSelectedMenuKeys(pathname);
 
@@ -143,7 +143,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
           openKeys={openKeys}
           selectedKeys={selectedKeys}
         >
-          {this.getNavMenuItems(menuData)}
+          {this.getNavMenuItems(menus)}
         </Menu>
       </Sider>
     );
