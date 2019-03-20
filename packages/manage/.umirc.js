@@ -67,7 +67,7 @@ export default {
       title: '薄荷糖社区(Mints)',
       routes: [
         { path: '/', redirect: '/dashboard' },
-        { path: '/dashboard', component: './index', title: '首页' },
+        { path: '/dashboard', component: './dashboard/index', title: '首页' },
         { path: '/content', redirect: '/content/topics' },
         { path: '/content/topics', component: './content/topics', title: '话题管理' },
         { path: '/content/users', component: './content/users', title: '用户管理' },
