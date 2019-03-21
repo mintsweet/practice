@@ -8,6 +8,8 @@ export default {
     page: null,
     size: null,
     total: null,
+    last_week: 0,
+    this_week: 0,
   },
 
   reducers: {
@@ -57,6 +59,21 @@ export default {
       const page = yield select(state => state.users.page);
       yield put({ type: 'fetch', payload: { page } });
     },
+
+    *statis(_, { call, put }) {
+      const total = yield call(API.getUserTotal);
+      const this_week = yield call(API.getNewUserThisWeek);
+      const last_week = yield call(API.getNewUserLastWeek);
+
+      yield put({
+        type: 'update',
+        payload: {
+          last_week,
+          this_week,
+          total,
+        }
+      });
+    },
   },
 
   subscriptions: {
@@ -64,6 +81,10 @@ export default {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/content/users') {
           dispatch({ type: 'fetch', payload: query });
+        }
+
+        if (pathname === '/dashboard') {
+          dispatch({ type: 'statis' });
         }
       });
     },

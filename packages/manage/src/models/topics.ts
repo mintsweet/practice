@@ -7,7 +7,9 @@ export default {
     list: [],
     page: null,
     size: null,
-    total: null
+    total: null,
+    last_week: 0,
+    this_week: 0,
   },
 
   reducers: {
@@ -57,6 +59,21 @@ export default {
       const page = yield select(state => state.topics.page);
       yield put({ type: 'fetch', payload: { page } });
     },
+
+    *statis(_, { call, put }) {
+      const this_week = yield call(API.getNewTopicThisWeek);
+      const last_week = yield call(API.getNewTopicLastWeek);
+      const total = yield call(API.getTopicTotal);
+
+      yield put({
+        type: 'update',
+        payload: {
+          total,
+          this_week,
+          last_week,
+        },
+      });
+    }
   },
 
   subscriptions: {
@@ -64,6 +81,10 @@ export default {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/content/topics') {
           dispatch({ type: 'fetch', payload: query });
+        }
+
+        if (pathname === '/dashboard') {
+          dispatch({ type: 'statis' });
         }
       });
     },
