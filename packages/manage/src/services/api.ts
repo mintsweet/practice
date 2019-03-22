@@ -31,6 +31,9 @@ axios.interceptors.response.use(res => {
 // 登录
 export const signin = params => axios.post('/v1/signin', params);
 
+// 忘记密码
+export const forgetPass = user => axios.patch('/v1/forget_pass', user);
+
 // 获取当前用户信息
 export const getUser = () => axios.get('/v1/info');
 

@@ -52,16 +52,20 @@ export default {
       yield put(routerRedux.push('/'));
     },
 
-    *signout({ payload }, { call, put }) {
+    *signout(_, { put }) {
       delStorage('token');
       yield put({ type: 'update', payload: { token: '', user: {} }});
       yield put(routerRedux.push('/user/login'));
     },
 
-    *getUser({ payload }, { call, put }) {
+    *getUser(_, { call, put }) {
       const user = yield call(API.getUser);
       yield put({ type: 'update', payload: { user } });
     },
+
+    *forgetPass(_, { call }) {
+      yield call(API.forgetPass);
+    }
   },
 
   subscriptions: {
