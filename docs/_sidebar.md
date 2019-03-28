@@ -9,9 +9,10 @@
 
 - 项目文档
 
-  - [Server](server)
-  - [Client](client)
-  - [Manage](manage)
+  - [数据服务(Server)](server)
+  - [PC客户端(Client)](client)
+  - [后台管理(Manage)](manage)
+  - [移动网站(Mobile)](mobile)
 
 - 其他
 
