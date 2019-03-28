@@ -1,10 +1,23 @@
+const path = require('path');
+
 module.exports = {
   devServer: {
-    proxy: {
-      '/': {
-        target: 'http://localhost:3000/',
-        changeOrigin: true
+    port: 3003,
+    // proxy: {
+    //   '/': {
+    //     target: 'http://localhost:3000/',
+    //     changeOrigin: true
+    //   }
+    // }
+  },
+
+  css: {
+    loaderOptions: {
+      postcss: {
+        options: {
+          config: path.join(__dirname, './postcss.config.js')
+        }
       }
     }
-  },
+  }
 }
