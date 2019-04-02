@@ -27,3 +27,6 @@ axios.interceptors.response.use(res => {
   Toast.fail(err.response.data);
   return Promise.reject(err.response.data);
 });
+
+// 登录
+export const login = params => axios.post('/v1/signin', params);
