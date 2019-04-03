@@ -24,7 +24,7 @@ axios.interceptors.response.use(res => {
   if (err.response.status === 401) {
     delStorage('token');
   }
-  Toast.fail(err.response.data);
+  Toast(err.response.data);
   return Promise.reject(err.response.data);
 });
 

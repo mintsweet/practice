@@ -32,6 +32,7 @@
 
 <script>
 import { Field, CellGroup, Button, Toast } from 'vant';
+import { getUrlParams } from '@/utils/urlParams';
 
 export default {
   name: 'Login',
@@ -61,8 +62,12 @@ export default {
         return;
       }
 
+      // 获取回跳链接
+      const { redirect } = getUrlParams();
+      const url = redirect ? unescape(redirect) : '/';
+
       this.$store.dispatch('login', this.form);
-      this.$router.push('/');
+      this.$router.push(url);
     }
   }
 };
