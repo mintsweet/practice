@@ -1,6 +1,8 @@
 <template>
   <div>
-    <router-view />
+    <div class="main">
+      <router-view />
+    </div>
     <van-tabbar v-model="active" :fixed="true" active-color="#52c41a">
       <van-tabbar-item icon="wap-home" to="/">主页</van-tabbar-item>
       <van-tabbar-item icon="apps-o" to="/tags">分类</van-tabbar-item>
@@ -25,3 +27,9 @@ export default {
   },
 };
 </script>
+
+<style lang="less" scoped>
+.main {
+  padding-bottom: 50px;
+}
+</style>
