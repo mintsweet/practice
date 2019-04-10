@@ -53,7 +53,7 @@ export default {
   },
 
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       if (!this.form.email || !/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(this.form.email)) {
         Toast('请输入正确的邮箱');
         return;
@@ -66,7 +66,8 @@ export default {
       const { redirect } = getUrlParams();
       const url = redirect ? unescape(redirect) : '/';
 
-      this.$store.dispatch('login', this.form);
+      await this.$store.dispatch('login', this.form);
+      await this.$store.dispatch('getUser');
       this.$router.push(url);
     }
   }

@@ -26,16 +26,19 @@ export default {
 
   data() {
     return {
-      data: [
-        {
-          author: '青湛',
-          date: '2小时前',
-          tag: '精华',
-          title: '这是一段标题'
-        }
-      ]
+      data: [],
     };
-  }
+  },
+
+  created() {
+    this.getData();
+  },
+
+  methods: {
+    getData() {
+      this.$store.dispatch('getTopics');
+    }
+  },
 };
 </script>
 

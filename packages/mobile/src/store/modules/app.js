@@ -1,4 +1,5 @@
 import * as API from '@/services/api';
+import { setStorage } from '@/utils/storage';
 
 export default {
   state: {
@@ -8,6 +9,7 @@ export default {
   mutations: {
     SAVE_TOKEN(state, token) {
       state.token = token;
+      setStorage('token', token);
     }
   },
 

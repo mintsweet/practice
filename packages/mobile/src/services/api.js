@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { Toast } from 'vant';
-import { getStorage, delStorage } from '../utils/storage';
+import { getStorage, delStorage } from '@/utils/storage';
 
 axios.defaults.baseURL = '/api';
 
 axios.interceptors.request.use(config => {
   const token = getStorage('token');
+
+  console.log(token);
 
   if (token) {
     config.headers = {
@@ -30,3 +32,9 @@ axios.interceptors.response.use(res => {
 
 // 登录
 export const login = params => axios.post('/v1/signin', params);
+
+// 获取当前用户信息
+export const getUser = params => axios.get('/v1/info', params);
+
+// 获取话题列表
+export const getTopics = params => axios.get('/v1/topics/list', { params });
