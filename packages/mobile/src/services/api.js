@@ -7,8 +7,6 @@ axios.defaults.baseURL = '/api';
 axios.interceptors.request.use(config => {
   const token = getStorage('token');
 
-  console.log(token);
-
   if (token) {
     config.headers = {
       Authorization: token
@@ -38,3 +36,6 @@ export const getUser = params => axios.get('/v1/info', params);
 
 // 获取话题列表
 export const getTopics = params => axios.get('/v1/topics/list', { params });
+
+// 获取话题详情
+export const getTopic = tid => axios.get(`/v1/topic/${tid}`);

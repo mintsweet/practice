@@ -7,6 +7,8 @@ export default {
     ps: 10,
     list: [],
     tab: 'all',
+    id: '',
+    detail: {}
   },
 
   mutations: {
@@ -16,6 +18,10 @@ export default {
       state.pn = data.currentPage;
       state.ps = data.size;
       state.tab = data.currentTab;
+    },
+
+    FETCH_TOPIC_DETAIL(state, data) {
+      state.detail = data;
     },
   },
 
@@ -27,6 +33,13 @@ export default {
         tab: state.tab,
       });
       commit('FETCH_TOPIC', data);
+    },
+
+    async getTopic({ state, commit }, id) {
+      if (id !== state.id) {
+        const data = await API.getTopic(id);
+        commit('FETCH_TOPIC_DETAIL', data);
+      }
     },
   },
 };

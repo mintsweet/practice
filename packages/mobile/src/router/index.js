@@ -32,6 +32,10 @@ const router = new VueRouter({
         },
       ]
     },
+    {
+      path: '/detail/:id',
+      component: () => import('@/views/detail/index'),
+    },
   ]
 });
 

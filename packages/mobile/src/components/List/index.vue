@@ -1,19 +1,35 @@
 <template>
   <ul class="topic-list">
     <li class="item" v-for="item in data" :key="item.id">
-      <div class="info">{{ item.author }} · {{ item.date }} · {{ item.tag }}</div>
-      <div class="title">{{ item.title }}</div>
-      <div class="bottom">
-        <span class="box">33</span>
-        <span class="box">22</span>
-      </div>
+      <router-link :to="`/detail/${item.id}`">
+        <div class="info">
+          {{ item.author.nickname }} · {{ item.create_at | moment('from') }} · {{ item.tabName }}
+        </div>
+        <div class="title">{{ item.title }}</div>
+        <div class="bottom">
+          <div class="box">
+            <van-icon class="icon" name="like" />
+            <span>{{ item.like_count }}</span>
+          </div>
+          <div class="box">
+            <van-icon class="icon" name="comment" />
+            <span>{{ item.reply_count }}</span>
+          </div>
+        </div>
+      </router-link>
     </li>
   </ul>
 </template>
 
 <script>
+import { Icon } from 'vant';
+
 export default {
   name: 'Topic',
+
+  components: {
+    'van-icon': Icon
+  },
 
   props: {
     data: {
@@ -40,6 +56,7 @@ export default {
     margin: 5px 0 10px;
     font-size: 15px;
     font-weight: 600;
+    color: #333;
   }
 
   .bottom {
@@ -47,7 +64,7 @@ export default {
 
     .box {
       display: inline-block;
-      padding: 0 10px;
+      padding: 0 6px;
       width: 30px;
       height: 18px;
       line-height: 18px;
@@ -56,6 +73,15 @@ export default {
       border: 1px solid #edeeef;
       border-left: 0;
       border-radius: 1px;
+
+      span {
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+
+      .icon {
+        vertical-align: middle;
+      }
 
       &:first-child {
         border-left: 1px solid #edeeef;

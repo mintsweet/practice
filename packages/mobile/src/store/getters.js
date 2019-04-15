@@ -8,5 +8,6 @@ export default {
     return state.app.token;
   },
   user: state => state.user,
-  topic: state => state.topic,
+  topics: state => state.topic.list,
+  detail: state => state.topic.detail,
 };

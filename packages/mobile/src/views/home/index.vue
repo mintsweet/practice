@@ -6,14 +6,14 @@
       <van-swipe-item class="red"></van-swipe-item>
       <van-swipe-item class="blue"></van-swipe-item>
     </van-swipe>
-
-    <c-topic :data="data" />
+    <c-list :data="topics" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { Swipe, SwipeItem } from 'vant';
-import Topic from '@/components/Topic';
+import List from '@/components/List';
 
 export default {
   name: 'Home',
@@ -21,17 +21,15 @@ export default {
   components: {
     'van-swipe': Swipe,
     'van-swipe-item': SwipeItem,
-    'c-topic': Topic,
-  },
-
-  data() {
-    return {
-      data: [],
-    };
+    'c-list': List,
   },
 
   created() {
     this.getData();
+  },
+
+  computed: {
+    ...mapGetters(['topics'])
   },
 
   methods: {
