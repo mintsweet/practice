@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="page">
     <van-nav-bar
       class="header"
       :title="detail.topic && detail.topic.title"
@@ -10,12 +10,65 @@
       class="markdown"
       :source="detail.topic && detail.topic.content"
     />
+    <div class="author">
+      <div class="title">作者</div>
+      <div class="content">
+        <div class="avatar">
+          <img
+            :src="detail.author && detail.author.avatar"
+            :alt="detail.author && detail.author.nickname"
+          >
+        </div>
+        <div class="detail">
+          <div class="nickname">
+            <strong>{{ detail.author && detail.author.nickname }}</strong>
+            <span>
+              <van-icon name="location" />{{ detail.author && detail.author.location || '未知' }}
+            </span>
+          </div>
+          <div class="signature">
+            {{ (detail.author && detail.author.signature) || '这个用户什么都没有留下' }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="comment">
+      <div class="title">评论</div>
+      <div class="content">
+        <div class="item" v-for="item in detail.replies" :key="item.id">
+          <div class="author-info">
+            <div class="avatar">
+              <img
+                :src="item.author && item.author.avatar"
+                :alt="item.author && item.author.nickname"
+              >
+            </div>
+            <div class="nickname">{{ item.author && item.author.nickname }}</div>
+            <div class="date">{{ item.create_at_ago }}</div>
+          </div>
+          <div class="detail">{{ item.content }}</div>
+          <div class="other"><van-icon name="youzan-shield" />{{ item.ups.length }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="info">
+      <div class="action">
+        <van-icon :name="detail.like ? 'like' : 'like-o'" />
+          ·
+        <van-icon :name="detail.collect ? 'star' : 'star-o'" />
+      </div>
+      <div class="count">
+        {{ detail.topic && detail.topic.like_count }} 喜欢
+         ·
+        {{ detail.topic && detail.topic.collect_count }} 收藏
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { NavBar } from 'vant';
+import { NavBar, Icon } from 'vant';
 import VueMarkdown from 'vue-markdown';
 
 export default {
@@ -23,6 +76,7 @@ export default {
 
   components: {
     'van-nav-bar': NavBar,
+    'van-icon': Icon,
     'van-markdown': VueMarkdown,
   },
 
@@ -42,101 +96,152 @@ export default {
 };
 </script>
 
-<style lang="less">
-.markdown {
-  margin-top: 60px;
-  padding: 0 10px;
-  font-size: 14px;
+<style lang="less" scoped>
+@import '../../styles/variable.less';
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: 24px;
-    margin-bottom: 16px;
-    font-weight: 600;
-    line-height: 1.25;
+.page {
+  padding: 40px 10px 60px;
+
+  .info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 10px;
+    height: 36px;
+    background: #fff;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, .1);
+
+    .action {
+      color: @gray;
+    }
+
+    .count {
+      font-size: 12px;
+      color: @gray;
+    }
   }
 
-  h1,
-  h2,
-  h3 {
-    padding-left: 10px;
-    border-left: 4px solid #16982b;
-  }
+  .author,
+  .comment {
+    .title {
+      position: relative;
+      font-size: 18px;
+      line-height: 2;
 
-  h1 {
-    font-size: 1.4em;
-  }
-
-  h2 {
-    font-size: 1.2em;
-  }
-
-  h3 {
-    font-size: 1em;
-  }
-
-  h4 {
-    font-size: .875em;
-  }
-
-  h5 {
-    font-size: .85em;
-  }
-
-  h6 {
-    font-size: .6em;
-  }
-
-  ul,
-  ol {
-    padding-left: 2em;
-  }
-
-  ol > li {
-    list-style-type: decimal;
-  }
-
-  ul > li {
-    list-style-type: disc;
-  }
-
-  p {
-    margin: 10px 0;
-  }
-
-  a {
-    color: #16982b;
-  }
-
-  table {
-    display: block;
-    width: 100%;
-    overflow: auto;
-
-    tr {
-      background-color: #f5f5f5;
-      border-top: 1px solid #e6e6e6;
-
-      &:nth-child(2n) {
-        background-color: #f1f1f1;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 40px;
+        height: 4px;
+        background: @theme-color;
       }
     }
 
-    th,
-    td {
-      padding: 6px 13px;
-      border: 1px solid #e6e6e6;
+    .content {
+      margin-top: 10px;
     }
   }
 
-  blockquote {
-    padding: 0 1em;
-    color: #8a8a8a;
-    border-left: 4px solid #e6e6e6;
+  .author {
+    margin: 20px 0;
+    padding-top: 10px;
+    border-top: 1px dashed @light-gray;
+
+    .content {
+      display: flex;
+    }
+
+    .avatar {
+      flex: 0 0 50px;
+      margin-right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+
+    .nickname {
+      strong {
+        font-size: 16px;
+      }
+
+      span {
+        margin-left: 6px;
+        font-size: 13px;
+        color: @gray;
+      }
+    }
+
+    .signature {
+      margin-top: 8px;
+      font-size: 12px;
+      color: @gray;
+    }
+  }
+
+  .comment {
+    .item {
+      padding: 10px 0;
+      border-bottom: 1px dashed @light-gray;
+    }
+
+    .author-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .nickname {
+      flex: auto;
+      margin-left: 5px;
+      font-size: 14px;
+      color: @dark-gray;
+    }
+
+    .date {
+      flex: 0 0 100px;
+      text-align: right;
+      font-size: 12px;
+      color: @gray;
+    }
+
+    .detail {
+      padding: 10px 25px 0;
+      font-size: 14px;
+    }
+
+    .other {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 13px;
+      color: @dark-gray;
+
+      .van-icon {
+        margin-right: 4px;
+      }
+    }
   }
 }
 </style>

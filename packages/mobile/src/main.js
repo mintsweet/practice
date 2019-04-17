@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import './styles/index.less';
 
 Vue.config.productionTip = false;
 
