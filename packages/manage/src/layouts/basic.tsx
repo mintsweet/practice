@@ -3,7 +3,7 @@ import Link from 'umi/link';
 import { Layout, Icon, LocaleProvider, Breadcrumb } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import { connect } from 'dva';
-import menuData from '../menu';
+import routes from '../../config/router.js';
 import GlobalHeader from '../components/Header';
 import GlobalFooter from '../components/Footer';
 import SiderMenu from '../components/SiderMenu';
@@ -15,15 +15,13 @@ const { Item: BreadcrumbItem } = Breadcrumb;
 
 // 面包屑映射
 const getBreadcrumbNameMap = (menuData) => {
-  const result = {
-    '/': '首页',
-  };
+  const result = {};
 
   for (const i of menuData) {
-    result[i.path] = i.name;
+    result[i.path] = i.title;
 
-    if (i.children) {
-      Object.assign(result, getBreadcrumbNameMap(i.children));
+    if (i.routes) {
+      Object.assign(result, getBreadcrumbNameMap(i.routes));
     }
   }
 
@@ -48,7 +46,7 @@ export default class BasicLayout extends React.PureComponent<Props> {
   }
 
   getBreadcrumbDom = () => {
-    const breadcrumbMap = getBreadcrumbNameMap(menuData);
+    const breadcrumbMap = getBreadcrumbNameMap(routes);
     const { location } = this.props;
     const urlList = location.pathname.split('/').filter(i => i);
     const pathSnippets = urlList.map((_, i) => {
@@ -57,10 +55,14 @@ export default class BasicLayout extends React.PureComponent<Props> {
 
     pathSnippets.unshift('/');
 
-    const extraBreadcrumbItems = pathSnippets.map(url => {
+    const extraBreadcrumbItems = pathSnippets.map((url, i, arr) => {
+      if (i === arr.length - 1) {
+        return <BreadcrumbItem key={url}>{breadcrumbMap[url]}</BreadcrumbItem>
+      }
+
       return (
         <BreadcrumbItem key={url}>
-          <Link to={url} replace>{breadcrumbMap[url]}</Link>
+          <Link to={url}>{breadcrumbMap[url]}</Link>
         </BreadcrumbItem>
       );
     });
@@ -81,12 +83,27 @@ export default class BasicLayout extends React.PureComponent<Props> {
   render() {
     const { children, user, collapsed, location } = this.props;
 
+    const links = [
+      {
+        key: 'souces',
+        title: '源码',
+        href: 'https://github.com/mintsweet/practice',
+        blankTarget: true
+      },
+      {
+        key: 'blog',
+        title: '博客',
+        href: 'https://github.com/mintsweet/blog',
+        blankTarget: true
+      }
+    ];
+
     const layout = (
       <Layout style={{ height: '100%', }}>
         <SiderMenu
           logo={logo}
           collapsed={collapsed}
-          menus={menuData}
+          menus={routes}
           location={location}
         />
         <Layout>
@@ -104,25 +121,8 @@ export default class BasicLayout extends React.PureComponent<Props> {
           </Content>
           <Footer>
             <GlobalFooter
-              links={[
-                {
-                  key: 'souces',
-                  title: '源码',
-                  href: 'https://github.com/mintsweet/practice',
-                  blankTarget: true
-                },
-                {
-                  key: 'blog',
-                  title: '博客',
-                  href: 'https://github.com/mintsweet/blog',
-                  blankTarget: true
-                }
-              ]}
-              copyright={
-                <>
-                  Copyright <Icon type="copyright" /> 2018 - 2019 青湛(GitHub/mintsweet)
-                </>
-              }
+              links={links}
+              copyright={<>Copyright <Icon type="copyright" /> 2018 - 2019 青湛(GitHub/mintsweet)</>}
             />
           </Footer>
         </Layout>

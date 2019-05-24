@@ -1,3 +1,6 @@
+import path from 'path';
+import routes from './config/router';
+
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
@@ -49,31 +52,5 @@ export default {
     }],
   ],
 
-  routes: [
-    {
-      path: '/user',
-      component: '../layouts/user',
-      title: '薄荷糖社区(Mints)',
-      routes: [
-        { path: '/user', redirect: '/user/login' },
-        { path: '/user/login', component: './user/login', title: '登录' },
-        { path: '/user/forget_pass', component: './user/forget_pass', title: '忘记密码' },
-      ],
-    },
-    {
-      path: '/',
-      component: '../layouts/basic',
-      Routes: ['src/pages/authorized'],
-      title: '薄荷糖社区(Mints)',
-      routes: [
-        { path: '/', redirect: '/dashboard' },
-        { path: '/dashboard', component: './dashboard/index', title: '首页' },
-        { path: '/content', redirect: '/content/topics' },
-        { path: '/content/topics', component: './content/topics', title: '话题管理' },
-        { path: '/content/users', component: './content/users', title: '用户管理' },
-        { path: '/system', redirect: '/system/setting' },
-        { path: '/system/setting', component: './system/setting', title: '系统设置' },
-      ]
-    },
-  ]
+  routes,
 }

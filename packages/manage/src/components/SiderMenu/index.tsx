@@ -12,8 +12,8 @@ const getFlatMenuKeys = menuData => {
   let keys = [];
   menuData.forEach(item => {
     keys.push(item.path);
-    if (item.children) {
-      keys = keys.concat(getFlatMenuKeys(item.children));
+    if (item.routes) {
+      keys = keys.concat(getFlatMenuKeys(item.routes));
     }
   });
   return keys;
@@ -29,7 +29,6 @@ const url2List = url => {
 const getDefaultCollapsedSubMenus = (flatMenuKeys, pathname) => {
   return url2List(pathname).map(path => flatMenuKeys.filter(item => pathToRegexp(item).test(path))[0]).filter(i => i).reduce((acc, curr) => [...acc, curr], ['/']);
 }
-
 
 export interface Props {
   logo: any;
@@ -51,30 +50,32 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
 
   // 获取菜单dom
   getSubMenuOrItem = item => {
-    if (item.children && item.children.some(child => child.name)) {
-      const childrenItems = this.getNavMenuItems(item.children);
-      if (childrenItems && childrenItems.length > 0) {
+    if (item.routes && item.routes.some(child => child.title)) {
+      const childrenItems = this.getNavMenuItems(item.routes);
+      if (childrenItems && (childrenItems.length > 1 || item.path !== childrenItems[0].key)) {
+        const title = (
+          <>
+            <Icon type={item.icon} />
+            <span>{item.title}</span>
+          </>
+        );
+
         return (
           <SubMenu
-            title={(
-              <span>
-                <Icon type={item.icon} />
-                <span>{item.name}</span>
-              </span>
-            )}
+            title={title}
             key={item.path}
           >
             {childrenItems}
           </SubMenu>
         );
       }
-      return null;
+      return childrenItems;
     } else {
       return (
         <MenuItem key={item.path}>
-          <Link to={item.path} replace>
+          <Link to={item.path}>
             {item.icon && <Icon type={item.icon} />}
-            <span>{item.name}</span>
+            <span>{item.title}</span>
           </Link>
         </MenuItem>
       );
@@ -86,7 +87,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
     if (!data) return [];
 
     return data
-      .filter(item => item.name && !item.hidenInMenu)
+      .filter(item => !item.redirect && !item.hidden)
       .map(item => {
         return this.getSubMenuOrItem(item);
       })
@@ -125,7 +126,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
         breakpoint="lg"
         trigger={null}
         collapsed={collapsed}
-        collapsible
+        collapsible={true}
         width={240}
         theme="light"
         className={styles.sider}
