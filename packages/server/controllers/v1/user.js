@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
 const Base = require('../base');
-const config = require('../../config');
+const { secret, JWT_EXPIRES, JWT_REFRESH } = require('../../config');
 const redis = require('../../db/redis');
 const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
@@ -106,12 +106,11 @@ class User extends Base {
     const token = jwt.sign(
       {
         id: user.id,
-        role: user.role
+        role: user.role,
+        exp: Date.now() + JWT_EXPIRES,
+        ref: Date.now() + JWT_REFRESH,
       },
-      config.secret,
-      {
-        expiresIn: '1h'
-      }
+      secret
     );
 
     ctx.body = `Bearer ${token}`;

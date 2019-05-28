@@ -6,8 +6,10 @@ module.exports = {
     test: 'mongodb://localhost:27017/practice-test'
   },
 
-  // token 签名 => 必改
+  // JWT 参数
   secret: 'practice',
+  JWT_EXPIRES: 30 * 60 * 1000,
+  JWT_REFRESH: 3 * 24 * 60 * 60 * 1000,
 
   // 话题分类
   tabs: [
