@@ -27,7 +27,7 @@ describe('test /app.js', function() {
     }
   });
 
-  it('should/ status 200', async function() {
+  it('should / status 200', async function() {
     try {
       const res = await request
         .get('/v2')

@@ -2,6 +2,12 @@ const jwt = require('jsonwebtoken');
 const { secret, JWT_EXPIRES, JWT_REFRESH } = require('../config');
 
 class Auth {
+  constructor() {
+    this.userRequired = this.userRequired.bind(this);
+    this.adminRequired = this.adminRequired.bind(this);
+    this.rootRequired = this.rootRequired.bind(this);
+  }
+
   _validJWT(user) {
     const { id, exp, ref } = user;
 
