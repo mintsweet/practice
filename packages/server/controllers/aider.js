@@ -1,12 +1,10 @@
 const { BMP24 } = require('gd-bmp');
-const Base = require('../base');
-const { qn } = require('../../config');
+const Base = require('./base');
 
 class Aider extends Base {
   constructor() {
     super();
     this.getCaptcha = this.getCaptcha.bind(this);
-    this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
   getCaptcha(ctx) {
@@ -44,18 +42,6 @@ class Aider extends Base {
     const url = `data:image/bmp;base64,${img.getFileData().toString('base64')}`;
 
     ctx.body = { token, url };
-  }
-
-  async uploadAvatar(ctx) {
-    const { id } = ctx.state.user;
-    const { avatar } = ctx.request.files;
-
-    try {
-      const avatarName = await this._uploadImgByQn(`avatar_${id}.${avatar.path.split('.')[1]}`, avatar.path);
-      ctx.body = `${qn.DONAME}/${avatarName}`;
-    } catch(err) {
-      throw new Error(err);
-    }
   }
 }
 

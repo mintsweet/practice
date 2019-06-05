@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const Auth = require('./middlewares/auth');
-const AiderV1 = require('./controllers/v1/aider');
+const User = require('./controllers/user');
+const Aider = require('./controllers/aider');
 const UserV1 = require('./controllers/v1/user');
 const UserV2 = require('./controllers/v2/user');
 const TopicV1 = require('./controllers/v1/topic');
@@ -8,22 +9,23 @@ const TopicV2 = require('./controllers/v2/topic');
 const ReplyV1 = require('./controllers/v1/reply');
 const NoticeV1 = require('./controllers/v1/notice');
 
-const routerV1 = new Router({
-  prefix: '/v1'
-});
+const router = new Router();
+
+router.get('/', ctx => { ctx.body = 'Welcome to mints api'; }); // API 测试
+router.get('/captcha', Aider.getCaptcha); // 获取图形验证码
+router.post('/signup', User.signup); // 注册
+router.get('/set_active', User.setActive); // 账户激活
+router.post('/upload_avatar', Auth.userRequired, User.uploadAvatar); // 头像上传
+router.post('/signin', User.signin); // 登录
+router.post('/forget_pass', User.forgetPass); // 忘记密码
+router.post('/reset_pass', User.resetPass); // 重置密码
+router.get('/info', Auth.userRequired, User.getCurrentUser); // 获取当前用户信息
+router.put('/setting', Auth.userRequired, User.updateSetting); // 更新个人信息
+router.patch('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
+
+const routerV1 = new Router({ prefix: '/v1' });
 
 routerV1
-  .get('/', ctx => { ctx.body = 'Version_1 API'; })
-  .get('/aider/captcha', AiderV1.getCaptcha) // 获取图形验证码
-  .post('/aider/upload_avatar', Auth.userRequired, AiderV1.uploadAvatar) // 头像上传
-  .post('/signup', UserV1.signup) // 注册
-  .get('/set_active', UserV1.setActive) // 账户激活
-  .post('/signin', UserV1.signin) // 登录
-  .post('/forget_pass', UserV1.forgetPass) // 忘记密码
-  .post('/reset_pass', UserV1.resetPass) // 重置密码
-  .get('/info', Auth.userRequired, UserV1.getCurrentUser) // 获取当前用户信息
-  .put('/setting', Auth.userRequired, UserV1.updateSetting) // 更新个人信息
-  .patch('/update_pass', Auth.userRequired, UserV1.updatePass) // 修改密码
   .get('/users/top', UserV1.getUserTop) // 获取积分榜用户列表
   .get('/user/:uid', UserV1.getUserById) // 根据ID获取用户信息
   .get('/user/:uid/action', UserV1.getUserAction) // 获取用户动态
@@ -49,9 +51,7 @@ routerV1
   .get('/notice/user', Auth.userRequired, NoticeV1.getUserNotice) // 获取用户消息
   .get('/notice/system', Auth.userRequired, NoticeV1.getSystemNotice); // 获取系统消息
 
-const routerV2 = new Router({
-  prefix: '/v2'
-});
+const routerV2 = new Router({ prefix: '/v2' });
 
 routerV2
   .get('/', ctx => { ctx.body = 'Version_2 API'; })
@@ -72,6 +72,7 @@ routerV2
   .patch('/topic/:tid/lock', Auth.adminRequired, TopicV2.lockTopic); // 话题锁定(封贴)
 
 module.exports = {
+  rt: router.routes(),
   v1: routerV1.routes(),
   v2: routerV2.routes()
 };

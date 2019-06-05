@@ -2,7 +2,7 @@ const Koa = require('koa');
 const koaBody = require('koa-body');
 const koaJwt = require('koa-jwt');
 const path = require('path');
-const { secret, port } = require('./config');
+const { jwt: { SECRET }, PORT, FILE_LIMIT } = require('./config');
 const router = require('./router');
 const logger = require('./utils/logger');
 const ErrorHandler = require('./middlewares/error-handler');
@@ -19,7 +19,7 @@ app
       uploadDir: `${__dirname}/uploads`,
       keepExtensions: true,
       multiples: false,
-      maxFieldsSize: 1024 * 1024 * 0.5, // 限制上传文件大小为 512kb
+      maxFieldsSize: FILE_LIMIT, // 限制上传文件大小为 512kb
       onFileBegin(name, file) {
         const dir = path.dirname(file.path);
         file.path = path.join(dir, file.name);
@@ -27,13 +27,14 @@ app
     }
   }))
   .use(koaJwt({
-    secret,
+    SECRET,
     passthrough: true
   }))
   .use(ErrorHandler.handleError);
 
 // router
 app
+  .use(router.rt)
   .use(router.v1)
   .use(router.v2);
 
@@ -46,4 +47,4 @@ app.use(ctx => {
 // error handle
 app.on('error', err => logger.error(err)); // 记录服务器错误
 
-if (!module.parent) app.listen(port);
+if (!module.parent) app.listen(PORT);

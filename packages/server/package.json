@@ -19,6 +19,7 @@
     "moment": "^2.23.0",
     "mongoose": "^5.3.16",
     "nodemailer": "^5.0.0",
+    "passport": "^0.4.0",
     "qiniu": "^7.2.1",
     "redis": "^2.8.0",
     "uuid": "^3.3.2"

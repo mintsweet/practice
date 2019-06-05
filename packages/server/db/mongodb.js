@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
-const { dbpath } = require('../config');
+const { DB_PATH } = require('../config');
 
 mongoose.set('useCreateIndex', true);
-mongoose.connect(dbpath[process.env.NODE_ENV], { useNewUrlParser: true });
+mongoose.connect(DB_PATH, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 
