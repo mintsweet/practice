@@ -22,85 +22,85 @@ const forgetPass = params => request('/forget_pass', params, 'POST');
 const resetPass = params => request('/reset_pass', params, 'POST');
 
 // 获取当前用户信息
-const getCurrentUser = () => request('/info');
+const getCurrentUser = () => request('/v1/info');
 
 // 更新个人信息
-const updateSetting = params => request('/setting', params, 'PUT');
+const updateSetting = params => request('/v1/setting', params, 'PUT');
 
 // 修改密码
-const updatePass = params => request('/update_pass', params, 'PATCH');
+const updatePass = params => request('/v1/update_pass', params, 'PATCH');
 
 // 获取积分榜用户列表
-const getUsersTop = params => request('/users/top', params);
+const getUsersTop = params => request('/v1/users/top', params);
 
 // 根据ID获取用户信息
-const getUserById = uid => request(`/user/${uid}`);
+const getUserById = uid => request(`/v1/user/${uid}`);
 
 // 获取用户动态
-const getUserAction = uid => request(`/user/${uid}/action`);
+const getUserAction = uid => request(`/v1/user/${uid}/action`);
 
 // 获取用户专栏列表
-const getUserCreate = uid => request(`/user/${uid}/create`);
+const getUserCreate = uid => request(`/v1/user/${uid}/create`);
 
 // 获取用户喜欢列表
-const getUserLike = uid => request(`/user/${uid}/like`);
+const getUserLike = uid => request(`/v1/user/${uid}/like`);
 
 // 获取用户收藏列表
-const getUserCollect = uid => request(`/user/${uid}/collect`);
+const getUserCollect = uid => request(`/v1/user/${uid}/collect`);
 
 // 获取用户粉丝列表
-const getUserFollower = uid => request(`/user/${uid}/follower`);
+const getUserFollower = uid => request(`/v1/user/${uid}/follower`);
 
 // 获取用户关注列表
-const getUserFollowing = uid => request(`/user/${uid}/following`);
+const getUserFollowing = uid => request(`/v1/user/${uid}/following`);
 
 // 关注或者取消关注用户
-const followOrUn = uid => request(`/user/${uid}/follow_or_un`, {}, 'PATCH');
+const followOrUn = uid => request(`/v1/user/${uid}/follow_or_un`, {}, 'PATCH');
 
 // 创建话题
-const createTopic = params => request('/create', params, 'POST');
+const createTopic = params => request('/v1/create', params, 'POST');
 
 // 删除话题
-const deleteTopic = tid => request(`/topic/${tid}/delete`, {}, 'DELETE');
+const deleteTopic = tid => request(`/v1/topic/${tid}/delete`, {}, 'DELETE');
 
 // 编辑话题
-const editTopic = (tid, params) => request(`/topic/${tid}/update`, params, 'PUT');
+const editTopic = (tid, params) => request(`/v1/topic/${tid}/update`, params, 'PUT');
 
 // 获取话题列表
-const getTopics = params => request('/topics/list', params);
+const getTopics = params => request('/v1/topics/list', params);
 
 // 搜索话题列表
-const searchTopics = params => request('/topics/search', params);
+const searchTopics = params => request('/v1/topics/search', params);
 
 // 获取无人回复的话题
-const getTopicsNoReply = params => request('/topics/no_reply', params);
+const getTopicsNoReply = params => request('/v1/topics/no_reply', params);
 
 // 根据ID获取话题详情
-const getTopicById = tid => request(`/topic/${tid}`);
+const getTopicById = tid => request(`/v1/topic/${tid}`);
 
 // 喜欢或者取消喜欢话题
-const likeOrUn = tid => request(`/topic/${tid}/like_or_un`, {}, 'PATCH');
+const likeOrUn = tid => request(`/v1/topic/${tid}/like_or_un`, {}, 'PATCH');
 
 // 收藏或者取消收藏话题
-const collectOrUn = tid => request(`/topic/${tid}/collect_or_un`, {}, 'PATCH');
+const collectOrUn = tid => request(`/v1/topic/${tid}/collect_or_un`, {}, 'PATCH');
 
 // 创建回复
-const createReply = (tid, params) => request(`/topic/${tid}/reply`, params, 'POST');
+const createReply = (tid, params) => request(`/v1/topic/${tid}/reply`, params, 'POST');
 
 // 删除回复
-const deleteReply = rid => request(`/reply/${rid}/delete`, {}, 'DELETE');
+const deleteReply = rid => request(`/v1/reply/${rid}/delete`, {}, 'DELETE');
 
 // 编辑回复
-const editReply = (rid, params) => request(`/reply/${rid}/update`, params, 'PUT');
+const editReply = (rid, params) => request(`/v1/reply/${rid}/update`, params, 'PUT');
 
 // 回复点赞或者取消点赞
-const upOrDown = rid => request(`/reply/${rid}/up_or_down`, {}, 'PATCH');
+const upOrDown = rid => request(`/v1/reply/${rid}/up_or_down`, {}, 'PATCH');
 
 // 获取用户消息
-const getUserNotice = () => request('/notice/user');
+const getUserNotice = () => request('/v1/notice/user');
 
 // 获取系统消息
-const getSystemNotice = () => request('/notice/system');
+const getSystemNotice = () => request('/v1/notice/system');
 
 module.exports = {
   getCaptcha,

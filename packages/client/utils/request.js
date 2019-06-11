@@ -8,7 +8,7 @@ module.exports = (url, data, method = 'GET') => {
     method,
     json: true,
     headers: {
-      Authorization: global.token
+      Authorization: global.token || ''
     }
   };
 
