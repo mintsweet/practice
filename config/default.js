@@ -1,6 +1,6 @@
 const defaultConfig = {
   // 监听端口
-  PORT: 3000,
+  SERVER_PORT: 3000,
 
   // 数据库连接地址
   DB_PATH: 'mongodb://localhost:27017/practice',
@@ -32,9 +32,9 @@ const defaultConfig = {
   qn: {
     ACCESS_KEY: '',
     SECRET_KEY: '',
-    BUCKET_NAME: 'image-mintsweet-cn',
-    DONAME: 'http://image.mintsweet.cn',
-    ZONE: 'Zone_z2',
+    BUCKET_NAME: '',
+    DONAME: '',
+    ZONE: '',
   },
 
   // 上传文件大小限制 单位(B) 默认 512KB
@@ -55,7 +55,22 @@ const defaultConfig = {
   limit: {
     POST_CREATE: 100,
     REPLY_CREATE: 1000,
-  }
+  },
+
+  // 网站设置
+  site: {
+    name: 'Mints - 薄荷糖社区',
+    description: '简洁、快乐的交流社区',
+    keywords: 'mints, community',
+    author: '青湛(github/mintsweet)',
+    icon: '/static/img/favicon.ico',
+  },
+
+  // 客户端端口号
+  CLIENT_PORT: 3001,
+
+  // 接口地址
+  API: 'http://localhost:3000',
 };
 
 module.exports = defaultConfig;

@@ -3,7 +3,7 @@ const UserProxy = require('../../proxy/user');
 const ActionProxy = require('../../proxy/action');
 const ReplyProxy = require('../../proxy/reply');
 const NoticeProxy = require('../../proxy/notice');
-const config = require('../../config');
+const config = require('../../../../config');
 
 class Topic {
   // 创建话题

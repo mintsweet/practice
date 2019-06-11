@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
 const Base = require('./base');
-const { secret, JWT_EXPIRES, JWT_REFRESH, qn } = require('../config');
+const { secret, JWT_EXPIRES, JWT_REFRESH, qn } = require('../../../config');
 const redis = require('../db/redis');
 const UserProxy = require('../proxy/user');
 

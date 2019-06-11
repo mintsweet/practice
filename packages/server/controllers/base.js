@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { qn, mail } = require('../config');
+const { qn, mail } = require('../../../config');
 
 // 密码加密位数
 const SALT_WORK_FACTOR = 10;

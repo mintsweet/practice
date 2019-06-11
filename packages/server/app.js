@@ -2,7 +2,7 @@ const Koa = require('koa');
 const koaBody = require('koa-body');
 const koaJwt = require('koa-jwt');
 const path = require('path');
-const { jwt: { SECRET }, PORT, FILE_LIMIT } = require('./config');
+const { jwt: { SECRET }, SERVER_PORT, FILE_LIMIT } = require('../../config');
 const router = require('./router');
 const logger = require('./utils/logger');
 const ErrorHandler = require('./middlewares/error-handler');
@@ -47,4 +47,4 @@ app.use(ctx => {
 // error handle
 app.on('error', err => logger.error(err)); // 记录服务器错误
 
-if (!module.parent) app.listen(PORT);
+if (!module.parent) app.listen(SERVER_PORT);

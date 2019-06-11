@@ -1,5 +1,4 @@
 const API = require('../utils/api');
-const config = require('../config');
 
 class Site {
   // 首页
@@ -12,7 +11,7 @@ class Site {
     const data = await API.getTopics({
       tab,
       page,
-      size: config.home_topic_count
+      size: 20,
     });
 
     return res.render('pages/index', {

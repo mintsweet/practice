@@ -2,6 +2,7 @@
 node_modules
 .umi
 .umi-production
+config/custom.js
 
 # testing
 coverage

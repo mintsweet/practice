@@ -4,6 +4,11 @@
     "packages/*"
   ],
   "scripts": {
+    "start:db": "cd packages/server && npm run db-server",
+    "start:server": "cd packages/server && npm start",
+    "start:client": "cd packages/client && npm start",
+    "start:manage": "cd packages/manage && npm start",
+    "start:mobile": "cd packages/mobile && npm start",
     "lint": "npm run lint:js && npm run lint:style",
     "lint:js": "eslint packages/**/*.js",
     "lint:style": "stylelint packages/**/*.less",

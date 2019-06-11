@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Plugin = require('./plugin');
-const config = require('../config');
+const config = require('../../../config');
 
 const { Schema } = mongoose;
 const { ObjectId } = Schema;

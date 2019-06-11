@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { secret, JWT_EXPIRES, JWT_REFRESH } = require('../config');
+const { secret, JWT_EXPIRES, JWT_REFRESH } = require('../../../config');
 
 class Auth {
   constructor() {
