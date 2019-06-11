@@ -27,8 +27,11 @@
             span.divider
             .item
               a(href="/signout") 退出登录
-      else
+      else if config.ALLOW_SIGNUP
         .account
           a(href="/signin") 登录
           span.divider |
           a(href="/signup") 注册
+      else
+        .account
+          a(href="/auth/github") 使用 GitHub 登录

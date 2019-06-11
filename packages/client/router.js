@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const Site = require('./controllers/site');
 const Static = require('./controllers/static');
 const Aider = require('./controllers/aider');
@@ -6,7 +7,9 @@ const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Reply = require('./controllers/reply');
 const Notice = require('./controllers/notice');
+const Github = require('./controllers/github');
 const Auth = require('./middlewares/auth');
+const { ALLOW_SIGNUP } = require('./config');
 
 const router = express.Router();
 
@@ -23,8 +26,14 @@ router.get('/static/norms', wrap(Static.renderNormsDoc));
 router.get('/aider/captcha', wrap(Aider.getCaptcha));
 
 // 用户
-router.get('/signup', wrap(User.renderSignup));
-router.post('/signup', wrap(User.signup));
+if (ALLOW_SIGNUP) {
+  router.get('/signup', wrap(User.renderSignup));
+  router.post('/signup', wrap(User.signup));
+} else {
+  router.get('/auth/github', passport.authenticate('github'));
+  router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), Github.callback);
+}
+
 router.get('/signin', wrap(User.renderSignin));
 router.post('/signin', wrap(User.signin));
 router.get('/forget_pass', wrap(User.renderForgetPass));
