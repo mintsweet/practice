@@ -9,7 +9,7 @@ const Reply = require('./controllers/reply');
 const Notice = require('./controllers/notice');
 const Github = require('./controllers/github');
 const Auth = require('./middlewares/auth');
-const { ALLOW_SIGNUP } = require('./config');
+const { ALLOW_SIGNUP } = require('../../config');
 
 const router = express.Router();
 

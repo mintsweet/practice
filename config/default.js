@@ -71,6 +71,16 @@ const defaultConfig = {
 
   // 接口地址
   API: 'http://localhost:3000',
+
+  // 是否允许注册
+  ALLOW_SIGNUP: false,
+
+  // GitHub 鉴权配置
+  github: {
+    CLIENT_ID: '',
+    CLIENT_SECRET: '',
+    CALLBACK_URL: '',
+  }
 };
 
 module.exports = defaultConfig;

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('passport');
 const routes = require('./router');
-const config = require('./config');
+const config = require('../../config');
 const Auth = require('./middlewares/auth');
 const ErrorHandler = require('./middlewares/error-handler');
 
@@ -32,4 +32,4 @@ app.use('/', routes);
 app.use(ErrorHandler.handle404);
 app.use(ErrorHandler.handle500);
 
-if (!module.parent) app.listen(config.CLINET_PORT);
+if (!module.parent) app.listen(config.CLIENT_PORT);
