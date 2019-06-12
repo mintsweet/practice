@@ -35,7 +35,7 @@ describe('test /v2/topic/:tid/good', function() {
   it('should / status 403 when the no permission', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -56,7 +56,7 @@ describe('test /v2/topic/:tid/good', function() {
   it('should / status 200 when the action is good', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -77,7 +77,7 @@ describe('test /v2/topic/:tid/good', function() {
   it('should / status 200 when the action is un_good', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'

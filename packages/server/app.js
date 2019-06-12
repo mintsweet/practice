@@ -27,7 +27,7 @@ app
     }
   }))
   .use(koaJwt({
-    SECRET,
+    secret: SECRET,
     passthrough: true
   }))
   .use(ErrorHandler.handleError);

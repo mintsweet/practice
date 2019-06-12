@@ -38,7 +38,7 @@ describe('test /v1/topic/:tid/like_or_un', function() {
   it('should / status 404 when the topic does not exist', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -59,7 +59,7 @@ describe('test /v1/topic/:tid/like_or_un', function() {
   it('should / status 403 when the topic is yours', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -80,7 +80,7 @@ describe('test /v1/topic/:tid/like_or_un', function() {
   it('should / status 200 when action is like', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -101,7 +101,7 @@ describe('test /v1/topic/:tid/like_or_un', function() {
   it('should / status 200 when the action is un_like', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'

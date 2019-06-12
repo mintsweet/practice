@@ -31,7 +31,7 @@ describe('test /v2/topics/new_last_week', function() {
 
   it('should / status 403 when the no permission', async function() {
     let res = await request
-      .post('/v1/signin')
+      .post('/signin')
       .send({
         email: mockUser.email,
         password: 'a123456'
@@ -49,7 +49,7 @@ describe('test /v2/topics/new_last_week', function() {
   it('should / status 200', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'

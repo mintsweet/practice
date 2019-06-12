@@ -20,11 +20,14 @@ describe('test /v2/users/create', function() {
 
   it('should / status 401 when the not signin', async function() {
     try {
-      const res = await request.post('/v2/users/create').send({
-        email: '123458@qq.com',
-        password: 'a123456',
-        nickname: '新建用户'
-      }).expect(401);
+      const res = await request
+        .post('/v2/users/create')
+        .send({
+          email: '123458@qq.com',
+          password: 'a123456',
+          nickname: '新建用户'
+        })
+        .expect(401);
 
       res.text.should.equal('尚未登录');
     } catch(err) {
@@ -35,7 +38,7 @@ describe('test /v2/users/create', function() {
   it('should / status 403 when the no permission', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -62,7 +65,7 @@ describe('test /v2/users/create', function() {
   it('should / status 400 when the email is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -89,7 +92,7 @@ describe('test /v2/users/create', function() {
   it('should / status 400 when the password is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -116,7 +119,7 @@ describe('test /v2/users/create', function() {
   it('should / status 400 when the nickname is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -143,7 +146,7 @@ describe('test /v2/users/create', function() {
   it('should / status 400 when the role is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -170,7 +173,7 @@ describe('test /v2/users/create', function() {
   it('should / status 409 when the email is registered', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -197,7 +200,7 @@ describe('test /v2/users/create', function() {
   it('should / status 409 when the nickname is registered', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -224,7 +227,7 @@ describe('test /v2/users/create', function() {
   it('should / status 200', async function() {
     try {
       const res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'

@@ -3,14 +3,16 @@ const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { qn, mail } = require('../../../config');
+const { qn: { ACCESS_KEY, SECRET_KEY, BUCKET_NAME, ZONE }, mail } = require('../../../config');
 
 // 密码加密位数
 const SALT_WORK_FACTOR = 10;
 
 // 方便集成测试的时候同时隐藏七牛 access_key 和 secret_key
-const QN_ACCESS_KEY = qn.ACCESS_KEY || process.env.QN_ACCESS_KEY;
-const QN_SECRET_KEY = qn.SECRET_KEY || process.env.QN_SECRET_KEY;
+const QN_ACCESS_KEY = ACCESS_KEY || process.env.QN_ACCESS_KEY;
+const QN_SECRET_KEY = SECRET_KEY || process.env.QN_SECRET_KEY;
+const QN_BUCKET_NAME = BUCKET_NAME || process.env.QN_BUCKET_NAME;
+const QN_ZONE = ZONE || process.env.QN_ZONE;
 
 module.exports = class Base {
   // 生成随机数
@@ -41,13 +43,13 @@ module.exports = class Base {
   _uploadImgByQn(name, local) {
     const mac = new qiniu.auth.digest.Mac(QN_ACCESS_KEY, QN_SECRET_KEY);
     const putPolicy = new qiniu.rs.PutPolicy({
-      scope: `${qn.BUCKET_NAME}:${name}`
+      scope: `${QN_BUCKET_NAME}:${name}`
     });
 
     const uploadToken = putPolicy.uploadToken(mac);
 
     const config = new qiniu.conf.Config();
-    config.zone = qiniu.zone[qn.ZONE];
+    config.zone = qiniu.zone[QN_ZONE];
     const formUploader = new qiniu.form_up.FormUploader(config);
     const putExtra = new qiniu.form_up.PutExtra();
 
@@ -72,7 +74,7 @@ module.exports = class Base {
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
 
     return new Promise((resolve, reject) => {
-      bucketManager.delete(qn.BUCKET_NAME, name, (err, respBody, respInfo) => {
+      bucketManager.delete(BUCKET_NAME, name, (err, respBody, respInfo) => {
         if (err) reject(err);
         resolve(respInfo.statusCode);
       });

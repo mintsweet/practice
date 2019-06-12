@@ -1,9 +1,9 @@
-const app = require('../../../app').listen();
+const app = require('../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
-const support = require('../../support');
+const support = require('../support');
 
-describe('test /v1/info', function() {
+describe('test /info', function() {
   let mockUser;
 
   before(async function() {
@@ -17,7 +17,7 @@ describe('test /v1/info', function() {
   it('should / status 401 when the not signin', async function() {
     try {
       const res = await request
-        .get('/v1/info')
+        .get('/info')
         .expect(401);
 
       res.text.should.equal('尚未登录');
@@ -29,7 +29,7 @@ describe('test /v1/info', function() {
   it('should / status 200', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -37,7 +37,7 @@ describe('test /v1/info', function() {
         .expect(200);
 
       res = await request
-        .get('/v1/info')
+        .get('/info')
         .set('Authorization', res.text)
         .expect(200);
 

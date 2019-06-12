@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
 const Base = require('./base');
-const { secret, JWT_EXPIRES, JWT_REFRESH, qn } = require('../../../config');
+const { jwt: { SECRET, EXPIRSE, REFRESH }, qn: { DONAME } } = require('../../../config');
 const redis = require('../db/redis');
 const UserProxy = require('../proxy/user');
+
+const QN_DONAME = DONAME || process.env.QN_DONAME;
 
 class User extends Base {
   constructor() {
@@ -13,6 +15,7 @@ class User extends Base {
     this.forgetPass = this.forgetPass.bind(this);
     this.resetPass = this.resetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
+    this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
   // 注册
@@ -58,7 +61,7 @@ class User extends Base {
     const token = await this._md5(key);
     await redis.set(email, token, 'EX', 60 * 30);
 
-    const url = `/v1/set_active?token=${token}&email=${email}`;
+    const url = `/set_active?token=${token}&email=${email}`;
 
     ctx.body = url;
   }
@@ -104,10 +107,10 @@ class User extends Base {
       {
         id: user.id,
         role: user.role,
-        exp: Date.now() + JWT_EXPIRES,
-        ref: Date.now() + JWT_REFRESH,
+        exp: Date.now() + EXPIRSE,
+        ref: Date.now() + REFRESH,
       },
-      secret
+      SECRET
     );
 
     ctx.body = `Bearer ${token}`;
@@ -137,7 +140,7 @@ class User extends Base {
     const token = await this._md5(key);
     await redis.set(email, token, 'EX', 60 * 30);
 
-    const url = `/v1/reset_pass?token=${token}&email=${email}`;
+    const url = `/reset_pass?token=${token}&email=${email}`;
 
     ctx.body = url;
   }
@@ -221,7 +224,7 @@ class User extends Base {
 
     try {
       const avatarName = await this._uploadImgByQn(`avatar_${id}.${avatar.path.split('.')[1]}`, avatar.path);
-      ctx.body = `${qn.DONAME}/${avatarName}`;
+      ctx.body = `${QN_DONAME}/${avatarName}`;
     } catch(err) {
       throw new Error(err);
     }

@@ -1,9 +1,9 @@
-const app = require('../../../app').listen();
+const app = require('../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
-const support = require('../../support');
+const support = require('../support');
 
-describe('test /v1/reset_pass', function() {
+describe('test /reset_pass', function() {
   let mockUser;
 
   before(async function() {
@@ -17,7 +17,7 @@ describe('test /v1/reset_pass', function() {
   it('should / status 400 when the token is invalid', async function() {
     try {
       const res = await request
-        .post('/v1/reset_pass?token=balabalabalabala&email=123456@qq.com')
+        .post('/reset_pass?token=balabalabalabala&email=123456@qq.com')
         .send({
           newPass: 'a123456789'
         })
@@ -34,7 +34,7 @@ describe('test /v1/reset_pass', function() {
       let res;
 
       res = await request
-        .post('/v1/forget_pass')
+        .post('/forget_pass')
         .send({
           email: '123456@qq.com'
         })
@@ -56,7 +56,7 @@ describe('test /v1/reset_pass', function() {
   it('should / status 200', async function() {
     try {
       const res = await request
-        .post('/v1/forget_pass')
+        .post('/forget_pass')
         .send({
           email: '123456@qq.com'
         })

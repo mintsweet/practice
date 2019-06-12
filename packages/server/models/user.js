@@ -6,13 +6,18 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   // 登录信息
   email: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String },
 
   // 用户信息
   nickname: { type: String, required: true },
   avatar: { type: String, default: 'http://image.mintsweet.cn/avatar.jpeg' },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
+
+  // GitHub 信息
+  github_id: { type: String, default: '' },
+  github_username: { type: String, default: '' },
+  github_access_token: { type: String, default: '' },
 
   // 积分
   score: { type: Number, default: 0 },

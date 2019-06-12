@@ -15,9 +15,9 @@ const defaultConfig = {
 
   // JWT 参数
   jwt: {
-    secret: 'practice',
-    expirse: 30 * 60 * 1000,
-    refresh: 3 * 24 * 60 * 60 * 1000,
+    SECRET: 'practice',
+    EXPIRSE: 30 * 60 * 1000,
+    REFRESH: 3 * 24 * 60 * 60 * 1000,
   },
 
   // 话题分类

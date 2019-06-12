@@ -1,9 +1,9 @@
-const app = require('../../../app').listen();
+const app = require('../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
-const support = require('../../support');
+const support = require('../support');
 
-describe('test /v1/forget_pass', function() {
+describe('test /forget_pass', function() {
   let mockUser;
 
   before(async function() {
@@ -17,7 +17,7 @@ describe('test /v1/forget_pass', function() {
   it('should / status 400 when the email is invalid', async function() {
     try {
       const res = await request
-        .post('/v1/forget_pass')
+        .post('/forget_pass')
         .send({
           email: '123456'
         })
@@ -32,7 +32,7 @@ describe('test /v1/forget_pass', function() {
   it('should / status 404 when the user is not exist', async function() {
     try {
       const res = await request
-        .post('/v1/forget_pass')
+        .post('/forget_pass')
         .send({
           email: '123457@qq.com'
         })
@@ -47,7 +47,7 @@ describe('test /v1/forget_pass', function() {
   it('should / status 200', async function() {
     try {
       await request
-        .post('/v1/forget_pass')
+        .post('/forget_pass')
         .send({
           email: '123456@qq.com'
         })

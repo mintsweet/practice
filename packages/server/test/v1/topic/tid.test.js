@@ -53,7 +53,7 @@ describe('test /api/topic/:tid', function() {
   it('should / status 200 when the signin', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'

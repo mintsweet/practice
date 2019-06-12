@@ -32,7 +32,7 @@ describe('test /v1/create', function() {
 
   it('should / status 400 when the tab is invalid', async function() {
     try {
-      let res = await request.post('/v1/signin').send({
+      let res = await request.post('/signin').send({
         email: mockUser.email,
         password: 'a123456'
       }).expect(200);
@@ -50,7 +50,7 @@ describe('test /v1/create', function() {
 
   it('should / status 400 when the title is invalid', async function() {
     try {
-      let res = await request.post('/v1/signin').send({
+      let res = await request.post('/signin').send({
         email: mockUser.email,
         password: 'a123456'
       }).expect(200);
@@ -68,7 +68,7 @@ describe('test /v1/create', function() {
 
   it('should / status 400 when the content is invalid', async function() {
     try {
-      let res = await request.post('/v1/signin').send({
+      let res = await request.post('/signin').send({
         email: mockUser.email,
         password: 'a123456'
       }).expect(200);
@@ -86,7 +86,7 @@ describe('test /v1/create', function() {
 
   it('should / status 200', async function() {
     try {
-      const res = await request.post('/v1/signin').send({
+      const res = await request.post('/signin').send({
         email: mockUser.email,
         password: 'a123456'
       }).expect(200);

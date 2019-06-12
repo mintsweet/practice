@@ -1,9 +1,9 @@
-const app = require('../../../app').listen();
+const app = require('../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
-const support = require('../../support');
+const support = require('../support');
 
-describe('test /v1/update_pass', function() {
+describe('test /update_pass', function() {
   let mockUser;
 
   before(async function() {
@@ -17,7 +17,7 @@ describe('test /v1/update_pass', function() {
   it('should / status 401 when the not signin', async function() {
     try {
       const res = await request
-        .patch('/v1/update_pass')
+        .patch('/update_pass')
         .send({
           oldPass: 'a123456',
           newPass: 'a123456789'
@@ -33,7 +33,7 @@ describe('test /v1/update_pass', function() {
   it('should / status 400 when the oldPass is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -41,7 +41,7 @@ describe('test /v1/update_pass', function() {
         .expect(200);
 
       res = await request
-        .patch('/v1/update_pass')
+        .patch('/update_pass')
         .send({
           oldPass: '',
           newPass: 'a123456789'
@@ -58,7 +58,7 @@ describe('test /v1/update_pass', function() {
   it('should / status 400 when the newPass is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -66,7 +66,7 @@ describe('test /v1/update_pass', function() {
         .expect(200);
 
       res = await request
-        .patch('/v1/update_pass')
+        .patch('/update_pass')
         .send({
           oldPass: 'a123456',
           newPass: '123456789'
@@ -83,7 +83,7 @@ describe('test /v1/update_pass', function() {
   it('should / status 400 when the oldPass is wrong', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -91,7 +91,7 @@ describe('test /v1/update_pass', function() {
         .expect(200);
 
       res = await request
-        .patch('/v1/update_pass')
+        .patch('/update_pass')
         .send({
           oldPass: '123456',
           newPass: 'a123456789'
@@ -108,7 +108,7 @@ describe('test /v1/update_pass', function() {
   it('should / status 200', async function() {
     try {
       const res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -116,7 +116,7 @@ describe('test /v1/update_pass', function() {
         .expect(200);
 
       await request
-        .patch('/v1/update_pass')
+        .patch('/update_pass')
         .send({
           oldPass: 'a123456',
           newPass: 'a123456789'

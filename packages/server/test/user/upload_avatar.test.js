@@ -1,11 +1,11 @@
 const path = require('path');
-const Base = require('../../../controllers/base');
-const app = require('../../../app').listen();
+const Base = require('../../controllers/base');
+const app = require('../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
-const support = require('../../support');
+const support = require('../support');
 
-describe('test /v1/aider/upload_avatar', function() {
+describe('test /upload_avatar', function() {
   let mockUser;
   let fileName;
 
@@ -18,15 +18,15 @@ describe('test /v1/aider/upload_avatar', function() {
     try {
       await Base._deleteImgByQn(path.basename(fileName.text));
     } catch(err) {
-      console.log(err);
+      console.error(err);
     }
   });
 
   it('should / status 401 when the user not signin', async function() {
     try {
       const res = await request
-        .post('/v1/aider/upload_avatar')
-        .attach('avatar', path.join(__dirname, '../../fixtures/test.png'))
+        .post('/upload_avatar')
+        .attach('avatar', path.join(__dirname, './fixtures/test.png'))
         .set('Content-Type', 'form-data')
         .expect(401);
 
@@ -39,7 +39,7 @@ describe('test /v1/aider/upload_avatar', function() {
   it('should / status 200', async function() {
     try {
       const res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'
@@ -47,8 +47,8 @@ describe('test /v1/aider/upload_avatar', function() {
         .expect(200);
 
       fileName = await request
-        .post('/v1/aider/upload_avatar')
-        .attach('avatar', path.join(__dirname, '../../fixtures/test.png'))
+        .post('/upload_avatar')
+        .attach('avatar', path.join(__dirname, './fixtures/test.png'))
         .set('Authorization', res.text)
         .set('Content-Type', 'form-data')
         .expect(200);

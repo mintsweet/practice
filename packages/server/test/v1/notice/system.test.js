@@ -32,7 +32,7 @@ describe('test /v1/notice/system', function() {
   it('should / status 200', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser.email,
           password: 'a123456'

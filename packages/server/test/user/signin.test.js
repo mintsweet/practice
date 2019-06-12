@@ -1,9 +1,9 @@
-const app = require('../../../app').listen();
+const app = require('../../app').listen();
 const request = require('supertest')(app);
 const should = require('should');
-const support = require('../../support');
+const support = require('../support');
 
-describe('test /v1/signin', function() {
+describe('test /signin', function() {
   let mockUser;
 
   before(async function() {
@@ -16,10 +16,13 @@ describe('test /v1/signin', function() {
 
   it('should / status 400 when the email is invalid', async function() {
     try {
-      const res = await request.post('/v1/signin').send({
-        email: '12345678901',
-        password: 'a123456'
-      }).expect(400);
+      const res = await request
+        .post('/signin')
+        .send({
+          email: '12345678901',
+          password: 'a123456'
+        })
+        .expect(400);
 
       res.text.should.equal('邮箱格式错误');
     } catch(err) {
@@ -29,10 +32,13 @@ describe('test /v1/signin', function() {
 
   it('should / status 404 when the user is not exist', async function() {
     try {
-      const res = await request.post('/v1/signin').send({
-        email: '123457@qq.com',
-        password: 'a123456'
-      }).expect(404);
+      const res = await request
+        .post('/signin')
+        .send({
+          email: '123457@qq.com',
+          password: 'a123456'
+        })
+        .expect(404);
 
       res.text.should.equal('尚未注册');
     } catch(err) {
@@ -42,10 +48,13 @@ describe('test /v1/signin', function() {
 
   it('should / status 400 when the password is not match', async function() {
     try {
-      const res = await request.post('/v1/signin').send({
-        email: '123456@qq.com',
-        password: 'a123456789'
-      }).expect(400);
+      const res = await request
+        .post('/signin')
+        .send({
+          email: '123456@qq.com',
+          password: 'a123456789'
+        })
+        .expect(400);
 
       res.text.should.equal('密码错误');
     } catch(err) {
@@ -55,10 +64,13 @@ describe('test /v1/signin', function() {
 
   it('should / status 200', async function() {
     try {
-      await request.post('/v1/signin').send({
-        email: '123456@qq.com',
-        password: 'a123456'
-      }).expect(200);
+      await request
+        .post('/signin')
+        .send({
+          email: '123456@qq.com',
+          password: 'a123456'
+        })
+        .expect(200);
     } catch(err) {
       should.ifError(err.message);
     }

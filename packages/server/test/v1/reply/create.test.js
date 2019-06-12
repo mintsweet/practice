@@ -43,7 +43,7 @@ describe('test /v1/topic/:tid/reply', function() {
   it('should / status 404 when the not find topic', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -67,7 +67,7 @@ describe('test /v1/topic/:tid/reply', function() {
   it('should / status 400 when the content is invalid', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -91,7 +91,7 @@ describe('test /v1/topic/:tid/reply', function() {
   it('should / status 200 when the reply topic', async function() {
     try {
       const res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -112,7 +112,7 @@ describe('test /v1/topic/:tid/reply', function() {
   it('should / status 200 when the reply a reply', async function() {
     try {
       const res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'

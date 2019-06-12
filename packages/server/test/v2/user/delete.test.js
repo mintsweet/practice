@@ -34,7 +34,7 @@ describe('test /v2/user/:uid/delete', function() {
   it('should / status 403 when the no permission', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser2.email,
           password: 'a123456'
@@ -55,7 +55,7 @@ describe('test /v2/user/:uid/delete', function() {
   it('should / status 401 when the user is root', async function() {
     try {
       let res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser3.email,
           password: 'a123456'
@@ -76,7 +76,7 @@ describe('test /v2/user/:uid/delete', function() {
   it('should / status 200', async function() {
     try {
       const res = await request
-        .post('/v1/signin')
+        .post('/signin')
         .send({
           email: mockUser3.email,
           password: 'a123456'
