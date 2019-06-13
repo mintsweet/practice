@@ -54,7 +54,7 @@
     const alert = $('#js-alert');
 
     captcha.on('click', () => {
-      $.getJSON('/aider/captcha', res => {
+      $.getJSON('/captcha', res => {
         if (res.status === 1) {
           captcha.attr('src', res.url);
         } else {

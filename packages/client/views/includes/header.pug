@@ -8,10 +8,12 @@
       input(type="text", name="q", required, placeholder="请输入搜索内容", autocomplete="off")
       button.practice(type="submit") &#xe7de;
     ul.menu
-      li
-        a(href="/static/norms") 规范
-      li
-        a(href="https://docs.mintsweet.cn", target="_blank") 文档
+      each item in [{ name: '社区规范', url: '/norms' }].concat(config.site.MENUS)
+        li
+          if item.url.indexOf('http') === 0
+            a(href=item.url, target="_blank") #{item.name}
+          else
+            a(href=item.url) #{item.name}
     .right
       if user
         .action

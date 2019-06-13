@@ -32,6 +32,25 @@ class User {
     });
   }
 
+  async github(req, res) {
+    const profile = req.user;
+
+    const data = {
+      email: profile.emails && profile.emails[0] && profile.emails[0].value,
+      nickname: profile.displayName,
+      avatar: profile._json.avatar_url,
+      location: profile._json.location,
+      signature: profile._json.bio,
+      githubId: profile.id,
+      githubUsername: profile.username,
+      githubAccessToken: profile.accessToken,
+    };
+
+    await API.signup(data);
+
+    res.redirect('/');
+  }
+
   // 注册
   async signup(req, res) {
     const { nickname, email, password, captcha } = req.body;

@@ -1,13 +1,11 @@
 const express = require('express');
 const passport = require('passport');
 const Site = require('./controllers/site');
-const Static = require('./controllers/static');
 const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Reply = require('./controllers/reply');
 const Notice = require('./controllers/notice');
-const Github = require('./controllers/github');
 const Auth = require('./middlewares/auth');
 const { ALLOW_SIGNUP } = require('../../config');
 
@@ -16,28 +14,22 @@ const router = express.Router();
 // 异常捕获
 const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 
-// 首页
 router.get('/', wrap(Site.renderIndex));
+router.get('/norms', wrap(Site.renderNormsDoc));
 
-// 静态
-router.get('/static/norms', wrap(Static.renderNormsDoc));
-
-// 辅助
-router.get('/aider/captcha', wrap(Aider.getCaptcha));
-
-// 用户
 if (ALLOW_SIGNUP) {
+  router.get('/captcha', wrap(Aider.getCaptcha));
   router.get('/signup', wrap(User.renderSignup));
   router.post('/signup', wrap(User.signup));
+  router.get('/signin', wrap(User.renderSignin));
+  router.post('/signin', wrap(User.signin));
+  router.get('/forget_pass', wrap(User.renderForgetPass));
+  router.post('/forget_pass', wrap(User.forgetPass));
 } else {
   router.get('/auth/github', passport.authenticate('github'));
-  router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), Github.callback);
+  router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), User.github);
 }
 
-router.get('/signin', wrap(User.renderSignin));
-router.post('/signin', wrap(User.signin));
-router.get('/forget_pass', wrap(User.renderForgetPass));
-router.post('/forget_pass', wrap(User.forgetPass));
 router.get('/signout', wrap(User.signout));
 router.get('/users/top100', wrap(User.renderUsersTop100));
 router.get('/user/:uid', wrap(User.renderUserInfo));

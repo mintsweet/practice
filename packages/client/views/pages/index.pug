@@ -17,6 +17,7 @@ block content
     .block
       .title 友情社区
       ul.content
-        li
-          a(href="https://cnodejs.org/", target="_blank")
-            img(src="/static/img/cnode_logo_32.png")
+        each item in config.site.FRIEND_LINK
+          li
+            a(href=item.link, target="_blank")
+              img(src=item.logo)

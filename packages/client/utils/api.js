@@ -1,7 +1,7 @@
 const request = require('./request');
 
 // 获取图片验证码
-const getCaptcha = params => request('/aider/captcha', params);
+const getCaptcha = params => request('/captcha', params);
 
 // 头像上传
 const uploadAvatar = params => request('/aider/upload_avatar', params);

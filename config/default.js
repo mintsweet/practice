@@ -72,16 +72,23 @@ const defaultConfig = {
 
   // 网站设置
   site: {
-    name: 'Mints - 薄荷糖社区',
-    description: '简洁、快乐的交流社区',
-    keywords: 'mints, community',
-    author: '青湛(github/mintsweet)',
-    icon: '/static/img/favicon.ico',
+    NAME: '薄荷糖社区',
+    DESCRIPTION: '简洁、快乐的交流社区',
+    KEYWORDS: 'mints, community',
+    AUTHOR: '青湛(github/mintsweet)',
+    ICON: '/static/img/favicon.ico',
 
     // 头部默认菜单
-    menus: [
+    MENUS: [
       { name: '文档', url: 'https://docs.mintsweet.cn' }
     ],
+
+    FRIEND_LINK: [
+      {
+        logo: 'https://cnodejs.org/public/images/cnodejs.svg',
+        link: 'https://cnodejs.org',
+      }
+    ]
   },
 
   // 客户端端口号
