@@ -13,6 +13,19 @@ const defaultConfig = {
     PASSWORD: '',
   },
 
+  // 超管用户
+  root: {
+    EMAIL: '0x1304570@gmail.com',
+    PASSWORD: 'a123456',
+    NICKNAME: '青湛',
+  },
+
+  // 密码加密位数
+  SALT_WORK_FACTOR: 10,
+
+  // 默认头像地址
+  DEFAULT_AVATAR_URL: '',
+
   // JWT 参数
   jwt: {
     SECRET: 'practice',
@@ -64,6 +77,11 @@ const defaultConfig = {
     keywords: 'mints, community',
     author: '青湛(github/mintsweet)',
     icon: '/static/img/favicon.ico',
+
+    // 头部默认菜单
+    menus: [
+      { name: '文档', url: 'https://docs.mintsweet.cn' }
+    ],
   },
 
   // 客户端端口号

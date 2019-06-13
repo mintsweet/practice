@@ -3,10 +3,7 @@ const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { qn: { ACCESS_KEY, SECRET_KEY, BUCKET_NAME, ZONE }, mail } = require('../../../config');
-
-// 密码加密位数
-const SALT_WORK_FACTOR = 10;
+const { qn: { ACCESS_KEY, SECRET_KEY, BUCKET_NAME, ZONE }, mail, SALT_WORK_FACTOR } = require('../../../config');
 
 // 方便集成测试的时候同时隐藏七牛 access_key 和 secret_key
 const QN_ACCESS_KEY = ACCESS_KEY || process.env.QN_ACCESS_KEY;

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const Plugin = require('./plugin');
+const { root: { EMAIL, PASSWORD, NICKNAME }, SALT_WORK_FACTOR, DEFAULT_AVATAR_URL } = require('../../../config');
 
 const { Schema } = mongoose;
 
@@ -10,7 +12,7 @@ const UserSchema = new Schema({
 
   // 用户信息
   nickname: { type: String, required: true },
-  avatar: { type: String, default: 'http://image.mintsweet.cn/avatar.jpeg' },
+  avatar: { type: String, default: DEFAULT_AVATAR_URL },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
 
@@ -58,5 +60,18 @@ UserSchema.pre('save', function(next) {
 });
 
 const User = mongoose.model('User', UserSchema);
+
+User.findOne((err, data) => {
+  if (err) throw new Error(err);
+
+  if (!data) {
+    User.create({
+      email: EMAIL,
+      password: bcrypt.hashSync(PASSWORD, bcrypt.genSaltSync(SALT_WORK_FACTOR)),
+      nickname: NICKNAME,
+      role: 101,
+    });
+  }
+});
 
 module.exports = User;
