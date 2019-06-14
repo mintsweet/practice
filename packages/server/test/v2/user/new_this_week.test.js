@@ -65,7 +65,7 @@ describe('test /v2/users/new_this_week', function() {
         .set('Authorization', res.text)
         .expect(200);
 
-      res.text.should.equal('2');
+      res.text.should.equal('3');
     } catch(err) {
       should.ifError(err.message);
     }

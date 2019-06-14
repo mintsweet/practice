@@ -35,7 +35,7 @@ describe('test /v1/users/top', function() {
         .expect(200);
 
       res.body.should.be.an.Array();
-      res.body.length.should.equal(1);
+      res.body.length.should.equal(2);
     } catch(err) {
       should.ifError(err.message);
     }

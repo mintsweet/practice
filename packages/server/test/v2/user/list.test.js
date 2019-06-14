@@ -65,10 +65,10 @@ describe('test /v2/users/list', async function() {
         .set('Authorization', res.text)
         .expect(200);
 
-      res.body.users.length.should.equal(2);
+      res.body.users.length.should.equal(3);
       res.body.page.should.equal(1);
       res.body.size.should.equal(10);
-      res.body.total.should.equal(2);
+      res.body.total.should.equal(3);
     } catch(err) {
       should.ifError(err.message);
     }
