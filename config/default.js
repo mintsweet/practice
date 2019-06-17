@@ -98,7 +98,7 @@ const defaultConfig = {
   API: 'http://localhost:3000',
 
   // 是否允许注册
-  ALLOW_SIGNUP: false,
+  ALLOW_SIGNUP: true,
 
   // GitHub 鉴权配置
   github: {

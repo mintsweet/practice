@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
+const rq = require('request-promise');
 const Base = require('./base');
 const { jwt: { SECRET, EXPIRSE, REFRESH }, qn: { DONAME } } = require('../../../config');
 const redis = require('../db/redis');
@@ -16,6 +17,69 @@ class User extends Base {
     this.resetPass = this.resetPass.bind(this);
     this.updatePass = this.updatePass.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
+  }
+
+  // GitHub 登录
+  async github(ctx) {
+    const { accessToken } = ctx.request.body;
+    let profile;
+
+    try {
+      const res = await rq({
+        url: 'https://api.github.com/user',
+        method: 'GET',
+        headers: {
+          Authorization: `token ${accessToken}`,
+          'user-agent': 'node.js',
+        }
+      });
+
+      profile = JSON.parse(res);
+    } catch(err) {
+      ctx.throw(403, 'GitHub 授权失败');
+    }
+
+    if (!profile.email) {
+      ctx.throw(401, 'GitHub 授权失败');
+    }
+
+    const existUser = await UserProxy.getOne({ email: profile.email });
+
+    if (existUser) {
+      existUser.avatar = profile.avatar_url;
+      existUser.location = profile.location;
+      existUser.signature = profile.bio;
+      existUser.github_id = profile.id;
+      existUser.github_username = profile.name;
+      existUser.github_access_token = accessToken;
+
+      await existUser.save();
+    } else {
+      await UserProxy.create({
+        email: profile.email,
+        nickname: profile.name,
+        avatar: profile.avatar_url,
+        location: profile.location,
+        signature: profile.bio,
+        github_id: profile.id,
+        github_username: profile.name,
+        github_access_token: accessToken,
+      });
+    }
+
+    const user = await UserProxy.getOne({ github_id: profile.id });
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+        exp: Date.now() + EXPIRSE,
+        ref: Date.now() + REFRESH,
+      },
+      SECRET
+    );
+
+    ctx.body = `Bearer ${token}`;
   }
 
   // 注册
