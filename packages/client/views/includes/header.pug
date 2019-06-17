@@ -8,7 +8,7 @@
       input(type="text", name="q", required, placeholder="请输入搜索内容", autocomplete="off")
       button.practice(type="submit") &#xe7de;
     ul.menu
-      each item in [{ name: '社区规范', url: '/norms' }].concat(config.site.MENUS)
+      each item in config.site.MENUS
         li
           if item.url.indexOf('http') === 0
             a(href=item.url, target="_blank") #{item.name}

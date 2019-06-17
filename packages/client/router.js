@@ -15,22 +15,27 @@ const router = express.Router();
 const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 
 router.get('/', wrap(Site.renderIndex));
-router.get('/norms', wrap(Site.renderNormsDoc));
 
 if (ALLOW_SIGNUP) {
-  router.get('/captcha', wrap(Aider.getCaptcha));
   router.get('/signup', wrap(User.renderSignup));
   router.post('/signup', wrap(User.signup));
-  router.get('/signin', wrap(User.renderSignin));
-  router.post('/signin', wrap(User.signin));
   router.get('/forget_pass', wrap(User.renderForgetPass));
   router.post('/forget_pass', wrap(User.forgetPass));
+  router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
+  router.post('/setting', Auth.userRequired, wrap(User.setting));
+  router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
+  router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
 } else {
   router.get('/auth/github', passport.authenticate('github'));
   router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), User.github);
 }
 
+router.get('/captcha', wrap(Aider.getCaptcha));
+router.get('/signin', wrap(User.renderSignin));
+router.post('/signin', wrap(User.signin));
 router.get('/signout', wrap(User.signout));
+
+// 用户
 router.get('/users/top100', wrap(User.renderUsersTop100));
 router.get('/user/:uid', wrap(User.renderUserInfo));
 router.get('/user/:uid/create', wrap(User.renderUserCreate));
@@ -38,10 +43,6 @@ router.get('/user/:uid/like', wrap(User.renderUserLike));
 router.get('/user/:uid/collect', wrap(User.renderUserCollect));
 router.get('/user/:uid/follower', wrap(User.renderUserFollower));
 router.get('/user/:uid/following', wrap(User.renderUserFollowing));
-router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
-router.post('/setting', Auth.userRequired, wrap(User.setting));
-router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
-router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
 router.post('/user/:uid/follow_or_un', wrap(User.followOrUn));
 
 // 话题

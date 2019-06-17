@@ -3,6 +3,12 @@ const request = require('./request');
 // 获取图片验证码
 const getCaptcha = params => request('/captcha', params);
 
+// 登录
+const signin = params => request('/signin', params, 'POST');
+
+// GitHub 登录
+const github = params => request('/github', params, 'POST');
+
 // 头像上传
 const uploadAvatar = params => request('/aider/upload_avatar', params);
 
@@ -12,9 +18,6 @@ const signup = params => request('/signup', params, 'POST');
 // 账户激活
 const setActive = params => request('/set_active', params);
 
-// 登录
-const signin = params => request('/signin', params, 'POST');
-
 // 忘记密码
 const forgetPass = params => request('/forget_pass', params, 'POST');
 
@@ -22,13 +25,14 @@ const forgetPass = params => request('/forget_pass', params, 'POST');
 const resetPass = params => request('/reset_pass', params, 'POST');
 
 // 获取当前用户信息
-const getCurrentUser = () => request('/v1/info');
+const getCurrentUser = () => request('/info');
 
 // 更新个人信息
-const updateSetting = params => request('/v1/setting', params, 'PUT');
+const updateSetting = params => request('/setting', params, 'PUT');
 
 // 修改密码
-const updatePass = params => request('/v1/update_pass', params, 'PATCH');
+const updatePass = params => request('/update_pass', params, 'PATCH');
+
 
 // 获取积分榜用户列表
 const getUsersTop = params => request('/v1/users/top', params);
@@ -105,6 +109,7 @@ const getSystemNotice = () => request('/v1/notice/system');
 module.exports = {
   getCaptcha,
   uploadAvatar,
+  github,
   signup,
   setActive,
   signin,

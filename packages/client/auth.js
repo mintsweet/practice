@@ -9,8 +9,7 @@ passport.use(new GitHubStrategy(
     callbackURL: CALLBACK_URL
   },
   (accessToken, refreshToken, profile, cb) => {
-    profile.accessToken = accessToken;
-    return cb(null, profile);
+    return cb(null, accessToken);
   }
 ));
 

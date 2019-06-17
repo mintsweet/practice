@@ -10,6 +10,17 @@ class User {
     this.forgetPass = this.forgetPass.bind(this);
   }
 
+  // GitHub 登录
+  async github(req, res) {
+    const accessToken = req.user;
+
+    global.token = await API.github({
+      accessToken
+    });
+
+    return res.redirect('/');
+  }
+
   async getCaptchaUrl(req) {
     const data = await API.getCaptcha({
       height: 34
@@ -30,25 +41,6 @@ class User {
       title: '注册',
       url
     });
-  }
-
-  async github(req, res) {
-    const profile = req.user;
-
-    const data = {
-      email: profile.emails && profile.emails[0] && profile.emails[0].value,
-      nickname: profile.displayName,
-      avatar: profile._json.avatar_url,
-      location: profile._json.location,
-      signature: profile._json.bio,
-      githubId: profile.id,
-      githubUsername: profile.username,
-      githubAccessToken: profile.accessToken,
-    };
-
-    await API.signup(data);
-
-    res.redirect('/');
   }
 
   // 注册
