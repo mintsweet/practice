@@ -11,8 +11,9 @@ block content
           if info.location
             span.practice &#xe602; #{info.location}
         h2 #{info.signature}
-        if user && info.id === user.id && config.ALLOW_SIGNUP
-          a.action(href=`/setting`) 编辑个人资料
+        if user && info.id === user.id
+          if config.ALLOW_SIGNUP
+            a.action(href=`/setting`) 编辑个人资料
         else if user && !info.follow
           a.action.follow_user(href="javascript:;", data-id=info.id) 关注
         else if user && info.follow
