@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect-mongo": "^3.0.0",
     "express": "^4.16.4",
+    "express-session": "^1.16.2",
     "highlight.js": "^9.13.1",
     "log4js": "^4.0.0",
     "markdown-it": "^8.4.2",

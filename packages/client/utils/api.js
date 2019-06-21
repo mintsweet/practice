@@ -1,145 +1,106 @@
 const request = require('./request');
 
 // 获取图片验证码
-const getCaptcha = params => request('/captcha', params);
-
-// 登录
-const signin = params => request('/signin', params, 'POST');
+exports.getCaptcha = params => request('/captcha', params);
 
 // GitHub 登录
-const github = params => request('/github', params, 'POST');
-
-// 头像上传
-const uploadAvatar = params => request('/aider/upload_avatar', params);
+exports.github = params => request('/github', params, 'POST');
 
 // 注册
-const signup = params => request('/signup', params, 'POST');
+exports.signup = params => request('/signup', params, 'POST');
+
+// 登录
+exports.signin = params => request('/signin', params, 'POST');
+
+// 头像上传
+exports.uploadAvatar = params => request('/upload_avatar', params);
 
 // 账户激活
-const setActive = params => request('/set_active', params);
+exports.setActive = params => request('/set_active', params);
 
 // 忘记密码
-const forgetPass = params => request('/forget_pass', params, 'POST');
+exports.forgetPass = params => request('/forget_pass', params, 'POST');
 
 // 重置密码
-const resetPass = params => request('/reset_pass', params, 'POST');
+exports.resetPass = params => request('/reset_pass', params, 'POST');
 
 // 获取当前用户信息
-const getCurrentUser = () => request('/info');
+exports.getCurrentUser = token => request('/info', {}, 'GET', token);
 
 // 更新个人信息
-const updateSetting = params => request('/setting', params, 'PUT');
+exports.updateSetting = (params, token) => request('/setting', params, 'PUT', token);
 
 // 修改密码
-const updatePass = params => request('/update_pass', params, 'PATCH');
-
+exports.updatePass = (params, token) => request('/update_pass', params, 'PATCH', token);
 
 // 获取积分榜用户列表
-const getUsersTop = params => request('/v1/users/top', params);
+exports.getUsersTop = params => request('/v1/users/top', params);
 
 // 根据ID获取用户信息
-const getUserById = uid => request(`/v1/user/${uid}`);
+exports.getUserById = uid => request(`/v1/user/${uid}`);
 
 // 获取用户动态
-const getUserAction = uid => request(`/v1/user/${uid}/action`);
+exports.getUserAction = uid => request(`/v1/user/${uid}/action`);
 
 // 获取用户专栏列表
-const getUserCreate = uid => request(`/v1/user/${uid}/create`);
+exports.getUserCreate = uid => request(`/v1/user/${uid}/create`);
 
 // 获取用户喜欢列表
-const getUserLike = uid => request(`/v1/user/${uid}/like`);
+exports.getUserLike = uid => request(`/v1/user/${uid}/like`);
 
 // 获取用户收藏列表
-const getUserCollect = uid => request(`/v1/user/${uid}/collect`);
+exports.getUserCollect = uid => request(`/v1/user/${uid}/collect`);
 
 // 获取用户粉丝列表
-const getUserFollower = uid => request(`/v1/user/${uid}/follower`);
+exports.getUserFollower = uid => request(`/v1/user/${uid}/follower`);
 
 // 获取用户关注列表
-const getUserFollowing = uid => request(`/v1/user/${uid}/following`);
+exports.getUserFollowing = uid => request(`/v1/user/${uid}/following`);
 
 // 关注或者取消关注用户
-const followOrUn = uid => request(`/v1/user/${uid}/follow_or_un`, {}, 'PATCH');
+exports.followOrUn = (uid, token) => request(`/v1/user/${uid}/follow_or_un`, {}, 'PATCH', token);
 
 // 创建话题
-const createTopic = params => request('/v1/create', params, 'POST');
+exports.createTopic = (params, token) => request('/v1/create', params, 'POST', token);
 
 // 删除话题
-const deleteTopic = tid => request(`/v1/topic/${tid}/delete`, {}, 'DELETE');
+exports.deleteTopic = (tid, token) => request(`/v1/topic/${tid}/delete`, {}, 'DELETE', token);
 
 // 编辑话题
-const editTopic = (tid, params) => request(`/v1/topic/${tid}/update`, params, 'PUT');
+exports.editTopic = (tid, params, token) => request(`/v1/topic/${tid}/update`, params, 'PUT', token);
 
 // 获取话题列表
-const getTopics = params => request('/v1/topics/list', params);
+exports.getTopics = params => request('/v1/topics/list', params);
 
 // 搜索话题列表
-const searchTopics = params => request('/v1/topics/search', params);
+exports.searchTopics = params => request('/v1/topics/search', params);
 
 // 获取无人回复的话题
-const getTopicsNoReply = params => request('/v1/topics/no_reply', params);
+exports.getTopicsNoReply = params => request('/v1/topics/no_reply', params);
 
 // 根据ID获取话题详情
-const getTopicById = tid => request(`/v1/topic/${tid}`);
+exports.getTopicById = tid => request(`/v1/topic/${tid}`);
 
 // 喜欢或者取消喜欢话题
-const likeOrUn = tid => request(`/v1/topic/${tid}/like_or_un`, {}, 'PATCH');
+exports.likeOrUn = (tid, token) => request(`/v1/topic/${tid}/like_or_un`, {}, 'PATCH', token);
 
 // 收藏或者取消收藏话题
-const collectOrUn = tid => request(`/v1/topic/${tid}/collect_or_un`, {}, 'PATCH');
+exports.collectOrUn = (tid, token) => request(`/v1/topic/${tid}/collect_or_un`, {}, 'PATCH', token);
 
 // 创建回复
-const createReply = (tid, params) => request(`/v1/topic/${tid}/reply`, params, 'POST');
+exports.createReply = (tid, params, token) => request(`/v1/topic/${tid}/reply`, params, 'POST', token);
 
 // 删除回复
-const deleteReply = rid => request(`/v1/reply/${rid}/delete`, {}, 'DELETE');
+exports.deleteReply = (rid, token) => request(`/v1/reply/${rid}/delete`, {}, 'DELETE', token);
 
 // 编辑回复
-const editReply = (rid, params) => request(`/v1/reply/${rid}/update`, params, 'PUT');
+exports.editReply = (rid, params, token) => request(`/v1/reply/${rid}/update`, params, 'PUT', token);
 
 // 回复点赞或者取消点赞
-const upOrDown = rid => request(`/v1/reply/${rid}/up_or_down`, {}, 'PATCH');
+exports.upOrDown = (rid, token) => request(`/v1/reply/${rid}/up_or_down`, {}, 'PATCH', token);
 
 // 获取用户消息
-const getUserNotice = () => request('/v1/notice/user');
+exports.getUserNotice = token => request('/v1/notice/user', {}, 'GET', token);
 
 // 获取系统消息
-const getSystemNotice = () => request('/v1/notice/system');
-
-module.exports = {
-  getCaptcha,
-  uploadAvatar,
-  github,
-  signup,
-  setActive,
-  signin,
-  forgetPass,
-  resetPass,
-  getCurrentUser,
-  updateSetting,
-  updatePass,
-  getUsersTop,
-  getUserById,
-  getUserAction,
-  getUserCreate,
-  getUserLike,
-  getUserCollect,
-  getUserFollower,
-  getUserFollowing,
-  followOrUn,
-  createTopic,
-  deleteTopic,
-  editTopic,
-  getTopics,
-  searchTopics,
-  getTopicsNoReply,
-  getTopicById,
-  likeOrUn,
-  collectOrUn,
-  createReply,
-  deleteReply,
-  editReply,
-  upOrDown,
-  getUserNotice,
-  getSystemNotice,
-};
+exports.getSystemNotice = token => request('/v1/notice/system', {}, 'GET', token);

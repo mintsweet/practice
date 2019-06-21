@@ -14,7 +14,7 @@ class User {
   async github(req, res) {
     const accessToken = req.user;
 
-    global.token = await API.github({
+    req.session.token = await API.github({
       accessToken
     });
 
@@ -109,9 +109,7 @@ class User {
     }
 
     try {
-      const jwt = await API.signin({ email, password });
-
-      global.token = jwt;
+      req.session.token = await API.signin({ email, password });
 
       return res.render('pages/transform', {
         title: '登录成功',
@@ -176,8 +174,9 @@ class User {
 
   // 登出
   async signout(req, res) {
-    global.token = '';
+    req.session.token = '';
     req.app.locals.user = null;
+
     return res.render('pages/transform', {
       title: '退出成功',
       type: 'success',
@@ -303,12 +302,13 @@ class User {
   // 更新个人设置
   async setting(req, res) {
     const { id } = req.app.locals.user;
+    const { token } = req.session;
 
     const top100 = await API.getUsersTop();
     const user = await API.getUserById(id);
 
     try {
-      await API.updateSetting(req.body);
+      await API.updateSetting(req.body, token);
 
       return res.render('pages/transform', {
         title: '更新个人设置成功',
@@ -338,10 +338,12 @@ class User {
 
   // 修改密码
   async updatePass(req, res) {
+    const { token } = req.session;
+
     const data = await API.getUsersTop();
 
     try {
-      await API.updatePass(req.body);
+      await API.updatePass(req.body, token);
 
       return res.render('pages/transform', {
         title: '修改密码成功',
@@ -360,10 +362,11 @@ class User {
 
   // 关注或者取消关注
   async followOrUn(req, res) {
+    const { token } = req.session;
     const { uid } = req.params;
 
     try {
-      const action = await API.followOrUn(uid);
+      const action = await API.followOrUn(uid, token);
 
       return res.send({
         status: 1,

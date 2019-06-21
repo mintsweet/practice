@@ -3,7 +3,10 @@ const API = require('../utils/api');
 class Notice {
   // 用户消息
   async renderNoticeUser(req, res) {
-    const data = await API.getUserNotice();
+    const { token } = req.session;
+
+    const data = await API.getUserNotice(token);
+
     return res.render('pages/notice', {
       title: '用户消息',
       type: 'user',
@@ -13,7 +16,10 @@ class Notice {
 
   // 系统消息
   async renderNoticeSystem(req, res) {
-    const data = await API.getSystemNotice();
+    const { token } = req.session;
+
+    const data = await API.getSystemNotice(token);
+
     return res.render('pages/notice', {
       title: '系统消息',
       type: 'system',

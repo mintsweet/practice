@@ -3,10 +3,11 @@ const API = require('../utils/api');
 class Reply {
   // 创建回复
   async createReply(req, res) {
+    const { token } = req.session;
     const { tid } = req.params;
 
     try {
-      await API.createReply(tid, req.body);
+      await API.createReply(tid, req.body, token);
 
       return res.render('pages/transform', {
         title: '创建回复成功',
@@ -26,10 +27,11 @@ class Reply {
 
   // 删除回复
   async deleteReply(req, res) {
+    const { token } = req.session;
     const { rid } = req.params;
 
     try {
-      await API.deleteReply(rid);
+      await API.deleteReply(rid, token);
 
       return res.send({
         status: 1
@@ -44,11 +46,12 @@ class Reply {
 
   // 编辑回复
   async editReply(req, res) {
+    const { token } = req.session;
     const { rid } = req.params;
     const { tid, content } = req.body;
 
     try {
-      await API.editReply(rid, { content });
+      await API.editReply(rid, { content }, token);
 
       return res.render('pages/transform', {
         title: '编辑回复成功',
@@ -68,10 +71,11 @@ class Reply {
 
   // 点赞回复
   async upReplyOrUn(req, res) {
+    const { token } = req.session;
     const { rid } = req.params;
 
     try {
-      const action = await API.upOrDown(rid);
+      const action = await API.upOrDown(rid, token);
       return res.send({
         status: 1,
         action

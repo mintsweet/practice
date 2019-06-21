@@ -1,14 +1,14 @@
 const rq = require('request-promise');
 const { API } = require('../../../config');
 
-module.exports = (url, data, method = 'GET') => {
+module.exports = (url, data, method = 'GET', token = '') => {
   const options = {
     baseUrl: API,
     url,
     method,
     json: true,
     headers: {
-      Authorization: global.token || ''
+      Authorization: token
     }
   };
 

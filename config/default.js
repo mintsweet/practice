@@ -97,6 +97,11 @@ const defaultConfig = {
   // 接口地址
   API: 'http://localhost:3000',
 
+  // session 配置
+  session: {
+    SECRET: 'practice'
+  },
+
   // 是否允许注册
   ALLOW_SIGNUP: true,
 

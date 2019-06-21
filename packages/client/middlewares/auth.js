@@ -16,11 +16,14 @@ class Auth {
   }
 
   async getUserInfo(req, res, next) {
-    if (!global.token || (req.app.locals.user && req.app.locals.user.id)) {
+    if (!req.session.token) {
+      req.app.locals.user = null;
+      next();
+    } else if (req.app.locals.user && req.app.locals.user.id) {
       next();
     } else {
       try {
-        const user = await API.getCurrentUser();
+        const user = await API.getCurrentUser(req.session.token);
         req.app.locals.user = user;
         next();
       } catch(err) {

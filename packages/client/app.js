@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const routes = require('./router');
 const config = require('../../config');
@@ -24,6 +26,17 @@ app.locals.config = config;
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(session({
+  secret: config.session.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({
+    url: config.DB_PATH,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 3
+    },
+  })
+}));
 app.use(passport.initialize());
 app.use(Auth.getUserInfo);
 

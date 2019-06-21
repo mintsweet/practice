@@ -11,8 +11,10 @@ class Topic {
 
   // 创建话题
   async createTopic(req, res) {
+    const { token } = req.session;
+
     try {
-      await API.createTopic(req.body);
+      await API.createTopic(req.body, token);
 
       return res.render('pages/transform', {
         title: '发布话题成功',
@@ -29,10 +31,11 @@ class Topic {
 
   // 删除话题
   async deleteTopic(req, res) {
+    const { token } = req.session;
     const { tid } = req.params;
 
     try {
-      await API.deleteTopic(tid);
+      await API.deleteTopic(tid, token);
 
       return res.render('pages/transform', {
         title: '删除话题',
@@ -62,10 +65,11 @@ class Topic {
 
   // 编辑话题
   async editTopic(req, res) {
+    const { token } = req.session;
     const { tid } = req.params;
 
     try {
-      await API.editTopic(tid, req.body);
+      await API.editTopic(tid, req.body, token);
 
       return res.render('pages/transform', {
         title: '编辑话题成功',
@@ -121,10 +125,11 @@ class Topic {
 
   // 喜欢或者取消喜欢
   async likeOrUn(req, res) {
+    const { token } = req.session;
     const { tid } = req.params;
 
     try {
-      const action = await API.likeOrUn(tid);
+      const action = await API.likeOrUn(tid, token);
 
       return res.send({
         status: 1,
@@ -140,10 +145,11 @@ class Topic {
 
   // 收藏或者取消收藏
   async collectOrUn(req, res) {
+    const { token } = req.session;
     const { tid } = req.params;
 
     try {
-      const action = await API.collectOrUn(tid);
+      const action = await API.collectOrUn(tid, token);
 
       return res.send({
         status: 1,
