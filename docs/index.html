@@ -25,9 +25,9 @@
         '.*?/server': 'https://raw.githubusercontent.com/mintsweet/practice/master/packages/server/README.md',
         '.*?/client': 'https://raw.githubusercontent.com/mintsweet/practice/master/packages/client/README.md',
         '.*?/manage': 'https://raw.githubusercontent.com/mintsweet/practice/master/packages/manage/README.md',
-        '.*?/mobile': 'https://raw.githubusercontent.com/mintsweet/practice/master/packages/mobile/README.md'
       },
       repo: 'mintsweet/practice',
+      homepage: 'https://raw.githubusercontent.com/mintsweet/practice/master/README.md',
       auto2top: true,
       loadNavbar: true,
       loadSidebar: true,
@@ -44,19 +44,19 @@
         placeholder: {
           '/': '搜索',
           '/en-us': 'Search',
-        }
+        },
       },
       plugins: [
-        function (hook, vm) {
-          hook.beforeEach(function (html) {
+        function(hook, vm) {
+          hook.beforeEach(function(html) {
             if (/githubusercontent\.com/.test(vm.route.file)) {
               url = vm.route.file
                 .replace('raw.githubusercontent.com', 'github.com')
-                .replace(/\/master/, '/blob/master')
+                .replace(/\/master/, '/blob/master');
             } else {
-              url = 'https://github.com/mintsweet/practice/blob/master/docs/' + vm.route.file
+              url = 'https://github.com/mintsweet/practice/blob/master/docs/' + vm.route.file;
             }
-            var editHtml = '[:memo: Edit Document](' + url + ')\n'
+            var editHtml = '[:memo: Edit Document](' + url + ')\n';
 
             return editHtml + html;
           });

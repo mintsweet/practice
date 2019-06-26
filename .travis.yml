@@ -13,7 +13,7 @@ env:
   - NODE_ENV=test
 
 script:
-  - yarn test
+  - cd packages/server && yarn test
 
 after_success:
   - yarn run coverage
