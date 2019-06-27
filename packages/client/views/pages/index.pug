@@ -10,14 +10,12 @@ block content
           a(href="?tab=" + item.tag) #{item.name}
     include ./topic/list.pug
   aside.asider
-    .block.no-title
-      a(href="https://github.com/mintsweet/practice", target="_blank") 查看源码
     include ../includes/user_ranking.pug
     include ../includes/no_reply_topic.pug
     .block
       .title 友情社区
       ul.content
-        each item in config.site.FRIEND_LINK
+        each item in config.friend_link
           li
             a(href=item.link, target="_blank")
               img(src=item.logo)

@@ -1,10 +1,8 @@
-// 宽高 - 不传高度为正方形
 .size(@width, @height: @width) {
   width: @width;
   height: @height;
 }
 
-// 垂直水平居中
 .v-h-center {
   position: absolute;
   left: 50%;
@@ -12,7 +10,6 @@
   transform: translate(-50%, -50%);
 }
 
-// 隐藏文字
 .text-hiden {
   font-size: 0;
   line-height: 0;
@@ -22,15 +19,8 @@
   border: 0;
 }
 
-// 文字超长省略
 .text-ellipsis {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-// 块居中
-.layout {
-  margin: 0 auto;
-  width: @global-body-width;
 }

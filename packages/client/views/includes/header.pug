@@ -1,39 +1,43 @@
 .header
-  .inner
-    h1.logo
-      a(href="/")
-        img(src="/static/img/logo.png")
-        span Mints - 薄荷糖社区
+  .layout
+    a.logo(href="/", title=config.name)
+      img(src="/static/img/logo.png")
     form.search(action="/topics/search")
       input(type="text", name="q", required, placeholder="请输入搜索内容", autocomplete="off")
-      button.practice(type="submit") &#xe7de;
+      button.mints.mints-search(type="submit")
     ul.menu
-      each item in config.site.MENUS
+      each item in config.menus
         li
           if item.url.indexOf('http') === 0
             a(href=item.url, target="_blank") #{item.name}
           else
             a(href=item.url) #{item.name}
-    .right
-      if user
-        .action
-          a.practice(href="/topics/create", title="发布主题") &#xea35;
-          a.practice(href="/notice/user", title="查看消息") &#xe60c;
-        .user
-          .avatar
-            img(src=user.avatar)
-          .nickname #{user.nickname}
-          .drop-menus
-            .item
-              a(href=`/user/${user.id}`) 个人主页
-            span.divider
-            .item
-              a(href="/signout") 退出登录
-      else if config.ALLOW_SIGNUP
-        .account
-          a(href="/signin") 登录
-          span.divider |
-          a(href="/signup") 注册
-      else
-        .account
-          a(href="/auth/github") 使用 GitHub 登录
+    if user
+      .account
+        .avatar
+          img(src=user.avatar)
+        .nickname #{user.nickname}
+        .drop-menus
+          .item
+            a(href="/topics/create") 发布主题
+          span.divider
+          .item
+            a(href="/notice/user") 查看消息
+          .item
+            a(href=`/user/${user.id}`) 个人主页
+          span.divider
+          .item
+            a(href="/signout") 退出登录
+    else if config.ALLOW_SIGNUP
+      .account
+        a(href="/signin") 登录
+        span.divider |
+        a(href="/signup") 注册
+    else
+      .account
+        a(href="/auth/github") 使用 GitHub 登录
+    h1.title #{config.name}
+    .navbar
+      span
+      span
+      span

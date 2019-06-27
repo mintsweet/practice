@@ -9,14 +9,42 @@
 @success:               #28a745;
 @warning:               #fd7e14;
 @black:                 #0a0a0a;
+@black-light:           #555;
 @white:                 #fefefe;
-@light-gray:            #e6e6e6;
+@white-dark:            #f5f5f5;
+@gray-light:            #e6e6e6;
 @gray:                  #cacaca;
-@dark-gray:             #8a8a8a;
+@gray-dark:             #8a8a8a;
 
 // Global
+@screen: ~"only screen and (max-width: 960px)";
 @global-body-width: 960px;
-@global-block-padding: 20px 30px;
+@global-font-color: @black-light;
+@global-bg-color: @white-dark;
+@global-link-color: @black-light;
+@global-link-hover-color: darken(@theme-color, 10%);
+
+// Font Families
+@font-family-base: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+@font-family-serif: Athelas, STHeiti, Microsoft Yahei, serif;
+@font-family-code: Consolas, Monaco, Menlo, Consolas, monospace;
+
+// Font Size
+@font-size-base: 16px;
+@font-size-small: @font-size-base - 2px;
+@font-size-smaller: @font-size-base - 4px;
+@font-size-large: @font-size-base + 2px;
+@font-size-larger: @font-size-base + 4px;
+
+// Font Weight
+@font-weight-lighter: 200;
+@font-weight-light: 300;
+@font-weight-normal: 400;
+@font-weight-bold: 600;
+@font-weight-bolder: 700;
+
+// Line Height
+@line-height-base: 2;
 
 // Zinex 等级
 @zIndex-0: -1;

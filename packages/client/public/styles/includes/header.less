@@ -1,34 +1,37 @@
 .header {
   height: 55px;
-  line-height: 55px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
-  background-color: #fff;
+  background-color: @white;
 
-  & > .inner {
-    position: relative;
-    .layout();
+  .layout {
+    display: flex;
+    align-items: center;
+
+    @media @screen {
+      justify-content: space-between;
+    }
   }
 
   .logo {
-    position: absolute;
-    top: 0;
-    left: 0;
+    flex: 0 0 55px;
     .size(55px);
-
-    span {
-      .text-hiden;
-    }
   }
 
   .search {
     position: relative;
-    float: left;
+    flex: 0 0 200px;
     margin-left: 60px;
+    margin-right: 60px;
+
+    @media @screen {
+      display: none;
+    }
 
     input {
-      padding-right: 30px;
+      padding: 6px 10px;
+      font-size: @font-size-small;
       border: none;
-      border-bottom: 1px solid @light-gray;
+      border-bottom: 1px solid @gray-light;
 
       &:hover,
       &:focus {
@@ -38,103 +41,142 @@
 
     button {
       position: absolute;
+      top: 5px;
       right: 10px;
-      top: 15px;
       border: none;
       background: transparent;
       outline: none;
+      cursor: pointer;
     }
   }
 
   .menu {
-    float: left;
-    margin-left: 60px;
+    flex: auto;
+    margin: 0;
 
     li {
       display: inline-block;
       margin-right: 20px;
     }
+
+    @media @screen {
+      display: none;
+    }
   }
 
-  .right {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0 10px;
-    line-height: 55px;
+  .account {
+    flex: 0 0 100px;
 
-    .account {
-      .divider {
-        margin: 0 10px;
-      }
+    @media @screen {
+      display: none;
     }
 
-    .action {
+    & > .divider {
+      margin: 0 10px;
+    }
+
+    .avatar {
       display: inline-block;
-      margin-right: 10px;
+      .size(40px);
+
       vertical-align: middle;
 
-      a {
-        font-size: 20px;
-
-        & + a {
-          margin-left: 10px;
-        }
+      img {
+        border-radius: 50%;
       }
     }
 
-    .user {
-      position: relative;
+    .nickname {
       display: inline-block;
-      padding: 0 15px;
+      margin-left: 20px;
+      vertical-align: middle;
+    }
 
-      .avatar {
-        display: inline-block;
-        .size(40px);
+    .drop-menus {
+      display: none;
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      width: 120px;
+      color: @white;
+      text-align: center;
+      background: #a4d1aa;
+      transition: opacity .3s;
+      z-index: @zIndex-4;
+      transform: translateX(-50%);
 
-        vertical-align: middle;
+      .item {
+        line-height: 34px;
+        cursor: pointer;
 
-        img {
-          border-radius: 50%;
-        }
-      }
-
-      .nickname {
-        display: inline-block;
-        margin-left: 20px;
-        vertical-align: middle;
-      }
-
-      .drop-menus {
-        display: none;
-        position: absolute;
-        top: 55px;
-        left: 50%;
-        width: 120px;
-        color: @white;
-        text-align: center;
-        background: #a4d1aa;
-        transition: opacity .3s;
-        z-index: @zIndex-4;
-        transform: translateX(-50%);
-
-        .item {
-          line-height: 34px;
-          cursor: pointer;
-
-          a {
-            display: block;
-            color: #fff;
-          }
-        }
-
-        .divider {
+        a {
           display: block;
-          margin: 0;
-          width: 100%;
-          height: 1px;
-          background: #ddd;
+          color: #fff;
         }
+      }
+
+      .divider {
+        display: block;
+        margin: 0;
+        width: 100%;
+        height: 1px;
+        background: #ddd;
+      }
+    }
+  }
+
+  .title {
+    display: none;
+    flex: auto;
+    margin: 0;
+    text-align: center;
+
+    @media @screen {
+      display: block;
+    }
+  }
+
+  .navbar {
+    display: none;
+    position: relative;
+    flex: 0 0 50px;
+    .size(50px);
+
+    @media @screen {
+      display: block;
+    }
+
+    span {
+      position: absolute;
+      margin-top: -1px;
+      margin-left: -11px;
+      left: 50%;
+      top: 50%;
+      width: 22px;
+      height: 2px;
+      background-color: @theme-color;
+      transition: transform .3s;
+
+      &:nth-child(1) {
+        transform: translateY(7px) rotate(0deg);
+      }
+
+      &:nth-child(3) {
+        transform: translateY(-7px) rotate(0deg);
+      }
+    }
+
+    &.open {
+      span:nth-child(1) {
+        transform: rotate(45deg);
+      }
+
+      span:nth-child(2) {
+        display: none;
+      }
+
+      span:nth-child(3) {
+        transform: rotate(-45deg);
       }
     }
   }

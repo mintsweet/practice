@@ -26,7 +26,9 @@ dl.topic-list
         else
           | #{topic.create_at}
   else
-    include ../../includes/no_content.pug
+    .empty
+      img(src="/static/img/empty.svg", alt="暂无内容")
+      p.description 暂无内容
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 if topics.length > 0
   ul.pagination

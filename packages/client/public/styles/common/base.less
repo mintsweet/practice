@@ -1,0 +1,169 @@
+* {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-touch-callout: none;
+}
+
+html {
+  font-size: @font-size-base;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: @font-family-base;
+  font-weight: @font-weight-normal;
+  line-height: @line-height-base;
+  color: @global-font-color;
+  background-color: @global-bg-color;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  border-top: 4px solid @theme-color;
+
+  @media @screen {
+    border-top: 0;
+  }
+}
+
+::selection {
+  color: @white;
+  background-color: @theme-color;
+}
+
+p {
+  margin: 0 0 10px 0;
+}
+
+a {
+  display: inline-block;
+  color: @global-link-color;
+  text-decoration: none;
+  word-wrap: break-word;
+  vertical-align: middle;
+  transition: color .3s;
+
+  &:hover {
+    color: @global-link-hover-color;
+  }
+}
+
+img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+input {
+  outline: none;
+}
+
+h1 {
+  font-size: 22px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+hr {
+  margin: 20px 0;
+  height: 3px;
+  border: none;
+  background-color: @gray;
+  background-image: repeating-linear-gradient(-45deg, @white, @white 4px, transparent 4px, transparent 8px);
+}
+
+.container {
+  min-height: 100vh;
+  transition: transform .3s;
+
+  &.slide-left {
+    transform: translateX(-180px);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, .2);
+    overflow: hidden;
+  }
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 180px;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: rgba(lighten(@theme-color, 80%), .1);
+  transform: translate3d(180px, 0, 0);
+  transition: transform .3s;
+
+  &.open {
+    transform: translate3d(0, 0, 0);
+  }
+
+  @media @screen {
+    display: block;
+  }
+}
+
+.layout {
+  margin: 0 auto;
+  width: @global-body-width;
+
+  @media @screen {
+    width: 100%;
+  }
+}
+
+.main {
+  display: flex;
+  padding: 20px 10px;
+  min-height: 600px;
+  box-sizing: border-box;
+  .layout();
+
+  @media @screen {
+    padding: 10px 0;
+  }
+
+  & > .content {
+    flex: 3;
+    border-radius: 4px;
+    background: @white;
+
+    @media @screen {
+      flex: 1;
+    }
+  }
+
+  & > .asider {
+    flex: 1;
+    margin-left: 20px;
+
+    @media @screen {
+      display: none;
+    }
+  }
+}

@@ -1,6 +1,19 @@
 (function(window, document, $) {
   const Mints = {};
 
+  // 移动端菜单显示
+  Mints.showMobileMenu = () => {
+    const container = $('.container');
+    const btn = $('.navbar');
+    const menu = $('.mobile-menu');
+
+    btn.on('click', () => {
+      menu.toggleClass('open');
+      btn.toggleClass('open');
+      container.toggleClass('slide-left');
+    });
+  };
+
   // 回到顶部
   Mints.backTop = () => {
     $(window).scroll(function() {
@@ -13,7 +26,7 @@
     });
 
     $('.back-top').click(function() {
-      $('html, body').animate({ scrollTop: 0 }, 500);
+      $('html, body').animate({ scrollTop: 0 }, 300);
       return false;
     });
   };

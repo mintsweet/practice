@@ -2,20 +2,21 @@ doctype html
 html
   head
     meta(charset="utf-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(name="description", content=config.site.DESCRIPTION)
-    meta(name="keywords", content=config.site.KEYWORDS)
-    meta(name="author", content=config.site.AUTHOR)
-    title #{title} - #{config.site.NAME}
-    if config.site.ICON
-      link(rel="shortcut icon", href=config.site.ICON, type="image/x-icon")
+    meta(name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1")
+    meta(name="description", content=config.description)
+    meta(name="keywords", content=config.keywords)
+    meta(name="author", content=config.author)
+    title #{title} - #{config.name}
+    link(rel="shortcut icon", href="/static/img/favicon.ico", type="image/x-icon")
     //- styles
     block head
       link(rel="stylesheet", href="/static/css/index.css")
   body
-    block header
-      include ./includes/header.pug
-    .main
-      block content
-    block footer
-      include ./includes/footer.pug
+    .container
+      block header
+        include ./includes/header.pug
+      .main
+        block content
+      block footer
+        include ./includes/footer.pug
+    .mobile-menu

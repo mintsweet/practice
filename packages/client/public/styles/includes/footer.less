@@ -1,18 +1,84 @@
 .footer {
-  margin-top: 50px;
-  height: 120px;
-  text-align: center;
+  background: @white;
+  border-top: 1px solid @gray-light;
 
-  .link {
-    a.practice {
-      font-size: 30px;
-      line-height: 1;
+  @media @screen {
+    text-align: center;
+  }
+
+  & > .layout {
+    display: flex;
+    padding: 20px 0;
+
+    @media @screen {
+      display: none;
+    }
+  }
+
+  .info {
+    flex: 0 0 240px;
+    font-size: @font-size-small;
+
+    span.mints {
+      margin-right: 10px;
+    }
+
+    .contact {
+      span {
+        display: block;
+      }
+    }
+  }
+
+  ul.about {
+    flex: auto;
+    display: flex;
+    margin: 0;
+
+    li {
+      flex: 1;
+      padding: 0 20px;
+    }
+
+    a {
+      display: block;
+      font-size: @font-size-smaller;
+    }
+  }
+
+  .mobile-link {
+    display: none;
+    margin: 10px 0;
+    font-size: @font-size-small;
+
+    @media @screen {
+      display: block;
+    }
+
+    .divider {
+      margin: 0 4px;
     }
   }
 
   .copy {
+    background: rgba(@theme-color, .1);
+
     p {
-      margin: 10px 0 0;
+      margin: 0;
     }
   }
+}
+
+.back-top {
+  display: none;
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  width: 36px;
+  color: @white;
+  background: darken(@theme-color, 10%);
+  text-align: center;
+  border-radius: 6px;
+  z-index: @zIndex-5;
+  cursor: pointer;
 }
