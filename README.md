@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://docs.mintsweet.cn">
-    <img width="200" src="./docs/_media/logo.svg" />
+    <img width="200" src="https://github.com/mintsweet/practice/raw/master/docs/_media/logo.svg" />
   </a>
 </p>
 
@@ -27,7 +27,7 @@
 
 ## 🔥 初衷
 
-可能是因为现在的前端圈的技术太多了，很多人不知道从何入手，无所适从，所以我还是想做一个教你如何去写而不是理论的东西，毕竟做出东西才会有兴趣，理论也是可以补的。
+可能是因为现在的前端圈的技术太多了，很多人不知道从何入手，无所适从，所以我还是想做一个教你如何去写而不是理论的东西，毕竟做出东西才会有兴趣，毕竟理论也是可以补的。
 
 
 ## 🌈 项目
@@ -36,12 +36,14 @@
   - [PC客户端 client](./packages/client/README.md)
   - [后台管理 manage](./packages/manage/README.md)
 
-## ⚡ 其他
+## 🔗 链接
+
+  - [文档](https://docs.mintsweet.cn)
+  - [快速入门](https://docs.mintsweet.cn/#/quick_start)
+  - [API](https://docs.mintsweet.cn/#/API)
+
+## 🔨 其他
 
 如若你有任何问题或者想法都可以在`issue`中提出，欢迎 star！
 
 **开源不易，且行且珍惜！！！**
-
-## 🔫 协议
-
-[MIT](./LICENSE)

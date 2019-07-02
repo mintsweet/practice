@@ -23,9 +23,3 @@
   2. 执行 `npm install` 或者是 `yarn` 安装依赖
   3. 执行 `npm start` 或者是 `yarn start`
   4. 检查服务是否开始，浏览器访问 `http://localhost:3000/api` 是否有返回JSON。
-
-## 常见问题(FAQ)
-
-### 如何部署在服务器上
-
-关于服务器部署，文档上有一篇专门的说明，[详见文档](https://docs.mintsweet.cn/#/deploy)。

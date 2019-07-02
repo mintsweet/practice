@@ -1,12 +1,13 @@
 - 快速入门
 
-  - [持续集成](ci.md)
+  - [快速开始](quick_start.md)
   - [项目部署](deploy.md)
 
 - 流程规范
 
   - [代码规范](codespecification.md)
   - [Git 使用规范](gitspecification.md)
+  - [持续集成](ci.md)
 
 - 项目文档
 
@@ -17,5 +18,6 @@
 - 其他
 
   - [踩坑记录](problemrecord.md)
+  - [常见问题](FAQ.md)
   - [API文档](API.md)
   - [更新日志](CHANGELOG)
