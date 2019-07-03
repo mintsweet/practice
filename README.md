@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://docs.mintsweet.cn">
-    <img width="200" src="https://github.com/mintsweet/practice/raw/master/docs/_media/logo.svg" />
+  <a href="http://www.mintsweet.cn">
+    <img width="200" src="http://image.mintsweet.cn/logo.svg" />
   </a>
 </p>
 
@@ -30,17 +30,11 @@
 可能是因为现在的前端圈的技术太多了，很多人不知道从何入手，无所适从，所以我还是想做一个教你如何去写而不是理论的东西，毕竟做出东西才会有兴趣，毕竟理论也是可以补的。
 
 
-## 🌈 项目
+## 🌈 链接
 
-  - [数据服务 server](./packages/server/README.md)
-  - [PC客户端 client](./packages/client/README.md)
-  - [后台管理 manage](./packages/manage/README.md)
-
-## 🔗 链接
-
-  - [文档](https://docs.mintsweet.cn)
-  - [快速入门](https://docs.mintsweet.cn/#/quick_start)
-  - [API](https://docs.mintsweet.cn/#/API)
+  - [文档](https://github.com/mintsweet/practice/wiki)
+  - [快速开始](https://github.com/mintsweet/practice/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+  - [API](https://github.com/mintsweet/practice/wiki/API)
 
 ## 🔨 其他
 
