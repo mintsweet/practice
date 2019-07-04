@@ -1,7 +1,7 @@
-import * as API from '../services/api';
+import * as API from '@/services/api';
 
 export default {
-  namespace: 'topics',
+  namespace: 'topic',
 
   state: {
     list: [],

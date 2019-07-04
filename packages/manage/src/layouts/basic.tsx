@@ -42,7 +42,9 @@ interface Props {
 }))
 export default class BasicLayout extends React.PureComponent<Props> {
   componentDidMount() {
-    this.props.dispatch({ type: 'app/getUser' });
+    this.props.dispatch({
+      type: 'app/getUser',
+    });
   }
 
   getBreadcrumbDom = () => {
@@ -71,32 +73,21 @@ export default class BasicLayout extends React.PureComponent<Props> {
   }
 
   handleCollapse = () => {
-    this.props.dispatch({ type: 'app/updateCollapsed' });
+    this.props.dispatch({
+      type: 'app/updateCollapsed',
+    });
   }
 
   handleMenuClick = ({ key }) => {
     if (key === 'logout') {
-      this.props.dispatch({ type: 'app/signout' });
+      this.props.dispatch({
+        type: 'app/signout'
+      });
     }
   }
 
   render() {
     const { children, user, collapsed, location } = this.props;
-
-    const links = [
-      {
-        key: 'souces',
-        title: '源码',
-        href: 'https://github.com/mintsweet/practice',
-        blankTarget: true
-      },
-      {
-        key: 'blog',
-        title: '博客',
-        href: 'https://github.com/mintsweet/blog',
-        blankTarget: true
-      }
-    ];
 
     const layout = (
       <Layout style={{ height: '100%', }}>
@@ -121,7 +112,20 @@ export default class BasicLayout extends React.PureComponent<Props> {
           </Content>
           <Footer>
             <GlobalFooter
-              links={links}
+              links={[
+                {
+                  key: 'souces',
+                  title: '源码',
+                  href: 'https://github.com/mintsweet/practice',
+                  blankTarget: true
+                },
+                {
+                  key: 'blog',
+                  title: '博客',
+                  href: 'https://github.com/mintsweet/blog',
+                  blankTarget: true
+                }
+              ]}
               copyright={<>Copyright <Icon type="copyright" /> 2018 - 2019 青湛(GitHub/mintsweet)</>}
             />
           </Footer>

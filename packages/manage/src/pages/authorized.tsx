@@ -13,6 +13,6 @@ interface Props {
 export default class Authorized extends React.Component<Props> {
   render() {
     const { token, children } = this.props;
-    return token ? children : <Redirect to="/user/login" />;
+    return token ? children : <Redirect to="/login" />;
   }
 }

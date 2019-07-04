@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { message } from 'antd';
-import { getStorage, delStorage } from '../utils/storage';
+import { storage } from 'mints-utils';
 
 axios.defaults.baseURL = '/api';
 
 axios.interceptors.request.use(config => {
-  const token = getStorage('token');
+  const token = storage.get('token');
 
   if (token) {
     config.headers = {
@@ -22,20 +22,19 @@ axios.interceptors.response.use(res => {
   return res.data;
 }, err => {
   if (err.response.status === 401) {
-    delStorage('token');
+    window.g_app._store.dispatch({
+      type: 'app/signout'
+    });
   }
   message.error(err.response.data);
   return Promise.reject(err.response.data);
 });
 
 // 登录
-export const signin = params => axios.post('/v1/signin', params);
-
-// 忘记密码
-export const forgetPass = user => axios.patch('/v1/forget_pass', user);
+export const signin = params => axios.post('/signin', params);
 
 // 获取当前用户信息
-export const getUser = () => axios.get('/v1/info');
+export const getUser = () => axios.get('/info');
 
 // 获取用户列表
 export const getUserList = params => axios.get('/v2/users/list', params);

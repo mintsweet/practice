@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { connect } from 'dva';
 import { Row, Col } from 'antd';
-import PageLoding from '../../components/PageLoding';
 import CountCard from './components/CountCard'
 
 interface Props {
-  loading: boolean;
   userTotal: number;
   newLastWeekUser: number;
   newThisWeekUser: number;
@@ -14,18 +12,17 @@ interface Props {
   newLastWeekTopic: number;
 };
 
-@connect(({ app, users, topics }) => ({
-  loading: app.loading,
-  userTotal: users.total,
-  newThisWeekUser: users.this_week,
-  newLastWeekUser: users.last_week,
-  topicTotal: topics.total,
-  newThisWeekTopic: topics.this_week,
-  newLastWeekTopic: topics.last_week,
+@connect(({ app, user, topic }) => ({
+  userTotal: user.total,
+  newThisWeekUser: user.this_week,
+  newLastWeekUser: user.last_week,
+  topicTotal: topic.total,
+  newThisWeekTopic: topic.this_week,
+  newLastWeekTopic: topic.last_week,
 }))
 export default class Dashboard extends React.Component<Props> {
   render() {
-    const { loading, userTotal, newLastWeekUser, newThisWeekUser, topicTotal, newThisWeekTopic, newLastWeekTopic } = this.props
+    const { userTotal, newLastWeekUser, newThisWeekUser, topicTotal, newThisWeekTopic, newLastWeekTopic } = this.props
 
     const data = [
       {
@@ -49,15 +46,13 @@ export default class Dashboard extends React.Component<Props> {
     ];
 
     return (
-      <PageLoding loading={loading}>
-        <Row gutter={24}>
-          {data.map((item, i) => (
-            <Col key={i} xs={24} sm={12} md={12} lg={12} xl={6} style={{ marginBottom: 24 }}>
-              <CountCard {...item} />
-            </Col>
-          ))}
-        </Row>
-      </PageLoding>
+      <Row gutter={24}>
+        {data.map((item, i) => (
+          <Col key={i} xs={24} sm={12} md={12} lg={12} xl={6} style={{ marginBottom: 24 }}>
+            <CountCard {...item} />
+          </Col>
+        ))}
+      </Row>
     );
   }
 }

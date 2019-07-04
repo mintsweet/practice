@@ -3,7 +3,7 @@ import { Form, Modal, Input, InputNumber } from 'antd';
 
 const { Item: FormItem } = Form;
 
-const CreateUser = Form.create()((props: any) => {
+const CreateModal = Form.create()((props: any) => {
   const { visible, form, handleToggleModal, handleSubmit } = props;
   const { getFieldDecorator } = form;
 
@@ -102,4 +102,4 @@ const CreateUser = Form.create()((props: any) => {
   );
 });
 
-export default CreateUser;
+export default CreateModal;

@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { connect } from 'dva';
 import { Table, Avatar, Tag, Badge, Divider, message, Card, Button, Modal } from 'antd';
-import PageLoding from '../../components/PageLoding';
-import CreateUser from './components/createUser';
+import CreateModal from './components/Modal';
 
 interface Props {
   user: any;
-  loading: boolean;
   data: [];
   page: number;
   size: number;
@@ -14,13 +12,12 @@ interface Props {
   dispatch: ({}) => void;
 };
 
-@connect(({ app, users }) => ({
+@connect(({ app, user }) => ({
   user: app.user,
-  loading: app.loading,
-  data: users.list,
-  page: users.page,
-  size: users.size,
-  total: users.total,
+  data: user.list,
+  page: user.page,
+  size: user.size,
+  total: user.total,
 }))
 export default class User extends React.Component<Props> {
   state = {
@@ -33,7 +30,7 @@ export default class User extends React.Component<Props> {
       type: 'users/fetch',
       payload: {
         page,
-      }
+      },
     });
   }
 
@@ -122,7 +119,7 @@ export default class User extends React.Component<Props> {
 
   render() {
     const { visible } = this.state;
-    const { user, loading, data, page, size, total } = this.props;
+    const { user, data, page, size, total } = this.props;
 
     const columns = [
       {
@@ -188,39 +185,37 @@ export default class User extends React.Component<Props> {
                 <Divider type="vertical" />
               </span>
             )}
-            <a href="javascript:;" className="text-default" onClick={() => this.handleStarUser(record)}>{ record.star ? '取消星标' : '设为星标'}</a>
+            <a href="javascript:;" className="text-default" onClick={() => this.handleStarUser(record)}>{record.star ? '取消星标' : '设为星标'}</a>
             <Divider type="vertical" />
-            <a href="javascript:;" className="text-warn" onClick={() => this.handleLockUser(record)}>{ record.lock ? '取消锁定' : '锁定账户' }</a>
+            <a href="javascript:;" className="text-warn" onClick={() => this.handleLockUser(record)}>{record.lock ? '取消锁定' : '锁定账户'}</a>
           </span>
         )
       },
     ];
 
     return (
-      <PageLoding loading={loading}>
-        <Card>
-          <div className="table-action">
-            <Button type="primary" onClick={this.handleToggleModal}>新增</Button>
-          </div>
-          <Table
-            rowKey="id"
-            size="middle"
-            dataSource={data}
-            columns={columns}
-            pagination={{
-              current: page,
-              pageSize: size,
-              total,
-              onChange: this.handleChangePage
-            }}
-          />
-          <CreateUser
-            visible={visible}
-            handleToggleModal={this.handleToggleModal}
-            handleSubmit={this.handleSubmit}
-          />
-        </Card>
-      </PageLoding>
+      <Card>
+        <div className="table-action">
+          <Button type="primary" onClick={this.handleToggleModal}>新增</Button>
+        </div>
+        <Table
+          rowKey="id"
+          size="middle"
+          dataSource={data}
+          columns={columns}
+          pagination={{
+            current: page,
+            pageSize: size,
+            total,
+            onChange: this.handleChangePage
+          }}
+        />
+        <CreateModal
+          visible={visible}
+          handleToggleModal={this.handleToggleModal}
+          handleSubmit={this.handleSubmit}
+        />
+      </Card>
     );
   }
 }

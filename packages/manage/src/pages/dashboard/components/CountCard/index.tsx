@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Icon } from 'antd';
 import CountUp from 'react-countup';
 import classNames from 'classnames';
-import styles from './CountCard.less';
+import styles from './index.less';
 
 export default ({ title, icon, color, count, last_count, rate, total }) => {
   const rateIsUp = rate.indexOf('-') < 0;

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { connect } from 'dva';
 import { Table, Card, Divider, Tag, Badge, Modal } from 'antd';
-import PageLoding from '../../components/PageLoding';
 
 interface Props {
   user: any,
-  loading: boolean;
   data: [];
   page: number;
   size: number;
@@ -13,13 +11,12 @@ interface Props {
   dispatch: ({}) => void;
 };
 
-@connect(({ app, topics }) => ({
+@connect(({ app, topic }) => ({
   user: app.user,
-  loading: app.loading,
-  data: topics.list,
-  page: topics.page,
-  size: topics.size,
-  total: topics.total,
+  data: topic.list,
+  page: topic.page,
+  size: topic.size,
+  total: topic.total,
 }))
 export default class Topic extends React.Component<Props> {
   // 切换页码
@@ -27,8 +24,8 @@ export default class Topic extends React.Component<Props> {
     this.props.dispatch({
       type: 'topics/fetch',
       payload: {
-        page
-      }
+        page,
+      },
     });
   }
 
@@ -75,7 +72,7 @@ export default class Topic extends React.Component<Props> {
   }
 
   render() {
-    const { user, loading, data, page, size, total } = this.props;
+    const { user, data, page, size, total } = this.props;
 
     const columns = [
       {
@@ -179,22 +176,20 @@ export default class Topic extends React.Component<Props> {
     }];;
 
     return (
-      <PageLoding loading={loading}>
-        <Card>
-          <Table
-            rowKey="id"
-            size="middle"
-            dataSource={data}
-            columns={columns}
-            pagination={{
-              current: page,
-              pageSize: size,
-              total,
-              onChange: this.handleChangePage
-            }}
-          />
-        </Card>
-      </PageLoding>
+      <Card>
+        <Table
+          rowKey="id"
+          size="middle"
+          dataSource={data}
+          columns={columns}
+          pagination={{
+            current: page,
+            pageSize: size,
+            total,
+            onChange: this.handleChangePage
+          }}
+        />
+      </Card>
     );
   }
 }

@@ -52,7 +52,7 @@ export default class SiderMenu extends React.PureComponent<Props, any> {
   getSubMenuOrItem = item => {
     if (item.routes && item.routes.some(child => child.title)) {
       const childrenItems = this.getNavMenuItems(item.routes);
-      if (childrenItems && (childrenItems.length > 1 || item.path !== childrenItems[0].key)) {
+      if (childrenItems && childrenItems.length > 1) {
         const title = (
           <>
             <Icon type={item.icon} />

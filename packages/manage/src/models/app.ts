@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import * as API from '../services/api';
-import { getStorage, setStorage, delStorage } from '../utils/storage';
+import { storage } from 'mints-utils';
 
 export default {
   namespace: 'app',
@@ -8,7 +8,6 @@ export default {
   state: {
     collapsed: false,
     autoLogin: false,
-    loading: false,
     token: '',
     user: {},
   },
@@ -22,17 +21,10 @@ export default {
     },
 
     updateAutoLogin(state) {
-      setStorage('autoLogin', !state.autoLogin);
+      storage.set('autoLogin', !state.autoLogin);
       return {
         ...state,
         autoLogin: !state.autoLogin
-      }
-    },
-
-    updateLoading(state) {
-      return {
-        ...state,
-        loading: !state.loading
       }
     },
 
@@ -47,13 +39,13 @@ export default {
   effects: {
     *signin({ payload }, { call, put }) {
       const token = yield call(API.signin, payload);
-      setStorage('token', token);
+      storage.set('token', token);
       yield put({ type: 'update', payload: { token } });
       yield put(routerRedux.push('/'));
     },
 
     *signout(_, { put }) {
-      delStorage('token');
+      storage.del('token');
       yield put({ type: 'update', payload: { token: '', user: {} }});
       yield put(routerRedux.push('/user/login'));
     },
@@ -62,17 +54,16 @@ export default {
       const user = yield call(API.getUser);
       yield put({ type: 'update', payload: { user } });
     },
-
-    *forgetPass(_, { call }) {
-      yield call(API.forgetPass);
-    }
   },
 
   subscriptions: {
     setup({ dispatch }) {
-      const autoLogin = getStorage('autoLogin') ? (getStorage('autoLogin') === 'false' ? false : true) : false;
-      const token = getStorage('token') || '';
-      dispatch({ type: 'update', payload: { autoLogin, token } });
+      const autoLogin = storage.get('autoLogin') ? (storage.get('autoLogin') === 'false' ? false : true) : false;
+      const token = storage.get('token') || '';
+      dispatch({
+        type: 'update',
+        payload: { autoLogin, token },
+      });
     },
   },
 }
