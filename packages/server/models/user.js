@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Plugin = require('./plugin');
-const { root: { EMAIL, PASSWORD, NICKNAME }, SALT_WORK_FACTOR, DEFAULT_AVATAR_URL } = require('../../../config');
+const { root: { EMAIL, PASSWORD, NICKNAME, AVATAR }, SALT_WORK_FACTOR } = require('../../../config');
 
 const { Schema } = mongoose;
 
@@ -12,7 +12,7 @@ const UserSchema = new Schema({
 
   // 用户信息
   nickname: { type: String, required: true },
-  avatar: { type: String, default: DEFAULT_AVATAR_URL },
+  avatar: { type: String, default: '' },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
 
@@ -69,6 +69,7 @@ User.findOne((err, data) => {
       email: EMAIL,
       password: bcrypt.hashSync(PASSWORD, bcrypt.genSaltSync(SALT_WORK_FACTOR)),
       nickname: NICKNAME,
+      avatar: AVATAR,
       role: 101,
     });
   }

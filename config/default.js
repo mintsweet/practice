@@ -15,16 +15,24 @@ const defaultConfig = {
 
   // 超管用户
   root: {
-    EMAIL: '0x1304570@gmail.com',
+    EMAIL: 'admin@mintsweet.cn',
     PASSWORD: 'a123456',
-    NICKNAME: '青湛',
+    NICKNAME: '管理员',
+    AVATAR: '',
+  },
+
+  // 是否允许注册
+  ALLOW_SIGNUP: true,
+
+  // GitHub 鉴权配置
+  github: {
+    CLIENT_ID: '',
+    CLIENT_SECRET: '',
+    CALLBACK_URL: '',
   },
 
   // 密码加密位数
   SALT_WORK_FACTOR: 10,
-
-  // 默认头像地址
-  DEFAULT_AVATAR_URL: '',
 
   // JWT 参数
   jwt: {
@@ -41,7 +49,6 @@ const defaultConfig = {
   ],
 
   // 七牛图片上传
-  // 不设置时，图片默认上传到服务器
   qn: {
     ACCESS_KEY: '',
     SECRET_KEY: '',
@@ -81,7 +88,7 @@ const defaultConfig = {
     { name: '文档', url: 'https://docs.mintsweet.cn' }
   ],
 
-  friend_link: [
+  friend_links: [
     {
       logo: 'https://cnodejs.org/public/images/cnodejs.svg',
       link: 'https://cnodejs.org',
@@ -98,16 +105,6 @@ const defaultConfig = {
   session: {
     SECRET: 'practice'
   },
-
-  // 是否允许注册
-  ALLOW_SIGNUP: true,
-
-  // GitHub 鉴权配置
-  github: {
-    CLIENT_ID: '',
-    CLIENT_SECRET: '',
-    CALLBACK_URL: '',
-  }
 };
 
 module.exports = defaultConfig;
