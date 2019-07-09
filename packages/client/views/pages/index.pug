@@ -14,8 +14,7 @@ block content
     include ../includes/no_reply_topic.pug
     .block
       .title 友情社区
-      ul.content
-        each item in config.friend_link
-          li
-            a(href=item.link, target="_blank")
-              img(src=item.logo)
+      .content
+        each item in config.friend_links
+          a.link(href=item.link, target="_blank")
+            img(src=item.logo)
