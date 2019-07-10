@@ -2,6 +2,11 @@
 
 带你入门大前端技术栈...
 
+[![Travis (.org)](https://img.shields.io/travis/mintsweet/practice.svg?style=flat-square)](https://github.com/mintsweet/practice)
+[![Codecov](https://img.shields.io/codecov/c/github/mintsweet/practice/master.svg?style=flat-square)](https://codecov.io/gh/mintsweet/practice)
+[![GitHub issues](https://img.shields.io/github/issues/mintsweet/practice.svg?style=flat-square)](https://github.com/mintsweet/practice/issues)
+[![GitHub license](https://img.shields.io/github/license/mintsweet/practice.svg?style=flat-square)](https://github.com/mintsweet/practice/blob/master/LICENSE)
+
 ## 初衷
 
 可能是因为现在的前端圈的技术太多了，很多人不知道从何入手，无所适从，所以我还是想做一个教你如何去写而不是理论的东西，毕竟做出东西才会有兴趣，毕竟理论也是可以补的。
