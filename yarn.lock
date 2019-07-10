@@ -2632,7 +2632,7 @@ babel-core@^6.0.0, babel-core@^6.26.0:
     slash "^1.0.0"
     source-map "^0.5.7"
 
-babel-eslint@10.0.2, babel-eslint@^10.0.1:
+babel-eslint@10.0.2, babel-eslint@^10.0.1, babel-eslint@^10.0.2:
   version "10.0.2"
   resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-10.0.2.tgz#182d5ac204579ff0881684b040560fdcc1558456"
   integrity sha512-UdsurWPtgiPgpJ06ryUnuaSXC2s0WoSZnQmEpbAH65XZSdwowgN5MvyP7e88nW07FYXv72erVtpBkxyDVKhH1Q==
@@ -6304,11 +6304,12 @@ eslint-config-airbnb@^17.1.0:
     object.assign "^4.1.0"
     object.entries "^1.1.0"
 
-eslint-config-mints@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-mints/-/eslint-config-mints-1.0.0.tgz#f7b77c098c5ec4dc913e5e3f064587eed1c8ed8c"
-  integrity sha512-6Kq4ehXx5hYhQRZGSHNQbNF+BL9DowlQy2QHPD05TM8UQorn6qpGVJ6NdmCkFqjF4NPzlnpOeN4Xnp0gKn8w7w==
+eslint-config-mints@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-mints/-/eslint-config-mints-1.1.0.tgz#25798a52b04f0e75482a904df0e0303d90f09478"
+  integrity sha512-lp8sfjqzpLLKxHy/uVZfaOlRqhz+11y+ITzLONNKzzbRUBz/5avxOQ0LwSTtiplb/nKPImorXSdATyqeHhp2jg==
   dependencies:
+    babel-eslint "^10.0.2"
     eslint-restricted-globals "^0.2.0"
 
 eslint-config-prettier@^4.3.0:

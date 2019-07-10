@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "db-server": "bash ./utils/db-server.sh",
     "start": "cross-env NODE_ENV=development nodemon app.js",
     "test": "cross-env NODE_ENV=test nyc --reporter=html mocha",
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
