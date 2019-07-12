@@ -1,0 +1,10 @@
+.block
+  .title 个人信息
+  .content
+    a.avatar(href=`/user/${user.id}`)
+      img(src=user.avatar)
+    a.nickname(href=`/user/${user.id}`) #{user.nickname}
+    .score
+      span 积分：#{user.score}
+    .signature
+      span “ #{user.signature || '这家伙很懒，什么都没留下'} ”

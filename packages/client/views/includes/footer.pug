@@ -4,7 +4,7 @@
       .title
         span.mints.mints-home
         span Mints.
-      p.copyright 蜀ICP备18037778号-1
+      p.copyright 蜀ICP备xxxxxxx
       .contact
         span 联系我们：
         a.mints.mints-github(href="https://github.com/mintsweet/practice", target="_blank")
@@ -12,20 +12,20 @@
       li
         .title About
         .links
-          a(href="https://docs.mintsweet.cn/", target="_blank") 关于本站
+          a(href="https://github.com/mintsweet/practice", target="_blank") 关于本站
           a(href="https://github.com/mintsweet/practice/issues", target="_blank") 反馈与建议
           a(href="https://github.com/mintsweet/practice/pulls", target="_blank") 加入我们
       li
         .title 开发者
         .links
-          a(href="https://docs.mintsweet.cn/#/codespecification", target="_blank") 开发者指南
-          a(href="https://docs.mintsweet.cn/#/API", target="_blank") API
+          a(href="https://github.com/mintsweet/practice/wiki/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83", target="_blank") 开发者指南
+          a(href="https://github.com/mintsweet/practice/wiki/API", target="_blank") API
       li
         .title 客户端
         .links
-          a(href="https://github.com/mintsweet/practice/blob/master/packages/mobile/README.md") APP
+          a(href="/") APP
   .mobile-link
-    a(href="https://docs.mintsweet.cn/", target="_blank") 关于本站
+    a(href="https://github.com/mintsweet/practice", target="_blank") 关于本站
     span.divider ·
     a(href="https://github.com/mintsweet/practice", target="_blank") 源码
     span.divider ·
@@ -38,3 +38,17 @@
 //- scripts
 script(src="/static/lib/jquery/jquery-3.3.1.min.js")
 script(src="/static/js/main.js")
+script.
+  $(window).scroll(function() {
+    const scrollTop = $(window).scrollTop();
+    if (scrollTop > 100) {
+      $('.back-top').fadeIn();
+    } else {
+      $('.back-top').fadeOut();
+    }
+  });
+
+  $('.back-top').click(function() {
+    $('html, body').animate({ scrollTop: 0 }, 300);
+    return false;
+  });

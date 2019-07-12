@@ -1,6 +1,6 @@
 .user-top {
   flex: 1;
-  padding: 25px 20px;
+  padding: 10px 15px;
   background: @white;
   border-radius: 4px;
 
@@ -12,16 +12,16 @@
 
   table {
     width: 100%;
-    border: 1px solid @light-gray;
+    border: 1px solid @gray-light;
     box-sizing: border-box;
 
     thead {
-      background: #e9f1e7;
+      background: rgba(@theme-color, .1);
     }
 
     tr {
       &:nth-child(even) {
-        background: #e9f1e7;
+        background: rgba(@theme-color, .1);
       }
     }
 
@@ -31,14 +31,18 @@
 
     td {
       padding: 4px 10px;
+      text-align: center;
     }
 
     a.avatar {
       display: inline-block;
       margin-right: 6px;
-      .size(36px);
-
       vertical-align: middle;
+      .size(30px);
+
+      img {
+        display: block;
+      }
     }
 
     a.nickname {

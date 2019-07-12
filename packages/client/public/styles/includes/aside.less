@@ -1,0 +1,139 @@
+.block {
+  margin-bottom: 10px;
+  background: @white;
+  border-radius: 4px;
+
+  .title {
+    padding: 10px 15px;
+    border-bottom: 1px solid @gray-light;
+
+    a {
+      float: right;
+      margin-top: 2px;
+      color: @theme-color;
+      font-size: 12px;
+    }
+  }
+
+  .content {
+    margin: 0;
+    padding: 10px 20px;
+
+    a.link {
+      display: block;
+      padding: 5px 10px;
+    }
+
+    .avatar {
+      display: inline-block;
+      .size(36px);
+    }
+
+    .nickname {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .score {
+      margin-top: 10px;
+      font-size: @font-size-small;
+    }
+
+    .signature {
+      font-size: @font-size-smaller;
+      font-style: italic;
+    }
+
+    .create-topic {
+      padding: 4px 15px;
+      color: @white;
+      font-size: @font-size-small;
+      background: @theme-color;
+      border-radius: 4px;
+      transition: background .3s;
+
+      &:hover {
+        background: darken(@theme-color, 10%);
+      }
+    }
+  }
+
+  .user-stat {
+    .item {
+      margin-bottom: 10px;
+    }
+
+    span.mints {
+      display: inline-block;
+      line-height: 25px;
+      border-radius: 50%;
+      color: @theme-color;
+      background: rgba(@theme-color, .1);
+      text-align: center;
+      .size(25px);
+    }
+
+    .gener {
+      display: inline-block;
+      margin-left: 10px;
+
+      .count {
+        margin: 0 4px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .user-follow {
+    display: flex;
+
+    .item {
+      flex: 1;
+      text-align: center;
+
+      & + .item {
+        border-left: 1px solid #eee;
+      }
+    }
+
+    span {
+      display: block;
+    }
+
+    a {
+      font-weight: @font-weight-bold;
+    }
+  }
+
+  .score-list {
+    li {
+      height: 26px;
+      line-height: 26px;
+    }
+
+    .nickname {
+      font-size: 13px;
+    }
+
+    .score {
+      float: right;
+      font-size: 12px;
+      color: @theme-color;
+    }
+  }
+
+  .no-reply {
+    li {
+      height: 30px;
+      line-height: 30px;
+      font-size: 13px;
+      color: @gray-dark;
+
+      a {
+        display: block;
+        width: 100%;
+        .text-ellipsis;
+      }
+    }
+  }
+}

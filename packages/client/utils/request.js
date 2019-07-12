@@ -1,7 +1,7 @@
 const rq = require('request-promise');
 const { API } = require('../../../config');
 
-module.exports = (url, data, method = 'GET', token = '') => {
+module.exports = async (url, data, method = 'GET', token = '') => {
   const options = {
     baseUrl: API,
     url,
@@ -18,5 +18,10 @@ module.exports = (url, data, method = 'GET', token = '') => {
     options.body = data;
   }
 
-  return rq(options);
+  try {
+    const res = await rq(options);
+    return res;
+  } catch(err) {
+    throw new Error(err);
+  }
 };

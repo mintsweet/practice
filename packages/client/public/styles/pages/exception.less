@@ -1,17 +1,19 @@
 .exception {
-  padding: 25px 20px;
+  padding-top: 60px;
   width: 100%;
   background: @white;
   border-radius: 4px;
   overflow: hidden;
   text-align: center;
 
-  .practice {
+  .mints {
     font-size: 100px;
+    line-height: 1;
     color: @error;
   }
 
   h1 {
+    margin: 0;
     font-size: 40px;
   }
 
@@ -24,7 +26,6 @@
     strong {
       display: block;
       font-size: 15px;
-      margin-bottom: 10px;
     }
 
     span {
@@ -33,6 +34,19 @@
 
     a {
       margin-top: 10px;
+    }
+
+    a.btn {
+      color: @theme-color;
+      padding: 4px 10px;
+      border: 1px solid @theme-color;
+      border-radius: 10px;
+      transition: all .3s;
+
+      &:hover {
+        color: @white;
+        background: @theme-color;
+      }
     }
   }
 }

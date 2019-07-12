@@ -1,6 +1,6 @@
 const request = require('./request');
 
-// 获取图片验证码
+// 获取验证码
 exports.getCaptcha = params => request('/captcha', params);
 
 // GitHub 登录

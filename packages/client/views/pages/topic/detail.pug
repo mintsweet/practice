@@ -1,15 +1,15 @@
 extends ../../layout.pug
 
 block content
-  .content.has-bg
+  .content
     .topic-detail
       .author
         a.avatar(href=`/user/${author.id}`)
           img(src=author.avatar)
-        .text
+        .nickname
           a(href=`/user/${author.id}`) #{author.nickname}
           span #{topic.create_at}
-          span 阅读 #{topic.visit_count}
+          span.visit 阅读 #{topic.visit_count}
       h1.title #{topic.title}
       .markdown
         | !{topic.content}
@@ -17,65 +17,51 @@ block content
         .action
           a.btn.warn(href=`/topic/${topic.id}/edit`) 编辑
           a.btn.error(href=`/topic/${topic.id}/delete`) 删除
-    .reply-title 评论
-    .reply-create#reply
-      if user
-        .avatar(for="reply")
-          img(src=user.avatar)
-        form.reply-form(action=`/topic/${topic.id}/reply`, method="post")
-          textarea(name="content", rows="2", placeholder="说说你的看法...")
-          button.btn(type="submit") 评论
-      else
-        span 评论，请先
-        a(href="/signin") 登录
-    ul.reply-list
-      each reply in replies
-        li
-          a.avatar(href=`/user/${reply.author.id}`)
-            img(src=reply.author.avatar)
-          .detail
-            a.nickname(href=`/user/${reply.author.id}`) #{reply.author.nickname}
+    #reply.reply
+      .title 评论
+      .create
+        if user
+          .avatar(for="reply")
+            img(src=user.avatar)
+          form.reply-form(action=`/topic/${topic.id}/reply`, method="post")
+            textarea.text(name="content", rows="2", placeholder="说说你的看法...")
+            button.btn(type="submit") 评论
+        else
+          span 评论，请先
+          a.link(href="/signin") 登录
+      ul.list
+        each reply in replies
+          li
+            .info
+              a.avatar(href=`/user/${reply.author.id}`)
+                img(src=reply.author.avatar)
+              a.nickname(href=`/user/${reply.author.id}`) #{reply.author.nickname}
             .content #{reply.content}
             .action
-              a.practice.action.up_reply(href="javascript:;", title="点赞", data-id=reply.id) &#xe603;
+              a#reply_up.mints.mints-like(href="javascript:;", title="点赞", data-id=reply.id)
                 span #{reply.ups.length}
-              a.practice.action.reply_reply(href="javascript:;", title="回复", data-id=reply.id) &#xe619;
+              a#reply_reply.mints.mints-reply(href="javascript:;", title="回复", data-id=reply.id)
               if user && user.id === reply.author_id
-                a.practice.action.edit_reply(href="javascript:;", title="编辑") &#xe605;
-                a.practice.action.delete_reply(href="javascript:;", title="删除", data-id=reply.id) &#xe694;
-              form.reply-form.edit_reply_form(action=`/reply/${reply.id}/edit`, method="post")
+                a#reply_update.mints.mints-edit(href="javascript:;", title="编辑")
+                a#reply_delete.mints.mints-delete(href="javascript:;", title="删除", data-id=reply.id)
+              form#js_reply_save.reply-form(action=`/reply/${reply.id}/edit`, method="post")
                 input(type="hidden", name="tid", value=topic.id)
                 textarea(name="content", rows="2") #{reply.content}
                 button.btn(type="submit") 保存
-              form.reply-form.reply_reply_form(action=`/topic/${topic.id}/reply`, method="post")
+              form#js_reply_reply.reply-form(action=`/topic/${topic.id}/reply`, method="post")
                 input(type="hidden", name="reply_id", value=reply.id)
                 textarea(name="content", rows="2") @#{reply.author.nickname}
                 button.btn(type="submit") 回复
               time #{reply.create_at_ago}
-      else
-        .no-reply 暂无回复
-  aside.asider
-    .block.topic-author
-      .title 关于作者
-      .info
-        a.avatar(href=`/user/${author.id}`)
-          img(src=author.avatar)
-        a.nickname(href=`/user/${author.id}`)
-          | #{author.nickname}
-          if author.location
-            span.location.practice &#xe602;#{author.location}
-      .other
-        .score 积分：#{author.score}
-        if author.signature
-          .signature(title=author.signature) **#{author.signature}**
         else
-          .signature **这家伙很懒，莫有签名**
-    include ../../includes/no_reply_topic.pug
-  .global-message
+          include ../../includes/empty.pug
+  aside.aside
+    include ../../aside/author_info.pug
+    include ../../aside/no_reply_topic.pug
   .float-action
-    a.practice.action.like_topic(href="javascript:;", class={ active: like }) &#xe63b;
+    a#topic_like.mints.mints-star(href="javascript:;", class={ active: like })
       span.number #{topic.like_count}
-    a.practice(href="#reply") &#xe619;
+    a.mints.mints-reply(href="#reply")
       span#reply_count.number #{topic.reply_count}
-    a.practice.action.collect_topic(href="javascript:;", class={ active: collect }) &#xe65f;
+    a#topic_collect.mints.mints-collect(href="javascript:;", class={ active: collect })
       span.number #{topic.collect_count}

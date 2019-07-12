@@ -23,6 +23,10 @@
       margin-right: 10px;
     }
 
+    p.copyright {
+      margin: 0;
+    }
+
     .contact {
       span {
         display: block;
@@ -82,4 +86,8 @@
   border-radius: 6px;
   z-index: @zIndex-5;
   cursor: pointer;
+
+  @media @screen {
+    display: none;
+  }
 }

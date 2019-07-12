@@ -19,10 +19,11 @@
 
 .topic-list {
   margin-top: 10px;
+  padding: 0 10px;
 
   .topic {
     display: flex;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
     height: 50px;
     line-height: 50px;
     background: rgba(@theme-color, .1);
@@ -31,6 +32,14 @@
       flex: 0 0 30px;
       margin: 10px 0 0 10px;
       .size(30px);
+
+      @media @screen {
+        display: none;
+      }
+
+      img {
+        display: block;
+      }
     }
 
     .content {
@@ -59,6 +68,7 @@
 
       a.title {
         flex: auto;
+        font-size: @font-size-small;
         .text-ellipsis;
       }
     }
@@ -72,7 +82,7 @@
         flex: 1;
         font-size: 12px;
 
-        i.practice {
+        i.mints {
           margin-right: 4px;
           font-size: 13px;
           vertical-align: top;
@@ -84,6 +94,10 @@
       flex: 0 0 110px;
       font-size: 12px;
       text-align: left;
+
+      @media @screen {
+        display: none;
+      }
 
       a {
         display: inline-block;
@@ -100,18 +114,35 @@
   }
 }
 
-.empty {
-  margin: 32px 0;
-  font-size: @font-size-small;
+.pagination {
+  margin-top: 10px;
   text-align: center;
-  color: rgba(0, 0, 0, .25);
 
-  img {
-    margin-bottom: 8px;
-    height: 40px;
-  }
+  .item {
+    display: inline-block;
+    margin-right: 8px;
+    .size(24px);
 
-  p {
-    margin: 0;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 4px;
+    user-select: none;
+    border: 1px solid @gray-light;
+    background-color: @white;
+    font-family: Arial, sans-serif;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &.disabled {
+      color: rgba(0, 0, 0, .25);
+      border-color: @gray-light;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      font-weight: 500;
+      color: @theme-color;
+      border-color: @theme-color;
+    }
   }
 }

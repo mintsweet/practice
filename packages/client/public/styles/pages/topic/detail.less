@@ -1,10 +1,212 @@
+.topic-detail {
+  padding: 20px 15px 0;
+
+  .author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+
+    .avatar {
+      flex: 0 0 40px;
+      margin-right: 10px;
+      .size(40px);
+    }
+
+    .nickname {
+      flex: auto;
+      line-height: 1.2;
+
+      a {
+        display: block;
+        font-weight: bold;
+      }
+
+      span {
+        font-size: 13px;
+        color: @gray-dark;
+      }
+
+      span.visit {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .title {
+    margin: 0 0 30px 0;
+    line-height: 1.25;
+    font-size: 1.75em;
+  }
+
+  .action {
+    margin-top: 20px;
+
+    .btn {
+      border-radius: 4px;
+    }
+
+    .error {
+      margin-left: 10px;
+    }
+  }
+}
+
+.reply {
+  padding: 0 20px 15px;
+
+  .title {
+    position: relative;
+    padding: 0 40%;
+    margin: 20px 0;
+    text-align: center;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      border: 1px dashed @gray-light;
+    }
+
+    &::before {
+      left: 0;
+      transform: translate(10%, -50%);
+    }
+
+    &::after {
+      right: 0;
+      transform: translate(-10%, -50%);
+    }
+  }
+
+  .create {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 20px;
+    background: #f1f1f1;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+
+    .avatar {
+      flex: 0 0 40px;
+      margin-right: 10px;
+      height: 40px;
+    }
+
+    a.link {
+      color: @theme-color;
+    }
+
+    .reply-form {
+      flex: auto;
+
+      .text {
+        display: block;
+        margin-bottom: 10px;
+        width: 100%;
+        padding: 10px;
+        border-color: #ddd;
+        border-radius: 4px;
+        resize: none;
+        box-sizing: border-box;
+
+        &:focus {
+          border-color: @theme-color;
+        }
+      }
+
+      .btn {
+        float: right;
+      }
+    }
+  }
+
+  .list {
+    margin-top: 20px;
+    padding: 10px 20px;
+
+    li {
+      border-bottom: 1px dashed #f1f1f1;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+
+      .avatar {
+        flex: 0 0 26px;
+        margin-right: 10px;
+        .size(26px);
+
+        img {
+          display: block;
+        }
+      }
+
+      .nickname {
+        line-height: 1;
+        font-weight: @font-weight-bold;
+      }
+    }
+
+    .content {
+      margin-top: 10px;
+      font-size: @font-size-small;
+      line-height: 30px;
+    }
+
+    .action {
+      position: relative;
+
+      a.mints {
+        margin-right: 10px;
+        color: @gray;
+        font-size: @font-size-small;
+
+        &:hover {
+          color: @theme-color;
+        }
+
+        span {
+          margin-left: 4px;
+        }
+      }
+
+      time {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: @gray;
+        font-size: 13px;
+        vertical-align: middle;
+      }
+    }
+
+    .reply-form {
+      display: none;
+
+      textarea {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        width: 100%;
+        border-color: #ddd;
+        border-radius: 4px;
+        resize: none;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+
 .float-action {
   position: fixed;
   left: 100px;
   top: 50%;
   transform: translateY(-50%);
 
-  a {
+  .mints {
     position: relative;
     display: block;
     margin-bottom: 10px;
@@ -32,97 +234,6 @@
       color: @white;
       background: @gray-dark;
       border-radius: 6px;
-    }
-  }
-}
-
-.topic-author {
-  .info {
-    display: flex;
-    align-items: center;
-
-    .avatar {
-      flex: 0 0 40px;
-      padding: 10px 20px;
-      height: 40px;
-    }
-
-    .location {
-      margin-left: 6px;
-      font-size: 12px;
-      color: @gray-dark;
-    }
-  }
-
-  .other {
-    padding: 0 20px 10px;
-
-    .score {
-      margin: 6px 0;
-    }
-
-    .signature {
-      width: 100%;
-      .text-ellipsis;
-
-      font-style: italic;
-      color: @gray-dark;
-      font-size: 13px;
-    }
-  }
-}
-
-.topic-detail {
-  margin-bottom: 80px;
-
-  .author {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-
-    .avatar {
-      flex: 0 0 40px;
-      margin-right: 10px;
-      .size(40px);
-
-      img {
-        border-radius: 50%;
-      }
-    }
-  }
-
-  .text {
-    flex: auto;
-
-    a {
-      display: block;
-      font-weight: bold;
-    }
-
-    span {
-      font-size: 13px;
-      color: @gray-dark;
-
-      & + span {
-        margin-left: 10px;
-      }
-    }
-  }
-
-  .title {
-    margin-top: 24px;
-    margin-bottom: 16px;
-    padding-bottom: .3em;
-    line-height: 1.25;
-    font-size: 2em;
-    font-weight: 600;
-  }
-
-  .action {
-    margin-top: 20px;
-
-    a {
-      margin-right: 10px;
     }
   }
 }

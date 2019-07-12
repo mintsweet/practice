@@ -31,7 +31,7 @@
 
   .account {
     display: block;
-    padding-top: 20px;
+    padding: 10px 10px 0;
     text-align: center;
 
     & > .divider {
@@ -39,11 +39,20 @@
     }
 
     .avatar {
-      .size(40px);
+      display: inline-block;
+      font-size: 0;
+      vertical-align: middle;
+      .size(26px);
 
       img {
         border-radius: 50%;
       }
+    }
+
+    .nickname {
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
     }
   }
 
@@ -63,8 +72,8 @@
 
 .main {
   display: flex;
-  padding: 20px 10px;
-  min-height: 600px;
+  padding: 20px 0;
+  min-height: 500px;
   box-sizing: border-box;
   .layout();
 
@@ -83,12 +92,104 @@
     }
   }
 
-  & > .asider {
+  & > .aside {
     flex: 1;
     margin-left: 20px;
 
     @media @screen {
       display: none;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.btn {
+  padding: 4px 15px;
+  line-height: 1.2;
+  color: @theme-color;
+  background: @white;
+  border: 1px solid @theme-color;
+  transition: all .3s;
+  cursor: pointer;
+
+  &:hover {
+    color: @white;
+    background: @theme-color;
+  }
+
+  &.error {
+    color: @error;
+    border-color: @error;
+
+    &:hover {
+      color: @white;
+      background: @error;
+    }
+  }
+
+  .warn {
+    color: @warning;
+    border-color: @warning;
+
+    &:hover {
+      color: @white;
+      background: @warning;
+    }
+  }
+}
+
+.alert {
+  padding: 4px 8px;
+  margin-bottom: 20px;
+  font-size: @font-size-small;
+  color: #c09853;
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+
+  &.alert-error {
+    color: @white;
+    background-color: @error;
+  }
+
+  &.alert-warn {
+    color: @white;
+    background-color: @warning;
+  }
+}
+
+.global-message {
+  display: none;
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+  z-index: @zIndex-5;
+
+  .content {
+    display: inline-block;
+    padding: 8px 16px;
+    color: @white;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+    pointer-events: all;
+
+    &.error {
+      background: @error;
+    }
+
+    &.warn {
+      background: @warning;
+    }
+
+    &.success {
+      background: @success;
     }
   }
 }

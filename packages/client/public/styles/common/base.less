@@ -60,7 +60,8 @@ ul {
   list-style: none;
 }
 
-input {
+input,
+button {
   outline: none;
 }
 
@@ -94,4 +95,22 @@ hr {
   border: none;
   background-color: @gray;
   background-image: repeating-linear-gradient(-45deg, @white, @white 4px, transparent 4px, transparent 8px);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="search"] {
+  padding: 6px 10px;
+  height: 36px;
+  line-height: 1;
+  font-size: @font-size-small;
+  border: 1px solid @gray-light;
+  border-radius: 2px;
+  box-sizing: border-box;
+  transition: .2s linear border;
+
+  &:hover,
+  &:focus {
+    border-color: @theme-color;
+  }
 }

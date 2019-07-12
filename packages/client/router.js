@@ -1,7 +1,6 @@
 const express = require('express');
 const passport = require('passport');
 const Site = require('./controllers/site');
-const Aider = require('./controllers/aider');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Reply = require('./controllers/reply');
@@ -30,7 +29,7 @@ if (ALLOW_SIGNUP) {
   router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), User.github);
 }
 
-router.get('/captcha', wrap(Aider.getCaptcha));
+router.get('/captcha', wrap(Site.getCaptcha));
 router.get('/signin', wrap(User.renderSignin));
 router.post('/signin', wrap(User.signin));
 router.get('/signout', wrap(User.signout));

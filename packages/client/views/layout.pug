@@ -19,21 +19,4 @@ html
         block content
       block footer
         include ./includes/footer.pug
-    .mobile-menu
-      if user
-        a.account(href=`/user/${user.id}`)
-          .avatar
-            img(src=user.avatar)
-          .nickname #{user.nickname}
-      else if config.ALLOW_SIGNUP
-        .account
-          a(href="/signin") 登录
-          span.divider |
-          a(href="/signup") 注册
-      else
-        .account
-          a(href="/auth/github") 使用 GitHub 登录
-      ul.menu
-        each item in config.menus
-          li
-            a(href=item.url, target=`${item.url.indexOf('http') === 0 ? '_blank' : '_self'}`) #{item.name}
+    include ./includes/mobile.pug

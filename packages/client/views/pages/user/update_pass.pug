@@ -6,24 +6,24 @@ append header
       a(href="/setting") 个人资料
       a.active(href="/update_pass") 修改密码
 block content
-  .content.has-bg
+  .content
     .setting-title 修改密码
-    form#updatePassForm.setting-form(method="post")
+    form.form(method="post")
       .alert.alert-error(class={hidden: !error}) #{error}
       .form-item
         label(for="oldPass") 旧密码
-        input(type="password", id="oldPass", name="oldPass", placeholder="请输入旧密码")
+        input#oldPass(type="password", name="oldPass", placeholder="请输入旧密码")
         a(href="/forget_pass") 忘记密码？
       .form-item
         label(for="newPass") 新密码
-        input(type="password", id="newPass", name="newPass", placeholder="请输入新密码")
+        input#newPass(type="password", name="newPass", placeholder="请输入新密码")
       .form-item
         label(for="confimPass") 确认密码
-        input(type="password", id="confimPass", placeholder="请再一次输入新密码")
+        input#confimPass(type="password", placeholder="请再一次输入新密码")
       .form-item
-        button.btn(type="submit") 保存修改
-  .asider
-    include ../../includes/user_ranking.pug
+        button.btn.submit(type="submit") 保存修改
+  .aside
+    include ../../aside/user_ranking.pug
 append footer
   script.
     var oldPass = $('#oldPass');
@@ -31,14 +31,18 @@ append footer
     var confimPass = $('#confimPass');
     var alert = $('.alert');
 
-    $('#updatePassForm').submit(function() {
+    $('.form').submit(function() {
       if (!oldPass.val()) {
         alert.text('旧密码不能为空').slideDown();
         return false;
-      } else if (!newPass.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass.val())) {
+      }
+
+      if (!newPass.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(newPass.val())) {
         alert.text('请填写6-18位数字、字母和特殊字符任意两种组合的密码').slideDown();
         return false;
-      } else if (newPass.val() !== confimPass.val()) {
+      }
+
+      if (newPass.val() !== confimPass.val()) {
         alert.text('两次密码不一致').slideDown();
         return false;
       }

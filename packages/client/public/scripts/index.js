@@ -1,8 +1,5 @@
 $(document).ready(function() {
   window.Mints.showMobileMenu();
-  window.Mints.backTop();
-  window.Mints.modalSelect();
-  window.Mints.headerDropMenu();
   window.Mints.renewCaptcha();
   window.Mints.followOrUn();
   window.Mints.likeTopic();

@@ -1,7 +1,9 @@
 const API = require('../utils/api');
+const Base = require('./base');
 
-class User {
+class User extends Base {
   constructor() {
+    super();
     this.renderSignup = this.renderSignup.bind(this);
     this.signup = this.signup.bind(this);
     this.renderSignin = this.renderSignin.bind(this);
@@ -18,70 +20,43 @@ class User {
       accessToken
     });
 
-    return res.redirect('/');
-  }
-
-  async getCaptchaUrl(req) {
-    const data = await API.getCaptcha({
-      height: 34
-    });
-
-    req.app.locals.captcha = {
-      token: data.token,
-      expired: Date.now() + 1000 * 60 * 10
-    };
-
-    return data.url;
+    res.redirect('/');
   }
 
   async renderSignup(req, res) {
     const url = await this.getCaptchaUrl(req);
-
     res.render('pages/user/signup', {
       title: '注册',
-      url
+      url,
     });
   }
 
   // 注册
   async signup(req, res) {
     const { nickname, email, password, captcha } = req.body;
-    const data = req.app.locals.captcha || {};
+    const { captcha: data } = req.session;
     const url = await this.getCaptchaUrl(req);
 
-    if (captcha.toUpperCase() !== data.token) {
-      return res.render('pages/user/signin', {
-        title: '登录',
-        error: '图形验证码错误',
-        url
-      });
-    } else if (Date.now() > data.expired) {
-      return res.render('pages/user/signin', {
-        title: '登录',
-        error: '图形验证码已经失效了，请重新获取',
-        url
-      });
-    }
-
     try {
+      if (captcha.toUpperCase() !== data.token) {
+        throw new Error('图形验证码错误');
+      } else if (Date.now() > data.expired) {
+        throw new Error('图形验证码已经失效了，请重新获取');
+      }
+
       await API.signup({ nickname, email, password });
-      return res.render('pages/transform', {
-        title: '注册成功',
-        type: 'success',
-        message: '注册成功'
-      });
+      res.redirect('/');
     } catch(err) {
-      return res.render('pages/user/signup', {
+      res.render('pages/user/signup', {
         title: '注册',
-        error: err.error,
-        picUrl: url
+        error: err.message,
+        url,
       });
     }
   }
 
   async renderSignin(req, res) {
     const url = await this.getCaptchaUrl(req);
-
     res.render('pages/user/signin', {
       title: '登录',
       url
@@ -91,36 +66,23 @@ class User {
   // 登录
   async signin(req, res) {
     const { email, password, captcha } = req.body;
-    const data = req.app.locals.captcha || {};
+    const { captcha: data } = req.session;
     const url = await this.getCaptchaUrl(req);
 
-    if (captcha.toUpperCase() !== data.token) {
-      return res.render('pages/user/signin', {
-        title: '登录',
-        error: '图形验证码错误',
-        url
-      });
-    } else if (Date.now() > data.expired) {
-      return res.render('pages/user/signin', {
-        title: '登录',
-        error: '图形验证码已经失效了，请重新获取',
-        url
-      });
-    }
-
     try {
-      req.session.token = await API.signin({ email, password });
+      if (captcha.toUpperCase() !== data.token) {
+        throw new Error('图形验证码错误');
+      } else if (Date.now() > data.expired) {
+        throw new Error('图形验证码已经失效了，请重新获取');
+      }
 
-      return res.render('pages/transform', {
-        title: '登录成功',
-        type: 'success',
-        message: '登录成功'
-      });
+      req.session.token = await API.signin({ email, password });
+      res.redirect('/');
     } catch(err) {
-      return res.render('pages/user/signin', {
+      res.render('pages/user/signin', {
         title: '登录',
-        error: err.error,
-        url
+        error: err.message,
+        url,
       });
     }
   }
@@ -128,8 +90,7 @@ class User {
   // 忘记密码页
   async renderForgetPass(req, res) {
     const url = await this.getCaptchaUrl(req);
-
-    return res.render('pages/user/forget_pass', {
+    res.render('pages/user/forget_pass', {
       title: '忘记密码',
       url
     });
@@ -138,36 +99,24 @@ class User {
   // 忘记密码
   async forgetPass(req, res) {
     const { email, captcha } = req.body;
-    const data = req.app.locals.captcha || {};
+    const { captcha: data } = req.session;
     const url = await this.getCaptchaUrl(req);
 
-    if (captcha.toUpperCase() !== data.token) {
-      return res.render('pages/user/signin', {
-        title: '登录',
-        error: '图形验证码错误',
-        url
-      });
-    } else if (Date.now() > data.expired) {
-      return res.render('pages/user/signin', {
-        title: '登录',
-        error: '图形验证码已经失效了，请重新获取',
-        url
-      });
-    }
 
     try {
-      await API.forgetPass({ email });
+      if (captcha.toUpperCase() !== data.token) {
+        throw new Error('图形验证码错误');
+      } else if (Date.now() > data.expired) {
+        throw new Error('图形验证码已经失效了，请重新获取');
+      }
 
-      return res.render('pages/transform', {
-        title: '找回密码成功',
-        type: 'success',
-        message: '找回密码成功'
-      });
+      await API.forgetPass({ email });
+      res.redirect('/signin');
     } catch(err) {
-      return res.render('pages/user/forget_pass', {
+      res.render('pages/user/forget_pass', {
         title: '忘记密码',
-        error: err.error,
-        picUrl: url
+        error: err.message,
+        url,
       });
     }
   }
@@ -175,20 +124,14 @@ class User {
   // 登出
   async signout(req, res) {
     req.session.token = '';
-    req.app.locals.user = null;
-
-    return res.render('pages/transform', {
-      title: '退出成功',
-      type: 'success',
-      message: '退出成功'
-    });
+    req.session.user = null;
+    res.redirect('/');
   }
 
   // 积分榜前一百
   async renderUsersTop100(req, res) {
     const top100 = await API.getUsersTop({ count: 100 });
-
-    return res.render('pages/user/top100', {
+    res.render('pages/user/top100', {
       title: '积分榜前一百',
       top100
     });
@@ -202,7 +145,7 @@ class User {
     const info = await API.getUserById(uid);
     const data = await API.getUserAction(uid);
 
-    return res.render('pages/user/info', {
+    res.render('pages/user/info', {
       title: '动态 - 用户信息',
       type: 'action',
       info,
@@ -217,7 +160,7 @@ class User {
     const info = await API.getUserById(uid);
     const data = await API.getUserCreate(uid);
 
-    return res.render('pages/user/info', {
+    res.render('pages/user/info', {
       title: '专栏 - 用户信息',
       type: 'create',
       info,
@@ -232,7 +175,7 @@ class User {
     const info = await API.getUserById(uid);
     const data = await API.getUserLike(uid);
 
-    return res.render('pages/user/info', {
+    res.render('pages/user/info', {
       title: '喜欢 - 用户信息',
       type: 'like',
       info,
@@ -247,7 +190,7 @@ class User {
     const info = await API.getUserById(uid);
     const data = await API.getUserCollect(uid);
 
-    return res.render('pages/user/info', {
+    res.render('pages/user/info', {
       title: '收藏 - 用户信息',
       type: 'collect',
       info,
@@ -262,7 +205,7 @@ class User {
     const info = await API.getUserById(uid);
     const data = await API.getUserFollower(uid);
 
-    return res.render('pages/user/info', {
+    res.render('pages/user/info', {
       title: '粉丝 - 用户信息',
       type: 'follower',
       info,
@@ -277,7 +220,7 @@ class User {
     const info = await API.getUserById(uid);
     const data = await API.getUserFollowing(uid);
 
-    return res.render('pages/user/info', {
+    res.render('pages/user/info', {
       title: '关注 - 用户信息',
       type: 'following',
       info,
@@ -292,7 +235,7 @@ class User {
     const top100 = await API.getUsersTop();
     const user = await API.getUserById(id);
 
-    return res.render('pages/user/setting', {
+    res.render('pages/user/setting', {
       title: '个人资料',
       top100,
       user
@@ -309,19 +252,13 @@ class User {
 
     try {
       await API.updateSetting(req.body, token);
-
-      return res.render('pages/transform', {
-        title: '更新个人设置成功',
-        type: 'success',
-        message: '更新个人资料成功',
-        url: '/setting'
-      });
+      res.redirect('/setting');
     } catch(err) {
-      return res.render('pages/user/setting', {
+      res.render('pages/user/setting', {
         title: '个人资料',
-        error: err.error,
+        error: err.message,
         top100,
-        user
+        user,
       });
     }
   }
@@ -330,9 +267,9 @@ class User {
   async renderUpdatePass(req, res) {
     const data = await API.getUsersTop();
 
-    return res.render('pages/user/update_pass', {
+    res.render('pages/user/update_pass', {
       title: '修改密码',
-      top100: data
+      top100: data,
     });
   }
 
@@ -345,17 +282,12 @@ class User {
     try {
       await API.updatePass(req.body, token);
 
-      return res.render('pages/transform', {
-        title: '修改密码成功',
-        type: 'success',
-        message: '修改成功',
-        url: '/update_pass'
-      });
+      res.redirect('update_pass');
     } catch(err) {
-      return res.render('pages/user/update_pass', {
+      res.render('pages/user/update_pass', {
         title: '修改密码',
         error: err.error,
-        top100: data
+        top100: data,
       });
     }
   }
@@ -368,12 +300,12 @@ class User {
     try {
       const action = await API.followOrUn(uid, token);
 
-      return res.send({
+      res.send({
         status: 1,
-        action
+        action,
       });
     } catch(err) {
-      return res.send({
+      res.send({
         status: 0,
         message: err.error
       });

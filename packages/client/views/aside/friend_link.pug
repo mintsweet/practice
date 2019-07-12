@@ -1,0 +1,6 @@
+.block
+  .title 友情社区
+  .content
+    each item in config.friend_links
+      a.link(href=item.link, target="_blank")
+        img(src=item.logo)

@@ -85,7 +85,8 @@ const defaultConfig = {
 
   // 头部默认菜单
   menus: [
-    { name: '文档', url: 'https://docs.mintsweet.cn' }
+    { name: '快速开始', url: 'https://github.com/mintsweet/practice/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B' },
+    { name: '文档', url: 'https://github.com/mintsweet/practice/wiki' },
   ],
 
   friend_links: [

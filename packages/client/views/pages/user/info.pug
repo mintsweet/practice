@@ -11,13 +11,11 @@ block content
           if info.location
             span.practice &#xe602; #{info.location}
         h2 #{info.signature}
-        if user && info.id === user.id
+        if user && user.id === info.id
           if config.ALLOW_SIGNUP
             a.action(href=`/setting`) 编辑个人资料
-        else if user && !info.follow
-          a.action.follow_user(href="javascript:;", data-id=info.id) 关注
-        else if user && info.follow
-          a.action.follow_user(href="javascript:;", data-id=info.id) 取消关注
+        else if user
+          a#follow_user(href="javascript:;", data-id=info.id) #{ info.follow ? '取消关注' : '关注' }
     .user-gener
       .gener
         a(href=`/user/${info.id}`, class={active: type === 'action'}) 动态
@@ -79,32 +77,10 @@ block content
                       span.signature #{item.signature}
           else
             include ../../includes/empty.pug
-  aside.asider
-    .block
-      .title 个人成就
-      ul.content.user-stat
-        li
-          span.practice &#xe63b;
-          .gener.
-            获得喜欢#[span.count #{info.like_count}]次
-        li
-          span.practice &#xe65f;
-          .gener.
-            获得收藏#[span.count #{info.collect_count}]次
-        li
-          span.practice &#xe6a4;
-          .gener.
-            获得积分#[span.count #{info.score}]分
-    .user-follow
-      .item
-        .title 关注了
-        a.count(href=`/user/${info.id}/following`) #{info.following_count}
-      .item
-        .title 关注者
-        a.count(href=`/user/${info.id}/follower`) #{info.follower_count}
-    .user-collect
-      a(href=`/user/${info.id}/collect`) 收藏集
-  .global-message
+  .aside
+    include ../../aside/user_stat.pug
+    include ../../aside/user_follow.pug
+    include ../../aside/user_collect.pug
 append footer
   script.
     $('.user-gener .gener>span').hover(function() {
