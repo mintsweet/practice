@@ -1,3 +1,18 @@
+function globalMessage(type = 'error', message = '', duration = 3000) {
+  const html = $(`
+    <div class="global-message">
+      <div class="content ${type}">${message}</div>
+    </div>
+  `);
+
+  $('body').append(html);
+  $('body .global-message').fadeIn();
+
+  setTimeout(function() {
+    $('body .global-message').remove();
+  }, duration);
+}
+
 (function(window, document, $) {
   const Mints = {};
 
@@ -13,21 +28,6 @@
       container.toggleClass('slide-left');
     });
   };
-
-  function globalMessage(type = 'error', message = '', duration = 3000) {
-    const html = $(`
-      <div class="global-message">
-        <div class="content ${type}">${message}</div>
-      </div>
-    `);
-
-    $('body').append(html);
-    $('body .global-message').fadeIn();
-
-    setTimeout(function() {
-      $('body .global-message').remove();
-    }, duration);
-  }
 
   // 话题点赞
   Mints.likeTopic = () => {
@@ -70,22 +70,6 @@
           globalMessage('error', res.message);
         }
       });
-    });
-  };
-
-  // 回复编辑
-  Mints.editReply = () => {
-    $('#reply_update').click(function() {
-      $('#js_reply_reply').slideUp();
-      $(this).siblings('#js_reply_save').slideToggle();
-    });
-  };
-
-  // 回复回复
-  Mints.replyReply = () => {
-    $('#reply_reply').click(function() {
-      $('#js_reply_save').slideUp();
-      $(this).siblings('#js_reply_reply').slideToggle();
     });
   };
 

@@ -65,3 +65,14 @@ block content
       span#reply_count.number #{topic.reply_count}
     a#topic_collect.mints.mints-collect(href="javascript:;", class={ active: collect })
       span.number #{topic.collect_count}
+append footer
+  script.
+    $('#reply_update').click(function() {
+      $('#js_reply_reply').slideUp();
+      $(this).siblings('#js_reply_save').slideToggle();
+    });
+
+    $('#reply_reply').click(function() {
+      $('#js_reply_save').slideUp();
+      $(this).siblings('#js_reply_reply').slideToggle();
+    });

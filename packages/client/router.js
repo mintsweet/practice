@@ -18,12 +18,6 @@ router.get('/', wrap(Site.renderIndex));
 if (ALLOW_SIGNUP) {
   router.get('/signup', wrap(User.renderSignup));
   router.post('/signup', wrap(User.signup));
-  router.get('/forget_pass', wrap(User.renderForgetPass));
-  router.post('/forget_pass', wrap(User.forgetPass));
-  router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
-  router.post('/setting', Auth.userRequired, wrap(User.setting));
-  router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
-  router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
 } else {
   router.get('/auth/github', passport.authenticate('github'));
   router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), User.github);
@@ -33,6 +27,12 @@ router.get('/captcha', wrap(Site.getCaptcha));
 router.get('/signin', wrap(User.renderSignin));
 router.post('/signin', wrap(User.signin));
 router.get('/signout', wrap(User.signout));
+router.get('/forget_pass', wrap(User.renderForgetPass));
+router.post('/forget_pass', wrap(User.forgetPass));
+router.get('/setting', Auth.userRequired, wrap(User.renderSetting));
+router.post('/setting', Auth.userRequired, wrap(User.setting));
+router.get('/update_pass', Auth.userRequired, wrap(User.renderUpdatePass));
+router.post('/update_pass', Auth.userRequired, wrap(User.updatePass));
 
 // 用户
 router.get('/users/top100', wrap(User.renderUsersTop100));
