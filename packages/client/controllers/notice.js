@@ -6,7 +6,7 @@ class Notice {
     const { token } = req.session;
     const data = await API.getUserNotice(token);
 
-    return res.render('pages/notice', {
+    res.render('pages/notice', {
       title: '用户消息',
       type: 'user',
       data,
@@ -18,7 +18,7 @@ class Notice {
     const { token } = req.session;
     const data = await API.getSystemNotice(token);
 
-    return res.render('pages/notice', {
+    res.render('pages/notice', {
       title: '系统消息',
       type: 'system',
       data,

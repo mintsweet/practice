@@ -9,7 +9,7 @@ block content
         h1
           | #{info.nickname}
           if info.location
-            span.practice &#xe602; #{info.location}
+            span.mints.mints-location #{info.location}
         h2 #{info.signature}
         if user && user.id === info.id
           if config.ALLOW_SIGNUP
@@ -42,10 +42,10 @@ block content
               a.topic(href=`/topic/${item.id}`) #{item.title}
               .desc
                 span
-                  i.practice &#xe63b;
+                  i.mints.mints-star
                   | #{item.like_count}
                 span
-                  i.practice &#xe65f;
+                  i.mints.mints-collect
                   | #{item.collect_count}
                 span 阅读数 #{item.visit_count}
           else

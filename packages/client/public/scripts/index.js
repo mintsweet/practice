@@ -5,7 +5,5 @@ $(document).ready(function() {
   window.Mints.likeTopic();
   window.Mints.collectTopic();
   window.Mints.deleteReply();
-  window.Mints.editReply();
   window.Mints.upReply();
-  window.Mints.replyReply();
 });

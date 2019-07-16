@@ -9,19 +9,9 @@ class Reply {
     try {
       await API.createReply(tid, req.body, token);
 
-      return res.render('pages/transform', {
-        title: '创建回复成功',
-        type: 'success',
-        message: '创建回复成功',
-        url: `/topic/${tid}`
-      });
+      res.redirect(`/topic/${tid}`);
     } catch(err) {
-      return res.render('pages/transform', {
-        title: '创建回复失败',
-        type: 'error',
-        message: err.message,
-        url: `/topic/${tid}`
-      });
+      res.redirect(`/topic/${tid}`);
     }
   }
 
@@ -33,14 +23,9 @@ class Reply {
     try {
       await API.deleteReply(rid, token);
 
-      return res.send({
-        status: 1
-      });
+      return res.send({ status: 1 });
     } catch(err) {
-      return res.send({
-        status: 0,
-        message: err.message
-      });
+      return res.send({ status: 0, message: err.message });
     }
   }
 
@@ -53,19 +38,9 @@ class Reply {
     try {
       await API.editReply(rid, { content }, token);
 
-      return res.render('pages/transform', {
-        title: '编辑回复成功',
-        type: 'success',
-        message: '编辑回复成功',
-        url: `/topic/${tid}`
-      });
+      res.redirect(`/topic/${tid}`);
     } catch(err) {
-      return res.render('pages/transform', {
-        title: '编辑回复失败',
-        type: 'error',
-        message: '编辑回复失败',
-        url: `/topic/${tid}`
-      });
+      res.redirect(`/topic/${tid}`);
     }
   }
 
@@ -76,15 +51,9 @@ class Reply {
 
     try {
       const action = await API.upOrDown(rid, token);
-      return res.send({
-        status: 1,
-        action
-      });
+      return res.send({ status: 1, action });
     } catch(err) {
-      return res.send({
-        status: 0,
-        messsage: err.error
-      });
+      return res.send({ status: 0, messsage: err.error });
     }
   }
 }

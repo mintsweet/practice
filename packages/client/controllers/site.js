@@ -15,7 +15,7 @@ class Site extends Base {
       size: 20,
     });
 
-    return res.render('pages/index', {
+    res.render('pages/index', {
       title: '首页',
       topics: data.topics,
       totalPage: data.totalPage,
@@ -30,10 +30,8 @@ class Site extends Base {
   // 获取验证码
   async getCaptcha(req, res) {
     const url = this.getCaptchaUrl(req);
-    return res.send({
-      status: 1,
-      url,
-    });
+
+    res.send({ status: 1, url });
   }
 }
 
