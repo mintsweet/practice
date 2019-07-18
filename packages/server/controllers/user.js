@@ -233,7 +233,7 @@ class User extends Base {
   // 获取当前用户信息
   async getCurrentUser(ctx) {
     const { id } = ctx.state.user;
-    const user = await UserProxy.getById(id);
+    const user = await UserProxy.getById(id, 'email nickname avatar location signature score');
     ctx.body = user;
   }
 

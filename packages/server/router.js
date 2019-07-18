@@ -17,17 +17,17 @@ router.get('/', ctx => { ctx.body = 'Welcome to mints api'; }); // API 测试
 if (ALLOW_SIGNUP) {
   router.post('/signup', User.signup); // 注册
   router.get('/set_active', User.setActive); // 账户激活
-  router.post('/forget_pass', User.forgetPass); // 忘记密码
-  router.post('/reset_pass', User.resetPass); // 重置密码
-  router.post('/upload_avatar', Auth.userRequired, User.uploadAvatar); // 头像上传
-  router.put('/setting', Auth.userRequired, User.updateSetting); // 更新个人信息
-  router.patch('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
 } else {
   router.post('/github', User.github); // Github 登录
 }
 
 router.get('/captcha', Aider.getCaptcha); // 获取图形验证码
 router.post('/signin', User.signin); // 登录
+router.post('/forget_pass', User.forgetPass); // 忘记密码
+router.post('/reset_pass', User.resetPass); // 重置密码
+router.post('/upload_avatar', Auth.userRequired, User.uploadAvatar); // 头像上传
+router.put('/setting', Auth.userRequired, User.updateSetting); // 更新个人信息
+router.patch('/update_pass', Auth.userRequired, User.updatePass); // 修改密码
 router.get('/info', Auth.userRequired, User.getCurrentUser); // 获取当前用户信息
 
 const routerV1 = new Router({ prefix: '/v1' });

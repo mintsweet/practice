@@ -9,7 +9,7 @@ class User extends Base {
   async getUserTop(ctx) {
     const { count = 10 } = ctx.query;
     const limit = parseInt(count);
-    const users = await UserProxy.get({}, '', { limit, sort: '-score' });
+    const users = await UserProxy.get({}, 'nickname avatar score topic_count like_count collect_count follow_count', { limit, sort: '-score' });
     ctx.body = users;
   }
 
@@ -18,7 +18,7 @@ class User extends Base {
     const { uid } = ctx.params;
     const { user: current } = ctx.state;
 
-    const user = await UserProxy.getById(uid);
+    const user = await UserProxy.getById(uid, 'nickname avatar location signature score follower_count following_count');
 
     if (!user) {
       ctx.throw(404, '用户不存在');
