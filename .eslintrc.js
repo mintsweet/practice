@@ -3,6 +3,7 @@ const eslintConfig = {
 
   env: {
     jquery: true,
+    mocha: true,
   },
 };
 
