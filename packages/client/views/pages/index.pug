@@ -1,7 +1,7 @@
 extends ../layout.pug
 
 block content
-  .content
+  .content.has-bg
     .tab-list
       each item in [{ name: '全部', tag: 'all' }, { name: '精华', tag: 'good' }].concat(tabs)
         a(href=`?tab=${item.tag}`, class={ active: currentTab === item.tag }) #{item.name}

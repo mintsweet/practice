@@ -1,18 +1,15 @@
-.notice-page {
-  background-color: @global-bg-color !important;
+.notice-item {
+  margin-bottom: 10px;
+  padding: 25px 20px;
+  background: @white;
+  border-radius: 4px;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, .05);
 
-  .item {
-    margin-bottom: 10px;
-    padding: 25px 20px;
-    background: @white;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, .1);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+  &:last-child {
+    margin-bottom: 0;
   }
 
-  .follow {
+  &.follow {
     .title {
       padding: 0 10px;
 
@@ -48,7 +45,7 @@
     }
   }
 
-  .topic {
+  &.topic {
     display: flex;
 
     .avatar {

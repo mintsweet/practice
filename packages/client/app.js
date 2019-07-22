@@ -38,7 +38,7 @@ app.use(session({
   })
 }));
 app.use(passport.initialize());
-app.use(Auth.getUserInfo);
+app.use(Auth.validaUser);
 
 // router
 app.use('/', routes);
