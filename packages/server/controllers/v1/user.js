@@ -18,7 +18,7 @@ class User extends Base {
     const { uid } = ctx.params;
     const { user: current } = ctx.state;
 
-    const user = await UserProxy.getById(uid, 'nickname avatar location signature score follower_count following_count');
+    const user = await UserProxy.getById(uid, 'nickname avatar location signature score like_count collect_count follower_count following_count');
 
     if (!user) {
       ctx.throw(404, '用户不存在');

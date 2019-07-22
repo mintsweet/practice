@@ -166,20 +166,12 @@ class Topic {
       });
     }));
 
-    const promiseLastReply = await Promise.all(topics.map(item => {
-      return new Promise(resolve => {
-        resolve(UserProxy.getById(item.last_reply, 'id nickname avatar'));
-      });
-    }));
-
     const list = topics.map((item, i) => {
       return {
         ...item.toObject({
           virtuals: true
         }),
         author: promiseAuthor[i],
-        last_reply_author: promiseLastReply[i],
-        last_reply_at_ago: item.last_reply_at_ago()
       };
     });
 
@@ -221,11 +213,6 @@ class Topic {
       });
     }));
 
-    const promiseLastReply = await Promise.all(topics.map(item => {
-      return new Promise(resolve => {
-        resolve(UserProxy.getById(item.last_reply, 'id nickname avatar'));
-      });
-    }));
 
     const list = topics.map((item, i) => {
       return {
@@ -233,8 +220,6 @@ class Topic {
           virtuals: true
         }),
         author: promiseAuthor[i],
-        last_reply_author: promiseLastReply[i],
-        last_reply_at_ago: item.last_reply_at_ago()
       };
     });
 
