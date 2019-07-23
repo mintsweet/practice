@@ -19,10 +19,9 @@ const http = async (url, data, method = 'GET', token = '') => {
   }
 
   try {
-    const res = await rq(options);
-    return res;
+    return await rq(options);
   } catch(err) {
-    throw new Error(err);
+    throw new Error(err.error);
   }
 };
 

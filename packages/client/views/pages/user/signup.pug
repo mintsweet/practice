@@ -19,7 +19,7 @@ block content
           input#nickname(type="text", name="nickname", minlength="2", maxlength="8", placeholder="请输入昵称", autocomplete="off")
         .form-item
           label(for="captcha") 验证码：
-          input#cpatcha(type="text", name="captcha", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
+          input#captcha(type="text", name="captcha", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
           img#js-captcha(src=url, alt="验证码")
         .form-item
           button.btn(type="submit") 立即注册
@@ -33,24 +33,24 @@ block content
 append footer
   script.
     var nickname = $('#nickname');
-    var mobile = $('#email');
+    var email = $('#email');
     var password = $('#password');
     var captcha = $('#captcha');
     var alert = $('.alert');
 
     $('#signupForm').submit(function() {
-      if (!nickname.val() || nickname.val().length > 6 || nickname.val().length < 2) {
-        alert.text('请填写2-6位的昵称').slideDown();
-        return false;
-      }
-
       if (!email.val() || !(/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(email.val()))) {
-        alert.text('请填写正确格式的手机号').slideDown();
+        alert.text('请填写正确格式的邮箱').slideDown();
         return false;
       }
 
       if (!password.val() || !/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/.test(password.val())) {
         alert.text('请填写6-18位数字、字母和特殊字符任意两种组合').slideDown();
+        return false;
+      }
+
+      if (!nickname.val() || nickname.val().length > 6 || nickname.val().length < 2) {
+        alert.text('请填写2-6位的昵称').slideDown();
         return false;
       }
 

@@ -46,6 +46,11 @@ class Site {
       res.send({ status: 0, message: err.message });
     }
   }
+
+  async sendMail(req, res) {
+    // const { email } = req.query;
+    res.send({ status: 1 });
+  }
 }
 
 module.exports = new Site();

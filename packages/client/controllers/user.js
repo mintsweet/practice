@@ -7,7 +7,7 @@ const getCaptchaUrl = async req => {
 
   req.session.captcha = {
     token: data.token,
-    expired: Date.now() + 1000 * 60 * 10,
+    expired: Date.now() + 1000 * 60 * 3,
   };
 
   return data.url;
@@ -37,7 +37,6 @@ class User {
   // 渲染注册页
   async renderSignup(req, res) {
     const url = await getCaptchaUrl(req);
-
     res.render(
       'pages/user/signup',
       {
@@ -62,16 +61,14 @@ class User {
       await API.signup({ nickname, email, password });
 
       res.render(
-        'pages/jump',
+        'pages/user/email',
         {
-          type: 'success',
-          url: '/',
-          message: '注册成功',
+          title: '注册',
+          email,
         }
       );
     } catch(err) {
       const url = await getCaptchaUrl(req);
-
       res.render(
         'pages/user/signup',
         {
@@ -85,7 +82,6 @@ class User {
 
   async renderSignin(req, res) {
     const url = await getCaptchaUrl(req);
-
     res.render(
       'pages/user/signin',
       {
@@ -107,18 +103,14 @@ class User {
         throw new Error('图形验证码已经失效了，请重新获取');
       }
 
-      req.session.token = await API.signin({ email, password });
+      req.session.token = await API.signin({
+        email,
+        password,
+      });
 
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: '/',
-        }
-      );
+      res.redirect('/');
     } catch(err) {
       const url = await getCaptchaUrl(req);
-
       res.render(
         'pages/user/signin',
         {
@@ -133,7 +125,6 @@ class User {
   // 忘记密码页
   async renderForgetPass(req, res) {
     const url = await getCaptchaUrl(req);
-
     res.render(
       'pages/user/forget_pass',
       {
@@ -157,10 +148,15 @@ class User {
 
       await API.forgetPass({ email });
 
-      res.redirect('/signin');
+      res.render(
+        'pages/user/email',
+        {
+          title: '忘记密码',
+          email,
+        }
+      );
     } catch(err) {
-      const url = await this.getCaptchaUrl(req);
-
+      const url = await getCaptchaUrl(req);
       res.render(
         'pages/user/forget_pass',
         {
@@ -175,7 +171,7 @@ class User {
   // 登出
   async signout(req, res) {
     req.session.token = '';
-    req.session.user = null;
+    req.app.locals.user = null;
     res.redirect('/');
   }
 

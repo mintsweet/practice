@@ -144,5 +144,30 @@ function globalMessage(type = 'error', message = '', duration = 3000) {
     });
   };
 
+  Mints.sendMail = () => {
+    $('#email').click(function() {
+      if ($(this).hasClass('disabled')) return;
+
+      $.get(`/send_mail?email=${$(this).attr('data-email')}`, res => {
+        if (res.status === 1) {
+          $(this).addClass('disabled');
+          let i = 60;
+          const timer = setInterval(() => {
+            i -= 1;
+            if (i === 0) {
+              $(this).html('重新获取').removeClass('disabled');
+              clearInterval(timer);
+              return;
+            }
+
+            $(this).html(`请在${i}s后重试`);
+          }, 1000);
+        } else {
+          globalMessage('error', res.message);
+        }
+      });
+    });
+  };
+
   window.Mints = Mints;
 }(window, document, jQuery));

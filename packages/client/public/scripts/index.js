@@ -6,4 +6,5 @@ $(document).ready(function() {
   window.Mints.collectTopic();
   window.Mints.deleteReply();
   window.Mints.upReply();
+  window.Mints.sendMail();
 });
