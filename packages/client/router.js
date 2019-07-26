@@ -24,7 +24,7 @@ if (ALLOW_SIGNUP) {
 }
 
 router.get('/captcha', wrap(Site.getCaptcha));
-router.get('/send_mail', wrap(Site.sendMail));
+router.get('/send_mail', wrap(User.sendMail));
 router.get('/signin', wrap(User.renderSignin));
 router.post('/signin', wrap(User.signin));
 router.get('/signout', wrap(User.signout));

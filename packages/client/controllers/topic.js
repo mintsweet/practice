@@ -2,7 +2,7 @@ const API = require('../utils/api');
 const md2html = require('../utils/md2html');
 
 class Topic {
-  // 创建话题
+  // 渲染创建话题页
   renderCreate(req, res) {
     res.render(
       'pages/topic/create',
@@ -18,7 +18,6 @@ class Topic {
 
     try {
       await API.createTopic(req.body, token);
-
       res.render(
         'pages/jump',
         {
@@ -45,7 +44,6 @@ class Topic {
 
     try {
       await API.deleteTopic(tid, token);
-
       res.render(
         'pages/jump',
         {
@@ -70,7 +68,6 @@ class Topic {
   async renderEdit(req, res) {
     const { tid } = req.params;
     const data = await API.getTopicById(tid);
-
     res.render(
       'pages/topic/create',
       {
@@ -87,7 +84,6 @@ class Topic {
 
     try {
       await API.editTopic(tid, req.body, token);
-
       res.render(
         'pages/jump',
         {
@@ -159,7 +155,6 @@ class Topic {
 
     try {
       const action = await API.likeOrUn(tid, token);
-
       res.send({ status: 1, action });
     } catch(err) {
       res.send({ status: 0, message: err.message });
@@ -173,7 +168,6 @@ class Topic {
 
     try {
       const action = await API.collectOrUn(tid, token);
-
       res.send({ status: 1, action });
     } catch(err) {
       return res.send({ status: 0, message: err.message });

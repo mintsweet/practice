@@ -25,14 +25,17 @@ const http = async (url, data, method = 'GET', token = '') => {
   }
 };
 
-// 获取验证码
-exports.getCaptcha = params => http('/captcha', params);
-
 // GitHub 登录
 exports.github = params => http('/github', params, 'POST');
 
 // 注册
 exports.signup = params => http('/signup', params, 'POST');
+
+// 获取验证码
+exports.getCaptcha = params => http('/captcha', params);
+
+// 发送验证邮件
+exports.sendMail = params => http('/send_mail', params);
 
 // 登录
 exports.signin = params => http('/signin', params, 'POST');

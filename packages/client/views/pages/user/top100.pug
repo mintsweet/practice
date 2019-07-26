@@ -18,8 +18,6 @@ block content
           tr
             td #{index + 1}
             td
-              a.avatar(href=`/user/${item.id}`)
-                img(src=item.avatar)
               a.nickname(href=`/user/${item.id}`) #{item.nickname}
             td #{item.score}
             td #{item.topic_count}

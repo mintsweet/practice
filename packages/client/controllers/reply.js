@@ -36,7 +36,6 @@ class Reply {
 
     try {
       await API.deleteReply(rid, token);
-
       res.send({ status: 1 });
     } catch(err) {
       res.send({ status: 0, message: err.message });
@@ -51,7 +50,6 @@ class Reply {
 
     try {
       await API.editReply(rid, { content }, token);
-
       res.render(
         'pages/jump',
         {
@@ -79,7 +77,6 @@ class Reply {
 
     try {
       const action = await API.upOrDown(rid, token);
-
       res.send({ status: 1, action });
     } catch(err) {
       res.send({ status: 0, messsage: err.error });

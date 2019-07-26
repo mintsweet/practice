@@ -388,6 +388,17 @@ class User {
       });
     }
   }
+
+  async sendMail(req, res) {
+    const { email } = req.query;
+
+    try {
+      await API.sendMail(email);
+      res.send({ status: 1 });
+    } catch(err) {
+      res.send({ status: 0, message: err.message });
+    }
+  }
 }
 
 module.exports = new User();
