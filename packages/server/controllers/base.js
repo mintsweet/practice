@@ -3,13 +3,11 @@ const bcrypt = require('bcryptjs');
 const qiniu = require('qiniu');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { qn: { ACCESS_KEY, SECRET_KEY, BUCKET_NAME, ZONE }, mail, SALT_WORK_FACTOR } = require('../../../config');
-
-// 方便集成测试的时候同时隐藏七牛 access_key 和 secret_key
-const QN_ACCESS_KEY = ACCESS_KEY || process.env.QN_ACCESS_KEY;
-const QN_SECRET_KEY = SECRET_KEY || process.env.QN_SECRET_KEY;
-const QN_BUCKET_NAME = BUCKET_NAME || process.env.QN_BUCKET_NAME;
-const QN_ZONE = ZONE || process.env.QN_ZONE;
+const {
+  qn: { ACCESS_KEY, SECRET_KEY, BUCKET_NAME, ZONE },
+  mail: { HOST, PORT, SECURE, AUTH },
+  SALT_WORK_FACTOR,
+} = require('../../../config');
 
 module.exports = class Base {
   // 生成随机数
@@ -38,15 +36,17 @@ module.exports = class Base {
 
   // 七牛图片上传
   _uploadImgByQn(name, local) {
-    const mac = new qiniu.auth.digest.Mac(QN_ACCESS_KEY, QN_SECRET_KEY);
+    if (process.env.NODE_ENV === 'test') return '';
+
+    const mac = new qiniu.auth.digest.Mac(ACCESS_KEY, SECRET_KEY);
     const putPolicy = new qiniu.rs.PutPolicy({
-      scope: `${QN_BUCKET_NAME}:${name}`
+      scope: `${BUCKET_NAME}:${name}`
     });
 
     const uploadToken = putPolicy.uploadToken(mac);
 
     const config = new qiniu.conf.Config();
-    config.zone = qiniu.zone[QN_ZONE];
+    config.zone = qiniu.zone[ZONE];
     const formUploader = new qiniu.form_up.FormUploader(config);
     const putExtra = new qiniu.form_up.PutExtra();
 
@@ -63,24 +63,22 @@ module.exports = class Base {
     });
   }
 
-  // 七牛图片删除
-  static _deleteImgByQn(name) {
-    const mac = new qiniu.auth.digest.Mac(QN_ACCESS_KEY, QN_SECRET_KEY);
-    const config = new qiniu.conf.Config();
-    config.zone = qiniu.zone.Zone_z0;
-    const bucketManager = new qiniu.rs.BucketManager(mac, config);
-
-    return new Promise((resolve, reject) => {
-      bucketManager.delete(BUCKET_NAME, name, (err, respBody, respInfo) => {
-        if (err) reject(err);
-        resolve(respInfo.statusCode);
-      });
-    });
-  }
-
   // 邮件发送
-  _sendMail(opts) {
-    const transporter = nodemailer.createTransport(mail);
+  _sendMail(email, content) {
+    if (process.env.NODE_ENV === 'test') return '';
+
+    const transporter = nodemailer.createTransport({
+      host: HOST,
+      port: PORT,
+      secure: SECURE,
+      auth: AUTH,
+    });
+
+    const opts = {
+      from: 'Mints(薄荷糖社区) <email@mintsweet.cn>',
+      to: email,
+      html: content,
+    };
 
     return new Promise((resolve, reject) => {
       transporter.sendMail(opts, (err, info) => {

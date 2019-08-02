@@ -22,6 +22,7 @@ if (ALLOW_SIGNUP) {
 }
 
 router.get('/captcha', Aider.getCaptcha); // 获取图形验证码
+router.get('/send_mail', User.sendMail); // 发送验证邮件
 router.post('/signin', User.signin); // 登录
 router.post('/forget_pass', User.forgetPass); // 忘记密码
 router.post('/reset_pass', User.resetPass); // 重置密码

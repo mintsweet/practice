@@ -63,8 +63,8 @@ const defaultConfig = {
   // 邮件配置
   mail: {
     HOST: '',
-    PORT: 465,
-    SECRET: true,
+    PORT: 587,
+    SECURE: false,
     AUTH: {
       user: '',
       pass: '',

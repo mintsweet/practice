@@ -6,7 +6,7 @@ const { jwt: { SECRET, EXPIRSE, REFRESH }, qn: { DONAME } } = require('../../../
 const redis = require('../db/redis');
 const UserProxy = require('../proxy/user');
 
-const QN_DONAME = DONAME || process.env.QN_DONAME;
+const ENV = process.env.NODE_ENV;
 
 class User extends Base {
   constructor() {
@@ -117,17 +117,16 @@ class User extends Base {
       nickname
     });
 
-    // 随机的uuid
-    const secret = uuid();
-    const key = `${email}&${secret}`;
-
     // 加密
-    const token = await this._md5(key);
+    const token = await this._md5(`${email}&${uuid()}`);
     await redis.set(email, token, 'EX', 60 * 30);
 
     const url = `/set_active?token=${token}&email=${email}`;
 
-    ctx.body = url;
+    if (ENV !== 'production') ctx.body = url;
+
+    await this._sendMail(email, url);
+    ctx.body = '';
   }
 
   // 账户激活
@@ -158,6 +157,10 @@ class User extends Base {
     // 判断用户是否存在
     if (!user) {
       ctx.throw(404, '尚未注册');
+    }
+
+    if (!user.active) {
+      ctx.throw(401, '邮箱账户尚未激活');
     }
 
     const isMatch = await this._comparePass(password, user.password);
@@ -206,7 +209,10 @@ class User extends Base {
 
     const url = `/reset_pass?token=${token}&email=${email}`;
 
-    ctx.body = url;
+    if (ENV !== 'production') ctx.body = url;
+
+    await this._sendMail(email, url);
+    ctx.body = '';
   }
 
   // 重置密码
@@ -286,12 +292,19 @@ class User extends Base {
     const { id } = ctx.state.user;
     const { avatar } = ctx.request.files;
 
+    if (ENV !== 'production') ctx.body = '';
+
     try {
       const avatarName = await this._uploadImgByQn(`avatar_${id}.${avatar.path.split('.')[1]}`, avatar.path);
-      ctx.body = `${QN_DONAME}/${avatarName}`;
+      ctx.body = `${DONAME}/${avatarName}`;
     } catch(err) {
       throw new Error(err);
     }
+  }
+
+  // 发送验证邮件
+  sendMail(ctx) {
+    ctx.body = '';
   }
 }
 

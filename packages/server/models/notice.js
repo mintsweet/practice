@@ -18,7 +18,7 @@ const { ObjectId } = Schema;
 const NoticeSchema = new Schema({
   type: { type: String, required: true },
 
-  target_id: { type: ObjectId, required: true },
+  target_id: { type: ObjectId },
   author_id: { type: ObjectId },
   topic_id: { type: ObjectId },
   reply_id: { type: ObjectId },

@@ -71,6 +71,7 @@ User.findOne((err, data) => {
       nickname: NICKNAME,
       avatar: AVATAR,
       role: 101,
+      active: true,
     });
   }
 });
