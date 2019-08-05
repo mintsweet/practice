@@ -10,6 +10,7 @@ exports.createUser = function(email, nickname, other = {}) {
     email,
     password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10)),
     nickname,
+    active: true,
     ...other
   });
 };

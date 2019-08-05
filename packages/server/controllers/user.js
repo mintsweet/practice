@@ -209,10 +209,12 @@ class User extends Base {
 
     const url = `/reset_pass?token=${token}&email=${email}`;
 
-    if (ENV !== 'production') ctx.body = url;
-
-    await this._sendMail(email, url);
-    ctx.body = '';
+    if (ENV === 'production') {
+      await this._sendMail(email, url);
+      ctx.body = '';
+    } else {
+      ctx.body = url;
+    }
   }
 
   // 重置密码
@@ -292,13 +294,15 @@ class User extends Base {
     const { id } = ctx.state.user;
     const { avatar } = ctx.request.files;
 
-    if (ENV !== 'production') ctx.body = '';
-
-    try {
-      const avatarName = await this._uploadImgByQn(`avatar_${id}.${avatar.path.split('.')[1]}`, avatar.path);
-      ctx.body = `${DONAME}/${avatarName}`;
-    } catch(err) {
-      throw new Error(err);
+    if (ENV === 'production') {
+      try {
+        const avatarName = await this._uploadImgByQn(`avatar_${id}.${avatar.path.split('.')[1]}`, avatar.path);
+        ctx.body = `${DONAME}/${avatarName}`;
+      } catch(err) {
+        throw new Error(err);
+      }
+    } else {
+      ctx.body = '';
     }
   }
 
