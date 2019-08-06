@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Plugin = require('./plugin');
-const { root: { EMAIL, PASSWORD, NICKNAME, AVATAR }, SALT_WORK_FACTOR } = require('../../../config');
+const { root: { EMAIL, PASSWORD, NICKNAME, AVATAR }, SALT_WORK_FACTOR, DEFAULT_AVATAR } = require('../../../config');
 
 const { Schema } = mongoose;
 
@@ -12,7 +12,7 @@ const UserSchema = new Schema({
 
   // 用户信息
   nickname: { type: String, required: true },
-  avatar: { type: String, default: '' },
+  avatar: { type: String, default: DEFAULT_AVATAR },
   location: { type: String, default: '' },
   signature: { type: String, default: '' },
 

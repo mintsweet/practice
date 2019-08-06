@@ -123,10 +123,12 @@ class User extends Base {
 
     const url = `/set_active?token=${token}&email=${email}`;
 
-    if (ENV !== 'production') ctx.body = url;
-
-    await this._sendMail(email, url);
-    ctx.body = '';
+    if (ENV !== 'production') {
+      ctx.body = url;
+    } else {
+      await this._sendMail(email, url);
+      ctx.body = '';
+    }
   }
 
   // 账户激活
@@ -197,6 +199,10 @@ class User extends Base {
     // 判断用户是否存在
     if (!user) {
       ctx.throw(404, '尚未注册');
+    }
+
+    if (!user.active) {
+      ctx.throw(401, '邮箱账户尚未激活');
     }
 
     // 随机的uuid
