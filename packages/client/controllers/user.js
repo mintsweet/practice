@@ -34,7 +34,7 @@ class User {
     res.redirect('/');
   }
 
-  // 渲染注册页
+  // 注册页
   async renderSignup(req, res) {
     const url = await getCaptchaUrl(req);
     res.render(
@@ -80,6 +80,7 @@ class User {
     }
   }
 
+  // 登录页
   async renderSignin(req, res) {
     const url = await getCaptchaUrl(req);
     res.render(
@@ -175,7 +176,7 @@ class User {
     res.redirect('/');
   }
 
-  // 积分榜前一百
+  // 积分榜前一百页
   async renderUsersTop100(req, res) {
     const top100 = await API.getUsersTop({ count: 100 });
 
@@ -187,7 +188,6 @@ class User {
       }
     );
   }
-
 
   // 个人信息页
   async renderUserInfo(req, res) {

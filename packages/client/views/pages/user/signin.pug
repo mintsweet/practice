@@ -7,7 +7,7 @@ block content
       | 用户登录
     .content
       form#signinForm(method="post")
-        #js-alert.alert.alert-error(class={ hidden: !error }) #{error}
+        .alert.alert-error(class={ hidden: !error }) #{error}
         .form-item
           label(for="email") 邮箱：
           input#email(type="text", name="email",placeholder="请输入邮箱", autocomplete="off")
@@ -30,12 +30,18 @@ block content
 append footer
   script.
     var email = $('#email');
+    var password = $('#password');
     var captcha = $('#captcha');
     var alert = $('.alert');
 
     $('#signinForm').submit(function() {
       if (!email.val() || !(/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(email.val()))) {
         alert.text('请填写正确格式的邮箱').slideDown();
+        return false;
+      }
+
+      if (!password.val()) {
+        alert.text('请输入密码').slideDown();
         return false;
       }
 
