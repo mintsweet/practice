@@ -24,7 +24,7 @@ const defaultConfig = {
   },
 
   // 是否允许注册
-  ALLOW_SIGNUP: true,
+  ALLOW_SIGNUP: false,
 
   // GitHub 鉴权配置
   github: {

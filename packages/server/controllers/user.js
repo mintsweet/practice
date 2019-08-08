@@ -43,19 +43,21 @@ class User extends Base {
       ctx.throw(401, 'GitHub 授权失败');
     }
 
-    const existUser = await UserProxy.getOne({ email: profile.email });
+    let existUser = await UserProxy.getOne({ email: profile.email });
 
     if (existUser) {
-      existUser.avatar = profile.avatar_url;
-      existUser.location = profile.location;
-      existUser.signature = profile.bio;
-      existUser.github_id = profile.id;
-      existUser.github_username = profile.name;
-      existUser.github_access_token = accessToken;
+      if (!existUser.github_id) {
+        existUser.avatar = profile.avatar_url;
+        existUser.location = profile.location;
+        existUser.signature = profile.bio;
+        existUser.github_id = profile.id;
+        existUser.github_username = profile.name;
+        // existUser.github_access_token = accessToken;
 
-      await existUser.save();
+        await existUser.save();
+      }
     } else {
-      await UserProxy.create({
+      existUser = await UserProxy.create({
         email: profile.email,
         nickname: profile.name,
         avatar: profile.avatar_url,
@@ -63,16 +65,14 @@ class User extends Base {
         signature: profile.bio,
         github_id: profile.id,
         github_username: profile.name,
-        github_access_token: accessToken,
+        // github_access_token: accessToken,
       });
     }
 
-    const user = await UserProxy.getOne({ github_id: profile.id });
-
     const token = jwt.sign(
       {
-        id: user.id,
-        role: user.role,
+        id: existUser.id,
+        role: existUser.role,
         exp: Date.now() + EXPIRSE,
         ref: Date.now() + REFRESH,
       },
