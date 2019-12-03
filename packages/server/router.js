@@ -14,7 +14,7 @@ const router = new Router();
 
 router.get('/', ctx => { ctx.body = 'Welcome to mints api'; }); // API 测试
 
-if (ALLOW_SIGNUP) {
+if (ALLOW_SIGNUP || process.env.NODE_ENV === 'test') {
   router.post('/signup', User.signup); // 注册
   router.get('/set_active', User.setActive); // 账户激活
 } else {
