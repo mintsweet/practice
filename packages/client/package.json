@@ -4,14 +4,8 @@
   "license": "MIT",
   "scripts": {
     "gulp": "gulp",
-    "start": "cross-env NODE_ENV=development npm run gulp",
-    "build": "cross-env NODE_ENV=production npm run gulp build",
-    "test": "cross-env NODE_ENV=test jest"
-  },
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true,
-    "coverageDirectory": "coverage"
+    "dev": "cross-env NODE_ENV=development npm run gulp",
+    "build": "cross-env NODE_ENV=production npm run gulp build"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -34,8 +28,6 @@
     "gulp-imagemin": "^5.0.3",
     "gulp-less": "^4.0.1",
     "gulp-nodemon": "^2.4.2",
-    "gulp-uglify": "^3.0.1",
-    "jest": "^23.6.0",
-    "supertest": "^3.4.1"
+    "gulp-uglify": "^3.0.1"
   }
 }
