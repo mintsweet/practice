@@ -25,9 +25,6 @@ const http = async (url, data, method = 'GET', token = '') => {
   }
 };
 
-// GitHub 登录
-exports.github = params => http('/github', params, 'POST');
-
 // 注册
 exports.signup = params => http('/signup', params, 'POST');
 

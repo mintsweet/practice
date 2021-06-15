@@ -1,12 +1,10 @@
 const express = require('express');
-const passport = require('passport');
 const Site = require('./controllers/site');
 const User = require('./controllers/user');
 const Topic = require('./controllers/topic');
 const Reply = require('./controllers/reply');
 const Notice = require('./controllers/notice');
 const Auth = require('./middlewares/auth');
-const { ALLOW_SIGNUP } = require('../../config');
 
 const router = express.Router();
 
@@ -15,14 +13,8 @@ const wrap = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2]);
 
 router.get('/', wrap(Site.renderIndex));
 
-if (ALLOW_SIGNUP) {
-  router.get('/signup', wrap(User.renderSignup));
-  router.post('/signup', wrap(User.signup));
-} else {
-  router.get('/auth/github', passport.authenticate('github'));
-  router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/signin' }), User.github);
-}
-
+router.get('/signup', wrap(User.renderSignup));
+router.post('/signup', wrap(User.signup));
 router.get('/captcha', wrap(Site.getCaptcha));
 router.get('/send_mail', wrap(User.sendMail));
 router.get('/signin', wrap(User.renderSignin));

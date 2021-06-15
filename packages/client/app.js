@@ -3,13 +3,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const passport = require('passport');
 const routes = require('./router');
 const config = require('../../config');
 const Auth = require('./middlewares/auth');
 const ErrorHandler = require('./middlewares/error-handler');
-
-require('./auth');
 
 const app = module.exports = express();
 
@@ -37,7 +34,6 @@ app.use(session({
     },
   })
 }));
-app.use(passport.initialize());
 app.use(Auth.validaUser);
 
 // router

@@ -23,15 +23,6 @@ const defaultConfig = {
     NICKNAME: '管理员',
   },
 
-  // 是否允许注册
-  ALLOW_SIGNUP: false,
-
-  // GitHub 鉴权配置
-  github: {
-    CLIENT_ID: '',
-    CLIENT_SECRET: '',
-    CALLBACK_URL: '',
-  },
 
   // 密码加密位数
   SALT_WORK_FACTOR: 10,

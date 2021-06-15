@@ -15,35 +15,11 @@ const getCaptchaUrl = async req => {
 
 class User {
   constructor() {
-    this.renderSignup = this.renderSignup.bind(this);
     this.signup = this.signup.bind(this);
     this.renderSignin = this.renderSignin.bind(this);
     this.signin = this.signin.bind(this);
     this.renderForgetPass = this.renderForgetPass.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
-  }
-
-  // GitHub 登录
-  async github(req, res) {
-    const accessToken = req.user;
-
-    req.session.token = await API.github({
-      accessToken
-    });
-
-    res.redirect('/');
-  }
-
-  // 注册页
-  async renderSignup(req, res) {
-    const url = await getCaptchaUrl(req);
-    res.render(
-      'pages/user/signup',
-      {
-        title: '注册',
-        url,
-      }
-    );
   }
 
   // 注册
