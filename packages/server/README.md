@@ -19,7 +19,7 @@
 
 ## 快速开始
 
-  1. 启动 `Mongodb` 和 `Redis` 的服务 ( Mac下可执行 `yarn db-server` 快速开启这两个服务)
+  1. 启动 `Mongodb` 和 `Redis` 的服务
   2. 执行 `npm install` 或者是 `yarn` 安装依赖
   3. 执行 `npm start` 或者是 `yarn start`
   4. 检查服务是否开始，浏览器访问 `http://localhost:3000/api` 是否有返回JSON。
