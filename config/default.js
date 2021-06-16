@@ -7,9 +7,9 @@ const defaultConfig = {
 
   // redis 配置
   redis: {
-    HOST: '',
-    PORT: '',
-    DB: '',
+    HOST: 'localhost',
+    PORT: '6379',
+    DB: 0,
     PASSWORD: '',
   },
 

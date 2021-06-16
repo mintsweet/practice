@@ -1,7 +1,16 @@
 const redis = require('redis');
 const { promisify } = require('util');
 const logger = require('../utils/logger');
-const client = redis.createClient();
+const {
+  redis: { HOST, PORT, DB, PASSWORD },
+} = require('../../../config');
+
+const client = redis.createClient({
+  host: HOST,
+  port: PORT,
+  db: DB,
+  password: PASSWORD,
+});
 
 client.on('error', err => {
   logger.error(`Redis connection error: ${err}!`);
