@@ -28,24 +28,6 @@ class Site {
       }
     );
   }
-
-  // 获取验证码
-  async getCaptcha(req, res) {
-    try {
-      const data = await API.getCaptcha({
-        height: 34,
-      });
-
-      req.session.captcha = {
-        token: data.token,
-        expired: Date.now() + 1000 * 60 * 10,
-      };
-
-      res.send({ status: 1, url: data.url });
-    } catch(err) {
-      res.send({ status: 0, message: err.message });
-    }
-  }
 }
 
 module.exports = new Site();
