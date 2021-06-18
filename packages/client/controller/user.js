@@ -4,11 +4,8 @@ const BaseService = require('../core/BaseService');
 class User extends BaseService {
   constructor() {
     super();
-    this.renderSignup = this.renderSignup.bind(this);
     this.signup = this.signup.bind(this);
-    this.renderSignin = this.renderSignin.bind(this);
     this.signin = this.signin.bind(this);
-    this.renderForgetPass = this.renderForgetPass.bind(this);
     this.forgetPass = this.forgetPass.bind(this);
   }
 
@@ -20,15 +17,6 @@ class User extends BaseService {
     } catch (err) {
       res.send({ status: 0, message: err.message });
     }
-  }
-
-  // 注册页
-  async renderSignup(req, res) {
-    const url = await this._getCaptchaUrl(req);
-    res.render('pages/user/signup', {
-      title: '注册',
-      url,
-    });
   }
 
   // 注册
@@ -57,15 +45,6 @@ class User extends BaseService {
         url,
       });
     }
-  }
-
-  // 登录页
-  async renderSignin(req, res) {
-    const url = await this._getCaptchaUrl(req);
-    res.render('pages/user/signin', {
-      title: '登录',
-      url,
-    });
   }
 
   // 登录
@@ -103,15 +82,6 @@ class User extends BaseService {
     res.redirect('/');
   }
 
-  // 忘记密码页
-  async renderForgetPass(req, res) {
-    const url = await this._getCaptchaUrl(req);
-    res.render('pages/user/forget_pass', {
-      title: '忘记密码',
-      url,
-    });
-  }
-
   // 忘记密码
   async forgetPass(req, res) {
     const { email, captcha } = req.body;
@@ -140,22 +110,6 @@ class User extends BaseService {
     }
   }
 
-  // 更新个人设置页
-  async renderSetting(req, res) {
-    const { id } = req.app.locals.user;
-
-    const [top100, user] = await Promise.all([
-      API.getUsersTop(),
-      API.getUserById(id),
-    ]);
-
-    res.render('pages/user/setting', {
-      title: '个人资料',
-      top100,
-      user,
-    });
-  }
-
   // 更新个人设置
   async setting(req, res) {
     const { id } = req.app.locals.user;
@@ -179,15 +133,6 @@ class User extends BaseService {
     }
   }
 
-  // 修改密码页
-  async renderUpdatePass(req, res) {
-    const data = await API.getUsersTop();
-    res.render('pages/user/update_pass', {
-      title: '修改密码',
-      top100: data,
-    });
-  }
-
   // 修改密码
   async updatePass(req, res) {
     const { token } = req.session;
@@ -203,117 +148,6 @@ class User extends BaseService {
         top100: data,
       });
     }
-  }
-
-  // 积分榜前一百页
-  async renderUsersTop100(req, res) {
-    const top100 = await API.getUsersTop({ count: 100 });
-    res.render('pages/user/top100', {
-      title: '积分榜前一百',
-      top100,
-    });
-  }
-
-  // 个人信息页
-  async renderUserInfo(req, res) {
-    const { uid } = req.params;
-
-    const [info, data] = await Promise.all([
-      API.getUserById(uid),
-      API.getUserAction(uid),
-    ]);
-
-    res.render('pages/user/info', {
-      title: '动态 - 用户信息',
-      type: 'action',
-      info,
-      data,
-    });
-  }
-
-  // 用户专栏页
-  async renderUserCreate(req, res) {
-    const { uid } = req.params;
-
-    const [info, data] = await Promise.all([
-      API.getUserById(uid),
-      API.getUserCreate(uid),
-    ]);
-
-    res.render('pages/user/info', {
-      title: '专栏 - 用户信息',
-      type: 'create',
-      info,
-      data,
-    });
-  }
-
-  // 用户喜欢页
-  async renderUserLike(req, res) {
-    const { uid } = req.params;
-
-    const [info, data] = await Promise.all([
-      API.getUserById(uid),
-      API.getUserLike(uid),
-    ]);
-
-    res.render('pages/user/info', {
-      title: '喜欢 - 用户信息',
-      type: 'like',
-      info,
-      data,
-    });
-  }
-
-  // 用户收藏页
-  async renderUserCollect(req, res) {
-    const { uid } = req.params;
-
-    const [info, data] = Promise.all([
-      API.getUserById(uid),
-      API.getUserCollect(uid),
-    ]);
-
-    res.render('pages/user/info', {
-      title: '收藏 - 用户信息',
-      type: 'collect',
-      info,
-      data,
-    });
-  }
-
-  // 用户粉丝页
-  async renderUserFollower(req, res) {
-    const { uid } = req.params;
-
-    const [info, data] = Promise.all([
-      API.getUserById(uid),
-      API.getUserFollower(uid),
-    ]);
-
-    res.render('pages/user/info', {
-      title: '粉丝 - 用户信息',
-      type: 'follower',
-      info,
-      data,
-    });
-  }
-
-  // 用户关注页
-  async renderUserFollowing(req, res) {
-    const { uid } = req.params;
-
-    const [info, data] = Promise.all([
-      API.getUserById(uid),
-      API.getUserFollowing(uid),
-    ]);
-
-    res.render('pages/user/info', {
-      title: '关注 - 用户信息',
-      type: 'following',
-      info,
-      data,
-    });
   }
 
   // 关注或者取消关注

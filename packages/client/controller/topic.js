@@ -1,17 +1,6 @@
 const API = require('../utils/api');
-const md2html = require('../utils/md2html');
 
 class Topic {
-  // 渲染创建话题页
-  renderCreate(req, res) {
-    res.render(
-      'pages/topic/create',
-      {
-        title: '发布话题'
-      }
-    );
-  }
-
   // 创建话题
   async createTopic(req, res) {
     const { token } = req.session;
@@ -64,19 +53,6 @@ class Topic {
     }
   }
 
-  // 编辑话题页
-  async renderEdit(req, res) {
-    const { tid } = req.params;
-    const data = await API.getTopicById(tid);
-    res.render(
-      'pages/topic/create',
-      {
-        title: '编辑话题',
-        topic: data.topic
-      }
-    );
-  }
-
   // 编辑话题
   async editTopic(req, res) {
     const { token } = req.session;
@@ -103,51 +79,6 @@ class Topic {
     }
   }
 
-  // 搜索结果页
-  async renderSearch(req, res) {
-    const { q } = req.query;
-
-    const noReplyTopic = await API.getTopicsNoReply();
-    const data = await API.searchTopics({ title: q });
-
-    res.render(
-      'pages/topic/search',
-      {
-        title: '搜索结果',
-        topics: data.topics,
-        currentPage: data.currentPage,
-        totalPage: data.totalPage,
-        total: data.total,
-        q,
-        noReplyTopic,
-      }
-    );
-  }
-
-  // 话题详情页
-  async renderDetail(req, res) {
-    const { tid } = req.params;
-
-    const noReplyTopic = await API.getTopicsNoReply();
-    const data = await API.getTopicById(tid);
-
-    res.render(
-      'pages/topic/detail',
-      {
-        title: '话题详情',
-        topic: {
-          ...data.topic,
-          content: md2html(data.topic.content)
-        },
-        author: data.author,
-        replies: data.replies,
-        like: data.like,
-        collect: data.collect,
-        noReplyTopic,
-      }
-    );
-  }
-
   // 喜欢或者取消喜欢
   async likeOrUn(req, res) {
     const { token } = req.session;
@@ -171,6 +102,88 @@ class Topic {
       res.send({ status: 1, action });
     } catch(err) {
       return res.send({ status: 0, message: err.message });
+    }
+  }
+
+  // 创建回复
+  async createReply(req, res) {
+    const { token } = req.session;
+    const { tid } = req.params;
+
+    try {
+      await API.createReply(tid, req.body, token);
+
+      res.render(
+        'pages/jump',
+        {
+          type: 'success',
+          url: `/topic/${tid}`,
+          message: '创建回复成功',
+        }
+      );
+    } catch(err) {
+      res.render(
+        'pages/jump',
+        {
+          type: 'error',
+          url: `/topic/${tid}`,
+          message: '创建回复失败',
+        }
+      );
+    }
+  }
+
+  // 删除回复
+  async deleteReply(req, res) {
+    const { token } = req.session;
+    const { rid } = req.params;
+
+    try {
+      await API.deleteReply(rid, token);
+      res.send({ status: 1 });
+    } catch(err) {
+      res.send({ status: 0, message: err.message });
+    }
+  }
+
+  // 编辑回复
+  async editReply(req, res) {
+    const { token } = req.session;
+    const { rid } = req.params;
+    const { tid, content } = req.body;
+
+    try {
+      await API.editReply(rid, { content }, token);
+      res.render(
+        'pages/jump',
+        {
+          type: 'success',
+          url: `/topic/${tid}`,
+          message: '编辑回复成功',
+        }
+      );
+    } catch(err) {
+      res.render(
+        'pages/jump',
+        {
+          type: 'error',
+          url: `/topic/${tid}`,
+          message: '编辑回复失败',
+        }
+      );
+    }
+  }
+
+  // 点赞回复
+  async upReplyOrUn(req, res) {
+    const { token } = req.session;
+    const { rid } = req.params;
+
+    try {
+      const action = await API.upOrDown(rid, token);
+      res.send({ status: 1, action });
+    } catch(err) {
+      res.send({ status: 0, messsage: err.error });
     }
   }
 }
