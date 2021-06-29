@@ -13,17 +13,6 @@ const defaultConfig = {
     PASSWORD: '',
   },
 
-  // 默认头像
-  DEFAULT_AVATAR: '',
-
-  // 超管用户
-  root: {
-    EMAIL: 'admin@mintsweet.cn',
-    PASSWORD: 'a123456',
-    NICKNAME: '管理员',
-  },
-
-
   // 密码加密位数
   SALT_WORK_FACTOR: 10,
 
