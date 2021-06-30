@@ -1,42 +1,42 @@
 const Koa = require('koa');
 const koaBody = require('koa-body');
 const koaJwt = require('koa-jwt');
-const path = require('path');
-const { jwt: { SECRET }, SERVER_PORT, FILE_LIMIT } = require('../../config');
+const {
+  jwt: { SECRET },
+  SERVER_PORT,
+  FILE_LIMIT,
+} = require('../../config');
 const router = require('./router');
 const logger = require('./utils/logger');
-const ErrorHandler = require('./middlewares/error-handler');
+const errorHandler = require('./middleware/error-handler');
 
 require('./db/mongodb');
 
-const app = module.exports = new Koa();
+const app = (module.exports = new Koa());
 
 // middleware
 app
-  .use(koaBody({
-    multipart: true,
-    formidable: {
-      uploadDir: `${__dirname}/uploads`,
-      keepExtensions: true,
-      multiples: false,
-      maxFieldsSize: FILE_LIMIT, // 限制上传文件大小为 512kb
-      onFileBegin(name, file) {
-        const dir = path.dirname(file.path);
-        file.path = path.join(dir, file.name);
-      }
-    }
-  }))
-  .use(koaJwt({
-    secret: SECRET,
-    passthrough: true
-  }))
-  .use(ErrorHandler.handleError);
+  .use(
+    koaBody({
+      multipart: true,
+      formidable: {
+        uploadDir: `${__dirname}/upload`,
+        keepExtensions: true,
+        multiples: false,
+        maxFieldsSize: FILE_LIMIT, // 限制上传文件大小为 512kb
+      },
+    }),
+  )
+  .use(
+    koaJwt({
+      secret: SECRET,
+      passthrough: true,
+    }),
+  )
+  .use(errorHandler);
 
 // router
-app
-  .use(router.rt)
-  .use(router.v1)
-  .use(router.v2);
+app.use(router.rt).use(router.be);
 
 // 404
 app.use(ctx => {
