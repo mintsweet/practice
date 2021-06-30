@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { tabs } = require('../../../config');
 
 const { Schema } = mongoose;
 const { ObjectId } = Schema;

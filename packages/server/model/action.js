@@ -9,6 +9,7 @@ const { ObjectId } = Schema;
  * 2. star 喜欢了
  * 3. collect 收藏了
  * 4. follow 关注了
+ * 5. up 点赞了
  */
 
 const ActionSchema = new Schema(
@@ -16,7 +17,7 @@ const ActionSchema = new Schema(
     type: { type: String, required: true }, // 类型
     aid: { type: ObjectId, required: true }, // 发起者
     tid: { type: ObjectId, required: true }, // 命中者
-    is_un: { type: Boolean, default: false }, // 行为反向
+    is_un: { type: Boolean, default: true }, // 若为 false 行为反向
   },
   {
     timestamps: {
