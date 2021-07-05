@@ -1,73 +1,66 @@
 const bcrypt = require('bcryptjs');
-const UserProxy = require('../proxy/user');
-const TopicProxy = require('../proxy/topic');
-const ReplyProxy = require('../proxy/reply');
-const NoticeProxy = require('../proxy/notice');
-const ActionProxy = require('../proxy/action');
+const UserModel = require('../model/user');
+const TopicModel = require('../model/topic');
+const NoticeModel = require('../model/notice');
+const ActionModel = require('../model/action');
+const ReplyModel = require('../model/reply');
 
-exports.createUser = function(email, nickname, other = {}) {
-  return UserProxy.create({
+exports.createUser = function(email, props = {}) {
+  return UserModel.create({
     email,
+    nickname: '测试用户',
     password: bcrypt.hashSync('a123456', bcrypt.genSaltSync(10)),
-    nickname,
-    active: true,
-    ...other
+    ...props,
   });
 };
 
 exports.deleteUser = function(email) {
-  return UserProxy.delete({ email });
+  return UserModel.findOneAndDelete({ email });
 };
 
-exports.createTopic = function(author_id) {
-  return TopicProxy.create({
+exports.createTopic = function(aid) {
+  return TopicModel.create({
     tab: 'ask',
     title: '这是一个测试标题',
     content: '这是测试内容',
-    author_id
+    aid,
   });
 };
 
-exports.deleteTopic = function(condition) {
-  return TopicProxy.delete(condition);
-};
-
-exports.createAction = function(type, author_id, target_id) {
-  return ActionProxy.create({
-    type,
-    author_id,
-    target_id
+exports.deleteTopic = function(aid) {
+  return TopicModel.deleteMany({
+    aid,
   });
 };
 
-exports.deleteAction = function(author_id) {
-  return ActionProxy.delete({ author_id });
+exports.createNotice = function(params) {
+  return NoticeModel.create(params);
 };
 
-exports.createReply = function(author_id, topic_id) {
-  return ReplyProxy.create({
-    author_id,
-    topic_id,
-    content: '# 回复哈哈哈哈'
+exports.deleteNotice = function(uid) {
+  return NoticeModel.deleteMany({
+    uid,
   });
 };
 
-exports.deleteReply = function(topic_id) {
-  return ReplyProxy.delete({
-    topic_id
+exports.createAction = function(params) {
+  return ActionModel.create(params);
+};
+
+exports.deleteAction = function(aid) {
+  return ActionModel.deleteMany({ aid });
+};
+
+exports.createReply = function(aid, tid) {
+  return ReplyModel.create({
+    aid,
+    tid,
+    content: '# 回复',
   });
 };
 
-exports.createNotice = function(type, target_id, restProps) {
-  return NoticeProxy.create({
-    type,
-    target_id,
-    ...restProps
-  });
-};
-
-exports.deleteNotice = function(target_id) {
-  return NoticeProxy.delete({
-    target_id
+exports.deleteReply = function(tid) {
+  return ReplyModel.deleteMany({
+    tid,
   });
 };
