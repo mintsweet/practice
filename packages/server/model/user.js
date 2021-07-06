@@ -9,7 +9,7 @@ const UserSchema = new Schema(
 
     // 用户信息
     nickname: { type: String, required: true },
-    avatar: { type: String, default: 'avatar.png' },
+    avatar: { type: String, default: 'avatar.jpeg' },
     location: { type: String, default: '' },
     signature: { type: String, default: '' },
 
