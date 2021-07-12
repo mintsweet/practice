@@ -180,12 +180,12 @@ class User {
   async getUser(ctx) {
     const { id } = ctx.state.user;
     const user = await UserModel.findById(id, {
-      _id: 0,
       email: 1,
       nickname: 1,
       avatar: 1,
       location: 1,
       signature: 1,
+      score: 1,
     });
     ctx.body = user;
   }
