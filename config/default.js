@@ -30,34 +30,8 @@ const defaultConfig = {
     { name: '招聘', tag: 'job' },
   ],
 
-  // 七牛图片上传
-  qn: {
-    ACCESS_KEY: '',
-    SECRET_KEY: '',
-    BUCKET_NAME: '',
-    DONAME: '',
-    ZONE: '',
-  },
-
   // 上传文件大小限制 单位(B) 默认 512KB
   FILE_LIMIT: 1024 * 1024 * 0.5,
-
-  // 邮件配置
-  mail: {
-    HOST: '',
-    PORT: 587,
-    SECURE: false,
-    AUTH: {
-      user: '',
-      pass: '',
-    },
-  },
-
-  // 接口限制
-  limit: {
-    POST_CREATE: 100,
-    REPLY_CREATE: 1000,
-  },
 
   // 网站设置
   name: '薄荷糖社区',
