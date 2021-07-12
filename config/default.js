@@ -24,11 +24,11 @@ const defaultConfig = {
   },
 
   // 话题分类
-  tabs: [
-    { name: '分享', tag: 'share' },
-    { name: '问答', tag: 'ask' },
-    { name: '招聘', tag: 'job' },
-  ],
+  tabs: {
+    share: '分享',
+    ask: '问答',
+    job: '招聘',
+  },
 
   // 上传文件大小限制 单位(B) 默认 512KB
   FILE_LIMIT: 1024 * 1024 * 0.5,
@@ -41,7 +41,11 @@ const defaultConfig = {
 
   // 头部默认菜单
   menus: [
-    { name: '快速开始', url: 'https://github.com/mintsweet/practice/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B' },
+    {
+      name: '快速开始',
+      url:
+        'https://github.com/mintsweet/practice/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B',
+    },
     { name: '文档', url: 'https://github.com/mintsweet/practice/wiki' },
   ],
 
@@ -49,7 +53,7 @@ const defaultConfig = {
     {
       logo: 'https://cnodejs.org/public/images/cnodejs.svg',
       link: 'https://cnodejs.org',
-    }
+    },
   ],
 
   // 客户端端口号
@@ -60,7 +64,7 @@ const defaultConfig = {
 
   // session 配置
   session: {
-    SECRET: 'practice'
+    SECRET: 'practice',
   },
 };
 
