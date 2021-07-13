@@ -1,0 +1,6 @@
+.block
+  .title 无人回复的话题
+  ul.content.topic-no-reply
+    each item in noReplyTopic
+      li
+        a(href=`/topic/${item._id}`, title=item.title) #{item.title}

@@ -1,7 +1,0 @@
-.block
-  .title
-    span 无人回复的话题
-  ul.content.no-reply
-    each topic in noReplyTopic
-      li
-        a(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}

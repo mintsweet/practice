@@ -1,0 +1,10 @@
+.block
+  .title 个人信息
+  .content.user-info
+    .basic
+      .avatar
+        img(src=`${config.API}/upload/${user.avatar}`)
+      .nickname
+        a(href=`/user/${user._id}`) #{user.nickname}
+    .signature
+      span “ #{user.signature || '这家伙很懒，什么都没留下'} ”
