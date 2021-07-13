@@ -6,9 +6,9 @@ append header
       a.active(href="/setting") 个人资料
       a(href="/update_pass") 修改密码
 block content
-  .content.has-bg
-    .setting-title 个人资料
-    form.setting-form(method="post")
+  .content.page-setting
+    .title 个人资料
+    form.form(method="post")
       .alert.alert-error(class={hidden: !error}) #{error}
       .form-item
         label(for="avatar") 头像

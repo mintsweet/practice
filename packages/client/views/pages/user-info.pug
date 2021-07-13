@@ -1,8 +1,8 @@
 extends ../layout.pug
 
 block content
-  .content
-    .user-info
+  .content.page-user-info
+    .basic
       .avatar
         img(src=`${config.API}/upload/${info.avatar}`)
       .desc
@@ -15,8 +15,8 @@ block content
           a.action(href=`/setting`) 编辑个人资料
         else if user
           a#follow_user(href="javascript:;", data-id=info.id) #{ info.follow ? '取消关注' : '关注' }
-    .user-gener
-      .gener
+    .detail
+      .tabs
         a(href=`/user/${info.id}`, class={active: type === 'action'}) 动态
         a(href=`/user/${info.id}/create`, class={active: type === 'create'}) 专栏
         a(href=`/user/${info.id}/like`, class={active: type === 'like'}) 喜欢

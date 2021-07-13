@@ -6,9 +6,11 @@
     text-align: center;
   }
 
-  & > .layout {
+  .inner {
     display: flex;
+    margin: 0 auto;
     padding: 20px 0;
+    width: @global-body-width;
 
     @media @screen {
       display: none;
@@ -66,7 +68,7 @@
 
   .copy {
     font-size: @font-size-small;
-    background: rgba(@theme-color, .1);
+    background: rgba(@theme-color, 0.1);
 
     p {
       margin: 0;

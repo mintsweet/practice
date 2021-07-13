@@ -1,19 +1,18 @@
 extends ../layout.pug
 
 block content
-  .user-account
+  .content.page-forget-pass
     .title
-      span.mints.mints-password
-      | 忘记密码
+      span.mints.mints-password 忘记密码
     .content
-      form#forgetForm(method="post")
+      form.form#forgetForm(method="post")
         .alert.alert-error(class={ hidden: !error }) #{error}
         .form-item
           label.label(for="email") 邮箱：
-          input#email(type="text", name="email", placeholder="请输入邮箱", autocomplete="off")
+          input#email(type="text" name="email" placeholder="请输入邮箱" autocomplete="off")
         .form-item
           label.label(for="captcha") 验证码：
-          input#captcha(type="text", name="captcha", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
+          input#captcha(type="text" name="captcha" minlength="5" maxlength="5" placeholder="请输入验证码" autocomplete="off")
           img#js-captcha(src=url, alt="图形验证码")
         .form-item
           button.btn(type="submit") 点击确认

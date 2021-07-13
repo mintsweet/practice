@@ -1,10 +1,13 @@
-.block {
-  margin-bottom: 10px;
-  background: @white;
-  border-radius: 4px;
+.aside {
+  .block {
+    margin-bottom: 10px;
+    background: @white;
+    border-radius: 4px;
+  }
 
   .title {
-    padding: 10px 15px;
+    padding: 6px 10px;
+    font-size: 15px;
     border-bottom: 1px solid @gray-light;
 
     a {
@@ -17,60 +20,101 @@
 
   .content {
     margin: 0;
-    padding: 10px 20px;
+    padding: 8px 16px;
+  }
 
-    a.link {
-      display: block;
-      padding: 5px 10px;
+  .user-info {
+    .basic {
+      display: flex;
     }
 
     .avatar {
-      display: inline-block;
-      .size(36px);
+      flex: 0 0 40px;
     }
 
     .nickname {
-      display: inline-block;
+      flex: auto;
       margin-left: 10px;
     }
 
-    & > .score {
-      margin-top: 10px;
-      font-size: @font-size-small;
-    }
-
     .signature {
+      margin-top: 12px;
       font-size: @font-size-smaller;
       font-style: italic;
     }
+  }
 
-    .create-topic {
-      padding: 4px 15px;
-      color: @white;
-      font-size: @font-size-small;
-      background: @theme-color;
-      border-radius: 4px;
-      transition: background .3s;
+  .create-topic {
+    padding: 4px 15px;
+    color: @white;
+    font-size: @font-size-small;
+    background-color: @theme-color;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 
-      &:hover {
-        background: darken(@theme-color, 10%);
+    &:hover {
+      background-color: darken(@theme-color, 10%);
+    }
+  }
+
+  .users-top {
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 26px;
+      line-height: 26px;
+    }
+
+    .nickname {
+      font-size: 13px;
+    }
+
+    .score {
+      font-size: @font-size-smaller;
+      color: @theme-color;
+    }
+  }
+
+  .topic-no-reply {
+    li {
+      height: 30px;
+      line-height: 30px;
+      font-size: 13px;
+      color: @gray-dark;
+
+      a {
+        display: block;
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
   }
 
-  .user-stat {
+  .friend-link {
+    li {
+      a {
+        display: block;
+      }
+    }
+  }
+
+  .user-achievement {
     .item {
       margin-bottom: 10px;
     }
 
     span.mints {
       display: inline-block;
+      width: 25px;
+      height: 25px;
       line-height: 25px;
       border-radius: 50%;
       color: @theme-color;
-      background: rgba(@theme-color, .1);
+      background: rgba(@theme-color, 0.1);
       text-align: center;
-      .size(25px);
     }
 
     .gener {
@@ -94,45 +138,13 @@
       & + .item {
         border-left: 1px solid #eee;
       }
-    }
 
-    span {
-      display: block;
-    }
-
-    a {
-      font-weight: @font-weight-bold;
-    }
-  }
-
-  .score-list {
-    li {
-      height: 26px;
-      line-height: 26px;
-    }
-
-    .nickname {
-      font-size: 13px;
-    }
-
-    .score {
-      float: right;
-      font-size: 12px;
-      color: @theme-color;
-    }
-  }
-
-  .no-reply {
-    li {
-      height: 30px;
-      line-height: 30px;
-      font-size: 13px;
-      color: @gray-dark;
+      span {
+        display: block;
+      }
 
       a {
-        display: block;
-        width: 100%;
-        .text-ellipsis;
+        font-weight: @font-weight-bold;
       }
     }
   }

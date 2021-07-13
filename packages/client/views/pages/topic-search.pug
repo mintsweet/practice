@@ -1,11 +1,10 @@
 extends ../layout.pug
 
 block content
-  .content
-    .search-page
-      h1.title 搜索结果
-      h2.statis.
-        关于"#[span #{q}]"的结果，共查询到#[span #{total}]条数据
+  .content.page-search
+    .result
+      .title 搜索结果
+      .statis 关于"#[strong #{q}]"的结果，共查询到#[strong #{total}]条数据
     include ../includes/topic-list.pug
   .aside
     include ../aside/topic-no-reply.pug

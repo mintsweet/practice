@@ -3,7 +3,7 @@ extends ../layout.pug
 append head
   link(rel="stylesheet" href="/static/lib/simplemde/simplemde.min.css")
 block content
-  .topic-create
+  .page-topic-create
     .title #{topic ? '编辑话题' : '发布话题'}
     form(method="post")
       .alert.alert-error(class={ hidden: !error }) #{error}

@@ -1,11 +1,13 @@
 .header {
   height: 50px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   background-color: @white;
 
-  .layout {
+  .inner {
     display: flex;
     align-items: center;
+    margin: 0 auto;
+    width: @global-body-width;
 
     @media @screen {
       justify-content: space-between;
@@ -14,7 +16,8 @@
 
   .logo {
     flex: 0 0 50px;
-    .size(50px);
+    width: 50px;
+    height: 50px;
   }
 
   .search {
@@ -33,7 +36,7 @@
       border: 0;
       border-bottom: 1px solid @gray-light;
       box-sizing: border-box;
-      transition: border-color .3s;
+      transition: border-color 0.3s;
 
       &:hover,
       &:focus {
@@ -48,7 +51,7 @@
       border: none;
       background: transparent;
       outline: none;
-      transition: color .3s;
+      transition: color 0.3s;
       cursor: pointer;
 
       &:hover {
@@ -94,7 +97,8 @@
     display: none;
     position: relative;
     flex: 0 0 50px;
-    .size(50px);
+    width: 50px;
+    height: 50px;
 
     @media @screen {
       display: block;
@@ -109,7 +113,7 @@
       width: 22px;
       height: 2px;
       background-color: @theme-color;
-      transition: transform .3s;
+      transition: transform 0.3s;
 
       &:nth-child(1) {
         transform: translateY(7px) rotate(0deg);

@@ -1,6 +1,6 @@
-dl.topic-list
+.topics
   each topic in topics
-    dd.topic
+    .topic
       a.avatar(href=`/user/${topic.author_id}`, title=topic.author_nickname)
         img(src=`${config.API}/upload/${topic.author_avatar}`)
       .content
@@ -18,7 +18,7 @@ dl.topic-list
         span(title="回复数")
           i.mints.mints-reply
           | #{topic.reply_count}
-      .date #{topic.create_at}
+      .date #{topic.created_at}
   else
     include ./empty.pug
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`

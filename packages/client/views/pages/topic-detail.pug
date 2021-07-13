@@ -1,8 +1,8 @@
 extends ../layout.pug
 
 block content
-  .content.has-bg
-    .topic-detail
+  .content.page-topic-detail
+    .topic
       .author
         a.avatar(href=`/user/${topic.author_id}`)
           img(src=`${config.API}/upload/${topic.author_avatar}`)
@@ -17,7 +17,7 @@ block content
         .action
           a.btn.warn(href=`/topic/${topic._id}/edit`) 编辑
           a.btn.error(href=`/topic/${topic._id}/delete`) 删除
-    #reply.reply
+    .reply#reply
       .title 评论
       .create
         if user
@@ -55,16 +55,16 @@ block content
               time #{reply.create_at_ago}
         else
           include ../includes/empty.pug
-  aside.aside
-    include ../aside/author-info.pug
-    include ../aside/topic-no-reply.pug
-  .float-action
+    .action
     a#topic_like.mints.mints-star(href="javascript:;", class={ active: like }, data-id=topic._id)
       span.number #{topic.like_count}
     a.mints.mints-reply(href="#reply")
       span#reply_count.number #{topic.reply_count}
     a#topic_collect.mints.mints-collect(href="javascript:;", class={ active: collect })
       span.number #{topic.collect_count}
+  aside.aside
+    include ../aside/author-info.pug
+    include ../aside/topic-no-reply.pug
 append footer
   script.
     $('#reply_update').click(function() {
