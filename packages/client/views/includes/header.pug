@@ -1,10 +1,10 @@
 .header
-  .layout
+  .inner
     a.logo(href="/", title=config.name)
       img(src="/static/img/logo.png")
     form.search(action="/topics/search")
-      input(type="text", name="q", required, placeholder="请输入搜索内容", autocomplete="off")
-      button.mints.mints-search(type="submit", title="搜索")
+      input(type="text" name="q", required, placeholder="请输入搜索内容" autocomplete="off")
+      button.mints.mints-search(type="submit" title="搜索")
     ul.menu
       each item in [{ name: '首页', url: '/' }].concat(config.menus)
         li
@@ -14,14 +14,11 @@
           a(href="/notice/user") 我的消息
         li
           a(href="/signout") 退出登录
-      else if config.ALLOW_SIGNUP
+      else
         li
           a(href="/signup") 注册
         li
           a(href="/signin") 登录
-      else
-        li
-          a(href="/auth/github") GitHub 登录
     h1.title #{config.name}
     .navbar
       span

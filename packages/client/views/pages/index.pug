@@ -3,14 +3,14 @@ extends ../layout.pug
 block content
   .content.has-bg
     .tab-list
-      each item in [{ name: '全部', tag: 'all' }, { name: '精华', tag: 'good' }].concat(tabs)
+      each item in [{ name: '全部', tag: 'all' }, { name: '精华', tag: 'good' }].concat(Object.keys(config.tabs).map(k => ({ name: config.tabs[k], tag: k})))
         a(href=`?tab=${item.tag}`, class={ active: currentTab === item.tag }) #{item.name}
-    include ./topic/list.pug
+    include ../includes/topic-list.pug
   .aside
     if user
-      include ../aside/user_info.pug
-      include ../aside/create_topic.pug
-    include ../aside/user_ranking.pug
-    include ../aside/no_reply_topic.pug
-    include ../aside/friend_link.pug
+      include ../aside/user-info.pug
+      include ../aside/create-topic.pug
+    include ../aside/users-top.pug
+    include ../aside/topic-no-reply.pug
+    include ../aside/friend-link.pug
 

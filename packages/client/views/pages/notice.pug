@@ -14,23 +14,23 @@ block content
             span #{item.typeName}
             time #{item.create_at}
           .detail
-            a.avatar(href=`/user/${item.author.id}`)
-              img(src=item.author.avatar)
+            a.avatar(href=`/user/${item.author_id}`)
+              img(src=`${config.API}/upload/${item.author_avatar}`)
             a.nickname(href=`/user/${item.author.id}`)
               span #{item.author.nickname}
             a.btn(href="javascript") 关注
       else
         .notice-item.topic
-          a.avatar(href=`/user/${item.author.id}`)
-            img(src=item.author.avatar)
+          a.avatar(href=`/user/${item.author_id}`)
+            img(src=`${config.API}/upload/${item.author_avatar}`)
           .detail
-            a.nickname(href=`/user/${item.author.id}`) #{item.author.nickname}
+            a.nickname(href=`/user/${item.author_id}`) #{item.author_nickname}
             time #{item.create_at}
             .content
               span #{item.typeName}你的话题：
-              a(href=`/topic/${item.topic.id}`) #{item.topic.title}
+              a(href=`/topic/${item.topic_id}`) #{item.topic_title}
     else
       include ../includes/empty.pug
   .aside
-    include ../aside/user_info.pug
-    include ../aside/create_topic.pug
+    include ../aside/user-info.pug
+    include ../aside/create-topic.pug

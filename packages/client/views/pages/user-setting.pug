@@ -13,24 +13,24 @@ block content
       .form-item
         label(for="avatar") 头像
         .avatar
-          img(src=user.avatar)
+          img(src=`${config.API}/upload/${user.avatar}`)
           p
-            input#file(type="file", name="file")
+            input#file(type="file" name="file")
             span 支持 jpg、png 格式大小 1M 以内的图片
             a.btn.upload(href="javascript:;") 点击上传
       .form-item
         label(for="nickname") 昵称
-        input(type="text", name="nickname", placeholder="请输入昵称", autocomplete="off", value=user.nickname)
+        input(type="text" name="nickname" placeholder="请输入昵称" autocomplete="off", value=user.nickname)
       .form-item
         label(for="location") 所在地
-        input(type="text", name="location", placeholder="请输入所在地", autocomplete="off", value=user.location)
+        input(type="text" name="location" placeholder="请输入所在地" autocomplete="off", value=user.location)
       .form-item
         label(for="signature") 个人介绍
-        input#signature(type="text", name="signature", placeholder="请输入个人介绍", autocomplete="off", value=user.signature)
+        input#signature(type="text" name="signature" placeholder="请输入个人介绍" autocomplete="off", value=user.signature)
       .form-item
         button.btn(type="submit") 更新个人资料
   .aside
-    include ../../aside/user_ranking.pug
+    include ../../aside/users-top.pug
 append footer
   script.
     var signature = $('#signature');

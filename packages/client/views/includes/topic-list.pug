@@ -1,16 +1,16 @@
 dl.topic-list
   each topic in topics
     dd.topic
-      a.avatar(href=`/user/${topic.author.id}`, title=topic.author.nickname)
-        img(src=topic.author.avatar)
+      a.avatar(href=`/user/${topic.author_id}`, title=topic.author_nickname)
+        img(src=`${config.API}/upload/${topic.author_avatar}`)
       .content
         if topic.top
           span.tag.stress 置顶
         else if topic.good
           span.tag.stress 精华
         else
-          span.tag #{topic.tabName}
-        a.title(href=`/topic/${topic.id}`, title=topic.title) #{topic.title}
+          span.tag #{config.tabs[topic.tab]}
+        a.title(href=`/topic/${topic._id}`, title=topic.title) #{topic.title}
       .statistics
         span(title="喜欢数")
           i.mints.mints-like
@@ -20,7 +20,7 @@ dl.topic-list
           | #{topic.reply_count}
       .date #{topic.create_at}
   else
-    include ../../includes/empty.pug
+    include ./empty.pug
 - var baseUrl = `/?tab=${typeof tab !== undefined ? tab : ''}&page=`
 if topics.length > 0
   .pagination
@@ -29,10 +29,10 @@ if topics.length > 0
     else
       a.item.mints.mints-left(href=`${baseUrl}${currentPage - 1}`)
     - for(var i = 1; i <= totalPage; i++) {
-        if currentPage === i
-          a.item.active.disabled #{i}
-        else
-          a.item(href=`${baseUrl}${i}`) #{i}
+      if currentPage === i
+        a.item.active.disabled #{i}
+      else
+        a.item(href=`${baseUrl}${i}`) #{i}
     - }
     if currentPage === totalPage
       a.item.disabled.mints.mints-right

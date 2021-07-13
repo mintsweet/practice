@@ -1,19 +1,18 @@
-extends ../../layout.pug
+extends ../layout.pug
 
 block content
   .content
     .user-info
       .avatar
-        img(src=info.avatar)
+        img(src=`${config.API}/upload/${info.avatar}`)
       .desc
         h1
           | #{info.nickname}
           if info.location
             span.mints.mints-location #{info.location}
         h2 #{info.signature}
-        if user && user.id === info.id
-          if config.ALLOW_SIGNUP
-            a.action(href=`/setting`) 编辑个人资料
+        if user && user._id === info._id
+          a.action(href=`/setting`) 编辑个人资料
         else if user
           a#follow_user(href="javascript:;", data-id=info.id) #{ info.follow ? '取消关注' : '关注' }
     .user-gener
@@ -31,11 +30,11 @@ block content
           each item in data
             li.follow-item
               a.avatar(href=`/user/${item.id}`)
-                img(src=item.avatar)
+                img(src=`${config.API}/upload/${item.avatar}`)
               a.nickname(href=`/user/${item.id}`)
                 span #{item.nickname}
           else
-            include ../../includes/empty.pug
+            include ../includes/empty.pug
         else if type === 'create'
           each item in data
             li.topic-item
@@ -49,7 +48,7 @@ block content
                   | #{item.collect_count}
                 span 阅读数 #{item.visit_count}
           else
-            include ../../includes/empty.pug
+            include ../includes/empty.pug
         else
           each item in data
             li.action-item
@@ -71,16 +70,16 @@ block content
                   time #{item.create_at}
                   .info
                     a.avatar(href=`/user/${item.id}`)
-                      img(src=item.avatar)
+                      img(src=`${config.API}/upload/${item.avatar}`)
                     .detail
                       a.nickname(href=`/user/${item.id}`) #{item.nickname}
                       span.signature #{item.signature}
           else
-            include ../../includes/empty.pug
+            include ../includes/empty.pug
   .aside
-    include ../../aside/user_stat.pug
-    include ../../aside/user_follow.pug
-    include ../../aside/user_collect.pug
+    include ../aside/user-info.pug
+    include ../aside/user-follow.pug
+    include ../aside/user-collect.pug
 append footer
   script.
     $('.user-gener .gener>span').hover(function() {

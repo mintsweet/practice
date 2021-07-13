@@ -1,4 +1,4 @@
-extends ../../layout.pug
+extends ../layout.pug
 
 block content
   .user-account
@@ -10,16 +10,16 @@ block content
         .alert.alert-error(class={hidden: !error}) #{error}
         .form-item
           label(for="email") 邮箱：
-          input#email(type="text", name="email", placeholder="请输入邮箱", autocomplete="off")
+          input#email(type="text" name="email" placeholder="请输入邮箱" autocomplete="off")
         .form-item
           label(for="password") 密码：
-          input#password(type="password", name="password", minlength="6", maxlength="18", placeholder="请输入密码", autocomplete="off")
+          input#password(type="password" name="password" minlength="6" maxlength="18" placeholder="请输入密码" autocomplete="off")
         .form-item
           label(for="nickname") 昵称：
-          input#nickname(type="text", name="nickname", minlength="2", maxlength="8", placeholder="请输入昵称", autocomplete="off")
+          input#nickname(type="text" name="nickname" minlength="2" maxlength="10" placeholder="请输入昵称" autocomplete="off")
         .form-item
           label(for="captcha") 验证码：
-          input#captcha(type="text", name="captcha", minlength="5", maxlength="5", placeholder="请输入验证码", autocomplete="off")
+          input#captcha(type="text" name="captcha" minlength="5" maxlength="5" placeholder="请输入验证码" autocomplete="off")
           img#js-captcha(src=url, alt="验证码")
         .form-item
           button.btn(type="submit") 立即注册
@@ -49,8 +49,8 @@ append footer
         return false;
       }
 
-      if (!nickname.val() || nickname.val().length > 6 || nickname.val().length < 2) {
-        alert.text('请填写2-6位的昵称').slideDown();
+      if (!nickname.val() || nickname.val().length > 10 || nickname.val().length < 2) {
+        alert.text('请填写2-10位的昵称').slideDown();
         return false;
       }
 

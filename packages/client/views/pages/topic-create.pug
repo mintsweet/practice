@@ -1,25 +1,25 @@
-extends ../../layout.pug
+extends ../layout.pug
 
 append head
-  link(rel="stylesheet", href="/static/lib/simplemde/simplemde.min.css")
+  link(rel="stylesheet" href="/static/lib/simplemde/simplemde.min.css")
 block content
   .topic-create
     .title #{topic ? '编辑话题' : '发布话题'}
     form(method="post")
       .alert.alert-error(class={ hidden: !error }) #{error}
       .form-item
-        input#tab(type="hidden", name="tab", value=topic && topic.tab)
+        input#tab(type="hidden" name="tab", value=topic && topic.tab)
         .select
           a.placeholder(href="javascript:;") #{topic ? topic.tabName : '请选择类别'}
           .options
-            each item in config.tabs
+            each item in Object.keys(config.tabs).map(k => ({ name: config.tabs[k], tag: k}))
               .item(data-value=item.tag) #{item.name}
       .form-item
         label(for="title") 标题：
-        input(type="text", name="title", autocomplete="off", value=topic && topic.title)
+        input(type="text" name="title" autocomplete="off", value=topic && topic.title)
       .form-item
         label(for="content") 内容：
-        input#content(type="hidden", name="content")
+        input#content(type="hidden" name="content")
         textarea#editor #{topic ? topic.content : ''}
       .form-item
         button.btn(type="submit") 发布话题
@@ -31,7 +31,7 @@ append footer
     });
 
     $('.options .item').click(function() {
-      $('.select-hidden').val($(this).attr('data-value'));
+      $('#tab').val($(this).attr('data-value'));
       $('.select>.placeholder').text($(this).text());
     });
 
