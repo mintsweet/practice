@@ -7,22 +7,16 @@ class Topic {
 
     try {
       await API.createTopic(req.body, token);
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: '/',
-          message: '创建话题成功',
-        }
-      );
-    } catch(err) {
-      res.render(
-        'pages/topic/create',
-        {
-          title: '发布话题',
-          error: err.message,
-        }
-      );
+      res.render('pages/jump', {
+        type: 'success',
+        url: '/',
+        message: '创建话题成功',
+      });
+    } catch (err) {
+      res.render('pages/topic-create', {
+        title: '发布话题',
+        error: err.message,
+      });
     }
   }
 
@@ -33,23 +27,17 @@ class Topic {
 
     try {
       await API.deleteTopic(tid, token);
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: '/',
-          message: '删除话题成功',
-        }
-      );
-    } catch(err) {
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: `/topic/${tid}`,
-          message: '删除话题失败',
-        }
-      );
+      res.render('pages/jump', {
+        type: 'success',
+        url: '/',
+        message: '删除话题成功',
+      });
+    } catch (err) {
+      res.render('pages/jump', {
+        type: 'success',
+        url: `/topic/${tid}`,
+        message: '删除话题失败',
+      });
     }
   }
 
@@ -60,34 +48,28 @@ class Topic {
 
     try {
       await API.editTopic(tid, req.body, token);
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: `/topic/${tid}`,
-          message: '编辑话题成功',
-        }
-      );
-    } catch(err) {
-      res.render(
-        'pages/topic/create',
-        {
-          title: '编辑话题',
-          error: err.message,
-        }
-      );
+      res.render('pages/jump', {
+        type: 'success',
+        url: `/topic/${tid}`,
+        message: '编辑话题成功',
+      });
+    } catch (err) {
+      res.render('pages/topic-create', {
+        title: '编辑话题',
+        error: err.message,
+      });
     }
   }
 
   // 喜欢或者取消喜欢
-  async likeOrUn(req, res) {
+  async likeTopic(req, res) {
     const { token } = req.session;
     const { tid } = req.params;
 
     try {
-      const action = await API.likeOrUn(tid, token);
+      const action = await API.likeTopic(tid, token);
       res.send({ status: 1, action });
-    } catch(err) {
+    } catch (err) {
       res.send({ status: 0, message: err.message });
     }
   }
@@ -100,7 +82,7 @@ class Topic {
     try {
       const action = await API.collectOrUn(tid, token);
       res.send({ status: 1, action });
-    } catch(err) {
+    } catch (err) {
       return res.send({ status: 0, message: err.message });
     }
   }
@@ -113,64 +95,17 @@ class Topic {
     try {
       await API.createReply(tid, req.body, token);
 
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: `/topic/${tid}`,
-          message: '创建回复成功',
-        }
-      );
-    } catch(err) {
-      res.render(
-        'pages/jump',
-        {
-          type: 'error',
-          url: `/topic/${tid}`,
-          message: '创建回复失败',
-        }
-      );
-    }
-  }
-
-  // 删除回复
-  async deleteReply(req, res) {
-    const { token } = req.session;
-    const { rid } = req.params;
-
-    try {
-      await API.deleteReply(rid, token);
-      res.send({ status: 1 });
-    } catch(err) {
-      res.send({ status: 0, message: err.message });
-    }
-  }
-
-  // 编辑回复
-  async editReply(req, res) {
-    const { token } = req.session;
-    const { rid } = req.params;
-    const { tid, content } = req.body;
-
-    try {
-      await API.editReply(rid, { content }, token);
-      res.render(
-        'pages/jump',
-        {
-          type: 'success',
-          url: `/topic/${tid}`,
-          message: '编辑回复成功',
-        }
-      );
-    } catch(err) {
-      res.render(
-        'pages/jump',
-        {
-          type: 'error',
-          url: `/topic/${tid}`,
-          message: '编辑回复失败',
-        }
-      );
+      res.render('pages/jump', {
+        type: 'success',
+        url: `/topic/${tid}`,
+        message: '创建回复成功',
+      });
+    } catch (err) {
+      res.render('pages/jump', {
+        type: 'error',
+        url: `/topic/${tid}`,
+        message: '创建回复失败',
+      });
     }
   }
 
@@ -182,7 +117,7 @@ class Topic {
     try {
       const action = await API.upOrDown(rid, token);
       res.send({ status: 1, action });
-    } catch(err) {
+    } catch (err) {
       res.send({ status: 0, messsage: err.error });
     }
   }

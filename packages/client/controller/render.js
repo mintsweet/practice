@@ -6,30 +6,31 @@ class Render extends BaseService {
   constructor() {
     super();
     this.signup = this.signup.bind(this);
+    this.signin = this.signin.bind(this);
+    this.forgetPass = this.forgetPass.bind(this);
   }
 
   // 首页
   async home(req, res) {
-    const { tab, page } = req.query;
+    const { tab = 'all', page = 1 } = req.query;
 
-    const [top100, noReplyTopic, data] = await Promise.all([
-      API.getUsersTop({ count: 10 }),
-      API.getTopicsNoReply({ count: 5 }),
+    const [data, top100, noReplyTopic] = await Promise.all([
       API.getTopics({
         tab,
         page,
         size: 20,
       }),
+      API.getUsersTop({ count: 10 }),
+      API.getTopicsNoReply({ count: 5 }),
     ]);
 
     res.render('pages/index', {
       title: '首页',
-      topics: data.topics,
-      totalPage: data.totalPage,
-      currentPage: data.currentPage,
-      currentTab: data.currentTab,
-      top100: top100.slice(0, 10),
-      tabs: data.tabs,
+      topics: data.list,
+      totalPage: Math.ceil(data.total / 20),
+      currentPage: page,
+      currentTab: tab,
+      top100,
       noReplyTopic,
     });
   }
@@ -37,7 +38,7 @@ class Render extends BaseService {
   // 注册页
   async signup(req, res) {
     const url = await this._getCaptchaUrl(req);
-    res.render('pages/user/signup', {
+    res.render('pages/signup', {
       title: '注册',
       url,
     });
@@ -46,7 +47,7 @@ class Render extends BaseService {
   // 登录页
   async signin(req, res) {
     const url = await this._getCaptchaUrl(req);
-    res.render('pages/user/signin', {
+    res.render('pages/signin', {
       title: '登录',
       url,
     });
@@ -55,7 +56,7 @@ class Render extends BaseService {
   // 忘记密码页
   async forgetPass(req, res) {
     const url = await this._getCaptchaUrl(req);
-    res.render('pages/user/forget_pass', {
+    res.render('pages/forget-pass', {
       title: '忘记密码',
       url,
     });
@@ -63,23 +64,24 @@ class Render extends BaseService {
 
   // 个人设置页
   async setting(req, res) {
-    const { id } = req.app.locals.user;
+    const { _id } = req.app.locals.user;
 
-    const [top100, user] = await Promise.all([
-      API.getUsersTop(),
-      API.getUserById(id),
+    const [user, top100] = await Promise.all([
+      API.getUserById(_id),
+      API.getUsersTop({ count: 10 }),
     ]);
 
     res.render('pages/user/setting', {
       title: '个人资料',
-      top100,
       user,
+      top100,
     });
   }
 
   // 修改密码页
-  async updatePass(req, res) {
+  async updatePass(_, res) {
     const data = await API.getUsersTop();
+
     res.render('pages/user/update_pass', {
       title: '修改密码',
       top100: data,
@@ -87,9 +89,9 @@ class Render extends BaseService {
   }
 
   // 积分榜前一百页
-  async userTop100(req, res) {
+  async userTop100(_, res) {
     const top100 = await API.getUsersTop({ count: 100 });
-    res.render('pages/user/top100', {
+    res.render('pages/users-top', {
       title: '积分榜前一百',
       top100,
     });
@@ -104,7 +106,7 @@ class Render extends BaseService {
       API.getUserAction(uid),
     ]);
 
-    res.render('pages/user/info', {
+    res.render('pages/user-info', {
       title: '动态 - 用户信息',
       type: 'action',
       info,
@@ -113,7 +115,7 @@ class Render extends BaseService {
   }
 
   // 用户专栏页
-  async userTopic(req, res) {
+  async userCreate(req, res) {
     const { uid } = req.params;
 
     const [info, data] = await Promise.all([
@@ -121,7 +123,7 @@ class Render extends BaseService {
       API.getUserCreate(uid),
     ]);
 
-    res.render('pages/user/info', {
+    res.render('pages/user-info', {
       title: '专栏 - 用户信息',
       type: 'create',
       info,
@@ -130,7 +132,7 @@ class Render extends BaseService {
   }
 
   // 用户喜欢页
-  async userStar(req, res) {
+  async userLike(req, res) {
     const { uid } = req.params;
 
     const [info, data] = await Promise.all([
@@ -138,7 +140,7 @@ class Render extends BaseService {
       API.getUserLike(uid),
     ]);
 
-    res.render('pages/user/info', {
+    res.render('pages/user-info', {
       title: '喜欢 - 用户信息',
       type: 'like',
       info,
@@ -155,7 +157,7 @@ class Render extends BaseService {
       API.getUserCollect(uid),
     ]);
 
-    res.render('pages/user/info', {
+    res.render('pages/user-info', {
       title: '收藏 - 用户信息',
       type: 'collect',
       info,
@@ -172,7 +174,7 @@ class Render extends BaseService {
       API.getUserFollower(uid),
     ]);
 
-    res.render('pages/user/info', {
+    res.render('pages/user-info', {
       title: '粉丝 - 用户信息',
       type: 'follower',
       info,
@@ -189,7 +191,7 @@ class Render extends BaseService {
       API.getUserFollowing(uid),
     ]);
 
-    res.render('pages/user/info', {
+    res.render('pages/user-info', {
       title: '关注 - 用户信息',
       type: 'following',
       info,
@@ -198,8 +200,8 @@ class Render extends BaseService {
   }
 
   // 创建话题页
-  topicCreate(req, res) {
-    res.render('pages/topic/create', {
+  topicCreate(_, res) {
+    res.render('pages/topic-create', {
       title: '发布话题',
     });
   }
@@ -207,10 +209,31 @@ class Render extends BaseService {
   // 编辑话题页
   async topicUpdate(req, res) {
     const { tid } = req.params;
+
     const data = await API.getTopicById(tid);
-    res.render('pages/topic/create', {
+
+    res.render('pages/topic-create', {
       title: '编辑话题',
       topic: data.topic,
+    });
+  }
+
+  // 话题详情页
+  async topicDetail(req, res) {
+    const { tid } = req.params;
+
+    const [data, noReplyTopic] = await Promise.all([
+      API.getTopicById(tid),
+      API.getTopicsNoReply(),
+    ]);
+
+    res.render('pages/topic-detail', {
+      title: '话题详情',
+      topic: {
+        ...data,
+        content: md2html(data.content),
+      },
+      noReplyTopic,
     });
   }
 
@@ -218,51 +241,26 @@ class Render extends BaseService {
   async topicSearch(req, res) {
     const { q } = req.query;
 
-    const noReplyTopic = await API.getTopicsNoReply();
-    const data = await API.searchTopics({ title: q });
+    const [data, noReplyTopic] = await Promise.all([
+      API.searchTopics({ title: q }),
+      API.getTopicsNoReply(),
+    ]);
 
-    res.render(
-      'pages/topic/search',
-      {
-        title: '搜索结果',
-        topics: data.topics,
-        currentPage: data.currentPage,
-        totalPage: data.totalPage,
-        total: data.total,
-        q,
-        noReplyTopic,
-      }
-    );
-  }
-
-  // 话题详情页
-  async topicDetail(req, res) {
-    const { tid } = req.params;
-
-    const noReplyTopic = await API.getTopicsNoReply();
-    const data = await API.getTopicById(tid);
-
-    res.render(
-      'pages/topic/detail',
-      {
-        title: '话题详情',
-        topic: {
-          ...data.topic,
-          content: md2html(data.topic.content)
-        },
-        author: data.author,
-        replies: data.replies,
-        like: data.like,
-        collect: data.collect,
-        noReplyTopic,
-      }
-    );
+    res.render('pages/topic-search', {
+      title: '搜索结果',
+      topics: data.list,
+      totalPage: Math.ceil(data.total / 20),
+      total: data.total,
+      q,
+      noReplyTopic,
+    });
   }
 
   // 用户消息页
   async userNotice(req, res) {
     const { token } = req.session;
-    const data = await API.getUserNotice(token);
+
+    const data = await API.getNoticeUser(token);
 
     res.render('pages/notice', {
       title: '用户消息',
@@ -274,6 +272,7 @@ class Render extends BaseService {
   // 系统消息页
   async systemNotice(req, res) {
     const { token } = req.session;
+
     const data = await API.getSystemNotice(token);
 
     res.render('pages/notice', {

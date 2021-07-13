@@ -33,13 +33,14 @@ class User extends BaseService {
 
       await API.signup({ nickname, email, password });
 
-      res.render('pages/user/email', {
-        title: '注册',
-        email,
+      res.render('pages/jump', {
+        type: 'success',
+        url: '/',
+        message: '注册成功',
       });
     } catch (err) {
       const url = await this._getCaptchaUrl(req);
-      res.render('pages/user/signup', {
+      res.render('pages/signup', {
         title: '注册',
         error: err.message,
         url,
@@ -67,7 +68,7 @@ class User extends BaseService {
       res.redirect('/');
     } catch (err) {
       const url = await this._getCaptchaUrl(req);
-      res.render('pages/user/signin', {
+      res.render('pages/signin', {
         title: '登录',
         error: err.message,
         url,
@@ -96,13 +97,13 @@ class User extends BaseService {
 
       await API.forgetPass({ email });
 
-      res.render('pages/user/email', {
-        title: '忘记密码',
+      res.render('pages/reset-pass', {
+        title: '重置密码',
         email,
       });
     } catch (err) {
       const url = await this._getCaptchaUrl(req);
-      res.render('pages/user/forget_pass', {
+      res.render('pages/forget-pass', {
         title: '忘记密码',
         error: err.message,
         url,
@@ -117,14 +118,14 @@ class User extends BaseService {
 
     try {
       await API.updateSetting(req.body, token);
-      res.redirect('/setting');
+      res.redirect('/user-setting');
     } catch (err) {
       const [top100, user] = await Promise.all([
         API.getUsersTop(),
         API.getUserById(id),
       ]);
 
-      res.render('pages/user/setting', {
+      res.render('pages/user-setting', {
         title: '个人资料',
         error: err.message,
         top100,
@@ -139,10 +140,10 @@ class User extends BaseService {
 
     try {
       await API.updatePass(req.body, token);
-      res.redirect('update_pass');
+      res.redirect('/update-pass');
     } catch (err) {
       const data = await API.getUsersTop();
-      res.render('pages/user/update_pass', {
+      res.render('pages/user-update-pass', {
         title: '修改密码',
         error: err.error,
         top100: data,
@@ -167,17 +168,6 @@ class User extends BaseService {
         status: 0,
         message: err.error,
       });
-    }
-  }
-
-  async sendMail(req, res) {
-    const { email } = req.query;
-
-    try {
-      await API.sendMail(email);
-      res.send({ status: 1 });
-    } catch (err) {
-      res.send({ status: 0, message: err.message });
     }
   }
 }
