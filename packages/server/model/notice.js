@@ -10,7 +10,6 @@ const { ObjectId } = Schema;
  * 3. collect 收藏话题
  * 4. follow 关注用户
  * 5. reply 回复话题
- * 6. up 点赞回复
  */
 
 const NoticeSchema = new Schema(

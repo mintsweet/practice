@@ -353,34 +353,9 @@ class Topic {
               },
             },
             {
-              $lookup: {
-                from: 'action',
-                let: { tid: '$_id' },
-                pipeline: [
-                  {
-                    $match: {
-                      type: 'up',
-                      aid: Types.ObjectId(aid),
-                      $expr: {
-                        $eq: ['$tid', '$$tid'],
-                      },
-                    },
-                  },
-                ],
-                as: 'up',
-              },
-            },
-            {
-              $unwind: {
-                path: '$up',
-                preserveNullAndEmptyArrays: true,
-              },
-            },
-            {
               $project: {
                 content: 1,
                 created_at: 1,
-                is_up: { $ifNull: ['$up.is_un', false] },
                 author_id: '$author._id',
                 author_nickname: '$author.nickname',
                 author_avatar: '$author.avatar',
@@ -659,46 +634,6 @@ class Topic {
       aid: id,
       tid,
     });
-
-    ctx.body = '';
-  }
-
-  // 点赞回复
-  async upReply(ctx) {
-    const { id } = ctx.state.user;
-    const { rid } = ctx.params;
-
-    const reply = await ReplyModel.findById(rid);
-
-    if (!reply) {
-      ctx.throw(404, '回复不存在');
-    }
-
-    if (reply.aid.equals(id)) {
-      ctx.throw(403, '不能给自己点赞哟');
-    }
-
-    // 行为反向
-    const action = await ActionModel.findOne({
-      type: 'up',
-      aid: id,
-      tid: reply._id,
-    });
-
-    if (!action) {
-      await Promise.all([
-        ActionModel.create({
-          type: 'up',
-          aid: id,
-          tid: reply._id,
-        }),
-        NoticeModel.create({
-          type: 'up',
-          aid: id,
-          uid: reply.aid,
-        }),
-      ]);
-    }
 
     ctx.body = '';
   }

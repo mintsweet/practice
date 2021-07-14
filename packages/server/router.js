@@ -37,8 +37,7 @@ router
   .get('/topic/:tid', Topic.getTopicById) // 根据ID获取话题详情
   .put('/topic/:tid/like', auth(), Topic.liekTopic) // 喜欢或者取消喜欢话题
   .put('/topic/:tid/collect', auth(), Topic.collectTopic) // 收藏或者取消收藏话题
-  .post('/topic/:tid/reply', auth(), Topic.createReply) // 创建回复
-  .put('/reply/:rid/up', auth(), Topic.upReply); // 点赞回复
+  .post('/topic/:tid/reply', auth(), Topic.createReply); // 创建回复
 
 const routerBe = new Router({ prefix: '/backend' });
 

@@ -287,15 +287,6 @@ class User {
         data.topic = await TopicModel.findById(item.topic_id, 'id title');
         data.typeName = '回复了';
         break;
-      case 'up':
-        data.author = await UserModel.findById(
-          item.author_id,
-          'id nickname avatar',
-        );
-        data.topic = await TopicModel.findById(item.topic_id, 'id title');
-        data.reply = await ReplyModel.findById(item.reply_id, 'id content');
-        data.typeName = '点赞了';
-        break;
       default:
         data.typeName = '系统消息';
         break;
