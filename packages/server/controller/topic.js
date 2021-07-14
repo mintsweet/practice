@@ -1,4 +1,3 @@
-// const moment = require('moment');
 const { Types } = require('mongoose');
 const ActionModel = require('../model/action');
 const TopicModel = require('../model/topic');
@@ -55,6 +54,7 @@ class Topic {
         },
         {
           $project: {
+            created_at: 1,
             is_top: 1,
             is_good: 1,
             like_count: 1,
@@ -123,6 +123,7 @@ class Topic {
         },
         {
           $project: {
+            created_at: 1,
             is_top: 1,
             is_good: 1,
             like_count: 1,
