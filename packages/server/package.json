@@ -16,10 +16,8 @@
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
     "log4js": "^3.0.6",
-    "moment": "^2.23.0",
+    "moment": "^2.29.1",
     "mongoose": "^5.3.16",
-    "nodemailer": "^5.0.0",
-    "qiniu": "^7.2.1",
     "redis": "^2.8.0",
     "request-promise": "^4.2.4",
     "uuid": "^3.3.2"
