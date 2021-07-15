@@ -3,7 +3,8 @@ extends ../layout.pug
 block content
   .content.page-forget-pass
     .title
-      span.mints.mints-password 忘记密码
+      span.mints.mints-password
+      | 忘记密码
     .content
       form.form#forgetForm(method="post")
         .alert.alert-error(class={ hidden: !error }) #{error}

@@ -1,3 +1,4 @@
+const moment = require('moment');
 const API = require('../utils/api');
 const md2html = require('../utils/md2html');
 const BaseService = require('../core/BaseService');
@@ -26,7 +27,10 @@ class Render extends BaseService {
 
     res.render('pages/index', {
       title: '首页',
-      topics: data.list,
+      topics: data.list.map(i => ({
+        ...i,
+        created_at: moment(i.created_at).format('YYYY-MM-DD HH:mm'),
+      })),
       totalPage: Math.ceil(data.total / 20),
       currentPage: page,
       currentTab: tab,
@@ -71,7 +75,7 @@ class Render extends BaseService {
       API.getUsersTop({ count: 10 }),
     ]);
 
-    res.render('pages/user/setting', {
+    res.render('pages/user-setting', {
       title: '个人资料',
       user,
       top100,
@@ -82,7 +86,7 @@ class Render extends BaseService {
   async updatePass(_, res) {
     const data = await API.getUsersTop();
 
-    res.render('pages/user/update_pass', {
+    res.render('pages/user-update-pass', {
       title: '修改密码',
       top100: data,
     });
@@ -152,7 +156,7 @@ class Render extends BaseService {
   async userCollect(req, res) {
     const { uid } = req.params;
 
-    const [info, data] = Promise.all([
+    const [info, data] = await Promise.all([
       API.getUserById(uid),
       API.getUserCollect(uid),
     ]);
@@ -169,7 +173,7 @@ class Render extends BaseService {
   async userFollower(req, res) {
     const { uid } = req.params;
 
-    const [info, data] = Promise.all([
+    const [info, data] = await Promise.all([
       API.getUserById(uid),
       API.getUserFollower(uid),
     ]);
@@ -186,7 +190,7 @@ class Render extends BaseService {
   async userFollowing(req, res) {
     const { uid } = req.params;
 
-    const [info, data] = Promise.all([
+    const [info, data] = await Promise.all([
       API.getUserById(uid),
       API.getUserFollowing(uid),
     ]);
@@ -232,6 +236,7 @@ class Render extends BaseService {
       topic: {
         ...data,
         content: md2html(data.content),
+        created_at: moment(data.created_at).format('YYYY-MM-DD HH:mm'),
       },
       noReplyTopic,
     });
@@ -248,7 +253,10 @@ class Render extends BaseService {
 
     res.render('pages/topic-search', {
       title: '搜索结果',
-      topics: data.list,
+      topics: data.list.map(i => ({
+        ...i,
+        created_at: moment(i.created_at).format('YYYY-MM-DD HH:mm'),
+      })),
       totalPage: Math.ceil(data.total / 20),
       total: data.total,
       q,
@@ -273,7 +281,7 @@ class Render extends BaseService {
   async systemNotice(req, res) {
     const { token } = req.session;
 
-    const data = await API.getSystemNotice(token);
+    const data = await API.getNoticeSystem(token);
 
     res.render('pages/notice', {
       title: '系统消息',

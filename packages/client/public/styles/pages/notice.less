@@ -1,83 +1,87 @@
-.notice-item {
-  margin-bottom: 10px;
-  padding: 25px 20px;
-  background: @white;
-  border-radius: 4px;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.05);
+.notice {
+  background-color: @white;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+  .item {
+    margin-bottom: 10px;
+    padding: 25px 20px;
+    background: @white;
+    border-radius: 4px;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.05);
 
-  &.follow {
-    .title {
-      padding: 0 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
 
-      time {
-        float: right;
-        font-size: 12px;
-        color: @gray;
+    &.follow {
+      .title {
+        padding: 0 10px;
+
+        time {
+          float: right;
+          font-size: 12px;
+          color: @gray;
+        }
       }
-    }
 
-    .detail {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-      padding: 10px 20px;
-      border: 1px solid @gray-light;
-    }
+      .detail {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        padding: 10px 20px;
+        border: 1px solid @gray-light;
+      }
 
-    .avatar {
-      flex: 0 0 60px;
-      width: 60px;
-      height: 60px;
-    }
-
-    .nickname {
-      flex: auto;
-      margin-left: 20px;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .btn {
-      flex: 0 0 40px;
-    }
-  }
-
-  &.topic {
-    display: flex;
-
-    .avatar {
-      flex: 0 0 60px;
-      margin-right: 20px;
-      height: 60px;
-    }
-
-    .detail {
-      flex: auto;
+      .avatar {
+        flex: 0 0 60px;
+        width: 60px;
+        height: 60px;
+      }
 
       .nickname {
-        display: block;
+        flex: auto;
+        margin-left: 20px;
+        font-size: 16px;
         font-weight: 600;
-        font-size: 15px;
-        line-height: 1.2;
       }
 
-      time {
-        display: block;
-        font-size: 12px;
-        color: #a1a1a1;
+      .btn {
+        flex: 0 0 40px;
+      }
+    }
+
+    &.topic {
+      display: flex;
+
+      .avatar {
+        flex: 0 0 60px;
+        margin-right: 20px;
+        height: 60px;
       }
 
-      .content {
-        background: #f1f1f1;
-        padding: 4px 10px;
-        margin-top: 6px;
+      .detail {
+        flex: auto;
 
-        a {
+        .nickname {
+          display: block;
           font-weight: 600;
+          font-size: 15px;
+          line-height: 1.2;
+        }
+
+        time {
+          display: block;
+          font-size: 12px;
+          color: #a1a1a1;
+        }
+
+        .content {
+          background: #f1f1f1;
+          padding: 4px 10px;
+          margin-top: 6px;
+
+          a {
+            font-weight: 600;
+          }
         }
       }
     }

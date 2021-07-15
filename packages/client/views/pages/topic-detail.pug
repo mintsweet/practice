@@ -8,7 +8,7 @@ block content
           img(src=`${config.API}/upload/${topic.author_avatar}`)
         .nickname
           a(href=`/user/${topic.author_id}`) #{topic.author_nickname}
-          span #{topic.create_at}
+          span #{topic.created_at}
           span.visit 阅读 #{topic.visit_count}
       h1.title #{topic.title}
       .markdown
@@ -23,7 +23,7 @@ block content
         if user
           .avatar(for="reply")
             img(src=`${config.API}/upload/${topic.author_avatar}`)
-          form.reply-form(action=`/topic/${topic.id}/reply`, method="post")
+          form.reply-form(action=`/topic/${topic._id}/reply`, method="post")
             textarea.text(name="content" rows="2" placeholder="说说你的看法...")
             button.btn(type="submit") 评论
         else
@@ -32,36 +32,22 @@ block content
       ul.list
         each reply in topic.replys
           li
-            .info
-              a.avatar(href=`/user/${reply.author_id}`)
-                img(src=`${config.API}/upload/${reply.author_avatar}`)
-              a.nickname(href=`/user/${reply.author_id}`) #{reply.author_nickname}
-            .content #{reply.content}
-            .action
-              a#reply_up.mints.mints-like(href="javascript:;" title="点赞", data-id=reply.id)
-                span #{reply.ups.length}
-              a#reply_reply.mints.mints-reply(href="javascript:;" title="回复", data-id=reply.id)
-              if user && user.id === reply.author_id
-                a#reply_update.mints.mints-edit(href="javascript:;" title="编辑")
-                a#reply_delete.mints.mints-delete(href="javascript:;" title="删除", data-id=reply.id)
-              form#js_reply_save.reply-form(action=`/reply/${reply.id}/edit`, method="post")
-                input(type="hidden" name="tid", value=topic.id)
-                textarea(name="content" rows="2") #{reply.content}
-                button.btn(type="submit") 保存
-              form#js_reply_reply.reply-form(action=`/topic/${topic.id}/reply`, method="post")
-                input(type="hidden" name="reply_id", value=reply.id)
-                textarea(name="content" rows="2") @#{reply.author_nickname}
-                button.btn(type="submit") 回复
-              time #{reply.create_at_ago}
+            a.avatar(href=`/user/${reply.author_id}`)
+              img(src=`${config.API}/upload/${reply.author_avatar}`)
+            .detail
+              .info
+                a.nickname(href=`/user/${reply.author_id}`) #{reply.author_nickname}
+                time #{reply.created_at_ago}
+              .content #{reply.content}
         else
           include ../includes/empty.pug
-    .action
-    a#topic_like.mints.mints-star(href="javascript:;", class={ active: like }, data-id=topic._id)
-      span.number #{topic.like_count}
-    a.mints.mints-reply(href="#reply")
-      span#reply_count.number #{topic.reply_count}
-    a#topic_collect.mints.mints-collect(href="javascript:;", class={ active: collect })
-      span.number #{topic.collect_count}
+    .float-action
+      a#topic_like.mints.mints-star(href="javascript:;", class={ active: like }, data-id=topic._id)
+        span.number #{topic.like_count}
+      a.mints.mints-reply(href="#reply")
+        span#reply_count.number #{topic.reply_count}
+      a#topic_collect.mints.mints-collect(href="javascript:;", class={ active: collect })
+        span.number #{topic.collect_count}
   aside.aside
     include ../aside/author-info.pug
     include ../aside/topic-no-reply.pug

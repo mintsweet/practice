@@ -2,14 +2,14 @@ extends ../layout.pug
 
 append header
   .setting-bar
-    .layout
+    .inner
       a(href="/notice/user", class={ active: type === 'user' }) 用户消息
       a(href="/notice/system", class={ active: type === 'system' }) 系统消息
 block content
-  .content(class={ 'has-bg': data.length === 0 })
+  .content.notice
     each item in data
       if item.type === 'follow'
-        .notice-item.follow
+        .item.follow
           .title
             span #{item.typeName}
             time #{item.create_at}
@@ -20,7 +20,7 @@ block content
               span #{item.author.nickname}
             a.btn(href="javascript") 关注
       else
-        .notice-item.topic
+        .item.topic
           a.avatar(href=`/user/${item.author_id}`)
             img(src=`${config.API}/upload/${item.author_avatar}`)
           .detail
@@ -31,6 +31,3 @@ block content
               a(href=`/topic/${item.topic_id}`) #{item.topic_title}
     else
       include ../includes/empty.pug
-  .aside
-    include ../aside/user-info.pug
-    include ../aside/create-topic.pug

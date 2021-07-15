@@ -23,7 +23,7 @@ const http = async (url, params = {}) => {
   try {
     return await rq(options);
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 

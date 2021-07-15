@@ -1,10 +1,10 @@
-extends ../../layout.pug
+extends ../layout.pug
 
 append header
   .setting-bar
-    .layout
+    .inner
       a.active(href="/setting") 个人资料
-      a(href="/update_pass") 修改密码
+      a(href="/update-pass") 修改密码
 block content
   .content.page-setting
     .title 个人资料
@@ -12,12 +12,11 @@ block content
       .alert.alert-error(class={hidden: !error}) #{error}
       .form-item
         label(for="avatar") 头像
+        img(src=`${config.API}/upload/${user.avatar}`)
         .avatar
-          img(src=`${config.API}/upload/${user.avatar}`)
-          p
-            input#file(type="file" name="file")
-            span 支持 jpg、png 格式大小 1M 以内的图片
-            a.btn.upload(href="javascript:;") 点击上传
+          input#file(type="file" name="file")
+          span 支持 jpg、png 格式大小 1M 以内的图片
+          a.btn.upload(href="javascript:;") 点击上传
       .form-item
         label(for="nickname") 昵称
         input(type="text" name="nickname" placeholder="请输入昵称" autocomplete="off", value=user.nickname)
@@ -30,7 +29,7 @@ block content
       .form-item
         button.btn(type="submit") 更新个人资料
   .aside
-    include ../../aside/users-top.pug
+    include ../aside/users-top.pug
 append footer
   script.
     var signature = $('#signature');

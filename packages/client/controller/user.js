@@ -42,7 +42,7 @@ class User extends BaseService {
       const url = await this._getCaptchaUrl(req);
       res.render('pages/signup', {
         title: '注册',
-        error: err.message,
+        error: err.error,
         url,
       });
     }

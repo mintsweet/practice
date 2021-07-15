@@ -1,19 +1,19 @@
-extends ../../layout.pug
+extends ../layout.pug
 
 append header
   .setting-bar
-    .layout
+    .inner
       a(href="/setting") 个人资料
-      a.active(href="/update_pass") 修改密码
+      a.active(href="/update-pass") 修改密码
 block content
-  .content.setting
+  .content.page-setting
     .title 修改密码
     form.form(method="post")
       .alert.alert-error(class={hidden: !error}) #{error}
       .form-item
         label(for="oldPass") 旧密码
         input#oldPass(type="password", name="oldPass", placeholder="请输入旧密码")
-        a(href="/forget_pass") 忘记密码？
+        a(href="/forget-pass") 忘记密码？
       .form-item
         label(for="newPass") 新密码
         input#newPass(type="password", name="newPass", placeholder="请输入新密码")
@@ -23,7 +23,7 @@ block content
       .form-item
         button.btn.submit(type="submit") 保存修改
   .aside
-    include ../../aside/users-top.pug
+    include ../aside/users-top.pug
 append footer
   script.
     var oldPass = $('#oldPass');

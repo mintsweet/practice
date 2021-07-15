@@ -94,14 +94,15 @@ class Topic {
 
     try {
       await API.createReply(tid, req.body, token);
-
       res.render('pages/jump', {
+        title: '创建回复成功',
         type: 'success',
         url: `/topic/${tid}`,
         message: '创建回复成功',
       });
     } catch (err) {
       res.render('pages/jump', {
+        title: '创建回复失败',
         type: 'error',
         url: `/topic/${tid}`,
         message: '创建回复失败',

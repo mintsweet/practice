@@ -1,6 +1,6 @@
 .block
   .title 作者信息
-  .content
+  .content.author-info
     a.avatar(href=`/user/${topic.author_id}`)
       img(src=`${config.API}/upload/${topic.author_avatar}`)
     a.nickname(href=`/user/${topic.author_id}`) #{topic.author_nickname}

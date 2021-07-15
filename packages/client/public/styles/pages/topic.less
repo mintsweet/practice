@@ -208,6 +208,8 @@
 }
 
 .page-topic-detail {
+  background-color: #fff;
+
   .topic {
     padding: 20px 15px 0;
 
@@ -338,81 +340,42 @@
       padding: 10px 20px;
 
       li {
-        border-bottom: 1px dashed #f1f1f1;
-      }
-
-      .info {
         display: flex;
         align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px dashed #f1f1f1;
 
-        .avatar {
-          flex: 0 0 26px;
-          margin-right: 10px;
-          width: 26p;
-          height: 26px;
-
-          img {
-            display: block;
-          }
+        &:first-child {
+          border-top: 1px dashed #f1f1f1;
         }
+      }
 
+      .avatar {
+        flex: 0 0 48px;
+        margin-right: 10px;
+        width: 48px;
+        height: 48px;
+
+        img {
+          display: block;
+        }
+      }
+
+      .detail {
         .nickname {
           line-height: 1;
           font-weight: @font-weight-bold;
         }
-      }
 
-      .content {
-        margin-top: 10px;
-        font-size: @font-size-small;
-        line-height: 30px;
-      }
-
-      .action {
-        position: relative;
-
-        a.mints {
-          margin-right: 10px;
-          color: @gray;
+        .content {
           font-size: @font-size-small;
-
-          &:hover {
-            color: @theme-color;
-          }
-
-          span {
-            margin-left: 4px;
-          }
-        }
-
-        time {
-          position: absolute;
-          top: 0;
-          right: 0;
-          color: @gray;
-          font-size: 13px;
-          vertical-align: middle;
-        }
-      }
-
-      .reply-form {
-        display: none;
-
-        textarea {
-          display: block;
-          margin: 10px 0;
-          padding: 10px;
-          width: 100%;
-          border-color: #ddd;
-          border-radius: 4px;
-          resize: none;
-          box-sizing: border-box;
+          line-height: 30px;
         }
       }
     }
   }
 
-  .action {
+  .float-action {
     position: fixed;
     left: 100px;
     top: 50%;

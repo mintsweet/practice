@@ -17,71 +17,56 @@ block content
           a#follow_user(href="javascript:;", data-id=info.id) #{ info.follow ? '取消关注' : '关注' }
     .detail
       .tabs
-        a(href=`/user/${info.id}`, class={active: type === 'action'}) 动态
-        a(href=`/user/${info.id}/create`, class={active: type === 'create'}) 专栏
-        a(href=`/user/${info.id}/like`, class={active: type === 'like'}) 喜欢
+        a(href=`/user/${info._id}`, class={active: type === 'action'}) 动态
+        a(href=`/user/${info._id}/create`, class={active: type === 'create'}) 专栏
+        a(href=`/user/${info._id}/like`, class={active: type === 'like'}) 喜欢
         span(class={active: type === 'following' || type === 'follower' || type === 'collect' }) 更多
           .more
-            a(href=`/user/${info.id}/following`, class={active: type === 'following'}) 关注
-            a(href=`/user/${info.id}/follower`, class={active: type === 'follower'}) 粉丝
-            a(href=`/user/${info.id}/collect`, class={active: type === 'collect'}) 收藏集
+            a(href=`/user/${info._id}/following`, class={active: type === 'following'}) 关注
+            a(href=`/user/${info._id}/follower`, class={active: type === 'follower'}) 粉丝
+            a(href=`/user/${info._id}/collect`, class={active: type === 'collect'}) 收藏集
       ul.content
-        if type === 'following' || type === 'follower'
-          each item in data
-            li.follow-item
-              a.avatar(href=`/user/${item.id}`)
-                img(src=`${config.API}/upload/${item.avatar}`)
-              a.nickname(href=`/user/${item.id}`)
-                span #{item.nickname}
-          else
-            include ../includes/empty.pug
-        else if type === 'create'
-          each item in data
-            li.topic-item
-              a.topic(href=`/topic/${item.id}`) #{item.title}
-              .desc
-                span
-                  i.mints.mints-star
-                  | #{item.like_count}
-                span
-                  i.mints.mints-collect
-                  | #{item.collect_count}
-                span 阅读数 #{item.visit_count}
-          else
-            include ../includes/empty.pug
+        each item in data
+          li.action-item
+            case item.type
+              when 'create'
+                span 发布了话题
+                time #{item.create_at}
+                a.topic(href=`/topic/${item.id}`) #{item.title}
+              when 'like'
+                span 喜欢了话题
+                time #{item.create_at}
+                a.topic(href=`/topic/${item.id}`) #{item.title}
+              when 'collect'
+                span 收藏了话题
+                time #{item.create_at}
+                a.topic(href=`/topic/${item.id}`) #{item.title}
+              when 'follow'
+                span 关注了用户
+                time #{item.create_at}
+                .info
+                  a.avatar(href=`/user/${item.id}`)
+                    img(src=`${config.API}/upload/${item.avatar}`)
+                  .detail
+                    a.nickname(href=`/user/${item.id}`) #{item.nickname}
+                    span.signature #{item.signature}
         else
-          each item in data
-            li.action-item
-              case item.type
-                when 'create'
-                  span 发布了话题
-                  time #{item.create_at}
-                  a.topic(href=`/topic/${item.id}`) #{item.title}
-                when 'like'
-                  span 喜欢了话题
-                  time #{item.create_at}
-                  a.topic(href=`/topic/${item.id}`) #{item.title}
-                when 'collect'
-                  span 收藏了话题
-                  time #{item.create_at}
-                  a.topic(href=`/topic/${item.id}`) #{item.title}
-                when 'follow'
-                  span 关注了用户
-                  time #{item.create_at}
-                  .info
-                    a.avatar(href=`/user/${item.id}`)
-                      img(src=`${config.API}/upload/${item.avatar}`)
-                    .detail
-                      a.nickname(href=`/user/${item.id}`) #{item.nickname}
-                      span.signature #{item.signature}
-          else
-            include ../includes/empty.pug
+          include ../includes/empty.pug
   .aside
     include ../aside/user-info.pug
-    include ../aside/user-follow.pug
-    include ../aside/user-collect.pug
+    .block
+      .content.user-follow
+        .item
+          span 关注了
+          a(href=`/user/${info._id}/following`) #{info.following_count}
+        .item
+          span 关注者
+          a(href=`/user/${info._id}/follower`) #{info.follower_count}
+    .block
+      .content
+        a(href=`/user/${info._id}/collect`) 收藏集
 append footer
   script.
-    $('.user-gener .gener>span').hover(function() {
-      $('.user-gener .more').stop(true, false).fadeToggle();
+    $('.page-user-info .tabs>span').hover(function() {
+      $('.page-user-info .tabs>span .more').stop(true, false).fadeToggle();
     });
