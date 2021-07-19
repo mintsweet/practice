@@ -1,44 +1,38 @@
 {
   "name": "manage",
   "version": "1.0.0",
-  "license": "MIT",
-  "scripts": {
-    "dev": "umi dev",
-    "build": "umi build",
-    "test": "umi test",
-    "lint:es": "eslint --ext .js src mock tests",
-    "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\""
-  },
+  "private": true,
   "dependencies": {
-    "antd": "^3.12.1",
-    "axios": "^0.19.0",
-    "classnames": "^2.2.6",
-    "path-to-regexp": "^3.0.0",
-    "react": "^16.7.0",
-    "react-countup": "^4.1.1",
-    "react-dom": "^16.7.0"
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "typescript": "^4.1.2",
+    "web-vitals": "^1.0.1"
   },
-  "devDependencies": {
-    "@types/jest": "^23.3.12",
-    "@types/react": "^16.7.18",
-    "@types/react-dom": "^16.0.11",
-    "@types/react-test-renderer": "^16.0.3",
-    "babel-eslint": "^9.0.0",
-    "babel-plugin-import": "^1.11.0",
-    "eslint": "^5.4.0",
-    "eslint-config-umi": "^1.4.0",
-    "eslint-plugin-flowtype": "^2.50.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.11.1",
-    "react-test-renderer": "^16.7.0",
-    "tslint": "^5.12.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-react": "^3.6.0",
-    "umi": "^2.4.2",
-    "umi-plugin-react": "^1.4.0"
+  "scripts": {
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "engines": {
-    "node": ">=8.0.0"
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
