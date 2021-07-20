@@ -9,7 +9,6 @@ const {
 } = require('../../../config');
 const redis = require('../db/redis');
 const UserModel = require('../model/user');
-const ReplyModel = require('../model/reply');
 const TopicModel = require('../model/topic');
 const ActionModel = require('../model/action');
 const NoticeModel = require('../model/notice');
@@ -96,7 +95,7 @@ class User {
 
   // 登录
   async signin(ctx) {
-    const { email, password } = ctx.request.body;
+    const { email, password, isBackend } = ctx.request.body;
 
     // 校验邮箱
     if (!email || !EMAIL_REGEXP.test(email)) {
@@ -114,6 +113,10 @@ class User {
 
     if (!isMatch) {
       ctx.throw(400, '用户名或密码错误');
+    }
+
+    if (isBackend && !user.role) {
+      ctx.throw(403, '用户权限值不足');
     }
 
     // 返回JWT
