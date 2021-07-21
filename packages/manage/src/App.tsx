@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Authorized from '@/components/Authorized';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 
@@ -11,7 +12,9 @@ function App() {
             <Login />
           </Route>
           <Route path="/">
-            <Dashboard />
+            <Authorized>
+              <Dashboard />
+            </Authorized>
           </Route>
         </Switch>
       </Router>
