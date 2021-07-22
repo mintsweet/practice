@@ -1,3 +1,5 @@
+import BasicLayout from '@/components/BasicLayout';
+
 export default function Dashboard() {
-  return <div>dashboard</div>;
+  return <BasicLayout>dashboard</BasicLayout>;
 }

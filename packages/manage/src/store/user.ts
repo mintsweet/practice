@@ -69,4 +69,12 @@ export default new Reate(initState, {
       });
     }
   },
+  logout: store => {
+    storage.del('token');
+    store.setState({
+      status: 0,
+      error: '',
+      info: null,
+    });
+  },
 });
