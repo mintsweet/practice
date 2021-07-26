@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 import { Form, Input, Checkbox, Button, Alert } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import userStore, { LoginPayload } from '@/store/user';
 import logo from '@/assets/logo.png';
 import styles from './index.module.less';
@@ -15,6 +15,7 @@ export default function Login() {
   const loginStatus = userStore.useState('status');
   const loginError = userStore.useState('error');
   const autoLogin = userStore.useState('autoLogin');
+  const history = useHistory();
 
   const handleFinish = (values: LoginPayload) => {
     userStore.dispatch('login', values);
@@ -28,9 +29,9 @@ export default function Login() {
 
   useEffect(() => {
     if (loginStatus === 1) {
-      window.location.href = '/';
+      history.push('/');
     }
-  }, [loginStatus]);
+  }, [loginStatus, history]);
 
   return (
     <div className={styles.container}>
