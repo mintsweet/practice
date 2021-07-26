@@ -1,9 +1,20 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
+import userStore from '@/store/user';
 import Authorized from '@/components/Authorized';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 
 function App() {
+  useEffect(() => {
+    userStore.dispatch('getUserInfo');
+  }, []);
+
   return (
     <div className="app">
       <Router>
@@ -11,7 +22,8 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/">
+          <Redirect path="/" to="/dashboard" exact />
+          <Route path="/dashboard">
             <Authorized>
               <Dashboard />
             </Authorized>
