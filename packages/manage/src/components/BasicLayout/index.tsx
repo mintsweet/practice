@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Layout, Breadcrumb } from 'antd';
 import { CopyrightOutlined } from '@ant-design/icons';
@@ -34,17 +34,17 @@ export default function BasicLayout({ children }: Props) {
   const { pathname } = useLocation();
   const collapsed = globalStore.useState('collapsed');
 
-  const handleCollapse = () => {
+  const handleCollapse = useCallback(() => {
     globalStore.dispatch('changeCollapsed', {
       collapsed: !collapsed,
     });
-  };
+  }, [collapsed]);
 
-  const handleMenuClick = ({ key }: { key: string }) => {
+  const handleMenuClick = useCallback(({ key }: { key: string }) => {
     if (key === 'logout') {
       userStore.dispatch('logout');
     }
-  };
+  }, []);
 
   const getBreadcrumb = () => {
     const breadcrumbMap = getBreadcrumbNameMap(routes);
