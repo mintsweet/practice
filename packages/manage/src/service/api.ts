@@ -1,6 +1,6 @@
 import { Http, storage } from 'mints-utils';
 
-const http = new Http('/', {
+export const http = new Http('/', {
   requestBefore: config => {
     const token = storage.get('token');
 
