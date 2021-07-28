@@ -73,9 +73,9 @@ export default function BasicLayout({ children }: Props) {
   };
 
   return (
-    <Layout style={{ height: '100%' }}>
+    <Layout>
       <SiderMenu collapsed={collapsed} menus={routes} />
-      <Layout>
+      <Layout style={{ minHeight: '100vh' }}>
         <Header style={{ background: '#fff', padding: 0 }}>
           <CustomHeader
             collapsed={collapsed}

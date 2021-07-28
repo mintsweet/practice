@@ -43,7 +43,7 @@ function Header({ collapsed, onCollapse, onMenuClick }: Props) {
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={user.avatar}
+                src={`/upload/${user.avatar}`}
               />
               <span className={styles.name}>{user.nickname}</span>
             </span>

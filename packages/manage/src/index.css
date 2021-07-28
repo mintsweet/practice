@@ -1,7 +1,6 @@
 html,
 body,
-#root,
-.app {
+#root {
   height: 100%;
 }
 
