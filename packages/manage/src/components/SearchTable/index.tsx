@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Form, Row, Col, Button, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { http } from '@/service/api';
+import styles from './index.module.less';
 
-interface QueryFormItem {
+export interface QueryFormItem {
   label: string;
   name: string;
-  key: string;
   component?: any;
   render?: any;
   initialValue?: string | number | any[];
@@ -34,40 +34,53 @@ export default function SearchTable({
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const loadData = async (p = page, s = pageSize, q = query) => {
-    setLoading(true);
-    const params: { [key: string]: string | number } = {
-      ...q,
-      page: p,
-      pageSize: s,
-    };
+  const loadData = useCallback(
+    async (p = page, s = pageSize, q = query) => {
+      setLoading(true);
+      const params: { [key: string]: string | number } = {
+        ...q,
+        page: p,
+        pageSize: s,
+      };
 
-    try {
-      Object.keys(params).forEach(key => {
-        if (typeof params[key] === 'object') {
-          params[key] = JSON.stringify(params[key]);
-        }
-      });
+      try {
+        Object.keys(params).forEach(key => {
+          if (typeof params[key] === 'object') {
+            params[key] = JSON.stringify(params[key]);
+          }
+        });
 
-      const data = await http.get(tableQueryURL, params);
+        const data = await http.get(tableQueryURL, params);
 
-      setPage(p);
-      setPageSize(s);
-      setQuery(q);
-      setList(data.list);
-      setTotal(data.total);
-    } catch (err) {
-    } finally {
-      setLoading(false);
-    }
-  };
+        setPage(p);
+        setPageSize(s);
+        setQuery(q);
+        setList(data.list);
+        setTotal(data.total);
+      } catch (err) {
+      } finally {
+        setLoading(false);
+      }
+    },
+    [page, pageSize, query, tableQueryURL],
+  );
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   // 搜索提交
-  const handleQuerySubmit = (values: any) => loadData(page, pageSize, values);
+  const handleQuerySubmit = (values: any) => {
+    Object.keys(values).forEach(key => {
+      if (!values[key]) {
+        delete values[key];
+      } else if (typeof values[key] === 'object') {
+        values[key] = JSON.stringify(values[key]);
+      }
+    });
+
+    loadData(page, pageSize, values);
+  };
 
   // 搜索重置
   const handleQueryReset = () => form.resetFields();
@@ -79,9 +92,13 @@ export default function SearchTable({
   const handleChangePageSize = (p: number, s: number) => loadData(p, s);
 
   return (
-    <div>
+    <div className={styles.searchTable}>
       {queryFormConfig && queryFormConfig.length > 0 && (
-        <Form onFinish={handleQuerySubmit}>
+        <Form
+          form={form}
+          className={styles.queryForm}
+          onFinish={handleQuerySubmit}
+        >
           <Row>
             {queryFormConfig.map(
               ({ label, name, component, render, initialValue, rules }) => (
@@ -98,7 +115,7 @@ export default function SearchTable({
               ),
             )}
             <Col lg={(3 - (queryFormConfig.length % 3)) * 8}>
-              <Form.Item>
+              <Form.Item className={styles.searchBtn} label=" " colon={false}>
                 <Button
                   style={{ marginRight: 8 }}
                   disabled={loading}
@@ -118,6 +135,7 @@ export default function SearchTable({
       )}
       {children}
       <Table
+        className={styles.table}
         rowKey={row => row._id}
         columns={tableColumns}
         dataSource={list}
