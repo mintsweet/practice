@@ -12,9 +12,11 @@ const UserModel = require('../model/user');
 const TopicModel = require('../model/topic');
 const ActionModel = require('../model/action');
 const NoticeModel = require('../model/notice');
+const { formatRangeTime, formatFuzzy } = require('../utils');
 
 const EMAIL_REGEXP = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
-const PASSWORD_REGEXP = /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/;
+const PASSWORD_REGEXP =
+  /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?].{6,18}/;
 
 const forgetPassKey = key => `FORGET_PASS_${key}`;
 
@@ -745,15 +747,20 @@ class User {
 
   // 用户列表
   async roleGetUserList(ctx) {
-    const { page, size } = ctx.query;
+    const { page, pageSize, ...rest } = ctx.query;
+
+    const query = formatFuzzy(formatRangeTime(rest, ['created_at']), [
+      'email',
+      'nickname',
+    ]);
 
     const [list, total] = await Promise.all([
-      UserModel.find({})
+      UserModel.find(query)
         .select({ password: 0 })
         .sort({ created_at: -1 })
-        .limit(+size)
-        .skip((+page - 1) * size),
-      UserModel.countDocuments(),
+        .limit(+pageSize)
+        .skip((+page - 1) * pageSize),
+      UserModel.countDocuments(query),
     ]);
 
     ctx.body = { list, total };
