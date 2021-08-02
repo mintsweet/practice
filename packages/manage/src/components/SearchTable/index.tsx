@@ -1,4 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useImperativeHandle,
+} from 'react';
 import { Form, Row, Col, Button, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { http } from '@/service/api';
@@ -17,15 +22,14 @@ interface Props {
   tableColumns: ColumnProps<any>[];
   tableQueryURL: string;
   queryFormConfig?: QueryFormItem[];
+  ref?: React.RefObject<HTMLElement>;
   children?: React.ReactNode;
 }
 
-export default function SearchTable({
-  tableColumns,
-  tableQueryURL,
-  queryFormConfig,
-  children,
-}: Props) {
+function SearchTable(
+  { tableColumns, tableQueryURL, queryFormConfig, children }: Props,
+  ref: React.ForwardedRef<any>,
+) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [list, setList] = useState([]);
@@ -64,6 +68,10 @@ export default function SearchTable({
     },
     [page, pageSize, query, tableQueryURL],
   );
+
+  useImperativeHandle(ref, () => ({
+    loadData,
+  }));
 
   useEffect(() => {
     loadData();
@@ -152,3 +160,5 @@ export default function SearchTable({
     </div>
   );
 }
+
+export default React.forwardRef(SearchTable);
