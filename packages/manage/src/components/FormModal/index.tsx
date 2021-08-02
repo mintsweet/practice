@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form } from 'antd';
+import { Modal, Form, message } from 'antd';
 import styles from './index.module.less';
 
 export interface FormModalItem {
@@ -33,8 +33,8 @@ function FormModal({
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
-    form.resetFields();
-  }, [visible]);
+    return () => form.resetFields();
+  }, [visible, form]);
 
   const handleDoShake = () => {
     setShake(true);
@@ -53,6 +53,7 @@ function FormModal({
           await onSubmit(values);
         } catch (e) {
           handleDoShake();
+          message.error(e.response.data);
         } finally {
           setLoading(false);
         }
