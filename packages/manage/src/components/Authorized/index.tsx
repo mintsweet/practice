@@ -2,10 +2,17 @@ import { Redirect } from 'react-router-dom';
 import userStore from '@/store/user';
 
 interface Props {
+  role?: number;
   children: JSX.Element;
 }
 
-export default function Authorized({ children }: Props) {
+export default function Authorized({ role, children }: Props) {
   const loginStatus = userStore.useState('status');
-  return loginStatus === 1 ? children : <Redirect to="/login" />;
+  const userInfo = userStore.useState('info');
+
+  if (loginStatus !== 1) {
+    return <Redirect to="/login" />;
+  }
+
+  return role && role > (userInfo?.role || 0) ? null : children;
 }
