@@ -14,6 +14,7 @@ import styles from './index.module.less';
 export default function Login() {
   const loginStatus = userStore.useState('status');
   const loginError = userStore.useState('error');
+  const userInfo = userStore.useState('info');
   const autoLogin = userStore.useState('autoLogin');
   const history = useHistory();
 
@@ -28,10 +29,10 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (loginStatus === 1) {
+    if (userInfo) {
       history.push('/');
     }
-  }, [loginStatus, history]);
+  }, [userInfo, history]);
 
   return (
     <div className={styles.container}>
