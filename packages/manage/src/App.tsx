@@ -9,6 +9,7 @@ import userStore from '@/store/user';
 import Authorized from '@/components/Authorized';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
+import User from './pages/user';
 
 function App() {
   useEffect(() => {
@@ -26,6 +27,11 @@ function App() {
           <Route path="/dashboard">
             <Authorized>
               <Dashboard />
+            </Authorized>
+          </Route>
+          <Route path="/user">
+            <Authorized>
+              <User />
             </Authorized>
           </Route>
         </Switch>

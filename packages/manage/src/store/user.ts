@@ -15,6 +15,7 @@ interface UserInfo {
   score: number;
   location: string;
   signature: string;
+  role: number;
 }
 
 interface State {
