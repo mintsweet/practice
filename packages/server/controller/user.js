@@ -191,6 +191,7 @@ class User {
       location: 1,
       signature: 1,
       score: 1,
+      role: 1,
     });
     ctx.body = user;
   }
