@@ -15,7 +15,7 @@ import BasicLayout from '@/components/BasicLayout';
 import SearchTable, { QueryFormItem } from '@/components/SearchTable';
 import FormModal, { FormModalItem } from '@/components/FormModal';
 import Authorized from '@/components/Authorized';
-import * as Service from '@/service/api';
+import * as Service from './service';
 
 const { RangePicker } = DatePicker;
 const { Password } = Input;
