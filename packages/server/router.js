@@ -53,6 +53,7 @@ routerBe
   .post('/topic', auth(1), Topic.roleCreateTopic) // 创建话题
   .delete('/topic/:tid', auth(100), Topic.roleDeleteTopic) // 删除话题(超管物理删除)
   .put('/topic/:tid', auth(1), Topic.roleUpdateTopic) // 更新话题
+  .get('/topic/:tid', auth(1), Topic.roleGetTopicById) // 根据话题ID获取话题详情
   .put('/topic/:tid/top', auth(100), Topic.roleTopTopic) // 话题置顶
   .put('/topic/:tid/good', auth(1), Topic.roleGoodTopic) // 话题加精
   .put('/topic/:tid/lock', auth(1), Topic.roleLockTopic); // 话题锁定(封贴)

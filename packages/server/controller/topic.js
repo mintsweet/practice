@@ -738,6 +738,19 @@ class Topic {
     ctx.body = '';
   }
 
+  // 根据话题ID获取话题详情
+  async roleGetTopicById(ctx) {
+    const { tid } = ctx.params;
+
+    const topic = await TopicModel.findById(tid);
+
+    if (!topic) {
+      ctx.throw(404, '话题不存在');
+    }
+
+    ctx.body = topic;
+  }
+
   // 话题置顶
   async roleTopTopic(ctx) {
     const { tid } = ctx.params;
