@@ -10,6 +10,8 @@ import Authorized from '@/components/Authorized';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 import User from './pages/user';
+import Topic from './pages/topic';
+import TopicDetail from './pages/topic/[id]';
 
 function App() {
   useEffect(() => {
@@ -32,6 +34,16 @@ function App() {
           <Route path="/user">
             <Authorized>
               <User />
+            </Authorized>
+          </Route>
+          <Route path="/topic" exact>
+            <Authorized>
+              <Topic />
+            </Authorized>
+          </Route>
+          <Route path="/topic/detail">
+            <Authorized>
+              <TopicDetail />
             </Authorized>
           </Route>
         </Switch>
