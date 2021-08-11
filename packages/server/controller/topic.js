@@ -2,7 +2,6 @@ const { Types } = require('mongoose');
 const ActionModel = require('../model/action');
 const TopicModel = require('../model/topic');
 const UserModel = require('../model/user');
-const ReplyModel = require('../model/reply');
 const NoticeModel = require('../model/notice');
 
 class Topic {
@@ -587,55 +586,6 @@ class Topic {
     }
 
     ctx.body = action.is_un ? 'collect' : 'un_collect';
-  }
-
-  // 创建回复
-  async createReply(ctx) {
-    const { id } = ctx.state.user;
-    const { tid } = ctx.params;
-    const { content } = ctx.request.body;
-
-    const topic = await TopicModel.findOne({
-      _id: tid,
-      is_delete: false,
-    });
-
-    if (!topic) {
-      ctx.throw(404, '话题不存在');
-    }
-
-    if (!content) {
-      ctx.throw(400, '回复内容不能为空');
-    }
-
-    // 创建回复
-    const reply = await ReplyModel.create({
-      content,
-      aid: id,
-      tid,
-    });
-
-    // 更新话题相关信息
-    await TopicModel.updateOne(
-      { tid },
-      {
-        $inc: {
-          reply_count: 1,
-        },
-        last_reply_id: reply._id,
-        last_reply_at: new Date(),
-      },
-    );
-
-    // 发送提醒
-    await NoticeModel.create({
-      type: 'reply',
-      uid: topic.aid,
-      aid: id,
-      tid,
-    });
-
-    ctx.body = '';
   }
 
   // 获取话题列表

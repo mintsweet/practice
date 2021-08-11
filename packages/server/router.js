@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const Aider = require('./controller/aider');
 const User = require('./controller/user');
 const Topic = require('./controller/topic');
+const Reply = require('./controller/reply');
 const auth = require('./middleware/auth');
 
 const router = new Router();
@@ -37,7 +38,7 @@ router
   .get('/topic/:tid', Topic.getTopicById) // 根据ID获取话题详情
   .put('/topic/:tid/like', auth(), Topic.liekTopic) // 喜欢或者取消喜欢话题
   .put('/topic/:tid/collect', auth(), Topic.collectTopic) // 收藏或者取消收藏话题
-  .post('/topic/:tid/reply', auth(), Topic.createReply); // 创建回复
+  .post('/topic/:tid/reply', auth(), Reply.createReply); // 创建回复
 
 const routerBe = new Router({ prefix: '/backend' });
 
@@ -56,7 +57,9 @@ routerBe
   .get('/topic/:tid', auth(1), Topic.roleGetTopicById) // 根据话题ID获取话题详情
   .put('/topic/:tid/top', auth(100), Topic.roleTopTopic) // 话题置顶
   .put('/topic/:tid/good', auth(1), Topic.roleGoodTopic) // 话题加精
-  .put('/topic/:tid/lock', auth(1), Topic.roleLockTopic); // 话题锁定(封贴)
+  .put('/topic/:tid/lock', auth(1), Topic.roleLockTopic) // 话题锁定(封贴)
+  .get('/replys', auth(1), Reply.roleGetReplyList) // 获取回复列表
+  .delete('/reply/:rid', auth(100), Reply.roleDeleteReply); // 删除回复
 
 module.exports = {
   rt: router.routes(),
