@@ -1,7 +1,8 @@
 import {
   DashboardOutlined,
-  ProfileOutlined,
   UserOutlined,
+  ProfileOutlined,
+  TagsOutlined,
 } from '@ant-design/icons';
 
 const routes = [
@@ -21,14 +22,19 @@ const routes = [
     icon: <DashboardOutlined />,
   },
   {
+    path: '/user',
+    title: '用户管理',
+    icon: <UserOutlined />,
+  },
+  {
     path: '/topic',
     title: '话题管理',
     icon: <ProfileOutlined />,
   },
   {
-    path: '/user',
-    title: '用户管理',
-    icon: <UserOutlined />,
+    path: '/reply',
+    title: '回复管理',
+    icon: <TagsOutlined />,
   },
 ];
 

@@ -12,6 +12,7 @@ import Dashboard from './pages/dashboard';
 import User from './pages/user';
 import Topic from './pages/topic';
 import TopicDetail from './pages/topic/[id]';
+import Reply from './pages/reply';
 
 function App() {
   useEffect(() => {
@@ -44,6 +45,11 @@ function App() {
           <Route path="/topic/detail">
             <Authorized>
               <TopicDetail />
+            </Authorized>
+          </Route>
+          <Route path="/reply">
+            <Authorized>
+              <Reply />
             </Authorized>
           </Route>
         </Switch>
