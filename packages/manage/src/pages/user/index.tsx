@@ -8,6 +8,7 @@ import {
   InputNumber,
   Divider,
   Popconfirm,
+  Switch,
   message,
 } from 'antd';
 import moment from 'moment';
@@ -129,8 +130,16 @@ export default function User() {
       dataIndex: 'is_star',
       key: 'is_star',
       align: 'center' as 'center',
-      render: (val: boolean) =>
-        val ? <Tag color="blue">是</Tag> : <Tag color="magenta">否</Tag>,
+      render: (val: boolean, row: any) => (
+        <Authorized
+          role={100}
+          noAuth={
+            val ? <Tag color="green">是</Tag> : <Tag color="error">否</Tag>
+          }
+        >
+          <Switch checked={val} onChange={e => handleSetStar(row._id)} />
+        </Authorized>
+      ),
     },
     {
       title: '用户状态',
@@ -181,19 +190,6 @@ export default function User() {
               >
                 <Button type="link" danger>
                   删除
-                </Button>
-              </Popconfirm>
-              <Divider type="vertical" />
-            </>
-          </Authorized>
-          <Authorized role={100}>
-            <>
-              <Popconfirm
-                title="确认要修改此用户吗?"
-                onConfirm={() => handleSetStar(row._id)}
-              >
-                <Button type="link" style={{ color: '#1890ff' }}>
-                  {row.is_star ? '取消星标' : '设为星标'}
                 </Button>
               </Popconfirm>
               <Divider type="vertical" />
