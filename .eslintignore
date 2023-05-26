@@ -1,8 +1,0 @@
-# production
-dist
-
-# vendor
-public/vendor/
-
-# development
-node_modules

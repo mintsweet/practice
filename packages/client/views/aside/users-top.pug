@@ -1,9 +1,0 @@
-.block
-  .title
-    span 积分榜
-    a(href="/users/top100") 更多
-  ul.content.users-top
-    each item in top100
-      li
-        a.nickname(href=`/user/${item._id}`) #{item.nickname}
-        span.score #{item.score}
