@@ -21,3 +21,8 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+# next.js
+.next
+next-env.d.ts
+
