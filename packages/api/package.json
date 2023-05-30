@@ -13,14 +13,21 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "typeorm:migration-create": "yarn typeorm migration:create",
+    "typeorm:migration-run": "yarn typeorm migration:run -d ./orm.config.ts",
+    "typeorm:migration-revert": "yarn typeorm migration:revert -d ./orm.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/typeorm": "^9.0.1",
+    "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

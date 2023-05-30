@@ -10,6 +10,9 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@entity/*": ["src/entities/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
