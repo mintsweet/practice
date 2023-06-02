@@ -9,7 +9,9 @@ import { UsersModule } from './users';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.ENV ?? 'local'}`,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (service: ConfigService) => ({
