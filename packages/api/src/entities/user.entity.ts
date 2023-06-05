@@ -14,7 +14,7 @@ export class User extends Base {
   @Index({ unique: true })
   email: string;
 
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @Column({ unique: true })

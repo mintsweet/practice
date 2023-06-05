@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { genSaltSync, hashSync } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 
 import { UsersService } from '@users';
 
 @Injectable()
 export class AuthService {
-  constructor(private config: ConfigService, private users: UsersService) {}
+  constructor(
+    private config: ConfigService,
+    private jwt: JwtService,
+    private users: UsersService,
+  ) {}
 
   private hashPassword(password: string) {
     return hashSync(password, genSaltSync(+this.config.get('SALT_ROUNDS')));
+  }
+
+  private comparePassword(password: string, hash: string) {
+    return compareSync(password, hash);
   }
 
   public async signup(email: string, password: string, nickname: string) {
@@ -34,5 +43,21 @@ export class AuthService {
     });
 
     return user.id;
+  }
+
+  public async signin(email: string, password: string) {
+    const user = await this.users.findOne(email);
+
+    if (!user) {
+      throw new Error('Email or password is incorrect.');
+    }
+
+    const match = this.comparePassword(password, user.password);
+
+    if (!match) {
+      throw new Error('Email or password is incorrect.');
+    }
+
+    return this.jwt.sign({ email });
   }
 }
