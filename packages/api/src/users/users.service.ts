@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 
 import { User } from '@entities';
 
@@ -29,5 +29,9 @@ export class UsersService {
 
   public async findOne(email: string) {
     return this.user.findOneBy({ email });
+  }
+
+  public async exist(condition: FindManyOptions<User>) {
+    return this.user.exist(condition);
   }
 }

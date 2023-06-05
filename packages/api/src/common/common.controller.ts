@@ -5,9 +5,6 @@ export class CommonController {
   @Get('captcha')
   captcha() {}
 
-  @Post('signup')
-  signup() {}
-
   @Post('signin')
   signin() {}
 

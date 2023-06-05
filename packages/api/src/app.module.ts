@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { BaseModule } from './base';
 import { CommonModule } from './common';
 import { NoticesModule } from './notices';
 import { TopicsModule } from './topics';
@@ -25,6 +26,7 @@ import { UsersModule } from './users';
       }),
       inject: [ConfigService],
     }),
+    BaseModule,
     CommonModule,
     NoticesModule,
     TopicsModule,
