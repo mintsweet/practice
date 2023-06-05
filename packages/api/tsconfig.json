@@ -11,7 +11,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@entity/*": ["src/entities/*"]
+      "@*": ["src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
