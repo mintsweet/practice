@@ -1,5 +1,7 @@
 import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
+import { UserRole } from '../src/entities';
+
 export class intUserTable1685426744431 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -13,12 +15,10 @@ export class intUserTable1685426744431 implements MigrationInterface {
             generationStrategy: 'uuid',
             isPrimary: true,
           },
-          { name: 'email', type: 'varchar' },
+          { name: 'email', type: 'varchar', isUnique: true },
           { name: 'password', type: 'varchar' },
-          { name: 'nickname', type: 'varchar' },
-          { name: 'avatar', type: 'varchar', isNullable: true },
-          { name: 'location', type: 'varchar', isNullable: true },
-          { name: 'signature', type: 'varchar', isNullable: true },
+          { name: 'nickname', type: 'varchar', isUnique: true },
+          { name: 'signature', type: 'varchar', default: `''` },
           { name: 'score', type: 'int', default: 0 },
           { name: 'is_star', type: 'bool', default: false },
           { name: 'is_lock', type: 'bool', default: false },
@@ -31,18 +31,12 @@ export class intUserTable1685426744431 implements MigrationInterface {
           {
             name: 'role',
             type: 'enum',
-            enum: ['root', 'admin', 'user'],
+            enum: Object.values(UserRole),
+            enumName: 'user_role',
+            default: `'${UserRole.USER}'`,
           },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'now()',
-          },
-          {
-            name: 'updated_at',
-            type: 'timestamp',
-            default: 'now()',
-          },
+          { name: 'created_at', type: 'timestamp', default: 'now()' },
+          { name: 'updated_at', type: 'timestamp', default: 'now()' },
         ],
       }),
       true,
@@ -51,14 +45,14 @@ export class intUserTable1685426744431 implements MigrationInterface {
     await queryRunner.createIndex(
       'user',
       new TableIndex({
-        name: 'IDX_USER_NAME',
+        name: 'IDX_USER_EMAIL',
         columnNames: ['email'],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropIndex('user', 'IDX_USER_NAME');
+    await queryRunner.dropIndex('user', 'IDX_USER_EMAIL');
     await queryRunner.dropTable('user');
   }
 }

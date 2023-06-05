@@ -10,52 +10,46 @@ export enum UserRole {
 
 @Entity()
 export class User extends Base {
-  @Column()
+  @Column({ unique: true })
   @Index({ unique: true })
-  email!: string;
+  email: string;
 
   @Column({ select: false })
-  password!: string;
+  password: string;
 
-  @Column()
-  nickname!: string;
+  @Column({ unique: true })
+  nickname: string;
 
-  @Column({ nullable: true })
-  avatar: string;
-
-  @Column({ nullable: true })
-  location: string;
-
-  @Column({ nullable: true })
+  @Column({ default: '' })
   signature: string;
 
   @Column({ default: 0 })
-  score!: number;
+  score: number;
 
-  @Column({ default: false })
-  is_star!: boolean;
+  @Column({ name: 'is_star', default: false })
+  isStar: boolean;
 
-  @Column({ default: false })
-  is_lock!: boolean;
+  @Column({ name: 'is_lock', default: false })
+  isLock: boolean;
 
-  @Column({ default: false })
-  is_delete!: boolean;
+  @Column({ name: 'is_delete', default: false })
+  isDelete: boolean;
 
-  @Column({ default: 0 })
-  topic_count!: number;
+  @Column({ name: 'topic_count', default: 0 })
+  topicCount: number;
 
-  @Column({ default: 0 })
-  star_count!: number;
+  @Column({ name: 'star_count', default: 0 })
+  starCount: number;
 
-  @Column({ default: 0 })
-  collect_count!: number;
+  @Column({ name: 'collect_count', default: 0 })
+  collectCount: number;
 
-  @Column({ default: 0 })
-  follower_count!: number;
+  @Column({ name: 'follower_count', default: 0 })
+  followerCount!: number;
 
-  @Column({ default: 0 })
-  following_count!: number;
+  @Column({ name: 'following_count', default: 0 })
+  followingCount!: number;
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
-  role!: UserRole;
+  role: UserRole;
 }
