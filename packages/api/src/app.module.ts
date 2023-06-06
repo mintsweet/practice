@@ -26,6 +26,7 @@ import { UsersModule } from './users';
         username: service.get('DB_USERNAME'),
         password: service.get('DB_PASSWORD'),
         autoLoadEntities: true,
+        synchronize: service.get('DB_SYNCHRONIZE'),
       }),
       inject: [ConfigService],
     }),
