@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Post,
-  HttpException,
+  BadRequestException,
   HttpStatus,
 } from '@nestjs/common';
 
@@ -21,13 +21,10 @@ export class AuthController {
       const uid = await this.auth.signup(email, password, nickname);
       return { uid };
     } catch (err) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: err.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException({
+        status: HttpStatus.BAD_REQUEST,
+        error: err.message,
+      });
     }
   }
 
@@ -41,13 +38,10 @@ export class AuthController {
       const accessToken = await this.auth.signin(email, password);
       return { accessToken };
     } catch (err) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: err.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException({
+        status: HttpStatus.BAD_REQUEST,
+        error: err.message,
+      });
     }
   }
 }
