@@ -3,20 +3,20 @@ import {
   Get,
   Put,
   Body,
-  UseGuards,
   Request,
   BadRequestException,
   HttpStatus,
 } from '@nestjs/common';
 
-import { AuthService, AuthGuard } from '@auth';
+import { AuthService, Role } from '@auth';
+import { UserRole } from '@entities';
 import { ProfileDTO } from '@dto';
 
 @Controller()
 export class ProfileController {
   constructor(private auth: AuthService) {}
 
-  @UseGuards(AuthGuard)
+  @Role(UserRole.USER)
   @Get('profile')
   public async getProfile(@Request() req) {
     const { email } = req.user;
@@ -31,7 +31,7 @@ export class ProfileController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Role(UserRole.USER)
   @Put('profile')
   public async updateProfile(@Request() req, @Body() payload: ProfileDTO) {
     const { email } = req.user;

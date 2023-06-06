@@ -6,13 +6,14 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { AuthService } from '@auth';
+import { AuthService, Public } from '@auth';
 import { SignUpDTO, SigninDTO } from '@dto';
 
 @Controller()
 export class AuthController {
   constructor(private auth: AuthService) {}
 
+  @Public()
   @Post('signup')
   public async signup(@Body() payload: SignUpDTO): Promise<{ uid: string }> {
     const { email, password, nickname } = payload;
@@ -28,6 +29,7 @@ export class AuthController {
     }
   }
 
+  @Public()
   @Post('signin')
   public async signin(
     @Body() payload: SigninDTO,
