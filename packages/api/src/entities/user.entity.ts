@@ -2,12 +2,6 @@ import { Entity, Column, Index } from 'typeorm';
 
 import { Base } from './base.entity';
 
-export enum UserRole {
-  ROOT = 'root',
-  ADMIN = 'admin',
-  USER = 'user',
-}
-
 @Entity()
 export class User extends Base {
   @Column({ unique: true })
@@ -50,6 +44,6 @@ export class User extends Base {
   @Column({ name: 'following_count', default: 0 })
   followingCount!: number;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
-  role: UserRole;
+  @Column({ default: 1 })
+  role: number;
 }

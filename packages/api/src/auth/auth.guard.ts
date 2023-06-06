@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-    const role = this.reflector.get<string>('role', context.getHandler());
+    const role = this.reflector.get<number>('role', context.getHandler());
 
     if (!token) {
       throw new UnauthorizedException({
@@ -63,7 +63,7 @@ export class AuthGuard implements CanActivate {
 
     const user = await this.user.findOne(payload.email);
 
-    if (!user || user.role !== role) {
+    if (!user || user.role >= role) {
       throw new ForbiddenException({
         status: HttpStatus.FORBIDDEN,
         error: 'The user has insufficient permissions',

@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { genSaltSync, hashSync } from 'bcrypt';
 
-import { User, UserRole } from '../src/entities/user.entity';
+import { User } from '../src/entities';
 
 const { SALT_ROUNDS, ROOT_PASS } = process.env;
 
@@ -12,7 +12,7 @@ export class InitUserRoot1685428173986 implements MigrationInterface {
         email: 'root@practice.com',
         password: hashSync(ROOT_PASS, genSaltSync(+SALT_ROUNDS)),
         nickname: 'root',
-        role: UserRole.ROOT,
+        role: 101,
       }),
     );
   }

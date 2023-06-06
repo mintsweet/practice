@@ -1,3 +1,4 @@
 import { SetMetadata } from '@nestjs/common';
 
-export const Role = (role: string) => SetMetadata('role', role);
+// Use role number to distinguish permission levels
+export const Role = (role = 1) => SetMetadata('role', role);

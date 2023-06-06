@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 
 import { AuthService, Role } from '@auth';
-import { UserRole } from '@entities';
 
 import { ProfileDTO } from '../dtos';
 
@@ -17,7 +16,7 @@ import { ProfileDTO } from '../dtos';
 export class ProfileController {
   constructor(private auth: AuthService) {}
 
-  @Role(UserRole.USER)
+  @Role()
   @Get('profile')
   public async getProfile(@Request() req) {
     const { email } = req.user;
@@ -32,7 +31,7 @@ export class ProfileController {
     }
   }
 
-  @Role(UserRole.USER)
+  @Role()
   @Put('profile')
   public async updateProfile(@Request() req, @Body() payload: ProfileDTO) {
     const { email } = req.user;

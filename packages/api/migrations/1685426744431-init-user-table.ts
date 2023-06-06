@@ -1,7 +1,5 @@
 import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
-import { UserRole } from '../src/entities';
-
 export class intUserTable1685426744431 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -28,13 +26,7 @@ export class intUserTable1685426744431 implements MigrationInterface {
           { name: 'collect_count', type: 'int', default: 0 },
           { name: 'follower_count', type: 'int', default: 0 },
           { name: 'following_count', type: 'int', default: 0 },
-          {
-            name: 'role',
-            type: 'enum',
-            enum: Object.values(UserRole),
-            enumName: 'user_role',
-            default: `'${UserRole.USER}'`,
-          },
+          { name: 'role', type: 'init', default: 1 },
           { name: 'created_at', type: 'timestamp', default: 'now()' },
           { name: 'updated_at', type: 'timestamp', default: 'now()' },
         ],
