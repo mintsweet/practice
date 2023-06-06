@@ -63,7 +63,7 @@ export class AuthGuard implements CanActivate {
 
     const user = await this.user.findOne(payload.email);
 
-    if (!user || user.role >= role) {
+    if (!user || user.role < role) {
       throw new ForbiddenException({
         status: HttpStatus.FORBIDDEN,
         error: 'The user has insufficient permissions',
