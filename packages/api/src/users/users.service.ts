@@ -34,4 +34,21 @@ export class UsersService {
   public async exist(condition: FindManyOptions<User>) {
     return this.user.exist(condition);
   }
+
+  public async getProfile(email: string) {
+    return this.user.findOne({
+      where: { email },
+      select: {
+        email: true,
+        nickname: true,
+        signature: true,
+        score: true,
+        topicCount: true,
+        starCount: true,
+        collectCount: true,
+        followerCount: true,
+        followingCount: true,
+      },
+    });
+  }
 }

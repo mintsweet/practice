@@ -60,4 +60,8 @@ export class AuthService {
 
     return this.jwt.sign({ email });
   }
+
+  public async getProfile(email: string) {
+    return this.users.getProfile(email);
+  }
 }
