@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 
 import { AuthService, Public } from '@auth';
-import { SignUpDTO, SigninDTO } from '@dto';
+
+import { SignUpDTO, SigninDTO } from '../dtos';
 
 @Controller()
 export class AuthController {

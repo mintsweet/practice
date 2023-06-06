@@ -10,7 +10,8 @@ import {
 
 import { AuthService, Role } from '@auth';
 import { UserRole } from '@entities';
-import { ProfileDTO } from '@dto';
+
+import { ProfileDTO } from '../dtos';
 
 @Controller()
 export class ProfileController {
