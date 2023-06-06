@@ -5,6 +5,8 @@ import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 
 import { UsersService } from '@users';
 
+import { IProfile } from './auth.interface';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -63,5 +65,37 @@ export class AuthService {
 
   public async getProfile(email: string) {
     return this.users.getProfile(email);
+  }
+
+  public async updateProfile(
+    email: string,
+    { nickname, signature, oldPass, newPass }: IProfile,
+  ) {
+    const user = await this.users.findOne(email);
+
+    if (nickname) {
+      const exist = await this.users.exist({ where: { nickname } });
+      if (exist) {
+        throw new Error(`The nickname of ${nickname} already exists.`);
+      }
+    }
+
+    let hashPassword = user.password;
+
+    if (oldPass && newPass) {
+      const match = this.comparePassword(oldPass, hashPassword);
+
+      if (!match) {
+        throw new Error('Old password is incorrect.');
+      }
+
+      hashPassword = this.hashPassword(newPass);
+    }
+
+    await this.users.update(email, {
+      nickname,
+      signature,
+      password: hashPassword,
+    });
   }
 }
