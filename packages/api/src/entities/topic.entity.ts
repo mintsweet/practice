@@ -44,4 +44,7 @@ export class Topic extends Base {
 
   @Column({ name: 'comment_count', default: 0 })
   commentCount: number;
+
+  @OneToMany(() => Comment, (comment) => comment.topic)
+  comments: Comment;
 }

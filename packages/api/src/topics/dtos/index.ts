@@ -1,3 +1,4 @@
+export * from './create-comment';
 export * from './create-tab';
 export * from './create-topic';
 export * from './query-topic';

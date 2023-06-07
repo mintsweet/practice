@@ -15,7 +15,12 @@ import {
 import { Role, Public } from '@auth';
 
 import { TopicsService } from '../topics.service';
-import { CreateTopicDTO, UpdateTopicDTO, QueryTopicDTO } from '../dtos';
+import {
+  CreateTopicDTO,
+  UpdateTopicDTO,
+  QueryTopicDTO,
+  CreateCommentDTO,
+} from '../dtos';
 
 @Controller('topics')
 export class TopicsController {
@@ -118,6 +123,27 @@ export class TopicsController {
     try {
       await this.topics.collectTopic(email, id);
       return { success: true };
+    } catch (err) {
+      throw new BadRequestException({
+        status: HttpStatus.BAD_REQUEST,
+        error: err.message,
+      });
+    }
+  }
+
+  @Role()
+  @Post(':id/comment')
+  public async createComment(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() data: CreateCommentDTO,
+  ) {
+    const { email } = req.user;
+    const { content } = data;
+
+    try {
+      const commentId = await this.topics.createComment(email, id, content);
+      return { commentId };
     } catch (err) {
       throw new BadRequestException({
         status: HttpStatus.BAD_REQUEST,

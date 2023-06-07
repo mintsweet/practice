@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
-import { Tab, Topic, User } from '@entities';
+import { Tab, Topic, Comment, User } from '@entities';
 
 @Injectable()
 export class TopicsService {
   constructor(
     @InjectRepository(Tab) private readonly tab: Repository<Tab>,
     @InjectRepository(Topic) private readonly topic: Repository<Topic>,
+    @InjectRepository(Comment) private readonly comment: Repository<Comment>,
     @InjectRepository(User) private readonly user: Repository<User>,
     private dataSource: DataSource,
   ) {}
@@ -167,6 +168,27 @@ export class TopicsService {
         { collectCount: () => 'collect_count + 1' },
       );
       await queryRunner.commitTransaction();
+    } catch {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  public async createComment(email: string, topicId: string, content: string) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const topic = await this.topic.findOneBy({ id: topicId });
+      const author = await this.user.findOneBy({ email });
+      const comment = await this.comment.save({ content, topic, author });
+
+      await queryRunner.commitTransaction();
+
+      return comment.id;
     } catch {
       await queryRunner.rollbackTransaction();
     } finally {
