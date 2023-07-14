@@ -6,3 +6,6 @@ migration-revert:
 
 api-dev:
 	- yarn workspace @practice/api start:dev
+
+website-dev:
+	- yarn workspace @practice/website dev
