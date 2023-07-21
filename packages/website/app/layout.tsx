@@ -1,3 +1,7 @@
+import './global.css';
+
+import { Header, Footer } from './components';
+
 export const metadata = {
   title: 'Practice',
 };
@@ -9,7 +13,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main>
+          <div className="container mx-auto">{children}</div>
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }
