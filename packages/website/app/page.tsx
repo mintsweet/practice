@@ -1,3 +1,9 @@
+import { Topics } from './components';
+
 export default function Home() {
-  return <main>Hello Practice.</main>;
+  return (
+    <div>
+      <Topics />
+    </div>
+  );
 }
