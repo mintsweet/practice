@@ -30,3 +30,14 @@ next-env.d.ts
 .env.development
 .env.production
 .env.test
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
