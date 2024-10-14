@@ -20,12 +20,10 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^8.41.0",
-    "eslint-config-mints": "^2.1.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "@mints/eslint-config": "^1.0.2",
+    "eslint": "^8.57.0",
     "husky": "^8.0.0",
-    "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8"
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
   }
 }
