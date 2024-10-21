@@ -12,6 +12,13 @@
 
 node_modules
 dist
+build
+
+# testing
+/coverage
+
+# next.js
+.next
 
 # Logs
 logs
@@ -22,14 +29,15 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# next.js
-.next
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
 next-env.d.ts
-.env
-.env.local
-.env.development
-.env.production
-.env.test
 
 # Editor directories and files
 .vscode/*
