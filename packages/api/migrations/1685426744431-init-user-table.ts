@@ -26,7 +26,7 @@ export class intUserTable1685426744431 implements MigrationInterface {
           { name: 'collect_count', type: 'int', default: 0 },
           { name: 'follower_count', type: 'int', default: 0 },
           { name: 'following_count', type: 'int', default: 0 },
-          { name: 'role', type: 'init', default: 1 },
+          { name: 'role', type: 'int', default: 1 },
           { name: 'created_at', type: 'timestamp', default: 'now()' },
           { name: 'updated_at', type: 'timestamp', default: 'now()' },
         ],
