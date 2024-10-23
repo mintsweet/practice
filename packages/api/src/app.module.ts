@@ -7,7 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from '@auth';
 
 import { BaseModule } from './base';
-import { NoticesModule } from './notices';
 import { TopicsModule } from './topics';
 import { UsersModule } from './users';
 
@@ -32,7 +31,6 @@ import { UsersModule } from './users';
     }),
     JwtModule,
     BaseModule,
-    NoticesModule,
     TopicsModule,
     UsersModule,
   ],
