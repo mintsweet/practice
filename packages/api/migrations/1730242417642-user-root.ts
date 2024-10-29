@@ -1,11 +1,12 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+
 import { genSaltSync, hashSync } from 'bcrypt';
 
 import { User } from '../src/entities';
 
 const { SALT_ROUNDS, ROOT_PASS } = process.env;
 
-export class InitUserRoot1685428173986 implements MigrationInterface {
+export class UserRoot1730242417642 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.manager.save(
       queryRunner.manager.create(User, {
