@@ -14,13 +14,13 @@ import {
 
 import { Role, Public } from '@auth';
 
-import { TopicsService } from '../topics.service';
+import { TopicsService } from './topics.service';
 import {
   CreateTopicDTO,
   UpdateTopicDTO,
   QueryTopicDTO,
   CreateCommentDTO,
-} from '../dtos';
+} from './dtos';
 
 @Controller('topics')
 export class TopicsController {

@@ -12,8 +12,8 @@ import {
 
 import { Role, Public } from '@auth';
 
-import { TopicsService } from '../topics.service';
-import { CreateTabDTO, UpdateTabDTO } from '../dtos';
+import { TopicsService } from './topics.service';
+import { CreateTabDTO, UpdateTabDTO } from './dtos';
 
 @Controller('tabs')
 export class TabsController {
