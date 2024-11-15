@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Tab, Topic, User, Comment } from '@entities';
+import { Tab, Topic, User, Comment } from '@/entities';
 
 import { TopicsController } from './topics.controller';
 import { TopicsService } from './topics.service';

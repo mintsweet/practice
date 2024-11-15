@@ -8,7 +8,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { AuthService, Role } from '@auth';
+import { AuthService, Role } from '@/auth';
 
 import { ProfileDTO } from '../dtos';
 

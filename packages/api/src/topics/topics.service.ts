@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
-import { Tab, Topic, Comment, User } from '@entities';
+import { Tab, Topic, Comment, User } from '@/entities';
 
 @Injectable()
 export class TopicsService {

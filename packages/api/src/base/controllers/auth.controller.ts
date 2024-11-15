@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { AuthService, Public } from '@auth';
+import { AuthService, Public } from '@/auth';
 
 import { SignUpDTO, SigninDTO } from '../dtos';
 

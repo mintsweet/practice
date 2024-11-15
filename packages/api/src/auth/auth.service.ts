@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 
-import { UsersService } from '@users';
+import { UsersService } from '@/users';
 
 import { IProfile } from './auth.interface';
 

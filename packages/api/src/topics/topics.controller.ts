@@ -12,7 +12,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { Role, Public } from '@auth';
+import { Role, Public } from '@/auth';
 
 import { TopicsService } from './topics.service';
 import {

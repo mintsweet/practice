@@ -10,7 +10,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { Role, Public } from '@auth';
+import { Role, Public } from '@/auth';
 
 import { TabsService } from './tabs.service';
 import { CreateTabDTO, UpdateTabDTO } from './dtos';
