@@ -12,12 +12,12 @@ import {
 
 import { Role, Public } from '@auth';
 
-import { TopicsService } from './topics.service';
+import { TabsService } from './tabs.service';
 import { CreateTabDTO, UpdateTabDTO } from './dtos';
 
 @Controller('tabs')
 export class TabsController {
-  constructor(private topics: TopicsService) {}
+  constructor(private tabs: TabsService) {}
 
   @Role(10)
   @Post('')
@@ -25,7 +25,7 @@ export class TabsController {
     const { sign, summary } = data;
 
     try {
-      await this.topics.createTab(sign, summary);
+      await this.tabs.createTab(sign, summary);
       return { success: true };
     } catch (err) {
       throw new BadRequestException({
@@ -39,7 +39,7 @@ export class TabsController {
   @Delete(':id')
   public async delete(@Param('id') id: string) {
     try {
-      await this.topics.deleteTab(id);
+      await this.tabs.deleteTab(id);
       return { success: true };
     } catch (err) {
       throw new BadRequestException({
@@ -53,7 +53,7 @@ export class TabsController {
   @Put(':id')
   public async update(@Param('id') id: string, @Body() data: UpdateTabDTO) {
     try {
-      await this.topics.updateTab(id, data);
+      await this.tabs.updateTab(id, data);
       return { success: true };
     } catch (err) {
       throw new BadRequestException({
@@ -67,7 +67,7 @@ export class TabsController {
   @Get('')
   public async query() {
     try {
-      const tabs = await this.topics.getTabs();
+      const tabs = await this.tabs.getTabs();
       return tabs;
     } catch (err) {
       throw new BadRequestException({

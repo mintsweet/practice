@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Tab, Topic, User, Comment } from '@entities';
 
-import { TopicsController } from './topics.controller';
-import { TopicsService } from './topics.service';
+import { TabsController } from './tabs.controller';
+import { TabsService } from './tabs.service';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { TopicsService } from './topics.service';
     ConfigModule,
     JwtModule,
   ],
-  controllers: [TopicsController],
-  providers: [TopicsService],
+  controllers: [TabsController],
+  providers: [TabsService],
 })
-export class TopicsModule {}
+export class TabsModule {}
