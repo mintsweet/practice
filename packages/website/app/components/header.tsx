@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const getTabs = async () => {
   const res = await fetch('http://localhost:3000/tabs');
@@ -21,11 +21,13 @@ export async function Header() {
           </div>
         </div>
         <ul className="flex-auto flex items-center">
-          {[{ sign: 'top' }, { sign: 'good' }, ...tabs].map((tab: any) => (
-            <li className="flex-1" key={tab.sign}>
-              <Link href={`/topics?tab=${tab.sign}`}>{tab.sign}</Link>
-            </li>
-          ))}
+          {[{ sign: 'top' }, { sign: 'good' }, ...tabs].map(
+            (tab: { sign: string }) => (
+              <li className="flex-1" key={tab.sign}>
+                <Link href={`/topics?tab=${tab.sign}`}>{tab.sign}</Link>
+              </li>
+            ),
+          )}
           <li className="flex-1">
             <Link href="/signup">Signup</Link>
           </li>

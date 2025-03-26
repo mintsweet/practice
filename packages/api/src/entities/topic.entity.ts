@@ -1,9 +1,9 @@
 import { Entity, OneToOne, JoinColumn, Column, OneToMany } from 'typeorm';
 
 import { Base } from './base.entity';
+import { Comment } from './comment.entity';
 import { Tab } from './tab.entity';
 import { User } from './user.entity';
-import { Comment } from './comment.entity';
 
 @Entity()
 export class Topic extends Base {

@@ -1,6 +1,5 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
-
 import { genSaltSync, hashSync } from 'bcrypt';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 import { User } from '../src/entities';
 

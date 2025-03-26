@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 import { Tab } from '@/entities';
 
@@ -63,7 +63,7 @@ describe('TabsService', () => {
 
   describe('deleteTab', () => {
     it('should mark a tab as deleted', async () => {
-      repository.update.mockResolvedValue({ affected: 1 } as any);
+      repository.update.mockResolvedValue({ affected: 1 } as UpdateResult);
 
       const result = await service.deleteTab('123');
       expect(result).toEqual({ affected: 1 });
@@ -77,7 +77,7 @@ describe('TabsService', () => {
   describe('updateTab', () => {
     it('should update a tab when the sign does not exist', async () => {
       repository.exist.mockResolvedValue(false);
-      repository.update.mockResolvedValue({ affected: 1 } as any);
+      repository.update.mockResolvedValue({ affected: 1 } as UpdateResult);
 
       const result = await service.updateTab('123', {
         sign: 'new-sign',
