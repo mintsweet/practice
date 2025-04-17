@@ -1,3 +1,5 @@
+import Topics from '@/components/topics';
+
 export default function Home({
   searchParams,
 }: {
@@ -53,7 +55,18 @@ export default function Home({
             ))}
           </div>
         </div>
-        <div className="bg-[#fefefe] p-4 rounded shadow">TODO: Topic List</div>
+        <div className="bg-[#fefefe] p-4 rounded shadow">
+          <Topics
+            topics={[]}
+            config={{
+              API: '',
+              tabs: {},
+            }}
+            currentPage={1}
+            totalPage={1}
+            tab="all"
+          />
+        </div>
       </div>
       <aside className="w-full lg:w-[280px] shrink-0 space-y-4">
         {user && (
