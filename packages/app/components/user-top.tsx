@@ -10,7 +10,7 @@ interface UsersTopProps {
   top100: User[];
 }
 
-export default function UsersTop({ top100 }: UsersTopProps) {
+export default function UserTop({ top100 }: UsersTopProps) {
   return (
     <div className="bg-[#fefefe] rounded p-4">
       <div className="flex justify-between items-center mb-2">
