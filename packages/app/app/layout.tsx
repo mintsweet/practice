@@ -6,7 +6,9 @@ import Header from '@/components/header';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Practice',
+  title: process.env.PRACTICE_TITLE || 'Practice',
+  description: process.env.PRACTICE_DESCRIPTION || '',
+  keywords: process.env.PRACTICE_KEYWORDS?.split(',') ?? [],
 };
 
 export default function RootLayout({
