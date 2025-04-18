@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 
+import '@mints/ui/style.css';
+
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 
 import './globals.css';
+
+const title = process.env.PRACTICE_TITLE || 'Practice';
 
 export const metadata: Metadata = {
   title: process.env.PRACTICE_TITLE || 'Practice',
@@ -19,8 +23,8 @@ export default function RootLayout({
   return (
     <html lang="zh">
       <body>
-        <Header user={true} />
-        <main className="min-h-[500px] py-8 px-4 w-[960px] mx-auto">
+        <Header title={title} user={null} />
+        <main className="min-h-[1500px] py-8 px-4 w-[960px] mx-auto">
           {children}
         </main>
         <Footer />
