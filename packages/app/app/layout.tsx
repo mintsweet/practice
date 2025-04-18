@@ -23,11 +23,13 @@ export default function RootLayout({
   return (
     <html lang="zh">
       <body>
-        <Header title={title} user={null} />
-        <main className="min-h-[1500px] py-8 px-4 w-[960px] mx-auto">
-          {children}
-        </main>
-        <Footer />
+        <div className="flex flex-col min-h-screen">
+          <Header title={title} user={null} />
+          <main className="flex-1 w-full">
+            <div className="max-w-5xl mx-auto">{children}</div>
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
