@@ -16,9 +16,9 @@ const sortOptions = [
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { sort?: string; page?: string };
+  searchParams: { sort?: string; page?: string; q?: string };
 }) {
-  const { sort, page } = await searchParams;
+  const { sort, page, q } = await searchParams;
 
   const currentSort = sort || 'latest';
   const currentPage = parseInt(page || '1', 10);
@@ -35,7 +35,9 @@ export default async function Home({
     <div className="flex flex-col lg:flex-row gap-6 px-4 py-6">
       <div className="flex-1 mb-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold mb-4 text-zinc-800">全部话题</h2>
+          <h2 className="text-xl font-bold mb-4 text-zinc-800">
+            {!q ? '全部话题' : `关于 ${q} 的话题`}
+          </h2>
           <div className="flex flex-wrap gap-2 mb-2 text-sm font-medium text-zinc-500">
             {sortOptions.map(({ key, label }) => (
               <Link

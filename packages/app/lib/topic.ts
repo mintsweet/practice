@@ -19,6 +19,7 @@ export async function getTopics({
 }: {
   sort?: string;
   page?: number;
+  q?: string;
 } = {}): Promise<{ topics: ITopic[]; totalPage: number }> {
   const all: ITopic[] = [...Array(30)].map((_, i) => ({
     id: `topic-${i + 1}`,
