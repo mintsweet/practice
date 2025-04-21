@@ -173,3 +173,53 @@ export async function getHotTopics(): Promise<
     },
   ];
 }
+
+export async function getTopic(topicId: string): Promise<
+  ITopic & {
+    replys: Array<{
+      id: string;
+      author: IUser;
+      content: string;
+      createdAt: string;
+    }>;
+  }
+> {
+  return {
+    id: topicId,
+    title: '这是一个测试话题',
+    content: '<p>这里是内容，可以包含 HTML...</p>',
+    author: {
+      id: 'u001',
+      email: 'anon@forum.dev',
+      nickname: '匿名用户',
+    },
+    tags: ['Tag1', 'Tag2'],
+    like: 10,
+    comment: 2,
+    collect: 5,
+    view: 100,
+    createdAt: '2025-04-21T21:36:13.267Z',
+    replys: [
+      {
+        id: 'r1',
+        author: {
+          id: 'u002',
+          nickname: '小红',
+          email: 'red@forum.dev',
+        },
+        content: '这是第一条评论，感谢你的分享！',
+        createdAt: '2025-04-21T12:00:00.000Z',
+      },
+      {
+        id: 'r2',
+        author: {
+          id: 'u003',
+          nickname: '小蓝',
+          email: 'blue@forum.dev',
+        },
+        content: '这个话题很有趣，期待更多内容。',
+        createdAt: '2025-04-21T18:30:00.000Z',
+      },
+    ],
+  };
+}
