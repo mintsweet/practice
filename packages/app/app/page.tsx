@@ -1,137 +1,173 @@
-import Topics from '@/components/topics';
+import { Button, Avatar } from '@mints/ui';
+import clsx from 'clsx';
+import Link from 'next/link';
 
-export default function Home({
+import Topics from '@/components/topics';
+import { getUser } from '@/lib/auth';
+import { getTopics, getTopTopics, getHotTopics } from '@/lib/topic';
+
+const sortOptions = [
+  { key: 'latest', label: '最新' },
+  { key: 'popular', label: '最热' },
+  { key: 'active', label: '活跃' },
+  { key: 'no-comment', label: '尚无评论' },
+];
+
+export default async function Home({
   searchParams,
 }: {
-  searchParams: { tab?: string };
+  searchParams: { sort?: string; page?: string };
 }) {
-  const currentTab = searchParams.tab || 'all';
-  const user = {
-    _id: 'user123',
-    nickname: '小明',
-    avatar: 'avatar.png',
-    signature: '热爱前端，喜欢写代码。',
-  };
-  const top100 = [
-    { _id: 'u1', nickname: 'Alice', score: 1200 },
-    { _id: 'u2', nickname: 'Bob', score: 1150 },
-  ];
-  const config = {
-    API: 'https://api.example.com',
-    tabs: {
-      share: '分享',
-      ask: '问答',
-      job: '招聘',
-    },
-    friend_links: [
-      { link: 'https://xxx.com', logo: '/logo1.png' },
-      { link: 'https://yyy.com', logo: '/logo2.png' },
-    ],
-  };
+  const { sort, page } = await searchParams;
 
-  const items = [
-    { name: '全部', tag: 'all' },
-    { name: '精华', tag: 'good' },
-    ...Object.entries(config.tabs).map(([k, v]) => ({ name: v, tag: k })),
-  ];
+  const currentSort = sort || 'latest';
+  const currentPage = parseInt(page || '1', 10);
+
+  const user = await getUser();
+  const { topics, totalPage } = await getTopics({
+    sort: currentSort,
+    page: currentPage,
+  });
+  const topTopics = await getTopTopics();
+  const hotTopics = await getHotTopics();
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 px-4 py-6">
-      <div className="flex-1">
-        <div className="mb-4">
-          <div className="flex gap-2 border-b">
-            {items.map((item) => (
-              <a
-                key={item.tag}
-                href={`?tab=${item.tag}`}
-                className={`px-3 py-1 border-b-2 text-sm ${
-                  currentTab === item.tag
-                    ? 'border-[#16982B] text-[#16982B]'
-                    : 'border-transparent text-[#555] hover:text-black'
-                }`}
+      <div className="flex-1 mb-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold mb-4 text-zinc-800">全部话题</h2>
+          <div className="flex flex-wrap gap-2 mb-2 text-sm font-medium text-zinc-500">
+            {sortOptions.map(({ key, label }) => (
+              <Link
+                key={key}
+                href={`?sort=${key}&page=1`}
+                className={clsx(
+                  'px-2 py-1 rounded transition',
+                  currentSort === key
+                    ? 'bg-zinc-900 text-white'
+                    : 'hover:bg-zinc-100 text-zinc-600',
+                )}
               >
-                {item.name}
-              </a>
+                {label}
+              </Link>
             ))}
           </div>
         </div>
-        <div className="bg-[#fefefe] p-4 rounded shadow">
-          <Topics
-            topics={[]}
-            config={{
-              API: '',
-              tabs: {},
-            }}
-            currentPage={1}
-            totalPage={1}
-            tab="all"
-          />
+
+        <div className="bg-zinc-50 px-4 py-3 rounded border border-zinc-200 mb-4">
+          <div className="flex flex-wrap gap-4">
+            {topTopics.map((topic) => (
+              <Link
+                key={topic.id}
+                href={topic.id}
+                className="flex-1 min-w-[200px] rounded border border-zinc-200 bg-white p-3 hover:shadow-sm transition"
+              >
+                <div className="text-sm font-medium text-zinc-700 mb-2 truncate">
+                  {topic.title}
+                </div>
+                <div className="flex items-center text-xs text-zinc-500 gap-3">
+                  <span>👍 {topic.like} 个点赞</span>
+                  <span className={clsx('flex items-center gap-1')}>
+                    💬 {topic.comment} 个评论
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <Topics topics={topics} />
+
+        <div className="bg-zinc-50 rounded p-4 border border-zinc-200 mt-6 flex justify-center gap-2 text-sm text-zinc-600">
+          {Array.from({ length: totalPage }, (_, i) => {
+            const page = i + 1;
+            return (
+              <Link
+                key={page}
+                href={`?sort=${currentSort}&page=${page}`}
+                className={clsx(
+                  'px-3 py-1 border rounded',
+                  page === currentPage
+                    ? 'bg-zinc-900 text-white'
+                    : 'border-zinc-300 hover:bg-zinc-100',
+                )}
+              >
+                {page}
+              </Link>
+            );
+          })}
         </div>
       </div>
+
       <aside className="w-full lg:w-[280px] shrink-0 space-y-4">
-        {user && (
+        {!user ? (
+          <div className="bg-zinc-50 rounded p-4 border border-zinc-200 text-center text-zinc-600 space-y-2">
+            <p className="text-base font-medium text-zinc-700">
+              欢迎来到 Mints 社区 👋
+            </p>
+            <p className="text-sm leading-relaxed">
+              这里汇聚了来自各地的分享者与探索者，讨论生活、职场、成长与灵感。
+            </p>
+            <p className="text-sm leading-relaxed">
+              注册账号即可发布话题、参与评论、收藏你感兴趣的内容。
+            </p>
+            <Link
+              href="/signup"
+              className="inline-block mt-2 px-4 py-1.5 text-sm text-white bg-zinc-900 rounded hover:bg-zinc-700 transition"
+            >
+              立即加入
+            </Link>
+          </div>
+        ) : (
           <>
-            <div className="bg-[#fefefe] rounded p-4">
-              <h2 className="text-base font-bold mb-2">个人信息</h2>
-              <div className="flex items-center mb-3">
-                <img
-                  src={`${config.API}/upload/${user.avatar}`}
-                  className="w-10 h-10 rounded"
-                />
-                <a href={`/user/${user._id}`} className="ml-3 font-semibold">
-                  {user.nickname}
-                </a>
-              </div>
-              <div className="italic text-sm text-[#8a8a8a]">
-                “ {user.signature || '这家伙很懒，什么都没留下'} ”
-              </div>
-            </div>
-            <div className="bg-[#fefefe] rounded p-4">
-              <a
-                href="/topic/create"
-                className="inline-block px-4 py-1 text-white text-sm bg-[#16982B] hover:bg-[#117A22] rounded"
+            <div className="bg-zinc-50 rounded p-4 border border-zinc-200 text-center">
+              <Link
+                href="/user/setting"
+                className="flex flex-col items-center gap-2 hover:opacity-90 transition"
               >
-                发布话题
-              </a>
+                <Avatar
+                  src={user.avatar}
+                  name={user.nickname ?? user.email}
+                  className="w-16 h-16"
+                />
+                <span className="text-zinc-800 font-semibold text-base">
+                  {user.nickname}
+                </span>
+              </Link>
+              <p className="mt-2 italic text-sm text-zinc-500">
+                “{user.signature || '这家伙很懒，什么都没留下'}”
+              </p>
+            </div>
+
+            <div className="bg-zinc-50 rounded p-4 border border-zinc-200 text-center">
+              <Link href="/topic/create">
+                <Button className="w-full bg-zinc-900 text-white hover:bg-zinc-700">
+                  发布话题
+                </Button>
+              </Link>
             </div>
           </>
         )}
-        <div className="bg-[#fefefe] rounded p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-base font-bold">积分榜</span>
-            <a href="/users/top100" className="text-sm text-[#16982B]">
-              更多
-            </a>
-          </div>
-          <ul className="space-y-1">
-            {top100.map((item) => (
-              <li key={item._id} className="flex justify-between text-sm">
-                <a href={`/user/${item._id}`} className="text-gray-700">
-                  {item.nickname}
-                </a>
-                <span className="text-[#16982B]">{item.score}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-[#fefefe] rounded p-4">
-          <h2 className="text-base font-bold mb-2">无人回复</h2>
-          <ul className="space-y-1 text-sm text-[#8a8a8a]">
-            <li>
-              <a href="#" className="block truncate">
-                TODO: 无人回复话题
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="bg-[#fefefe] rounded p-4">
-          <h2 className="text-base font-bold mb-2">友情社区</h2>
-          <ul className="space-y-2">
-            {config.friend_links.map((item, idx) => (
-              <li key={idx}>
-                <a href={item.link} target="_blank" rel="noopener noreferrer">
-                  <img src={item.logo} alt="friend logo" className="h-6" />
-                </a>
+
+        <div className="bg-zinc-50 rounded p-4 border border-zinc-200">
+          <h2 className="text-sm font-medium text-zinc-500 mb-3">
+            今日热议主题
+          </h2>
+          <ul className="space-y-3">
+            {hotTopics.map((topic) => (
+              <li key={topic.id} className="flex items-center gap-2">
+                <div className="shrink-0">
+                  <Avatar
+                    src={topic.author.avatar}
+                    name={topic.author.nickname ?? topic.author.email}
+                  />
+                </div>
+                <Link
+                  href={`/topic/${topic.id}`}
+                  className="text-sm text-zinc-700 leading-snug hover:underline"
+                >
+                  {topic.title}
+                </Link>
               </li>
             ))}
           </ul>
