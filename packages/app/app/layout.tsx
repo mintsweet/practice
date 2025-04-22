@@ -29,8 +29,8 @@ export default async function RootLayout({
       <body>
         <div className="flex flex-col min-h-screen">
           <Header title={title} user={user} />
-          <main className="flex-1 w-full">
-            <div className="max-w-5xl mx-auto">{children}</div>
+          <main className="flex-1 w-full flex">
+            <div className="max-w-5xl mx-auto flex-1">{children}</div>
           </main>
           <Footer />
         </div>
