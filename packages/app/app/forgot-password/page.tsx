@@ -1,10 +1,11 @@
 'use client';
 
+import { Input, Button } from '@mints/ui';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
-  const [captcha, setCaptcha] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -17,97 +18,52 @@ export default function ForgotPasswordPage() {
       return;
     }
 
-    if (captcha.length !== 5) {
-      setError('请填写正确格式的验证码');
-      return;
-    }
-
     setError('');
-    // TODO: 发送请求
+    console.log({ email });
+    // TODO: 发送重置请求
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-8">
-      <div className="mb-6 flex items-center text-lg font-bold">
-        <span className="inline-block w-6 h-6 rounded-full bg-[#16982B] mr-2"></span>
-        忘记密码
-      </div>
+    <div className="min-h-full flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-6">
+        <h1 className="text-center text-2xl font-bold text-zinc-900">
+          忘记密码
+        </h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 bg-[#fefefe] p-6 rounded shadow"
-      >
         {error && (
-          <div className="bg-[#dc3545] text-white px-4 py-2 rounded text-sm">
+          <div className="text-sm bg-zinc-800 text-white px-4 py-2 rounded">
             {error}
           </div>
         )}
 
-        <div className="flex flex-col">
-          <label htmlFor="email" className="mb-1 text-sm">
-            邮箱：
-          </label>
-          <input
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
             id="email"
             type="text"
-            name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="请输入邮箱"
-            autoComplete="off"
-            className="border border-[#cacaca] rounded px-3 py-2 text-sm"
           />
+
+          <Button type="submit" className="w-full text-sm py-2">
+            发送重置链接
+          </Button>
+        </form>
+
+        <div className="text-sm text-zinc-600 text-center space-x-4">
+          <span>
+            尚未拥有账号？
+            <Link href="/signup" className="text-zinc-900 underline">
+              注册
+            </Link>
+          </span>
+          <span>
+            已有账号？
+            <Link href="/signin" className="text-zinc-900 underline">
+              登录
+            </Link>
+          </span>
         </div>
-
-        <div className="flex flex-col">
-          <label htmlFor="captcha" className="mb-1 text-sm">
-            验证码：
-          </label>
-          <div className="flex gap-2 items-center">
-            <input
-              id="captcha"
-              type="text"
-              name="captcha"
-              value={captcha}
-              onChange={(e) => setCaptcha(e.target.value)}
-              minLength={5}
-              maxLength={5}
-              placeholder="请输入验证码"
-              autoComplete="off"
-              className="flex-1 border border-[#cacaca] rounded px-3 py-2 text-sm"
-            />
-            <img
-              id="js-captcha"
-              src="/api/captcha"
-              alt="图形验证码"
-              className="h-10 rounded border border-[#e6e6e6]"
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-[#16982B] hover:bg-[#117A22] text-white py-2 rounded text-sm"
-        >
-          点击确认
-        </button>
-      </form>
-
-      <div className="mt-6 text-sm text-[#555]">
-        <p className="mb-1">尚未拥有账号？</p>
-        <p className="mb-2">
-          请点击{' '}
-          <a href="/signup" className="text-[#16982B] underline">
-            注册
-          </a>
-        </p>
-        <p className="mb-1">已经拥有账号？</p>
-        <p>
-          请点击{' '}
-          <a href="/signin" className="text-[#16982B] underline">
-            登录
-          </a>
-        </p>
       </div>
     </div>
   );
