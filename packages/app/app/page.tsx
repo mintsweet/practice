@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import Topics from '@/components/topics';
-import { getUser } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 import { getTopics, getTopTopics, getHotTopics } from '@/lib/topic';
 
 const sortOptions = [
@@ -23,7 +23,7 @@ export default async function Home({
   const currentSort = sort || 'latest';
   const currentPage = parseInt(page || '1', 10);
 
-  const user = await getUser();
+  const user = await getAuth();
   const { topics, totalPage } = await getTopics({
     sort: currentSort,
     page: currentPage,

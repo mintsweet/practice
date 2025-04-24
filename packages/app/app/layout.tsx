@@ -5,7 +5,7 @@ import '@mints/ui/style.css';
 
 import Footer from '@/components/footer';
 import Header from '@/components/header';
-import { getUser } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 
 import './globals.css';
 
@@ -22,7 +22,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getUser();
+  const user = await getAuth();
 
   return (
     <html lang="zh">

@@ -2,7 +2,7 @@ import { Avatar, Button } from '@mints/ui';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { getUser } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 import { getTopic } from '@/lib/topic';
 
 export default async function TopicDetailPage({
@@ -12,7 +12,7 @@ export default async function TopicDetailPage({
 }) {
   const { topicId } = await params;
 
-  const user = await getUser();
+  const user = await getAuth();
   const {
     id,
     title,

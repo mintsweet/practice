@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IAuth {
   id: string;
   email: string;
   nickname?: string;
@@ -6,7 +6,7 @@ export interface IUser {
   signature?: string;
 }
 
-export async function getUser(): Promise<IUser | null> {
+export async function getAuth(): Promise<IAuth | null> {
   return {
     id: 'user123',
     email: '123456@gmail.com',
