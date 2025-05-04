@@ -26,13 +26,13 @@ export default async function UserSettingsPage() {
       <div className="bg-white p-6 rounded-2xl shadow border border-zinc-200">
         <div className="flex gap-6 mb-6 pb-2 text-sm font-medium">
           <a
-            href="/setting"
+            href="/user/setting"
             className="text-zinc-900 border-b-2 border-zinc-900 pb-1"
           >
             个人资料
           </a>
           <a
-            href="/update-pass"
+            href="/user/update-password"
             className="text-zinc-600 hover:text-zinc-900 pb-1"
           >
             修改密码

@@ -1,8 +1,8 @@
 'use client';
 
+import { Input, Button } from '@mints/ui';
+import Link from 'next/link';
 import { useState } from 'react';
-
-import UserTop from '@/components/user-top';
 
 export default function UpdatePasswordPage() {
   const [oldPass, setOldPass] = useState('');
@@ -32,94 +32,75 @@ export default function UpdatePasswordPage() {
     }
 
     setError('');
-    // TODO: 提交密码更新逻辑
+    console.log({ oldPass, newPass });
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 px-4 py-6">
-      <div className="flex-1 space-y-6">
-        <div className="flex gap-4 border-b pb-2">
-          <a href="/setting" className="text-[#555] hover:text-black">
+    <div className="px-4 py-6 space-y-6">
+      <div className="bg-white p-6 rounded-2xl shadow border border-zinc-200">
+        <div className="flex gap-6 mb-6 pb-2 text-sm font-medium">
+          <Link
+            href="/user/setting"
+            className="text-zinc-600 hover:text-zinc-900 pb-1"
+          >
             个人资料
-          </a>
-          <a href="/update-pass" className="text-[#16982B] font-bold">
+          </Link>
+          <Link
+            href="/user/update-password"
+            className="text-zinc-900 border-b-2 border-zinc-900 pb-1"
+          >
             修改密码
-          </a>
+          </Link>
         </div>
 
-        <div className="bg-[#fefefe] rounded p-4">
-          <h2 className="text-base font-bold mb-4">修改密码</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="bg-[#dc3545] text-white px-4 py-2 rounded text-sm">
-                {error}
-              </div>
-            )}
-
-            <div className="flex flex-col">
-              <label htmlFor="oldPass" className="mb-1 text-sm">
-                旧密码
-              </label>
-              <input
-                type="password"
-                id="oldPass"
-                name="oldPass"
-                placeholder="请输入旧密码"
-                value={oldPass}
-                onChange={(e) => setOldPass(e.target.value)}
-                className="border border-[#e6e6e6] rounded px-3 py-2 text-sm"
-              />
-              <a
-                href="/forget-pass"
-                className="text-xs text-[#16982B] underline mt-1 w-fit"
-              >
-                忘记密码？
-              </a>
+        <h2 className="text-base font-bold mb-4 text-zinc-800">修改密码</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="text-sm bg-zinc-800 text-white px-4 py-2 rounded">
+              {error}
             </div>
+          )}
 
-            <div className="flex flex-col">
-              <label htmlFor="newPass" className="mb-1 text-sm">
-                新密码
-              </label>
-              <input
-                type="password"
-                id="newPass"
-                name="newPass"
-                placeholder="请输入新密码"
-                value={newPass}
-                onChange={(e) => setNewPass(e.target.value)}
-                className="border border-[#e6e6e6] rounded px-3 py-2 text-sm"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label htmlFor="confirmPass" className="mb-1 text-sm">
-                确认密码
-              </label>
-              <input
-                type="password"
-                id="confirmPass"
-                name="confirmPass"
-                placeholder="请再一次输入新密码"
-                value={confirmPass}
-                onChange={(e) => setConfirmPass(e.target.value)}
-                className="border border-[#e6e6e6] rounded px-3 py-2 text-sm"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="bg-[#16982B] hover:bg-[#117A22] text-white px-4 py-2 rounded text-sm"
+          <div className="space-y-1">
+            <Input
+              label="旧密码"
+              id="oldPass"
+              type="password"
+              placeholder="请输入旧密码"
+              value={oldPass}
+              onChange={(e) => setOldPass(e.target.value)}
+            />
+            <Link
+              href="/forget-pass"
+              className="text-xs text-zinc-900 underline w-fit"
             >
-              保存修改
-            </button>
-          </form>
-        </div>
-      </div>
+              忘记密码？
+            </Link>
+          </div>
 
-      <aside className="w-full lg:w-[280px] shrink-0 space-y-4">
-        <UserTop top100={[]} />
-      </aside>
+          <Input
+            label="新密码"
+            id="newPass"
+            type="password"
+            placeholder="请输入新密码"
+            value={newPass}
+            onChange={(e) => setNewPass(e.target.value)}
+          />
+
+          <Input
+            label="确认密码"
+            id="confirmPass"
+            type="password"
+            placeholder="请再一次输入新密码"
+            value={confirmPass}
+            onChange={(e) => setConfirmPass(e.target.value)}
+          />
+
+          <Button type="submit" className="w-full text-sm py-2">
+            保存修改
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }
