@@ -1,5 +1,6 @@
 import { Input, Button, Dropdown, Avatar } from '@mints/ui';
 import Link from 'next/link';
+import { AiFillNotification } from 'react-icons/ai';
 
 interface Props {
   title: string;
@@ -32,33 +33,38 @@ export default function Header({ title, user }: Props) {
             </Link>
           </div>
         ) : (
-          <Dropdown
-            menu={[
-              {
-                label: (
-                  <Link className="block" href="/user/setting">
-                    个人中心
-                  </Link>
-                ),
-              },
-              {
-                label: (
-                  <Link className="block" href="/user/update-password">
-                    修改密码
-                  </Link>
-                ),
-              },
-              {
-                label: (
-                  <Link className="block" href="/signout">
-                    登出
-                  </Link>
-                ),
-              },
-            ]}
-          >
-            <Avatar name={user.avatar ?? user.nickname ?? user.email} />
-          </Dropdown>
+          <div className="flex items-center gap-4">
+            <Link href="/notification">
+              <AiFillNotification />
+            </Link>
+            <Dropdown
+              menu={[
+                {
+                  label: (
+                    <Link className="block" href="/user/setting">
+                      个人中心
+                    </Link>
+                  ),
+                },
+                {
+                  label: (
+                    <Link className="block" href="/user/update-password">
+                      修改密码
+                    </Link>
+                  ),
+                },
+                {
+                  label: (
+                    <Link className="block" href="/signout">
+                      登出
+                    </Link>
+                  ),
+                },
+              ]}
+            >
+              <Avatar name={user.avatar ?? user.nickname ?? user.email} />
+            </Dropdown>
+          </div>
         )}
       </div>
     </header>
