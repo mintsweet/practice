@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@mints/ui';
+import { Button, Input, TextArea } from '@mints/ui';
 import { useState } from 'react';
 
 export default function TopicCreatePage() {
@@ -50,26 +50,27 @@ export default function TopicCreatePage() {
           </div>
         )}
 
-        <div>
-          <label htmlFor="title" className="block mb-1 text-sm text-zinc-600">
-            标题：
-          </label>
-          <input
-            id="title"
-            type="text"
-            name="title"
-            placeholder="请输入标题"
-            autoComplete="off"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-zinc-300 rounded px-3 py-2 text-sm text-zinc-800"
-          />
-        </div>
+        <Input
+          label="标题："
+          placeholder="请输入标题"
+          autoComplete="off"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-        <div>
-          <label htmlFor="tag" className="block mb-1 text-sm text-zinc-600">
-            标签：
-          </label>
+        <div className="flex flex-col gap-2">
+          <Input
+            label="标签："
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleAddTag();
+              }
+            }}
+            placeholder="输入标签后回车添加"
+          />
           <div className="flex flex-wrap gap-2 mb-2">
             {tags.map((tag) => (
               <span
@@ -87,39 +88,16 @@ export default function TopicCreatePage() {
               </span>
             ))}
           </div>
-          <div className="flex gap-2">
-            <input
-              id="tag"
-              type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  handleAddTag();
-                }
-              }}
-              className="flex-1 border border-zinc-300 rounded px-3 py-2 text-sm text-zinc-800"
-              placeholder="输入标签后回车添加"
-            />
-            <Button type="button" onClick={handleAddTag}>
-              添加
-            </Button>
-          </div>
         </div>
 
         <div>
           <label htmlFor="content" className="block mb-1 text-sm text-zinc-600">
             内容：
           </label>
-          <textarea
-            id="content"
-            name="content"
+          <TextArea
             rows={10}
-            placeholder="请输入内容..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full border border-zinc-300 rounded px-3 py-2 text-sm text-zinc-800"
           />
         </div>
 
