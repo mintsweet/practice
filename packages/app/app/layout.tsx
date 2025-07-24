@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import React from 'react';
 
-import '@mints/ui/style.css';
-
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import { getAuth } from '@/lib/auth';
