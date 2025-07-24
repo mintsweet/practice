@@ -1,10 +1,10 @@
-import type { IUser } from './auth';
+import type { IAuth } from './auth';
 
 export interface ITopic {
   id: string;
   title: string;
   content: string;
-  author: IUser;
+  author: IAuth;
   tags: string[];
   like: number;
   comment: number;
@@ -179,7 +179,7 @@ export async function getTopic(topicId: string): Promise<
   ITopic & {
     replys: Array<{
       id: string;
-      author: IUser;
+      author: IAuth;
       content: string;
       createdAt: string;
     }>;
