@@ -1,15 +1,11 @@
 {
   "private": true,
-  "packageManager": "yarn@4.5.0",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "repository": "git@github.com:mintsweet/practice.git",
   "scripts": {
     "lint": "eslint . --fix",
     "prettier": "prettier . --write",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -22,9 +18,9 @@
   },
   "devDependencies": {
     "@mints/eslint-config": "^2.2.0",
-    "eslint": "^9.23.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
+    "eslint": "^9.35.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
+    "prettier": "^3.6.2"
   }
 }
