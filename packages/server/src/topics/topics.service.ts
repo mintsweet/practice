@@ -33,7 +33,7 @@ export class TopicsService {
           sectionId,
           userId,
         })
-        .returning();
+        .returning({ id: topics.id });
 
       const [user] = await tx
         .update(users)
