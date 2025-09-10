@@ -1,2 +1,2 @@
-export { users, refreshTokens, sections } from './schema';
+export { users, refreshTokens, sections, topics } from './schema';
 export { DataBaseModule } from './database.module';
