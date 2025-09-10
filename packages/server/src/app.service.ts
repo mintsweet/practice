@@ -18,7 +18,7 @@ export class AppService {
 
     if (result.length === 0) {
       await this.db.insert(users).values({
-        email: 'root@practice.com',
+        email: this.config.get('ROOT_USER_EMAIL'),
         password: hashSync(
           this.config.get('ROOT_PASS'),
           genSaltSync(+this.config.get('SALT_ROUNDS')),
