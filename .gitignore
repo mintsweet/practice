@@ -30,7 +30,7 @@ yarn-error.log*
 lerna-debug.log*
 
 # local env files
-.env*.local
+.env*
 
 # vercel
 .vercel
