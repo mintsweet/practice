@@ -102,6 +102,9 @@ importers:
       drizzle-orm:
         specifier: ^0.44.5
         version: 0.44.5(@types/pg@8.15.5)(pg@8.16.3)
+      drizzle-seed:
+        specifier: ^0.3.1
+        version: 0.3.1(drizzle-orm@0.44.5(@types/pg@8.15.5)(pg@8.16.3))
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -160,6 +163,9 @@ importers:
       tsconfig-paths:
         specifier: 4.2.0
         version: 4.2.0
+      tsx:
+        specifier: ^4.20.5
+        version: 4.20.5
       typescript:
         specifier: ^5.0.0
         version: 5.9.2
@@ -2301,6 +2307,14 @@ packages:
       sqlite3:
         optional: true
 
+  drizzle-seed@0.3.1:
+    resolution: {integrity: sha512-F/0lgvfOAsqlYoHM/QAGut4xXIOXoE5VoAdv2FIl7DpGYVXlAzKuJO+IphkKUFK3Dz+rFlOsQLnMNrvoQ0cx7g==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.4'
+    peerDependenciesMeta:
+      drizzle-orm:
+        optional: true
+
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
@@ -4356,6 +4370,11 @@ packages:
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  tsx@4.20.5:
+    resolution: {integrity: sha512-+wKjMNU9w/EaQayHXb7WA7ZaHY6hN8WgfvHNQ3t1PnU91/7O8TcTnIhCDYTZwnt8JsO9IBqZ30Ln1r7pPF52Aw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -6708,6 +6727,12 @@ snapshots:
     optionalDependencies:
       '@types/pg': 8.15.5
       pg: 8.16.3
+
+  drizzle-seed@0.3.1(drizzle-orm@0.44.5(@types/pg@8.15.5)(pg@8.16.3)):
+    dependencies:
+      pure-rand: 6.1.0
+    optionalDependencies:
+      drizzle-orm: 0.44.5(@types/pg@8.15.5)(pg@8.16.3)
 
   dunder-proto@1.0.1:
     dependencies:
@@ -9217,6 +9242,13 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@2.8.1: {}
+
+  tsx@4.20.5:
+    dependencies:
+      esbuild: 0.25.9
+      get-tsconfig: 4.10.1
+    optionalDependencies:
+      fsevents: 2.3.3
 
   type-check@0.4.0:
     dependencies:

@@ -16,7 +16,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "migration:init": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",
@@ -32,6 +33,7 @@
     "dotenv": "^17.2.2",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.5",
+    "drizzle-seed": "^0.3.1",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
@@ -53,6 +55,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.2.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.0.0"
   },
   "jest": {
