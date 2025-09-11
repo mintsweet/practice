@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
 import dayjs from 'dayjs';
-import { sql, eq, count } from 'drizzle-orm';
+import { sql, and, gte, eq, count } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
 import { CustomError } from '@/common/error';
-import { topics, sections, users } from '@/db';
+import { topics, sections, users, topicTags } from '@/db';
 
 import { TOPIC_ERROR_CODE } from './error-code';
 
@@ -19,11 +19,13 @@ export class TopicsService {
     content,
     sectionId,
     userId,
+    tagIds,
   }: {
     title: string;
     content: string;
     sectionId: string;
     userId: string;
+    tagIds?: string[];
   }) {
     return this.db.transaction(async (tx) => {
       const [topic] = await tx
@@ -38,16 +40,23 @@ export class TopicsService {
 
       const [user] = await tx
         .update(users)
-        .set({
-          score: sql`${users.score} - 10`,
-        })
-        .where(eq(users.id, userId))
+        .set({ score: sql`${users.score} - 10` })
+        .where(and(eq(users.id, userId), gte(users.score, 10)))
         .returning();
 
-      if (!user || user.score < 0) {
+      if (!user) {
         throw new CustomError(
           TOPIC_ERROR_CODE.Topic_Score_Insufficient,
           "The user's score is insufficient and cannot create a topic",
+        );
+      }
+
+      if (tagIds?.length) {
+        await tx.insert(topicTags).values(
+          tagIds.map((tagId) => ({
+            topicId: topic.id,
+            tagId,
+          })),
         );
       }
 
@@ -90,7 +99,11 @@ export class TopicsService {
       .where(eq(topics.id, topicId));
   }
 
-  public async update(topicId: string, userId: string, content: string) {
+  public async update(
+    topicId: string,
+    userId: string,
+    { content, tagIds }: { content: string; tagIds: string[] },
+  ) {
     const [topic] = await this.db
       .select()
       .from(topics)
@@ -111,10 +124,23 @@ export class TopicsService {
       );
     }
 
-    await this.db
-      .update(topics)
-      .set({ content, updatedAt: dayjs().toDate() })
-      .where(eq(topics.id, topicId));
+    await this.db.transaction(async (tx) => {
+      await tx
+        .update(topics)
+        .set({ content, updatedAt: dayjs().toDate() })
+        .where(eq(topics.id, topicId));
+
+      await tx.delete(topicTags).where(eq(topicTags.topicId, topicId));
+
+      if (tagIds && tagIds.length > 0) {
+        await tx.insert(topicTags).values(
+          tagIds.map((tagId) => ({
+            topicId,
+            tagId,
+          })),
+        );
+      }
+    });
   }
 
   public async query({ page, pageSize }: { page: number; pageSize: number }) {

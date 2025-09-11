@@ -74,11 +74,11 @@ export class TopicsController {
   public async update(
     @Param('id') id: string,
     @Request() req,
-    @Body() payload: { content: string },
+    @Body() payload: { content: string; tagIds: string[] },
   ) {
     const userId = req.user.sub;
     try {
-      await this.topics.update(id, userId, payload.content);
+      await this.topics.update(id, userId, payload);
     } catch (err) {
       this.handleError(err);
     }

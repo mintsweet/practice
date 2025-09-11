@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsArray } from 'class-validator';
 
 export class CreateTopicDTO {
   @IsString()
@@ -12,4 +12,8 @@ export class CreateTopicDTO {
   @IsUUID()
   @IsNotEmpty()
   sectionId: string;
+
+  @IsUUID()
+  @IsArray()
+  tagIds?: string[];
 }
