@@ -3,11 +3,11 @@ import { hashSync, genSaltSync } from 'bcryptjs';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { seed } from 'drizzle-seed';
 
-import { users, sections } from './schema';
+import { users, sections, tags } from './schema';
 
 async function main() {
   const db = drizzle(process.env.DATABASE_URL!);
-  await seed(db, { users, sections }).refine((func) => ({
+  await seed(db, { users, sections, tags }).refine((func) => ({
     users: {
       count: 1,
       columns: {
@@ -26,6 +26,15 @@ async function main() {
         name: func.valuesFromArray({ values: ['General', 'Q&A'] }),
         description: func.valuesFromArray({
           values: ['General talk', 'Questions and Answers'],
+        }),
+      },
+    },
+    tags: {
+      count: 1,
+      columns: {
+        name: func.valuesFromArray({ values: ['Share'] }),
+        description: func.valuesFromArray({
+          values: ['Share anything.'],
         }),
       },
     },
