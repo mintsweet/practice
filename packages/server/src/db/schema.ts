@@ -98,12 +98,13 @@ export const tags = table('tags', {
 export const topicTags = table(
   'topic_tags',
   {
-    topicId: uuid()
+    topicId: uuid('topic_id')
       .notNull()
       .references(() => topics.id, { onDelete: 'cascade' }),
-    tagId: uuid()
+    tagId: uuid('tag_id')
       .notNull()
       .references(() => tags.id, { onDelete: 'cascade' }),
+    ...timestamps,
   },
   (table) => [
     primaryKey({ columns: [table.topicId, table.tagId] }),
