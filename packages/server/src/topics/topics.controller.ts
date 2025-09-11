@@ -19,7 +19,7 @@ import {
 import { AuthGuard } from '@/auth/auth.guard';
 import { CustomError } from '@/common/error';
 
-import { CreateTopicDTO, QueryTopicsDTO } from './dtos';
+import { CreateTopicDTO, QueryTopicsDTO, CreateReplyDTO } from './dtos';
 import { TOPIC_ERROR_CODE } from './error-code';
 import { TopicsService } from './topics.service';
 
@@ -153,6 +153,22 @@ export class TopicsController {
     try {
       await this.topics.removeCollect(id, userId);
       return { status: 'OK' };
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(':id/reply')
+  public async reply(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() payload: CreateReplyDTO,
+  ) {
+    const userId = req.user.sub;
+    try {
+      const replyId = await this.topics.reply(id, userId, payload);
+      return replyId;
     } catch (err) {
       this.handleError(err);
     }

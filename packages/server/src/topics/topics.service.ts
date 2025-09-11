@@ -11,6 +11,7 @@ import {
   topicTags,
   topicLikes,
   topicCollects,
+  replies,
 } from '@/db';
 
 import { TOPIC_ERROR_CODE } from './error-code';
@@ -321,6 +322,33 @@ export class TopicsService {
             eq(config.relationTable.userId, userId),
           ),
         );
+    });
+  }
+
+  public async reply(
+    topicId: string,
+    userId: string,
+    { content, parentReplyId }: { content: string; parentReplyId?: string },
+  ) {
+    return this.db.transaction(async (tx) => {
+      const [reply] = await tx
+        .insert(replies)
+        .values({
+          topicId,
+          userId,
+          content,
+          parentReplyId,
+        })
+        .returning({
+          id: replies.id,
+        });
+
+      await tx.update(topics).set({
+        lastReplyAt: dayjs().toDate(),
+        lastReplyId: userId,
+        updatedAt: dayjs().toDate(),
+      });
+      return reply.id;
     });
   }
 }
