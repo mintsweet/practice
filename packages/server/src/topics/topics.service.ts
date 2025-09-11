@@ -3,9 +3,10 @@ import dayjs from 'dayjs';
 import { sql, eq, count } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
+import { CustomError } from '@/common/error';
 import { topics, sections, users } from '@/db';
 
-import { TopicError, TOPIC_ERROR_CODE } from './error';
+import { TOPIC_ERROR_CODE } from './error-code';
 
 @Injectable()
 export class TopicsService {
@@ -44,8 +45,8 @@ export class TopicsService {
         .returning();
 
       if (!user || user.score < 0) {
-        throw new TopicError(
-          TOPIC_ERROR_CODE.TOPIC_SCORE_INSUFFICIENT,
+        throw new CustomError(
+          TOPIC_ERROR_CODE.Topic_Score_Insufficient,
           "The user's score is insufficient and cannot create a topic",
         );
       }
@@ -62,23 +63,23 @@ export class TopicsService {
       .limit(1);
 
     if (!topic) {
-      throw new TopicError(
-        TOPIC_ERROR_CODE.TOPIC_NOT_FOUND,
+      throw new CustomError(
+        TOPIC_ERROR_CODE.Topic_Not_Found,
         `Topic ${topicId} not found`,
       );
     }
 
     if (topic.userId !== userId) {
-      throw new TopicError(
-        TOPIC_ERROR_CODE.TOPIC_FORBIDDEN,
+      throw new CustomError(
+        TOPIC_ERROR_CODE.Topic_Forbidden,
         `User ${userId} cannot delete this topic`,
       );
     }
 
     const diffMinutes = dayjs().diff(dayjs(topic.createdAt), 'minute');
     if (diffMinutes > 3) {
-      throw new TopicError(
-        TOPIC_ERROR_CODE.TOPIC_DELETE_EXPIRED,
+      throw new CustomError(
+        TOPIC_ERROR_CODE.Topic_Score_Insufficient,
         `Topic ${topicId} cannot be deleted after 3 minutes`,
       );
     }
@@ -97,15 +98,15 @@ export class TopicsService {
       .limit(1);
 
     if (!topic) {
-      throw new TopicError(
-        TOPIC_ERROR_CODE.TOPIC_NOT_FOUND,
+      throw new CustomError(
+        TOPIC_ERROR_CODE.Topic_Not_Found,
         `Topic ${topicId} not found`,
       );
     }
 
     if (topic.userId !== userId) {
-      throw new TopicError(
-        TOPIC_ERROR_CODE.TOPIC_FORBIDDEN,
+      throw new CustomError(
+        TOPIC_ERROR_CODE.Topic_Forbidden,
         `User ${userId} cannot update this topic`,
       );
     }

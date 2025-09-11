@@ -17,9 +17,10 @@ import {
 } from '@nestjs/common';
 
 import { AuthGuard } from '@/auth/auth.guard';
+import { CustomError } from '@/common/error';
 
 import { CreateTopicDTO, QueryTopicsDTO } from './dtos';
-import { TOPIC_ERROR_CODE, TopicError } from './error';
+import { TOPIC_ERROR_CODE } from './error-code';
 import { TopicsService } from './topics.service';
 
 @Controller('topics')
@@ -27,11 +28,11 @@ export class TopicsController {
   constructor(private readonly topics: TopicsService) {}
 
   private handleError(err) {
-    if (err instanceof TopicError) {
+    if (err instanceof CustomError) {
       switch (err.code) {
-        case TOPIC_ERROR_CODE.TOPIC_NOT_FOUND:
+        case TOPIC_ERROR_CODE.Topic_Not_Found:
           throw new NotFoundException(err.message);
-        case TOPIC_ERROR_CODE.TOPIC_FORBIDDEN:
+        case TOPIC_ERROR_CODE.Topic_Forbidden:
           throw new ForbiddenException(err.message);
         default:
           throw new BadRequestException(err.message);
