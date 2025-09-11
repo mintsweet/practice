@@ -4,9 +4,18 @@ import { sql, and, gte, eq, count } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
 import { CustomError } from '@/common/error';
-import { topics, sections, users, topicTags } from '@/db';
+import {
+  topics,
+  sections,
+  users,
+  topicTags,
+  topicLikes,
+  topicCollects,
+} from '@/db';
 
 import { TOPIC_ERROR_CODE } from './error-code';
+
+type ReactionType = 'like' | 'collect';
 
 @Injectable()
 export class TopicsService {
@@ -183,6 +192,135 @@ export class TopicsService {
         .where(eq(topics.id, topicId));
 
       return topic;
+    });
+  }
+
+  public async addLike(topicId: string, userId: string) {
+    return this.setReaction(topicId, userId, 'like');
+  }
+
+  public async removeLike(topicId: string, userId: string) {
+    return this.clearReaction(topicId, userId, 'like');
+  }
+
+  public async addCollect(topicId: string, userId: string) {
+    return this.setReaction(topicId, userId, 'collect');
+  }
+
+  public async removeCollect(topicId: string, userId: string) {
+    return this.clearReaction(topicId, userId, 'collect');
+  }
+
+  private readonly reactionConfig = {
+    like: {
+      counterColumn: topics.likeCount,
+      relationTable: topicLikes,
+      scoreChange: {
+        actor: -3,
+        owner: +3,
+      },
+    },
+    collect: {
+      counterColumn: topics.collectCount,
+      relationTable: topicCollects,
+      scoreChange: {
+        actor: -5,
+        owner: +5,
+      },
+    },
+  };
+
+  private async setReaction(
+    topicId: string,
+    userId: string,
+    type: ReactionType,
+  ) {
+    const config = this.reactionConfig[type];
+
+    await this.db.transaction(async (tx) => {
+      const [topic] = await tx
+        .select({ id: topics.id, userId: topics.userId })
+        .from(topics)
+        .where(eq(topics.id, topicId));
+
+      if (!topic)
+        throw new CustomError(
+          TOPIC_ERROR_CODE.Topic_Not_Found,
+          `Topic ${topicId} not found`,
+        );
+
+      await tx
+        .update(topics)
+        .set({ [config.counterColumn.name]: sql`${config.counterColumn} + 1` })
+        .where(eq(topics.id, topicId));
+
+      await tx
+        .update(users)
+        .set({
+          score: sql`${users.score} ${config.scoreChange.actor > 0 ? '+' : '-'} ${Math.abs(config.scoreChange.actor)}`,
+        })
+        .where(eq(users.id, userId));
+
+      await tx
+        .update(users)
+        .set({
+          score: sql`${users.score} ${config.scoreChange.owner > 0 ? '+' : '-'} ${Math.abs(config.scoreChange.owner)}`,
+        })
+        .where(eq(users.id, topic.userId));
+
+      await tx.insert(config.relationTable).values({
+        topicId: topic.id,
+        userId,
+      });
+    });
+  }
+
+  private async clearReaction(
+    topicId: string,
+    userId: string,
+    type: ReactionType,
+  ) {
+    const config = this.reactionConfig[type];
+
+    await this.db.transaction(async (tx) => {
+      const [topic] = await tx
+        .select({ id: topics.id, userId: topics.userId })
+        .from(topics)
+        .where(eq(topics.id, topicId));
+
+      if (!topic)
+        throw new CustomError(
+          TOPIC_ERROR_CODE.Topic_Not_Found,
+          `Topic ${topicId} not found`,
+        );
+
+      await tx
+        .update(topics)
+        .set({ [config.counterColumn.name]: sql`${config.counterColumn} - 1` })
+        .where(eq(topics.id, topicId));
+
+      await tx
+        .update(users)
+        .set({
+          score: sql`${users.score} ${config.scoreChange.actor < 0 ? '+' : '-'} ${Math.abs(config.scoreChange.actor)}`,
+        })
+        .where(eq(users.id, userId));
+
+      await tx
+        .update(users)
+        .set({
+          score: sql`${users.score} ${config.scoreChange.owner < 0 ? '+' : '-'} ${Math.abs(config.scoreChange.owner)}`,
+        })
+        .where(eq(users.id, topic.userId));
+
+      await tx
+        .delete(config.relationTable)
+        .where(
+          and(
+            eq(config.relationTable.topicId, topic.id),
+            eq(config.relationTable.userId, userId),
+          ),
+        );
     });
   }
 }

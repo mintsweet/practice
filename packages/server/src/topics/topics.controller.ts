@@ -109,4 +109,52 @@ export class TopicsController {
       this.handleError(err);
     }
   }
+
+  @UseGuards(AuthGuard)
+  @Post(':id/like')
+  public async addLike(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    try {
+      await this.topics.addLike(id, userId);
+      return { status: 'OK' };
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id/like')
+  public async removeLike(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    try {
+      await this.topics.removeLike(id, userId);
+      return { status: 'OK' };
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(':id/collect')
+  public async addCollect(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    try {
+      await this.topics.addCollect(id, userId);
+      return { status: 'OK' };
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id/collect')
+  public async removeCollect(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    try {
+      await this.topics.removeCollect(id, userId);
+      return { status: 'OK' };
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
 }
