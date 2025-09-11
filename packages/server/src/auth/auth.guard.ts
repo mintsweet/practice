@@ -4,15 +4,20 @@ import {
   HttpStatus,
   Injectable,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+
+import { ROLE_KEY } from '@/common/decorators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly config: ConfigService,
     private readonly jwt: JwtService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,8 +29,11 @@ export class AuthGuard implements CanActivate {
         error: 'Please log in first.',
       });
     }
+
+    let payload;
+
     try {
-      const payload = await this.jwt.verifyAsync(token, {
+      payload = await this.jwt.verifyAsync(token, {
         secret: this.config.get('JWT_SECRET'),
       });
       request['user'] = payload;
@@ -35,6 +43,20 @@ export class AuthGuard implements CanActivate {
         error: 'Invalid signature.',
       });
     }
+
+    const minRole = this.reflector.getAllAndOverride<number>(ROLE_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (minRole !== undefined) {
+      if (typeof payload.role !== 'number' || payload.role < minRole) {
+        throw new ForbiddenException({
+          status: HttpStatus.FORBIDDEN,
+          error: 'Insufficient role.',
+        });
+      }
+    }
+
     return true;
   }
 

@@ -62,7 +62,7 @@ export class AuthService {
       throw new Error('Email or password is incorrect.');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, role: user.role };
 
     const accessToken = await this.jwt.signAsync(payload);
 
