@@ -28,6 +28,8 @@ export const users = table(
     locked: boolean().notNull().default(false),
     deleted: boolean().notNull().default(false),
     role: integer().notNull().default(1),
+    followersCount: integer().notNull().default(0),
+    followingCount: integer().notNull().default(0),
     ...timestamps,
   },
   (table) => [uniqueIndex('email_idx').on(table.email)],
@@ -45,6 +47,24 @@ export const refreshTokens = table(
     ...timestamps,
   },
   (table) => [uniqueIndex('refresh_tokens_user_idx').on(table.userId)],
+);
+
+export const userFollows = table(
+  'user_follows',
+  {
+    followerId: uuid('follower_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    followeeId: uuid('followee_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    ...timestamps,
+  },
+  (table) => [
+    primaryKey({ columns: [table.followerId, table.followeeId] }),
+    index('user_follow_follower_idx').on(table.followerId),
+    index('user_follow_followee_idx').on(table.followeeId),
+  ],
 );
 
 export const sections = table('sections', {

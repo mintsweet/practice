@@ -1,6 +1,7 @@
 export {
   users,
   refreshTokens,
+  userFollows,
   sections,
   tags,
   topics,

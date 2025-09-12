@@ -3,18 +3,17 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { hashSync, genSaltSync, compareSync } from 'bcryptjs';
 import dayjs from 'dayjs';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 
-import { refreshTokens } from '@/db';
-import { UsersService } from '@/users/users.service';
+import { users, refreshTokens } from '@/db';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly config: ConfigService,
-    private readonly users: UsersService,
     private jwt: JwtService,
-    @Inject('DATABASE') private readonly db,
+    @Inject('DATABASE') private readonly db: ReturnType<typeof drizzle>,
   ) {}
 
   private hash(text: string) {
@@ -26,31 +25,34 @@ export class AuthService {
   }
 
   public async signup(email: string, password: string, nickname: string) {
-    const existEmail = await this.users.findByEmail(email);
+    const [exist] = await this.db
+      .select()
+      .from(users)
+      .where(or(eq(users.email, email), eq(users.nickname, nickname)));
 
-    if (existEmail) {
-      throw new Error(`The email of ${email} already exists.`);
-    }
-
-    const existNickname = await this.users.findByNickname(nickname);
-
-    if (existNickname) {
-      throw new Error(`The nickname of ${nickname} already exists.`);
+    if (exist) {
+      throw new Error('The user already exists.');
     }
 
     const hashPassword = this.hash(password);
 
-    const user = await this.users.create({
-      email,
-      password: hashPassword,
-      nickname,
-    });
+    const [user] = await this.db
+      .insert(users)
+      .values({
+        email,
+        password: hashPassword,
+        nickname,
+      })
+      .returning({ id: users.id });
 
     return user.id;
   }
 
   public async signin(email: string, password: string) {
-    const user = await this.users.findByEmail(email);
+    const [user] = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.email, email));
 
     if (!user) {
       throw new Error('Email or password is incorrect.');
@@ -145,11 +147,15 @@ export class AuthService {
     }
   }
 
-  public getMe(userId: string) {
-    return this.users.findById(userId);
+  public async getMe(userId: string) {
+    const [user] = await this.db.select().from(eq(users.id, userId));
+    return user;
   }
 
-  public updateMe(userId: string, profile: { nickname?: string }) {
-    return this.users.update(userId, profile);
+  public async updateMe(userId: string, profile: { nickname?: string }) {
+    await this.db
+      .update(users)
+      .set({ nickname: profile.nickname })
+      .where(eq(users.id, userId));
   }
 }

@@ -1,58 +1,93 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq, sql, and } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 
-import { users } from '@/db';
+import { CustomError } from '@/common/error';
+import { users, userFollows } from '@/db';
+
+import { USER_ERROR_CODE } from './error-code';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('DATABASE') private readonly db) {}
+  constructor(
+    @Inject('DATABASE') private readonly db: ReturnType<typeof drizzle>,
+  ) {}
 
-  private selectO = {
-    email: users.email,
-    nickname: users.nickname,
-    score: users.score,
-    starred: users.starred,
-  };
-
-  public async findById(id: string) {
+  public async queryById(userId: string) {
     const [user] = await this.db
-      .select(this.selectO)
+      .select({
+        email: users.email,
+        nickname: users.nickname,
+        score: users.score,
+        starred: users.starred,
+      })
       .from(users)
-      .where(eq(users.id, id));
-    return user ?? null;
-  }
+      .where(eq(users.id, userId));
 
-  public async findByEmail(email: string) {
-    const [user] = await this.db
-      .select()
-      .from(users)
-      .where(eq(users.email, email));
-    return user ?? null;
-  }
+    if (!user) {
+      throw new CustomError(
+        USER_ERROR_CODE.User_Not_Found,
+        `User ${userId} cannot find`,
+      );
+    }
 
-  public async findByNickname(nickname: string) {
-    const [user] = await this.db
-      .select()
-      .from(users)
-      .where(eq(users.nickname, nickname));
-    return user ?? null;
-  }
-
-  public async create(data: {
-    email: string;
-    password: string;
-    nickname: string;
-  }) {
-    const [user] = await this.db.insert(users).values(data).returning();
     return user;
   }
 
-  public async update(userId: string, payload: { nickname?: string }) {
-    const [updatedUser] = await this.db
-      .update(users)
-      .set(payload)
-      .where(eq(users.id, userId))
-      .returning(this.selectO);
-    return updatedUser;
+  public async addFollow(followerId: string, followeeId: string) {
+    if (followeeId === followerId) {
+      throw new CustomError(
+        USER_ERROR_CODE.User_Cannot_Follow_Theirself,
+        'You cannot follow yourself',
+      );
+    }
+
+    return this.db.transaction(async (tx) => {
+      await tx.insert(userFollows).values({
+        followerId,
+        followeeId,
+      });
+
+      await tx
+        .update(users)
+        .set({
+          followingCount: sql`${users.followingCount} + 1`,
+        })
+        .where(eq(users.id, followerId));
+
+      await tx
+        .update(users)
+        .set({
+          followersCount: sql`${users.followersCount} + 1`,
+        })
+        .where(eq(users.id, followeeId));
+    });
+  }
+
+  public async removeFollow(followerId: string, followeeId: string) {
+    return this.db.transaction(async (tx) => {
+      await tx
+        .delete(userFollows)
+        .where(
+          and(
+            eq(userFollows.followerId, followerId),
+            eq(userFollows.followeeId, followeeId),
+          ),
+        );
+
+      await tx
+        .update(users)
+        .set({
+          followingCount: sql`${users.followingCount} - 1`,
+        })
+        .where(eq(users.id, followerId));
+
+      await tx
+        .update(users)
+        .set({
+          followersCount: sql`${users.followersCount} - 1`,
+        })
+        .where(eq(users.id, followeeId));
+    });
   }
 }
