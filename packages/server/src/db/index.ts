@@ -8,5 +8,6 @@ export {
   topicLikes,
   topicCollects,
   replies,
+  replyLikes,
 } from './schema';
 export { DataBaseModule } from './database.module';
