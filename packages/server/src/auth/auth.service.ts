@@ -177,7 +177,18 @@ export class AuthService {
   }
 
   public async getMe(userId: string) {
-    const [user] = await this.db.select().from(eq(users.id, userId));
+    const [user] = await this.db
+      .select({
+        id: users.id,
+        email: users.email,
+        nickname: users.nickname,
+        score: users.score,
+        starred: users.starred,
+        followersCount: users.followersCount,
+        followingCount: users.followingCount,
+      })
+      .from(users)
+      .where(eq(users.id, userId));
     return user;
   }
 
