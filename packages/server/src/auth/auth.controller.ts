@@ -4,8 +4,9 @@ import {
   Get,
   Put,
   Body,
-  BadRequestException,
   UnauthorizedException,
+  BadRequestException,
+  InternalServerErrorException,
   HttpStatus,
   Res,
   Req,
@@ -13,13 +14,29 @@ import {
   Request,
 } from '@nestjs/common';
 
+import { CustomError } from '@/common/error';
+
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { SignUpDTO, SignInDTO, UpdateMeDTO } from './dtos';
+import { AUTH_ERROR_CODE } from './error-code';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
+
+  private errorHandle(err) {
+    if (err instanceof CustomError) {
+      switch (err.code) {
+        case AUTH_ERROR_CODE.INVALID_CREDENTIALS:
+          throw new UnauthorizedException(err.message);
+        default:
+          throw new BadRequestException(err.message);
+      }
+    }
+
+    throw new InternalServerErrorException('Something Error.');
+  }
 
   @Post('signup')
   public async signup(@Body() payload: SignUpDTO) {
@@ -29,10 +46,7 @@ export class AuthController {
       const userId = await this.auth.signup(email, password, nickname);
       return userId;
     } catch (err) {
-      throw new BadRequestException({
-        status: HttpStatus.BAD_REQUEST,
-        error: err.message,
-      });
+      this.errorHandle(err);
     }
   }
 
@@ -63,10 +77,7 @@ export class AuthController {
 
       return { accessToken };
     } catch (err) {
-      throw new UnauthorizedException({
-        status: HttpStatus.UNAUTHORIZED,
-        error: err.message,
-      });
+      this.errorHandle(err);
     }
   }
 

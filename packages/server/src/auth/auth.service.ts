@@ -3,10 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { hashSync, genSaltSync, compareSync } from 'bcryptjs';
 import dayjs from 'dayjs';
-import { eq, or } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
+import { CustomError } from '@/common/error';
 import { users, refreshTokens } from '@/db';
+
+import { AUTH_ERROR_CODE } from './error-code';
 
 @Injectable()
 export class AuthService {
@@ -25,13 +28,28 @@ export class AuthService {
   }
 
   public async signup(email: string, password: string, nickname: string) {
-    const [exist] = await this.db
-      .select()
+    const [byEmail] = await this.db
+      .select({})
       .from(users)
-      .where(or(eq(users.email, email), eq(users.nickname, nickname)));
+      .where(eq(users.email, email));
 
-    if (exist) {
-      throw new Error('The user already exists.');
+    if (byEmail) {
+      throw new CustomError(
+        AUTH_ERROR_CODE.EMAIL_EXISTS,
+        'This email is already registered.',
+      );
+    }
+
+    const [byNickname] = await this.db
+      .select({})
+      .from(users)
+      .where(eq(users.nickname, nickname));
+
+    if (byNickname) {
+      throw new CustomError(
+        AUTH_ERROR_CODE.NICKNAME_EXISTS,
+        'This nickname is already taken.',
+      );
     }
 
     const hashPassword = this.hash(password);
@@ -50,18 +68,29 @@ export class AuthService {
 
   public async signin(email: string, password: string) {
     const [user] = await this.db
-      .select()
+      .select({
+        id: users.id,
+        email: users.email,
+        password: users.password,
+        role: users.role,
+      })
       .from(users)
       .where(eq(users.email, email));
 
     if (!user) {
-      throw new Error('Email or password is incorrect.');
+      throw new CustomError(
+        AUTH_ERROR_CODE.INVALID_CREDENTIALS,
+        'Email or password is incorrect.',
+      );
     }
 
     const match = this.compareHash(password, user.password);
 
     if (!match) {
-      throw new Error('Email or password is incorrect.');
+      throw new CustomError(
+        AUTH_ERROR_CODE.INVALID_CREDENTIALS,
+        'Email or password is incorrect.',
+      );
     }
 
     const payload = { sub: user.id, email: user.email, role: user.role };
