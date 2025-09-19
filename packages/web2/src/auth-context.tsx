@@ -1,4 +1,4 @@
-import { logout } from '@mints/request';
+import { operator } from '@mints/request';
 import { useRequest } from '@mints/request/react';
 import { Spinner } from '@mints/ui';
 import React, { createContext, useCallback, useContext, useState } from 'react';
@@ -33,8 +33,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
       : 'guest';
 
   const signout = useCallback(async () => {
-    await logout(() => API.auth.signout());
-    setVersion((v) => v + 1);
+    const [success] = await operator(() => API.auth.signout());
+
+    if (success) {
+      setVersion((v) => v + 1);
+    }
   }, []);
 
   return (

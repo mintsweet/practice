@@ -3,6 +3,8 @@ import { login, logout, request } from '@mints/request';
 export interface IUser {
   id: string;
   email: string;
+  nickname: string;
+  avatar?: string;
 }
 
 interface ISignUp {
@@ -37,7 +39,7 @@ export async function signin(payload: ISignIn) {
 
 export async function signout() {
   await logout(() =>
-    request('/auth/logout', {
+    request('/auth/signout', {
       method: 'POST',
     }),
   );
