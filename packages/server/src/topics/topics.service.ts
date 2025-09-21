@@ -8,6 +8,7 @@ import {
   topics,
   sections,
   users,
+  tags,
   topicTags,
   topicLikes,
   topicCollects,
@@ -162,8 +163,29 @@ export class TopicsService {
           id: topics.id,
           title: topics.title,
           content: topics.content,
+          visitCount: topics.visitCount,
+          likeCount: topics.likeCount,
+          collectCount: topics.collectCount,
+          replyCount: topics.replyCount,
+          createdAt: topics.createdAt,
+          section: {
+            id: sections.id,
+            name: sections.name,
+          },
+          author: {
+            id: users.id,
+            nickname: users.nickname,
+          },
+          tags: sql`coalesce(array_agg(distinct ${tags.name}), '{}')`.as(
+            'tags',
+          ),
         })
         .from(topics)
+        .leftJoin(sections, eq(topics.sectionId, sections.id))
+        .leftJoin(users, eq(topics.userId, users.id))
+        .leftJoin(topicTags, eq(topicTags.topicId, topics.id))
+        .leftJoin(tags, eq(topicTags.tagId, tags.id))
+        .groupBy(topics.id, sections.id, users.id)
         .limit(pageSize)
         .offset((page - 1) * pageSize);
 
@@ -178,18 +200,29 @@ export class TopicsService {
           id: topics.id,
           title: topics.title,
           content: topics.content,
+          visitCount: topics.visitCount,
+          likeCount: topics.likeCount,
+          collectCount: topics.collectCount,
+          replyCount: topics.replyCount,
+          createdAt: topics.createdAt,
           section: {
             id: sections.id,
             name: sections.name,
           },
-          user: {
+          author: {
             id: users.id,
             nickname: users.nickname,
           },
+          tags: sql`coalesce(array_agg(distinct ${tags.name}), '{}')`.as(
+            'tags',
+          ),
         })
         .from(topics)
         .leftJoin(sections, eq(topics.sectionId, sections.id))
         .leftJoin(users, eq(topics.userId, users.id))
+        .leftJoin(topicTags, eq(topicTags.topicId, topics.id))
+        .leftJoin(tags, eq(topicTags.tagId, tags.id))
+        .groupBy(topics.id, sections.id, users.id)
         .where(eq(topics.id, topicId));
 
       return topic;
