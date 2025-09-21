@@ -172,6 +172,9 @@ importers:
 
   packages/web2:
     dependencies:
+      '@mints/hooks':
+        specifier: ^1.0.0
+        version: 1.0.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@mints/request':
         specifier: ^2.1.0
         version: 2.1.0(axios@1.12.2)(react@19.1.1)
@@ -181,6 +184,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.13
         version: 4.1.13(vite@7.1.5(@types/node@20.19.13)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1))
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -1152,6 +1158,12 @@ packages:
     peerDependencies:
       eslint: ^9
       prettier: ^3
+
+  '@mints/hooks@1.0.0':
+    resolution: {integrity: sha512-ptTyK9mGtSpCmR9fhRzkdo0cZRsBKAgVK4gbTv+dbB0Ev7/9xMG03/PAAuW39XO08xrjOy6muI6ZyT0OMbwhOQ==}
+    peerDependencies:
+      react: ^18
+      react-dom: ^18
 
   '@mints/request@2.1.0':
     resolution: {integrity: sha512-KskK1RpjEKsNeVsGqO+oVmcZ+se1Krm/Cn9QwSLfctsNBr3iJU7SkRS2bkMxNgnzyMP1rCZE6BM9scpVM97Img==}
@@ -5861,6 +5873,12 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
       - typescript
+
+  '@mints/hooks@1.0.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      lodash: 4.17.21
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
 
   '@mints/request@2.1.0(axios@1.12.2)(react@19.1.1)':
     dependencies:
