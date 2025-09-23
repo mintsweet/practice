@@ -42,6 +42,12 @@ export class SectionsService {
   }
 
   public query() {
-    return this.db.select().from(sections);
+    return this.db
+      .select({
+        id: sections.id,
+        name: sections.name,
+        description: sections.description,
+      })
+      .from(sections);
   }
 }
