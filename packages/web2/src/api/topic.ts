@@ -31,3 +31,14 @@ export function query(
     params,
   });
 }
+
+export function create(data: {
+  title: string;
+  content: string;
+  sectionId: string;
+}): Promise<string> {
+  return request.auth('/topics', {
+    method: 'POST',
+    data,
+  });
+}

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 
-import { Layout, Home, Signup, Signin } from '@/routes';
+import { AuthGate } from '@/auth-context';
+import { Layout, Home, Signup, Signin, TopicCreate, TopicId } from '@/routes';
 
 export default createBrowserRouter([
   {
@@ -18,6 +19,23 @@ export default createBrowserRouter([
       {
         path: 'signin',
         element: <Signin />,
+      },
+      {
+        path: 'topic',
+        children: [
+          {
+            path: 'create',
+            element: (
+              <AuthGate>
+                <TopicCreate />
+              </AuthGate>
+            ),
+          },
+          {
+            path: ':topicId',
+            element: <TopicId />,
+          },
+        ],
       },
     ],
   },
