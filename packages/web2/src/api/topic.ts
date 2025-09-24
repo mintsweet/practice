@@ -19,7 +19,8 @@ interface ITopic {
   };
   author: {
     id: string;
-    nickname: string;
+    email: string;
+    nickname?: string;
   };
   tags: string[];
 }
@@ -30,6 +31,23 @@ export function query(
   return request.public('/topics', {
     params,
   });
+}
+
+interface IReply {
+  id: string;
+  content: string;
+  createdAt: string;
+  author: {
+    id: string;
+    email: string;
+    nickname?: string;
+  };
+}
+
+export function queryById(
+  id: string,
+): Promise<ITopic & { replys: IReply[]; liked: boolean; collected: boolean }> {
+  return request.public(`/topics/${id}`);
 }
 
 export function create(data: {
