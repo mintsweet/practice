@@ -7,11 +7,10 @@ import {
   NotFoundException,
   BadRequestException,
   InternalServerErrorException,
-  UseGuards,
   Request,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@/auth/auth.guard';
+import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
 import { USER_ERROR_CODE } from './error-code';
@@ -43,7 +42,7 @@ export class UsersController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post(':id/follow')
   public async addFollow(@Request() req, @Param('id') id: string) {
     const userId = req.user.sub;
@@ -55,7 +54,7 @@ export class UsersController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Delete(':id/follow')
   public async removeFollow(@Request() req, @Param('id') id: string) {
     const userId = req.user.sub;

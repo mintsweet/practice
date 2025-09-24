@@ -4,7 +4,6 @@ import {
   Post,
   Patch,
   Delete,
-  UseGuards,
   Request,
   Body,
   Query,
@@ -16,7 +15,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@/auth/auth.guard';
+import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
 import { CreateTopicDTO, QueryTopicsDTO, CreateReplyDTO } from './dtos';
@@ -41,7 +40,7 @@ export class TopicsController {
     throw new InternalServerErrorException(err.message);
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post()
   public async create(@Request() req, @Body() payload: CreateTopicDTO) {
     const userId = req.user.sub;
@@ -56,7 +55,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Delete(':id')
   public async remove(@Param('id') id: string, @Request() req) {
     const userId = req.user.sub;
@@ -69,7 +68,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Patch(':id')
   public async update(
     @Param('id') id: string,
@@ -110,7 +109,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post(':id/like')
   public async addLike(@Param('id') id: string, @Request() req) {
     const userId = req.user.sub;
@@ -122,7 +121,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Delete(':id/like')
   public async removeLike(@Param('id') id: string, @Request() req) {
     const userId = req.user.sub;
@@ -134,7 +133,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post(':id/collect')
   public async addCollect(@Param('id') id: string, @Request() req) {
     const userId = req.user.sub;
@@ -146,7 +145,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Delete(':id/collect')
   public async removeCollect(@Param('id') id: string, @Request() req) {
     const userId = req.user.sub;
@@ -158,7 +157,7 @@ export class TopicsController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post(':id/reply')
   public async reply(
     @Request() req,

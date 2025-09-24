@@ -8,11 +8,9 @@ import {
   Body,
   InternalServerErrorException,
   BadRequestException,
-  UseGuards,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@/auth/auth.guard';
-import { RequireRole } from '@/common/decorators';
+import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
 import { CreateSectionDTO } from './dtos';
@@ -33,9 +31,8 @@ export class SectionsController {
     throw new InternalServerErrorException('Something Error.');
   }
 
+  @Auth(100)
   @Post()
-  @UseGuards(AuthGuard)
-  @RequireRole(100)
   public async create(@Body() payload: CreateSectionDTO) {
     try {
       const sectionId = await this.sections.create(payload);
@@ -45,9 +42,8 @@ export class SectionsController {
     }
   }
 
+  @Auth(100)
   @Delete(':id')
-  @UseGuards(AuthGuard)
-  @RequireRole(100)
   public async remove(@Param('id') id: string) {
     try {
       await this.sections.remove(id);
@@ -57,9 +53,8 @@ export class SectionsController {
     }
   }
 
+  @Auth(100)
   @Patch(':id')
-  @UseGuards(AuthGuard)
-  @RequireRole(100)
   public async update(
     @Param('id') id: string,
     @Body() payload: { description: string },

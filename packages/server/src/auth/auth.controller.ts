@@ -10,13 +10,12 @@ import {
   HttpStatus,
   Res,
   Req,
-  UseGuards,
   Request,
 } from '@nestjs/common';
 
 import { CustomError } from '@/common/error';
 
-import { AuthGuard } from './auth.guard';
+import { Auth } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { SignUpDTO, SignInDTO, UpdateMeDTO } from './dtos';
 import { AUTH_ERROR_CODE } from './error-code';
@@ -112,14 +111,14 @@ export class AuthController {
     return { status: 'OK' };
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Get('me')
   public async getMe(@Request() req) {
     const user = await this.auth.getMe(req.user.sub);
     return user;
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Put('me')
   public async updateMe(@Request() req, @Body() payload: UpdateMeDTO) {
     const user = await this.auth.updateMe(req.user.sub, payload);

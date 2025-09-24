@@ -8,11 +8,9 @@ import {
   Param,
   BadRequestException,
   InternalServerErrorException,
-  UseGuards,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@/auth/auth.guard';
-import { RequireRole } from '@/common/decorators';
+import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
 import { CreateTagDTO } from './dtos';
@@ -33,9 +31,8 @@ export class TagsController {
     throw new InternalServerErrorException(err.message);
   }
 
+  @Auth(10)
   @Post()
-  @UseGuards(AuthGuard)
-  @RequireRole(10)
   public async create(@Body() payload: CreateTagDTO) {
     try {
       const tagId = await this.tag.create(payload);
@@ -45,9 +42,8 @@ export class TagsController {
     }
   }
 
+  @Auth(10)
   @Delete(':id')
-  @UseGuards(AuthGuard)
-  @RequireRole(10)
   public async remove(@Param('id') id: string) {
     try {
       await this.tag.remove(id);
@@ -57,9 +53,8 @@ export class TagsController {
     }
   }
 
+  @Auth(10)
   @Patch(':id')
-  @UseGuards(AuthGuard)
-  @RequireRole(10)
   public async update(
     @Param('id') id: string,
     @Body() payload: { description: string },

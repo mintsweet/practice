@@ -10,10 +10,9 @@ import {
   ForbiddenException,
   NotFoundException,
   InternalServerErrorException,
-  UseGuards,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@/auth/auth.guard';
+import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
 import { REPLY_ERROR_CODE } from './error-code';
@@ -38,7 +37,7 @@ export class RepliesController {
     throw new InternalServerErrorException('Something Error.');
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Patch(':id')
   public async update(
     @Request() req,
@@ -54,7 +53,7 @@ export class RepliesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Delete(':id')
   public async remove(@Request() req, @Param('id') id: string) {
     const userId = req.user.id;
@@ -66,7 +65,7 @@ export class RepliesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post(':id/like')
   public async addLike(@Request() req, @Param('id') id: string) {
     const userId = req.user.id;
@@ -78,7 +77,7 @@ export class RepliesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Delete(':id/like')
   public async removeLike(@Request() req, @Param('id') id: string) {
     const userId = req.user.id;
