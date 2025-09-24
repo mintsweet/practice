@@ -193,7 +193,7 @@ export class TopicsService {
     });
   }
 
-  public async queryById(topicId: string) {
+  public async queryById(topicId: string, userId?: string) {
     return this.db.transaction(async (tx) => {
       const [topic] = await tx
         .select({
@@ -216,6 +216,12 @@ export class TopicsService {
           tags: sql`coalesce(array_agg(distinct ${tags.name}), '{}')`.as(
             'tags',
           ),
+          liked: userId
+            ? sql<boolean>`exists(select 1 from ${topicLikes} tl where tl.topic_id = ${topics.id} and tl.user_id = ${userId})`
+            : sql<boolean>`false`,
+          collected: userId
+            ? sql<boolean>`exists(select 1 from ${topicCollects} tc where tc.topic_id = ${topics.id} and tc.user_id = ${userId})`
+            : sql<boolean>`false`,
         })
         .from(topics)
         .leftJoin(sections, eq(topics.sectionId, sections.id))
@@ -225,7 +231,25 @@ export class TopicsService {
         .groupBy(topics.id, sections.id, users.id)
         .where(eq(topics.id, topicId));
 
-      return topic;
+      const replys = await tx
+        .select({
+          id: replies.id,
+          content: replies.content,
+          createdAt: replies.createdAt,
+          author: {
+            id: users.id,
+            nickname: users.nickname,
+          },
+        })
+        .from(replies)
+        .leftJoin(users, eq(replies.userId, users.id))
+        .where(eq(replies.topicId, topicId))
+        .orderBy(replies.createdAt);
+
+      return {
+        ...topic,
+        replys,
+      };
     });
   }
 

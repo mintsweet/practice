@@ -15,6 +15,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
+import { AuthOptional } from '@/auth/auth-optional.decorator';
 import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
@@ -99,10 +100,12 @@ export class TopicsController {
     }
   }
 
+  @AuthOptional()
   @Get(':id')
-  public async queryOne(@Param('id') id: string) {
+  public async queryOne(@Param('id') id: string, @Request() req) {
+    const userId = req.user?.sub;
     try {
-      const topic = await this.topics.queryById(id);
+      const topic = await this.topics.queryById(id, userId);
       return topic;
     } catch (err) {
       this.handleError(err);
