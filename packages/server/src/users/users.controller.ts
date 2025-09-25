@@ -10,6 +10,7 @@ import {
   Request,
 } from '@nestjs/common';
 
+import { AuthOptional } from '@/auth/auth-optional.decorator';
 import { Auth } from '@/auth/auth.decorator';
 import { CustomError } from '@/common/error';
 
@@ -32,10 +33,12 @@ export class UsersController {
     throw new InternalServerErrorException(err.message);
   }
 
+  @AuthOptional()
   @Get(':id')
-  public async queryById(@Param('id') id: string) {
+  public async queryById(@Param('id') id: string, @Request() req) {
+    const userId = req.user?.sub;
     try {
-      const user = await this.user.queryById(id);
+      const user = await this.user.queryById(id, userId);
       return user;
     } catch (err) {
       this.errorHandle(err);
@@ -44,10 +47,10 @@ export class UsersController {
 
   @Auth()
   @Post(':id/follow')
-  public async addFollow(@Request() req, @Param('id') id: string) {
+  public async follow(@Request() req, @Param('id') id: string) {
     const userId = req.user.sub;
     try {
-      await this.user.addFollow(userId, id);
+      await this.user.follow(userId, id);
       return { status: 'OK' };
     } catch (err) {
       this.errorHandle(err);
@@ -56,10 +59,10 @@ export class UsersController {
 
   @Auth()
   @Delete(':id/follow')
-  public async removeFollow(@Request() req, @Param('id') id: string) {
+  public async unfollow(@Request() req, @Param('id') id: string) {
     const userId = req.user.sub;
     try {
-      await this.user.removeFollow(userId, id);
+      await this.user.unfollow(userId, id);
       return { status: 'OK' };
     } catch (err) {
       this.errorHandle(err);

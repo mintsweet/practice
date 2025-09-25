@@ -13,7 +13,7 @@ export class UsersService {
     @Inject('DATABASE') private readonly db: ReturnType<typeof drizzle>,
   ) {}
 
-  public async queryById(userId: string) {
+  public async queryById(userId: string, viewerId?: string) {
     const [user] = await this.db
       .select({
         id: users.id,
@@ -22,6 +22,9 @@ export class UsersService {
         starred: users.starred,
         followersCount: users.followersCount,
         followingCount: users.followingCount,
+        followed: userId
+          ? sql<boolean>`exists(select 1 from ${userFollows} uf where uf.followee_id = ${userId} and uf.follower_id = ${viewerId})`
+          : sql<boolean>`false`,
       })
       .from(users)
       .where(eq(users.id, userId));
@@ -36,7 +39,7 @@ export class UsersService {
     return user;
   }
 
-  public async addFollow(followerId: string, followeeId: string) {
+  public async follow(followerId: string, followeeId: string) {
     if (followeeId === followerId) {
       throw new CustomError(
         USER_ERROR_CODE.User_Cannot_Follow_Theirself,
@@ -66,7 +69,7 @@ export class UsersService {
     });
   }
 
-  public async removeFollow(followerId: string, followeeId: string) {
+  public async unfollow(followerId: string, followeeId: string) {
     return this.db.transaction(async (tx) => {
       await tx
         .delete(userFollows)
