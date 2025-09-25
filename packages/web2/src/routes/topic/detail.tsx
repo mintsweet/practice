@@ -1,16 +1,53 @@
+import { operator } from '@mints/request';
 import { useRequest } from '@mints/request/react';
-import { Avatar, Button } from '@mints/ui';
+import { Avatar, Button, toast, Star, Message, Layers } from '@mints/ui';
 import clsx from 'clsx';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router';
 
 import API from '@/api';
 import { useAuth } from '@/auth-context';
 
-export function TopicId() {
+export function TopicDetail() {
   const { topicId } = useParams();
+
+  if (!topicId) {
+    return null;
+  }
+
+  return <TopicDetailContent topicId={topicId} />;
+}
+
+function TopicDetailContent({ topicId }: { topicId: string }) {
+  const [version, setVersion] = useState(0);
+
   const { user } = useAuth();
 
-  const { loading, data } = useRequest(() => API.topic.queryById(topicId!));
+  const { loading, data } = useRequest(
+    () => API.topic.queryById(topicId),
+    [version],
+  );
+
+  const handleReaction = async (action: 'like' | 'collect') => {
+    if (!user) {
+      toast.error('Please sign in first');
+      return;
+    }
+
+    const apiCall = {
+      like: liked
+        ? () => API.topic.removeLike(topicId)
+        : () => API.topic.addLike(topicId),
+      collect: collected
+        ? () => API.topic.removeCollect(topicId)
+        : () => API.topic.addCollect(topicId),
+    };
+    const [success] = await operator(() => apiCall[action]());
+
+    if (success) {
+      setVersion((v) => v + 1);
+    }
+  };
 
   if (loading || !data) {
     return null;
@@ -57,29 +94,30 @@ export function TopicId() {
               </div>
             </div>
 
-            <div className="flex gap-3 text-sm">
-              <button
-                id="topic_like"
-                data-id={id}
-                className={clsx(
-                  'flex items-center gap-1',
-                  liked && 'text-zinc-900',
-                )}
-              >
-                ⭐ <span>{likeCount}</span>
-              </button>
-              <a href="#reply" className="flex items-center gap-1">
-                💬 <span>{replyCount}</span>
-              </a>
-              <button
-                id="topic_collect"
-                className={clsx(
-                  'flex items-center gap-1',
-                  collected && 'text-zinc-900',
-                )}
-              >
-                📁 <span>{collectCount}</span>
-              </button>
+            <div className="flex items-center gap-3 text-sm">
+              <div className="flex items-center gap-1">
+                <Star
+                  size={20}
+                  className={clsx('cursor-pointer', liked && 'fill-zinc-900')}
+                  onClick={() => handleReaction('like')}
+                />
+                <span>{likeCount}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Message size={20} />
+                <span>{replyCount}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Layers
+                  size={20}
+                  className={clsx(
+                    'cursor-pointer',
+                    collected && 'fill-zinc-900',
+                  )}
+                  onClick={() => handleReaction('collect')}
+                />
+                <span>{collectCount}</span>
+              </div>
             </div>
           </div>
 

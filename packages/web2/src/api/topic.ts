@@ -60,3 +60,27 @@ export function create(data: {
     data,
   });
 }
+
+export function addLike(id: string): Promise<{ status: 'OK' }> {
+  return request.auth(`/topics/${id}/like`, {
+    method: 'POST',
+  });
+}
+
+export function removeLike(id: string): Promise<{ status: 'OK' }> {
+  return request.auth(`/topics/${id}/like`, {
+    method: 'DELETE',
+  });
+}
+
+export function addCollect(id: string): Promise<{ status: 'OK' }> {
+  return request.auth(`/topics/${id}/collect`, {
+    method: 'POST',
+  });
+}
+
+export function removeCollect(id: string): Promise<{ status: 'OK' }> {
+  return request.auth(`/topics/${id}/collect`, {
+    method: 'DELETE',
+  });
+}
