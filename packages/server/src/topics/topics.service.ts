@@ -406,7 +406,7 @@ export class TopicsService {
 
       await tx.update(topics).set({
         lastReplyAt: dayjs().toDate(),
-        lastReplyId: userId,
+        lastReplyId: reply.id,
         updatedAt: dayjs().toDate(),
       });
       return reply.id;
