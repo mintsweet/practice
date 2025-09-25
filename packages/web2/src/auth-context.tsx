@@ -40,6 +40,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
     }
   }, []);
 
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <Spinner size={50} />
+      </div>
+    );
+  }
+
   return (
     <AuthContext.Provider
       value={{
