@@ -271,7 +271,7 @@ export class TopicsService {
 
   private readonly reactionConfig = {
     like: {
-      counterColumn: topics.likeCount,
+      counterColumn: 'likeCount',
       relationTable: topicLikes,
       scoreChange: {
         actor: -3,
@@ -279,7 +279,7 @@ export class TopicsService {
       },
     },
     collect: {
-      counterColumn: topics.collectCount,
+      counterColumn: 'collectCount',
       relationTable: topicCollects,
       scoreChange: {
         actor: -5,
@@ -309,20 +309,22 @@ export class TopicsService {
 
       await tx
         .update(topics)
-        .set({ [config.counterColumn.name]: sql`${config.counterColumn} + 1` })
+        .set({
+          [config.counterColumn]: sql`${topics[config.counterColumn]} + 1`,
+        })
         .where(eq(topics.id, topicId));
 
       await tx
         .update(users)
         .set({
-          score: sql`${users.score} ${config.scoreChange.actor > 0 ? '+' : '-'} ${Math.abs(config.scoreChange.actor)}`,
+          score: sql`${users.score} + ${config.scoreChange.actor}`,
         })
         .where(eq(users.id, userId));
 
       await tx
         .update(users)
         .set({
-          score: sql`${users.score} ${config.scoreChange.owner > 0 ? '+' : '-'} ${Math.abs(config.scoreChange.owner)}`,
+          score: sql`${users.score} + ${config.scoreChange.owner}`,
         })
         .where(eq(users.id, topic.userId));
 
@@ -354,20 +356,22 @@ export class TopicsService {
 
       await tx
         .update(topics)
-        .set({ [config.counterColumn.name]: sql`${config.counterColumn} - 1` })
+        .set({
+          [config.counterColumn]: sql`${topics[config.counterColumn]} - 1`,
+        })
         .where(eq(topics.id, topicId));
 
       await tx
         .update(users)
         .set({
-          score: sql`${users.score} ${config.scoreChange.actor < 0 ? '+' : '-'} ${Math.abs(config.scoreChange.actor)}`,
+          score: sql`${users.score} + ${config.scoreChange.actor}`,
         })
         .where(eq(users.id, userId));
 
       await tx
         .update(users)
         .set({
-          score: sql`${users.score} ${config.scoreChange.owner < 0 ? '+' : '-'} ${Math.abs(config.scoreChange.owner)}`,
+          score: sql`${users.score} + ${config.scoreChange.owner}`,
         })
         .where(eq(users.id, topic.userId));
 
