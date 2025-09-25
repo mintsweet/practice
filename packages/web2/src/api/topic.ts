@@ -47,7 +47,7 @@ interface IReply {
 export function queryById(
   id: string,
 ): Promise<ITopic & { replys: IReply[]; liked: boolean; collected: boolean }> {
-  return request.public(`/topics/${id}`);
+  return request.auth(`/topics/${id}`);
 }
 
 export function create(data: {
