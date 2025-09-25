@@ -16,10 +16,12 @@ export class UsersService {
   public async queryById(userId: string) {
     const [user] = await this.db
       .select({
+        id: users.id,
         email: users.email,
         nickname: users.nickname,
-        score: users.score,
         starred: users.starred,
+        followersCount: users.followersCount,
+        followingCount: users.followingCount,
       })
       .from(users)
       .where(eq(users.id, userId));

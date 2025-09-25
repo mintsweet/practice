@@ -16,7 +16,7 @@ import { CustomError } from '@/common/error';
 import { USER_ERROR_CODE } from './error-code';
 import { UsersService } from './users.service';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
   constructor(private readonly user: UsersService) {}
 
