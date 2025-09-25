@@ -84,3 +84,16 @@ export function removeCollect(id: string): Promise<{ status: 'OK' }> {
     method: 'DELETE',
   });
 }
+
+export function reply(
+  id: string,
+  payload: {
+    content: string;
+    parentReplyId?: string;
+  },
+): Promise<{ replyId: string }> {
+  return request.auth(`/topics/${id}/reply`, {
+    method: 'POST',
+    data: payload,
+  });
+}

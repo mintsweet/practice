@@ -1,6 +1,14 @@
 import { operator } from '@mints/request';
 import { useRequest } from '@mints/request/react';
-import { Avatar, Button, toast, Star, Message, Layers } from '@mints/ui';
+import {
+  Avatar,
+  Button,
+  TextArea,
+  toast,
+  Star,
+  Message,
+  Layers,
+} from '@mints/ui';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useParams, Link } from 'react-router';
@@ -20,6 +28,7 @@ export function TopicDetail() {
 
 function TopicDetailContent({ topicId }: { topicId: string }) {
   const [version, setVersion] = useState(0);
+  const [replyContent, setReplyContent] = useState('');
 
   const { user } = useAuth();
 
@@ -45,6 +54,25 @@ function TopicDetailContent({ topicId }: { topicId: string }) {
     const [success] = await operator(() => apiCall[action]());
 
     if (success) {
+      setVersion((v) => v + 1);
+    }
+  };
+
+  const handleReply = async (parentReplyId?: string) => {
+    if (!user) {
+      toast.error('Please sign in first');
+      return;
+    }
+    if (!replyContent) {
+      return;
+    }
+
+    const [success] = await operator(() =>
+      API.topic.reply(topicId, { content: replyContent, parentReplyId }),
+    );
+
+    if (success) {
+      setReplyContent('');
       setVersion((v) => v + 1);
     }
   };
@@ -153,15 +181,25 @@ function TopicDetailContent({ topicId }: { topicId: string }) {
           {user ? (
             <form className="flex flex-col gap-2 mb-6">
               <div className="flex gap-3 items-start">
-                <Avatar name={user.id} className="w-8 h-8" />
-                <textarea
-                  name="content"
+                <Avatar
+                  name={user.nickname ?? user.email}
+                  className="w-8 h-8"
+                />
+                <TextArea
+                  className="w-full"
                   rows={2}
                   placeholder="说说你的看法..."
-                  className="flex-1 border border-zinc-300 rounded px-3 py-2 text-sm text-zinc-800"
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
                 />
               </div>
-              <Button className="self-end text-sm px-4 py-1">评论</Button>
+              <Button
+                className="self-end text-sm px-4 py-1"
+                disabled={!replyContent}
+                onClick={() => handleReply()}
+              >
+                评论
+              </Button>
             </form>
           ) : (
             <p className="text-sm text-zinc-600">
