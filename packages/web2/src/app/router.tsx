@@ -8,6 +8,7 @@ import {
   Signin,
   TopicCreate,
   TopicDetail,
+  UserDetail,
 } from '@/routes';
 
 export default createBrowserRouter([
@@ -41,6 +42,15 @@ export default createBrowserRouter([
           {
             path: ':topicId',
             element: <TopicDetail />,
+          },
+        ],
+      },
+      {
+        path: 'user',
+        children: [
+          {
+            path: ':userId',
+            element: <UserDetail />,
           },
         ],
       },
