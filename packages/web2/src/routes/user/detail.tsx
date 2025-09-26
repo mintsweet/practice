@@ -1,6 +1,8 @@
+import { operator } from '@mints/request';
 import { useRequest } from '@mints/request/react';
 import { Avatar } from '@mints/ui';
 import clsx from 'clsx';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router';
 
 import API from '@/api';
@@ -17,9 +19,14 @@ export function UserDetail() {
 }
 
 function UserDetailContent({ userId }: { userId: string }) {
+  const [version, setVersion] = useState(0);
+
   const { user } = useAuth();
 
-  const { loading, data } = useRequest(() => API.user.queryById(userId));
+  const { loading, data } = useRequest(
+    () => API.user.queryById(userId),
+    [version],
+  );
 
   if (loading || !data) {
     return null;
@@ -56,6 +63,16 @@ function UserDetailContent({ userId }: { userId: string }) {
     },
   ];
 
+  const handleFollow = async () => {
+    const [success] = await operator(() =>
+      followed ? API.user.unfollow(id) : API.user.follow(id),
+    );
+
+    if (success) {
+      setVersion((v) => v + 1);
+    }
+  };
+
   return (
     <div className="flex flex-col lg:flex-row gap-6 px-4 py-6">
       <div className="flex-1 space-y-6">
@@ -80,6 +97,7 @@ function UserDetailContent({ userId }: { userId: string }) {
                 className="text-sm text-zinc-900 underline"
                 id="follow_user"
                 data-id={id}
+                onClick={handleFollow}
               >
                 {followed ? '取消关注' : '关注'}
               </button>
