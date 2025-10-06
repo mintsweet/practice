@@ -6,6 +6,7 @@ export interface IUser {
   nickname: string;
   avatar?: string;
   signature?: string;
+  location?: string;
 }
 
 interface ISignUp {

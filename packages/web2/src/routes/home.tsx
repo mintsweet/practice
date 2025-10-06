@@ -149,7 +149,7 @@ export function Home() {
           <>
             <div className="bg-zinc-50 rounded p-4 border border-zinc-200 text-center">
               <Link
-                to="/setting"
+                to="/user/setting"
                 className="flex flex-col items-center gap-2 hover:opacity-90 transition"
               >
                 <Avatar

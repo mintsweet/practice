@@ -9,6 +9,8 @@ import {
   TopicCreate,
   TopicDetail,
   UserDetail,
+  UserSetting,
+  UserUpdatePassword,
 } from '@/routes';
 
 export default createBrowserRouter([
@@ -51,6 +53,22 @@ export default createBrowserRouter([
           {
             path: ':userId',
             element: <UserDetail />,
+          },
+          {
+            path: 'setting',
+            element: (
+              <AuthGate>
+                <UserSetting />
+              </AuthGate>
+            ),
+          },
+          {
+            path: 'update-password',
+            element: (
+              <AuthGate>
+                <UserUpdatePassword />
+              </AuthGate>
+            ),
           },
         ],
       },
