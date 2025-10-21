@@ -4,7 +4,7 @@ interface IQuery {
   page: number;
 }
 
-interface ITopic {
+export interface ITopic {
   id: string;
   title: string;
   content: string;
@@ -21,6 +21,7 @@ interface ITopic {
     id: string;
     email: string;
     nickname?: string;
+    avatar?: string;
   };
   tags: string[];
 }
