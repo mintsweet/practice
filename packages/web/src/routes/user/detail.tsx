@@ -45,7 +45,24 @@ function UserDetailContent({ userId }: { userId: string }) {
   } = data;
 
   const actionType = 'action';
-  const userActions = [];
+  const userActions: Array<{
+    id: string;
+    type: string;
+    detail: {
+      user?: {
+        id: string;
+        avatar?: string;
+        nickname?: string;
+        email: string;
+        signature?: string;
+      };
+      topic?: {
+        id: string;
+        title: string;
+      };
+    };
+    createdAt: string;
+  }> = [];
 
   const tabs = [
     { label: '动态', href: `/user/${userId}`, key: 'action' },
