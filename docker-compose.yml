@@ -13,5 +13,7 @@ services:
     build:
       context: .
       dockerfile: packages/server/Dockerfile
+    env_file:
+      - packages/server/.env
     ports:
       - "3000:3000"
