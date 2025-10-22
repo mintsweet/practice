@@ -1,14 +1,8 @@
-version: '3.8'
 services:
-  web:
-    build:
-      context: .
-      dockerfile: packages/web/Dockerfile
-    ports:
-      - "8080:80"
-    depends_on:
-      - server
-
+  db:
+    extends:
+      file: ./packages/server/docker-compose.db.yml
+      service: db
   server:
     build:
       context: .
@@ -16,4 +10,16 @@ services:
     env_file:
       - packages/server/.env
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile
+    ports:
+      - '80:80'
+    depends_on:
+      - server
