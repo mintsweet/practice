@@ -1,8 +1,7 @@
+include:
+  - path: ./packages/server/docker-compose.db.yml
+
 services:
-  db:
-    extends:
-      file: ./packages/server/docker-compose.db.yml
-      service: db
   server:
     build:
       context: .
