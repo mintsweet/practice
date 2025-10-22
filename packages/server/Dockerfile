@@ -24,25 +24,41 @@ RUN pnpm run build
 # Production stage
 FROM node:22-alpine AS runner
 
+# Install PostgreSQL client for health checks and migrations
+RUN apk add --no-cache postgresql-client
+
 WORKDIR /app
 
-# Copy built application and package files
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy built application and necessary files
 COPY --from=builder /app/packages/server/dist ./dist
 COPY --from=builder /app/packages/server/package.json ./
+COPY --from=builder /app/packages/server/drizzle.config.ts ./
+COPY --from=builder /app/packages/server/src/db ./src/db
 COPY --from=builder /app/pnpm-lock.yaml ./
 
-# Install pnpm and production dependencies only
-RUN npm install -g pnpm && \
-  pnpm install --prod --no-frozen-lockfile && \
-  npm uninstall -g pnpm && \
-  npm cache clean --force
+# Install production dependencies
+RUN pnpm install --prod --no-frozen-lockfile
+
+# Install drizzle-kit for schema push
+RUN pnpm add drizzle-kit dotenv --save-dev
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && \
   adduser -S nestjs -u 1001
 
+# Copy startup script
+COPY packages/server/docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
+# Change ownership of the app directory
+RUN chown -R nestjs:nodejs /app
+
 USER nestjs
 
 EXPOSE 3000
 
-CMD ["node", "dist/src/main.js"]
+# Run migrations and start application
+ENTRYPOINT ["./docker-entrypoint.sh"]
