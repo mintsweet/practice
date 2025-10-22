@@ -24,4 +24,4 @@ fi
 
 # Start the application
 echo "🎉 Starting NestJS application..."
-exec node dist/main.js
+exec node dist/src/main.js
