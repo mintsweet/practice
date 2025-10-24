@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router';
 
 import { AuthGate } from '@/auth-context';
 import {
+  Setup,
   Layout,
   Home,
   Signup,
@@ -14,6 +15,10 @@ import {
 } from '@/routes';
 
 export default createBrowserRouter([
+  {
+    path: '/setup',
+    element: <Setup />,
+  },
   {
     path: '/',
     element: <Layout />,

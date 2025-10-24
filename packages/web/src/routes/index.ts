@@ -1,3 +1,4 @@
+export { Setup } from './setup';
 export { Layout } from './layout';
 export { Home } from './home';
 export { Signup } from './signup';
