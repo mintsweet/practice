@@ -210,3 +210,10 @@ export const replyLikes = table(
     index('reply_likes_user_idx').on(table.userId),
   ],
 );
+
+export const systemConfig = table('system_config', {
+  id: uuid().defaultRandom().primaryKey(),
+  key: varchar({ length: 100 }).notNull().unique(),
+  value: text().notNull(),
+  ...timestamps,
+});
