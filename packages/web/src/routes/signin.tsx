@@ -1,3 +1,4 @@
+import { useHotkeys } from '@mints/hooks';
 import { operator } from '@mints/request';
 import { Button, Input, Callout } from '@mints/ui';
 import { useState } from 'react';
@@ -15,9 +16,11 @@ export function Signin() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+
     if (!form.email || !form.password) {
-      setError('请输入邮箱和密码');
+      setError('Please enter your email and password');
       return;
     }
 
@@ -30,58 +33,96 @@ export function Signin() {
     }
   };
 
+  useHotkeys('enter', () => {
+    handleSubmit();
+  });
+
   return (
-    <div className="flex items-center justify-center px-4 min-h-full">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-6">
-        <h1 className="text-center text-2xl font-bold text-zinc-900">
-          欢迎来到 Mints
-        </h1>
+    <div className="flex items-center justify-center h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 overflow-hidden">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16">
+            <img src="/logo.svg" alt="Logo" />
+          </div>
+          <h1 className="text-3xl font-bold text-zinc-900 mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-sm text-zinc-600">
+            Sign in to continue to Mints Community
+          </p>
+        </div>
 
-        {error && <Callout variant="danger">{error}</Callout>}
+        <form
+          className="bg-white rounded-2xl shadow-xl border border-zinc-200 p-8 space-y-6"
+          onSubmit={handleSubmit}
+        >
+          {error && (
+            <Callout variant="danger" className="text-sm">
+              {error}
+            </Callout>
+          )}
 
-        <div className="space-y-4">
-          <Input
-            type="email"
-            required
-            placeholder="邮箱"
-            value={form.email}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, email: e.target.value }))
-            }
-          />
-          <div className="space-y-1">
-            <div className="flex justify-end items-center text-sm text-zinc-600">
-              <Link
-                to="/forgot-password"
-                className="text-zinc-800 underline hover:text-zinc-900"
-              >
-                忘记密码？
-              </Link>
-            </div>
+          <div className="space-y-4">
             <Input
+              label="Email Address"
+              type="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, email: e.target.value }))
+              }
+            />
+
+            <Input
+              label={
+                <span className="w-full flex justify-between items-center">
+                  <span>Password</span>
+                  <Link
+                    to="/forgot-password"
+                    tabIndex={-1}
+                    className="text-xs text-zinc-600 hover:text-zinc-900 transition"
+                  >
+                    Forgot password?
+                  </Link>
+                </span>
+              }
               type="password"
-              required
-              placeholder="请输入密码"
+              placeholder="Enter your password"
               value={form.password}
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, password: e.target.value }))
               }
             />
-          </div>
-          <Button
-            type="submit"
-            className="w-full text-sm py-2"
-            disabled={operating}
-            onClick={handleSubmit}
-          >
-            {operating ? '登录中...' : '登录'}
-          </Button>
-        </div>
 
-        <p className="text-center text-sm text-zinc-600">
-          没有账户？{' '}
-          <Link to="/signup" className="text-zinc-900 underline">
-            注册
+            <Button type="submit" className="w-full" disabled={operating}>
+              {operating ? 'Signing in...' : 'Sign In'}
+            </Button>
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-200"></div>
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="px-3 bg-white text-zinc-500">New to Mints?</span>
+            </div>
+          </div>
+
+          <Link to="/signup" className="block">
+            <Button variant="outline" className="w-full">
+              Create an Account
+            </Button>
+          </Link>
+        </form>
+
+        <p className="text-center text-xs text-zinc-500 mt-6">
+          By signing in, you agree to our{' '}
+          <Link to="/terms" className="underline hover:text-zinc-700">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link to="/privacy" className="underline hover:text-zinc-700">
+            Privacy Policy
           </Link>
         </p>
       </div>
