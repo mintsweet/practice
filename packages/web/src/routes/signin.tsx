@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 
 import API from '@/api';
+import { Logo } from '@/components';
 
 export function Signin() {
   const [form, setForm] = useState({
@@ -42,7 +43,7 @@ export function Signin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16">
-            <img src="/logo.svg" alt="Logo" />
+            <Logo />
           </div>
           <h1 className="text-3xl font-bold text-zinc-900 mb-2">
             Welcome Back
