@@ -20,6 +20,10 @@ export default createBrowserRouter([
     element: <Setup />,
   },
   {
+    path: 'signup',
+    element: <Signup />,
+  },
+  {
     path: 'signin',
     element: <Signin />,
   },
@@ -31,11 +35,6 @@ export default createBrowserRouter([
         index: true,
         element: <Home />,
       },
-      {
-        path: 'signup',
-        element: <Signup />,
-      },
-
       {
         path: 'topic',
         children: [
