@@ -4,17 +4,16 @@ import { useNavigate, Outlet } from 'react-router';
 import { AuthProvider } from '@/auth-context';
 import { useSetup } from '@/setup-context';
 
-import { Footer } from './components/footer';
-import { Header } from './components/header';
+import { Footer } from './footer';
+import { Header } from './header';
 
 export function Layout() {
   const { initialized } = useSetup();
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!initialized) {
-      navigate('/setup');
+    if (initialized === false) {
+      navigate('/setup', { replace: true });
     }
   }, [initialized, navigate]);
 
