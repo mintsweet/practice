@@ -1,6 +1,6 @@
 import { request } from '@mints/request';
 
-interface ISection {
+export interface ISection {
   id: string;
   name: string;
   description: string;
