@@ -1,2 +1,196 @@
 @config "../tailwind.config.js";
 @import 'tailwindcss';
+
+/* Custom Markdown Styles */
+.markdown-content h1 {
+  margin: 1.875rem 0;
+  font-size: 1.875rem;
+  font-weight: 600;
+}
+
+.markdown-content h2 {
+  margin: 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.markdown-content h3 {
+  margin: 1.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.markdown-content h4 {
+  margin: 1.125rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.markdown-content h5 {
+  margin: 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.markdown-content h6 {
+  margin: 0.75rem 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.markdown-content h1::before,
+.markdown-content h2::before,
+.markdown-content h3::before,
+.markdown-content h4::before,
+.markdown-content h5::before,
+.markdown-content h6::before {
+  content: '#';
+  margin-right: 0.5rem;
+  color: #52525b;
+}
+
+.markdown-content blockquote {
+  position: relative;
+  margin: 1rem 0;
+  padding: 0.5rem 0.5rem;
+  border-left: 0.25rem solid #52525b;
+  border-radius: 2px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.markdown-content blockquote p {
+  margin: 0;
+}
+
+.markdown-content ul {
+  padding-left: 2rem;
+}
+
+.markdown-content ul li {
+  list-style: disc;
+}
+
+.markdown-content ol {
+  padding-left: 2rem;
+}
+
+.markdown-content ol li {
+  list-style: decimal;
+}
+
+.markdown-content p {
+  margin: 1rem 0;
+}
+
+.markdown-content a {
+  padding: 0 0.2rem;
+  color: #71717a;
+  text-decoration: underline;
+}
+
+.markdown-content code {
+  padding: 0.2rem 0.4rem;
+  font-size: 14px;
+  color: #3f3f46;
+  background-color: rgba(113, 113, 122, 0.1);
+  border-radius: 6px;
+}
+
+.markdown-content hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid #e4e4e7;
+  position: relative;
+}
+
+.markdown-content hr::before {
+  content: '***';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 0 1rem;
+  color: #a1a1aa;
+  font-size: 0.875rem;
+  letter-spacing: 0.5rem;
+}
+
+.markdown-content pre {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.markdown-content pre code {
+  padding: 0;
+  font-size: 14px;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.markdown-content table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.markdown-content table thead {
+  background-color: #f4f4f5;
+}
+
+.markdown-content table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #3f3f46;
+  border-bottom: 2px solid #e4e4e7;
+}
+
+.markdown-content table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e4e4e7;
+  color: #52525b;
+}
+
+.markdown-content table tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-content table tr:hover {
+  background-color: #fafafa;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-content strong {
+  font-weight: 600;
+  color: #18181b;
+}
+
+.markdown-content em {
+  font-style: italic;
+  color: #52525b;
+}
+
+.markdown-content del {
+  text-decoration: line-through;
+  color: #a1a1aa;
+}
+
+.markdown-content input[type='checkbox'] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+}

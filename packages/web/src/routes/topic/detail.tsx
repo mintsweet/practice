@@ -8,10 +8,16 @@ import {
   Star,
   Message,
   Layers,
+  Eye,
 } from '@mints/ui';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useParams, Link } from 'react-router';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 import API from '@/api';
 import { useAuth } from '@/auth-context';
@@ -97,174 +103,225 @@ function TopicDetailContent({ topicId }: { topicId: string }) {
   } = data;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 px-4 py-6">
-      <div className="flex-1 space-y-6">
-        <div className="bg-zinc-50 border border-zinc-200 rounded p-4">
-          <div className="flex justify-between mb-4 text-sm text-zinc-600">
-            <div className="flex items-center gap-3">
-              <Link to={`/user/${author.id}`}>
-                <Avatar
-                  name={author.nickname ?? author.email}
-                  className="w-10 h-10"
-                />
-              </Link>
-              <div>
+    <div className="bg-zinc-50 flex-1">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex-1 space-y-6">
+            <div className="bg-white rounded-xl border border-zinc-200 shadow-xl overflow-hidden">
+              <div className="p-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
+                  <div className="flex items-center gap-4">
+                    <Link to={`/user/${author.id}`} className="flex-shrink-0">
+                      <Avatar
+                        src={author.avatar}
+                        name={author.nickname ?? author.email}
+                        className="w-12 h-12 ring-2 ring-zinc-100 hover:ring-zinc-200 transition"
+                      />
+                    </Link>
+                    <div className="min-w-0 flex-1">
+                      <Link
+                        to={`/user/${author.id}`}
+                        className="font-semibold text-zinc-900 hover:text-zinc-700 transition-colors"
+                      >
+                        {author.nickname ?? author.email}
+                      </Link>
+                      <div className="flex items-center gap-3 mt-1 text-sm text-zinc-500">
+                        <span>
+                          {dayjs(createdAt).format('YYYY-MM-DD HH:mm')}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Eye size={16} /> {visitCount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 sm:flex-shrink-0">
+                    <button
+                      className={clsx(
+                        'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                        liked
+                          ? 'bg-zinc-900 text-white'
+                          : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200',
+                      )}
+                      onClick={() => handleReaction('like')}
+                    >
+                      <Star size={16} className={liked ? 'fill-white' : ''} />
+                      <span>{likeCount}</span>
+                    </button>
+                    <button
+                      className={clsx(
+                        'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                        collected
+                          ? 'bg-zinc-900 text-white'
+                          : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200',
+                      )}
+                      onClick={() => handleReaction('collect')}
+                    >
+                      <Layers
+                        size={16}
+                        className={collected ? 'fill-white' : ''}
+                      />
+                      <span>{collectCount}</span>
+                    </button>
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-50 text-sm text-zinc-600">
+                      <Message size={16} />
+                      <span>{replyCount}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <h1 className="text-2xl font-bold mb-6 text-zinc-900 leading-tight">
+                  {title}
+                </h1>
+
+                <article className="max-w-none markdown-content">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeHighlight, rehypeRaw]}
+                  >
+                    {content}
+                  </ReactMarkdown>
+                </article>
+
+                {user && user.id === author.id && (
+                  <div className="flex gap-3 mt-8 pt-6 border-t border-zinc-100">
+                    <Link to={`/topic/${id}/edit`}>
+                      <Button variant="outline" className="text-sm">
+                        ✏️ Edit
+                      </Button>
+                    </Link>
+                    <Link to={`/topic/${id}/delete`}>
+                      <Button
+                        variant="outline"
+                        className="text-sm text-red-600 border-red-200 hover:bg-red-50"
+                      >
+                        🗑️ Delete
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div
+              id="reply"
+              className="bg-white rounded-xl border border-zinc-200 shadow-xl p-6"
+            >
+              <h2 className="text-lg font-bold mb-6 text-zinc-900 flex items-center gap-2">
+                <span className="text-base">💬</span>
+                Comments
+              </h2>
+
+              {user ? (
+                <form className="flex flex-col gap-3 mb-6 bg-zinc-50 rounded-lg p-4">
+                  <div className="flex gap-3 items-start">
+                    <Avatar
+                      name={user.nickname ?? user.email}
+                      className="w-10 h-10 ring-2 ring-zinc-100"
+                    />
+                    <TextArea
+                      className="w-full"
+                      rows={3}
+                      placeholder="Share your thoughts..."
+                      value={replyContent}
+                      onChange={(e) => setReplyContent(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    className="self-end text-sm"
+                    disabled={!replyContent}
+                    onClick={() => handleReply()}
+                  >
+                    Post Comment
+                  </Button>
+                </form>
+              ) : (
+                <div className="bg-zinc-50 rounded-lg p-4 text-center">
+                  <p className="text-sm text-zinc-600">
+                    Please{' '}
+                    <Link
+                      to="/signin"
+                      className="text-zinc-900 hover:text-zinc-700 underline font-medium"
+                    >
+                      sign in
+                    </Link>{' '}
+                    to join the discussion
+                  </p>
+                </div>
+              )}
+
+              <ul className="space-y-6">
+                {replys && replys.length > 0 ? (
+                  replys.map((it) => (
+                    <li
+                      key={it.id}
+                      className="flex gap-3 pb-6 border-b border-zinc-100 last:border-b-0 last:pb-0"
+                    >
+                      <Link to={`/user/${it.author.id}`}>
+                        <Avatar
+                          name={it.author.nickname ?? it.author.email}
+                          className="w-10 h-10 ring-2 ring-zinc-100 hover:ring-zinc-200 transition"
+                        />
+                      </Link>
+                      <div className="flex-1 text-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <Link
+                            to={`/user/${it.author.id}`}
+                            className="font-semibold text-zinc-900 hover:text-zinc-700 transition"
+                          >
+                            {it.author.nickname ?? it.author.email}
+                          </Link>
+                          <span className="text-xs text-zinc-400">
+                            {it.createdAt}
+                          </span>
+                        </div>
+                        <div className="text-zinc-700 leading-relaxed">
+                          {it.content}
+                        </div>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-center text-sm text-zinc-400 py-8">
+                    <div className="text-3xl mb-2">💭</div>
+                    No comments yet
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+
+          <aside className="w-full lg:w-[280px] shrink-0">
+            <div className="sticky top-20 space-y-4">
+              <div className="bg-white rounded-xl border border-zinc-200 shadow-xl p-5">
+                <h2 className="text-sm font-bold mb-4 text-zinc-900 flex items-center gap-2">
+                  <span className="text-base">✍️</span>
+                  Author
+                </h2>
                 <Link
                   to={`/user/${author.id}`}
-                  className="font-semibold text-zinc-800"
+                  className="flex items-center gap-3 mb-4 group"
                 >
-                  {author.nickname ?? author.email}
-                </Link>
-                <span className="ml-2">
-                  {new Date(createdAt).toLocaleDateString()}
-                </span>
-                <span className="ml-2 text-zinc-400">阅读 {visitCount}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 text-sm">
-              <div className="flex items-center gap-1">
-                <Star
-                  size={20}
-                  className={clsx('cursor-pointer', liked && 'fill-zinc-900')}
-                  onClick={() => handleReaction('like')}
-                />
-                <span>{likeCount}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Message size={20} />
-                <span>{replyCount}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Layers
-                  size={20}
-                  className={clsx(
-                    'cursor-pointer',
-                    collected && 'fill-zinc-900',
-                  )}
-                  onClick={() => handleReaction('collect')}
-                />
-                <span>{collectCount}</span>
-              </div>
-            </div>
-          </div>
-
-          <h1 className="text-xl font-bold mb-4 text-zinc-800">{title}</h1>
-
-          <div
-            className="prose prose-sm max-w-none text-zinc-700"
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-
-          {user && user.id === author.id && (
-            <div className="flex gap-2 mt-4">
-              <Link to={`/topic/${id}/edit`}>
-                <Button variant="outline" className="text-sm px-3 py-1">
-                  编辑
-                </Button>
-              </Link>
-              <Link to={`/topic/${id}/delete`}>
-                <Button variant="outline" className="text-sm px-3 py-1">
-                  删除
-                </Button>
-              </Link>
-            </div>
-          )}
-        </div>
-
-        <div
-          id="reply"
-          className="bg-zinc-50 border border-zinc-200 rounded p-4"
-        >
-          <h2 className="text-base font-bold mb-4 text-zinc-800">评论</h2>
-
-          {user ? (
-            <form className="flex flex-col gap-2 mb-6">
-              <div className="flex gap-3 items-start">
-                <Avatar
-                  name={user.nickname ?? user.email}
-                  className="w-8 h-8"
-                />
-                <TextArea
-                  className="w-full"
-                  rows={2}
-                  placeholder="说说你的看法..."
-                  value={replyContent}
-                  onChange={(e) => setReplyContent(e.target.value)}
-                />
-              </div>
-              <Button
-                className="self-end text-sm px-4 py-1"
-                disabled={!replyContent}
-                onClick={() => handleReply()}
-              >
-                评论
-              </Button>
-            </form>
-          ) : (
-            <p className="text-sm text-zinc-600">
-              评论，请先{' '}
-              <Link to="/signin" className="text-zinc-900 underline">
-                登录
-              </Link>
-            </p>
-          )}
-
-          <ul className="space-y-8">
-            {replys && replys.length > 0 ? (
-              replys.map((it) => (
-                <li key={it.id} className="flex gap-3">
-                  <Link to={`/user/${it.author.id}`}>
-                    <Avatar
-                      name={it.author.nickname ?? it.author.email}
-                      className="w-8 h-8"
-                    />
-                  </Link>
-                  <div className="flex-1 text-sm text-zinc-700">
-                    <div className="flex justify-between text-zinc-600">
-                      <Link
-                        to={`/user/${it.author.id}`}
-                        className="font-semibold"
-                      >
-                        {it.author.nickname ?? it.author.email}
-                      </Link>
-                      <span className="text-xs text-zinc-400">
-                        {it.createdAt}
-                      </span>
+                  <Avatar
+                    name={author.nickname ?? author.email}
+                    className="w-12 h-12 ring-2 ring-zinc-100 group-hover:ring-zinc-200 transition"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm text-zinc-900 group-hover:text-zinc-700 transition truncate">
+                      {author.nickname ?? author.email}
                     </div>
-                    <div className="mt-1">{it.content}</div>
+                    <div className="text-xs text-zinc-500">View Profile</div>
                   </div>
-                </li>
-              ))
-            ) : (
-              <li className="text-sm text-zinc-400">暂无评论</li>
-            )}
-          </ul>
+                </Link>
+                <div className="text-xs text-zinc-600 italic bg-zinc-50 rounded-lg p-3 leading-relaxed">
+                  {'"'}Keep it simple, but significant{'"'}
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
-
-      <aside className="w-full lg:w-[280px] shrink-0 space-y-4">
-        <div className="bg-zinc-50 border border-zinc-200 rounded p-4">
-          <h2 className="text-base font-bold mb-2 text-zinc-700">作者信息</h2>
-          <div className="flex items-center gap-3 mb-2">
-            <Link to={`/user/${author.id}`}>
-              <Avatar
-                name={author.nickname ?? author.email}
-                className="w-9 h-9"
-              />
-            </Link>
-            <Link
-              to={`/user/${author.id}`}
-              className="font-semibold text-sm text-zinc-800"
-            >
-              {author.nickname ?? author.email}
-            </Link>
-          </div>
-          <div className="italic text-sm text-zinc-500">
-            “ 这家伙很懒，什么都没留下 ”
-          </div>
-        </div>
-      </aside>
     </div>
   );
 }
