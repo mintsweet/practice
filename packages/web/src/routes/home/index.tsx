@@ -104,7 +104,7 @@ export function Home() {
                     </p>
                     <Link to="/signup" className="block">
                       <Button className="w-full bg-zinc-900 text-white hover:bg-zinc-800 text-sm py-2">
-                        Sign Up Now
+                        Register Now
                       </Button>
                     </Link>
                   </div>
