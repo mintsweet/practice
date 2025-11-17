@@ -8,11 +8,15 @@ export function UserSetting() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center space-y-2">
-          <p className="text-lg text-zinc-800">未登录，无法访问该页面</p>
-          <Link to="/signin" className="text-zinc-900 underline">
-            点击登录
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100">
+        <div className="text-center space-y-4 bg-white rounded-2xl shadow-xl border border-zinc-200 p-8 max-w-md">
+          <div className="text-4xl mb-4">🔒</div>
+          <h2 className="text-xl font-bold text-zinc-900">Sign In Required</h2>
+          <p className="text-sm text-zinc-600">
+            Please sign in to access your settings
+          </p>
+          <Link to="/signin">
+            <Button className="w-full mt-4">Sign In Now</Button>
           </Link>
         </div>
       </div>
@@ -22,68 +26,103 @@ export function UserSetting() {
   const { email, avatar, nickname, location, signature } = user;
 
   return (
-    <div className="px-4 py-6 space-y-6">
-      <div className="bg-white p-6 rounded-2xl shadow border border-zinc-200">
-        <div className="flex gap-6 mb-6 pb-2 text-sm font-medium">
-          <a
-            href="/user/setting"
-            className="text-zinc-900 border-b-2 border-zinc-900 pb-1"
-          >
-            个人资料
-          </a>
-          <a
-            href="/user/update-password"
-            className="text-zinc-600 hover:text-zinc-900 pb-1"
-          >
-            修改密码
-          </a>
+    <div className="bg-zinc-50 flex-1">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-zinc-900 mb-2">
+            Account Settings
+          </h1>
+          <p className="text-sm text-zinc-600">
+            Manage your profile and account preferences
+          </p>
         </div>
 
-        <h2 className="text-base font-bold mb-4 text-zinc-800">个人资料</h2>
-        <form className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="file" className="text-sm font-medium text-zinc-700">
-              头像
-            </label>
-            <Avatar
-              src={avatar}
-              name={nickname ?? email}
-              className="w-20 h-20"
-            />
-            <input id="file" type="file" name="file" className="text-sm mt-2" />
-            <p className="text-xs text-zinc-500">
-              支持 jpg、png 格式，1MB 以内
-            </p>
-            <Button type="button" className="mt-2 w-fit text-sm px-4 py-1">
-              上传头像
-            </Button>
+        <div className="bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden">
+          <div className="flex gap-6 px-6 pt-4 pb-3 border-b border-zinc-200 text-sm font-medium">
+            <Link
+              to="/user/setting"
+              className="text-zinc-900 border-b-2 border-zinc-900 pb-2 -mb-[1px]"
+            >
+              Profile
+            </Link>
+            <Link
+              to="/user/update-password"
+              className="text-zinc-600 hover:text-zinc-900 pb-2"
+            >
+              Password
+            </Link>
           </div>
 
-          <Input
-            label="昵称"
-            id="nickname"
-            placeholder="请输入昵称"
-            value={nickname}
-          />
+          <div className="p-6">
+            <form className="space-y-6">
+              <div className="space-y-4">
+                <label
+                  htmlFor="file"
+                  className="block text-sm font-medium text-zinc-900"
+                >
+                  Avatar
+                </label>
+                <div className="flex items-center gap-6">
+                  <Avatar
+                    src={avatar}
+                    name={nickname ?? email}
+                    className="w-24 h-24 ring-4 ring-zinc-100"
+                  />
+                  <div className="flex-1 space-y-3">
+                    <input
+                      id="file"
+                      type="file"
+                      name="file"
+                      className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-zinc-900 file:text-white hover:file:bg-zinc-800 file:cursor-pointer"
+                    />
+                    <p className="text-xs text-zinc-500">JPG, PNG up to 1MB</p>
+                  </div>
+                </div>
+              </div>
 
-          <Input
-            label="所在地"
-            id="location"
-            placeholder="请输入所在地"
-            value={location}
-          />
+              <Input
+                label="Email Address"
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                disabled
+              />
 
-          <Input
-            label="个人介绍"
-            id="signature"
-            placeholder="请输入个人介绍"
-            value={signature}
-          />
+              <Input
+                label="Nickname"
+                id="nickname"
+                placeholder="Enter your nickname"
+                value={nickname}
+              />
 
-          <Button type="submit" className="w-full text-sm py-2">
-            更新个人资料
-          </Button>
-        </form>
+              <Input
+                label="Location"
+                id="location"
+                placeholder="Enter your location"
+                value={location}
+              />
+
+              <Input
+                label="Bio"
+                id="signature"
+                placeholder="Tell us about yourself"
+                value={signature}
+              />
+
+              <div className="flex gap-3 pt-4">
+                <Button type="submit" className="flex-1">
+                  Save Changes
+                </Button>
+                <Link to="/" className="flex-1">
+                  <Button type="button" variant="outline" className="w-full">
+                    Cancel
+                  </Button>
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
