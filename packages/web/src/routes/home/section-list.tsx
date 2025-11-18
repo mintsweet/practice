@@ -12,7 +12,7 @@ export function SectionList({ sections }: Props) {
     <div className="max-w-7xl mx-auto px-4">
       <div className="flex justify-center gap-1 overflow-x-auto scrollbar-hide py-2">
         {sections.map((section) => (
-          <Link to={`/s/${section.id}/topics`} key={section.id}>
+          <Link to={`/s/${section.id}`} key={section.id}>
             <Button variant="link" size="sm">
               {section.name}
             </Button>

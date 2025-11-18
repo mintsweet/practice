@@ -2,6 +2,7 @@ import { request } from '@mints/request';
 
 interface IQuery {
   page: number;
+  sectionId?: string;
 }
 
 export interface ITopic {

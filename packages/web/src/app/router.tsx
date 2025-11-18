@@ -12,6 +12,7 @@ import {
   UserDetail,
   UserSetting,
   UserUpdatePassword,
+  SectionTopics,
 } from '@/routes';
 
 export default createBrowserRouter([
@@ -34,6 +35,15 @@ export default createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: 's',
+        children: [
+          {
+            path: ':sectionId',
+            element: <SectionTopics />,
+          },
+        ],
       },
       {
         path: 'topic',

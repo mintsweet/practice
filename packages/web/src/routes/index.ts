@@ -5,3 +5,4 @@ export { Signup } from './signup';
 export { Signin } from './signin';
 export * from './topic';
 export * from './user';
+export { SectionTopics } from './section';
