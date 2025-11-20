@@ -3,6 +3,7 @@ export { Layout } from './layout';
 export { Home } from './home';
 export { Signup } from './signup';
 export { Signin } from './signin';
+export { ForgotPassword } from './forgot-password';
 export * from './topic';
 export * from './user';
 export { SectionTopics } from './section';

@@ -7,6 +7,7 @@ import {
   Home,
   Signup,
   Signin,
+  ForgotPassword,
   TopicCreate,
   TopicDetail,
   UserDetail,
@@ -27,6 +28,10 @@ export default createBrowserRouter([
   {
     path: 'signin',
     element: <Signin />,
+  },
+  {
+    path: 'forgot-password',
+    element: <ForgotPassword />,
   },
   {
     path: '/',
